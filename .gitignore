@@ -1,57 +1,45 @@
-# ========================================
-# Shimeji Neo Project Git Ignore Template
-# Environment: Windows + Eclipse + Gradle
-# ========================================
+# ==============================
+# Shimeji Neo Safe .gitignore
+# ==============================
 
-# --- Build & IDE output ---
+# Build output
 /build/
-/.gradle/
 /out/
 /bin/
 /target/
 
-# --- Eclipse project files ---
-.classpath
-.project
-.settings/
+# IDE configs
+/.idea/
+/.vscode/
+/.settings/
+/.classpath
+/.project
 
-# --- IntelliJ / VSCode / other IDEs ---
-.idea/
-.vscode/
+# OS junk
+.DS_Store
+Thumbs.db
 
-# --- Logs / Temp files ---
+# Logs & temp
 *.log
 *.tmp
 *.bak
 *.swp
-*.swo
 
-# --- OS-specific files ---
-.DS_Store
-Thumbs.db
-desktop.ini
+# Gradle cache
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
 
-# --- Java artifacts ---
+# Java
 *.class
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# --- VM crash logs ---
 hs_err_pid*
 replay_pid*
 
-# --- Local environment config ---
+# Eclipse / Pleiades
+*.launch
+.factorypath
+
+# Environment files (DO NOT COMMIT)
+.env
 local.properties
-*.iml
-
-# --- Optional: ignore Gradle wrapper if using system-wide Gradle ---
-# gradle/
-
-# --- Optional: custom user config (safe exclusion) ---
-user.config
-config.json
+secret.key
+api.key
