@@ -1,16 +1,38 @@
-# Compiled class file
-*.class
+# ========================================
+# Shimeji Neo Project Git Ignore Template
+# Environment: Windows + Eclipse + Gradle
+# ========================================
 
-# Log file
+# --- Build & IDE output ---
+/build/
+/.gradle/
+/out/
+/bin/
+/target/
+
+# --- Eclipse project files ---
+.classpath
+.project
+.settings/
+
+# --- IntelliJ / VSCode / other IDEs ---
+.idea/
+.vscode/
+
+# --- Logs / Temp files ---
 *.log
+*.tmp
+*.bak
+*.swp
+*.swo
 
-# BlueJ files
-*.ctxt
+# --- OS-specific files ---
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# --- Java artifacts ---
+*.class
 *.jar
 *.war
 *.nar
@@ -19,6 +41,17 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# --- VM crash logs ---
 hs_err_pid*
 replay_pid*
+
+# --- Local environment config ---
+local.properties
+*.iml
+
+# --- Optional: ignore Gradle wrapper if using system-wide Gradle ---
+# gradle/
+
+# --- Optional: custom user config (safe exclusion) ---
+user.config
+config.json
