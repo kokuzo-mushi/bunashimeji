@@ -80,4 +80,18 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+plugins {
+    id 'base'
+}
+
+tasks.register("initProject") {
+    description = "Initialize GitHub repository, create .gitignore and README."
+    doLast {
+        println("=== Shimeji Neo Init Script ===")
+        exec {
+            commandLine "python", "scripts/init_repo.py"
+        }
+    }
+}
 */
