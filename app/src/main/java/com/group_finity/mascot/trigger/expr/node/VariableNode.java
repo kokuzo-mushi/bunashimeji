@@ -1,6 +1,8 @@
 package com.group_finity.mascot.trigger.expr.node;
 
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
+import com.group_finity.mascot.trigger.expr.type.TypeResolver;
 
 public final class VariableNode implements ExpressionNode {
 
@@ -20,8 +22,8 @@ public final class VariableNode implements ExpressionNode {
     }
 
     @Override
-    public Class<?> getResultType() {
-        return expectedType != null ? expectedType : Object.class;
+    public Object evaluate(EvaluationContext context, TypeResolver resolver, TypeCoercion coercion) {
+        return evaluate(context); // 既存の単純評価にフォールバック
     }
 }
 

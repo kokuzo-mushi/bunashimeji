@@ -3,6 +3,8 @@ package com.group_finity.mascot.trigger.expr.node;
 import java.util.Objects;
 
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
+import com.group_finity.mascot.trigger.expr.type.TypeResolver;
 
 public final class LiteralNode implements ExpressionNode {
     private final Object value;
@@ -19,8 +21,8 @@ public final class LiteralNode implements ExpressionNode {
     }
 
     @Override
-    public Class<?> getResultType() {
-        return type;
+    public Object evaluate(EvaluationContext context, TypeResolver resolver, TypeCoercion coercion) {
+        return evaluate(context); // 既存の単純評価にフォールバック
     }
 
     @Override

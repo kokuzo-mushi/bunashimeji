@@ -176,17 +176,17 @@ public final class ExpressionParser {
                 // 単項演算子
                 case "!":
                     if (stack.isEmpty()) throw new RuntimeException("Syntax Error: missing operand for !");
-                    stack.push(new UnaryExpressionNode("!", stack.pop(), Boolean.class));
+                    stack.push(new UnaryExpressionNode("!", stack.pop()));
                     break;
                 case "u-":
                     if (stack.isEmpty()) throw new RuntimeException("Syntax Error: missing operand for u-");
                     // 修正: Double.class -> Object.class
-                    stack.push(new UnaryExpressionNode("-", stack.pop(), Object.class)); 
+                    stack.push(new UnaryExpressionNode("-", stack.pop())); 
                     break;
                 case "u+":
                     if (stack.isEmpty()) throw new RuntimeException("Syntax Error: missing operand for u+");
                     // 修正: Double.class -> Object.class
-                    stack.push(new UnaryExpressionNode("+", stack.pop(), Object.class));
+                    stack.push(new UnaryExpressionNode("+", stack.pop()));
                     break;
                 default:
                     stack.push(literalOrVariable(token));
