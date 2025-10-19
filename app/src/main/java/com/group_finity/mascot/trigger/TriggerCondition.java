@@ -1,55 +1,87 @@
 package com.group_finity.mascot.trigger;
 
-import com.group_finity.mascot.trigger.expr.ExprEvaluator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import com.group_finity.mascot.trigger.expr.ExpressionEngine;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
+import com.group_finity.mascot.trigger.expr.parser.ExpressionParser;
+import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
+import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
+import com.group_finity.mascot.trigger.expr.type.Mode;
 
 /**
- * TriggerCondition:
- * トリガーの発動条件を表すクラス。
- * 内部で式（JavaScript風の条件式）をASTキャッシュ付きで評価する。
+ * TriggerCondition — 単一の条件式を保持し、評価を行う。
  */
 public class TriggerCondition {
 
-    /** 評価対象の式（例: "shimeji.x > 100 && shimeji.state === 'falling'"） */
+    private static final Map<String, ExpressionNode> AST_CACHE = new ConcurrentHashMap<>();
+
     private final String expression;
+    private final ExpressionEngine engine;
+    private final EvaluationContext context;
 
-    /** 式評価器（ASTキャッシュ機構を内包） */
-    private final ExprEvaluator evaluator;
-
-    /**
-     * TriggerCondition の生成。
-     *
-     * @param expression 評価する式
-     * @param evaluator 共有される式評価器
-     */
-    public TriggerCondition(String expression, ExprEvaluator evaluator) {
+    public TriggerCondition(String expression, Map<String, Object> variables) {
         this.expression = expression;
-        this.evaluator = evaluator;
+        this.engine = new ExpressionEngine();
+        this.engine.setTypeResolver(new DefaultTypeResolver());
+        this.engine.setTypeCoercion(new DefaultTypeCoercion());
+        this.engine.setMode(Mode.STRICT);
+        this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT);
     }
 
-    /**
-     * 条件を評価する。
-     *
-     * @param context 評価コンテキスト（変数環境など）
-     * @return 条件が真の場合 true、偽またはエラー時は false
-     */
-    public boolean evaluate(EvaluationContext context) {
+    /** 内部のコンテキストを使って評価 */
+    public boolean evaluate() {
+        return evaluate(this.context);
+    }
+
+    /** 外部から渡された EvaluationContext を使って評価 */
+    public boolean evaluate(EvaluationContext externalCtx) {
         try {
-            Object result = evaluator.evaluate(expression, context);
-            return (result instanceof Boolean b) ? b : false;
+            EvaluationContext ctx = (externalCtx != null) ? externalCtx : this.context;
+
+            ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, expr -> {
+                try {
+                    return new ExpressionParser(expr).parse();
+                } catch (Exception e) {
+                    System.err.println("[TriggerCondition] Failed to parse expression: " + expr);
+                    e.printStackTrace();
+                    return null;
+                }
+            });
+
+            if (ast == null) return false;
+
+            Object result = ast.evaluate(ctx, new DefaultTypeResolver(), new DefaultTypeCoercion());
+            if (result instanceof Boolean) return (Boolean) result;
+            if (result instanceof Number) return ((Number) result).doubleValue() != 0.0;
+            return result != null;
+
         } catch (Exception e) {
-            // 評価中のエラーはログ出力して false 扱いにする
-            System.err.println("[TriggerCondition] Evaluation error: " + e.getMessage());
+            System.err.println("[TriggerCondition] Evaluation failed for expression: " + expression);
+            e.printStackTrace();
             return false;
         }
+    }
+
+    public void setVariable(String name, Object value) {
+        context.setValue(name, value);
+    }
+
+    public EvaluationContext getContext() {
+        return context;
     }
 
     public String getExpression() {
         return expression;
     }
 
-    @Override
-    public String toString() {
-        return "TriggerCondition[" + expression + "]";
+    public static void clearCache() {
+        AST_CACHE.clear();
+    }
+
+    public static int getCacheSize() {
+        return AST_CACHE.size();
     }
 }
