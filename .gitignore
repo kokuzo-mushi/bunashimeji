@@ -1,57 +1,64 @@
-# ========================================
-# Shimeji Neo Project Git Ignore Template
-# Environment: Windows + Eclipse + Gradle
-# ========================================
+# ===============================
+# Shimeji Neo Project .gitignore
+# Generated automatically
+# ===============================
 
-# --- Build & IDE output ---
+# Build artifacts
 /build/
-/.gradle/
+/app/build/
 /out/
 /bin/
 /target/
+/dist/
 
-# --- Eclipse project files ---
-.classpath
-.project
-.settings/
+# Gradle
+/.gradle/
+/app/.gradle/
+gradle-app.setting
+gradle.properties
+!gradle-wrapper.jar
 
-# --- IntelliJ / VSCode / other IDEs ---
-.idea/
-.vscode/
+# Eclipse files
+/.settings/
+/.classpath
+/.project
+/app/.classpath
+/app/.project
 
-# --- Logs / Temp files ---
+# IntelliJ IDEA (もし使ぁE��吁E
+/.idea/
+*.iml
+
+# Logs / Temporary files
 *.log
 *.tmp
 *.bak
 *.swp
-*.swo
+/temp/
+/tmp/
 
-# --- OS-specific files ---
-.DS_Store
+# OS files
 Thumbs.db
-desktop.ini
+Desktop.ini
+.DS_Store
 
-# --- Java artifacts ---
+# Java / Misc
 *.class
 *.jar
 *.war
-*.nar
 *.ear
-*.zip
-*.tar.gz
-*.rar
+/META-INF/
+/MANIFEST.MF
 
-# --- VM crash logs ---
-hs_err_pid*
-replay_pid*
-
-# --- Local environment config ---
+# Environment or private files
+.env
 local.properties
-*.iml
+/app/local.properties
 
-# --- Optional: ignore Gradle wrapper if using system-wide Gradle ---
-# gradle/
+# Ignore all credential or API keys
+token.txt
+api_keys.json
 
-# --- Optional: custom user config (safe exclusion) ---
-user.config
-config.json
+# ===============================
+# End of generated .gitignore
+# ===============================

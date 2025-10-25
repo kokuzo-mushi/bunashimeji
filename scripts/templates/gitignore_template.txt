@@ -1,0 +1,17 @@
+# Build & IDE files
+/build/
+/.gradle/
+/out/
+/.classpath
+.project
+.settings/
+/.idea/
+/.vscode/
+
+# Logs & temp
+*.log
+*.tmp
+
+# OS specific
+.DS_Store
+Thumbs.db

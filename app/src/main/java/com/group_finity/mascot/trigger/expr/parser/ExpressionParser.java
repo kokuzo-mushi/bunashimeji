@@ -1,10 +1,7 @@
 package com.group_finity.mascot.trigger.expr.parser;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
-import java.util.Map;
 
 import com.group_finity.mascot.trigger.expr.node.BinaryExpressionNode;
 import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
@@ -13,211 +10,250 @@ import com.group_finity.mascot.trigger.expr.node.UnaryExpressionNode;
 import com.group_finity.mascot.trigger.expr.node.VariableNode;
 
 /**
- * 式パーサ：簡易式構文をRPN(逆ポーランド記法)経由でASTに構築
- * 対応演算子: +, -, *, /, %, <, <=, >, >=, ==, !=, &&, ||, !, ===, 単項+, 単項-
+ * ExpressionParser (統合版)
+ * - インスタンス/静的呼び出しの両対応
+ * - Binary / Unary / Literal / Variable ノードに完全整合
  */
 public final class ExpressionParser {
 
-    private final String exprText;
+    private final List<Token> tokens;
+    private int pos;
 
-    public ExpressionParser(String exprText) {
-        this.exprText = exprText;
+    public ExpressionParser(String expr) {
+        this.tokens = tokenize(expr);
+        this.pos = 0;
     }
 
+    /** 静的パーサ入口（両方の呼び出しスタイルに対応） */
+    public static ExpressionNode parse(String expr) {
+        ExpressionParser p = new ExpressionParser(expr);
+        return p.parse();
+    }
+
+    /** インスタンス版パース（再帰下降） */
     public ExpressionNode parse() {
-        List<String> tokens = tokenize(exprText);
-        List<String> rpn = toRPN(tokens);
-        return buildAST(rpn);
+        ExpressionNode node = parseOr();
+        // EOFはtokenizeで付与済み。二重チェックはしない。
+        return node;
     }
 
-    // ===============================
-    // トークナイズ
-    // ===============================
-    private List<String> tokenize(String expr) {
-        List<String> result = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < expr.length(); i++) {
-            char c = expr.charAt(i);
+    // ===== 構文解析 =====
+    private ExpressionNode parseOr() {
+        ExpressionNode left = parseAnd();
+        while (match(TokenType.OROR)) {
+            String op = previous().lexeme;
+            ExpressionNode right = parseAnd();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
 
-            if (Character.isWhitespace(c)) {
-                if (sb.length() > 0) {
-                    result.add(sb.toString());
-                    sb.setLength(0);
+    private ExpressionNode parseAnd() {
+        ExpressionNode left = parseEquality();
+        while (match(TokenType.ANDAND)) {
+            String op = previous().lexeme;
+            ExpressionNode right = parseEquality();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
+
+    private ExpressionNode parseEquality() {
+        ExpressionNode left = parseComparison();
+        while (match(TokenType.EQEQ) || match(TokenType.BANGEQ)
+            || match(TokenType.EQEQEQ) || match(TokenType.BANGEQEQ)) {
+            String op = previous().lexeme;
+            ExpressionNode right = parseComparison();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
+
+    private ExpressionNode parseComparison() {
+        ExpressionNode left = parseAdditive();
+        while (match(TokenType.LT) || match(TokenType.LTE)
+            || match(TokenType.GT) || match(TokenType.GTE)) {
+            String op = previous().lexeme;
+            ExpressionNode right = parseAdditive();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
+
+    private ExpressionNode parseAdditive() {
+        ExpressionNode left = parseMultiplicative();
+        while (match(TokenType.PLUS) || match(TokenType.MINUS)) {
+            String op = previous().lexeme;
+            ExpressionNode right = parseMultiplicative();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
+
+    private ExpressionNode parseMultiplicative() {
+        ExpressionNode left = parseUnary();
+        while (match(TokenType.STAR) || match(TokenType.SLASH) || match(TokenType.PERCENT)) {
+            String op = previous().lexeme;
+            ExpressionNode right = parseUnary();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
+
+    private ExpressionNode parseUnary() {
+        if (match(TokenType.PLUS) || match(TokenType.MINUS)
+            || match(TokenType.BANG) || match(TokenType.TILDE)) {
+            String op = previous().lexeme;
+            ExpressionNode right = parseUnary(); // ← 再帰呼び出し順OK
+            return new UnaryExpressionNode(op, right);
+        }
+        return parsePrimary(); // ← 括弧含む最下層呼び出し
+    }
+
+    private ExpressionNode parsePrimary() {
+        if (match(TokenType.NUMBER)) {
+            String s = previous().lexeme;
+            if (s.contains(".")) return new LiteralNode(Double.parseDouble(s));
+            try { return new LiteralNode(Long.parseLong(s)); }
+            catch (NumberFormatException e) { return new LiteralNode(Double.parseDouble(s)); }
+        }
+        if (match(TokenType.STRING)) {
+            String raw = previous().lexeme;
+            return new LiteralNode(unescape(raw.substring(1, raw.length() - 1)));
+        }
+        if (match(TokenType.TRUE))  return new LiteralNode(Boolean.TRUE);
+        if (match(TokenType.FALSE)) return new LiteralNode(Boolean.FALSE);
+        if (match(TokenType.IDENT)) return new VariableNode(previous().lexeme);
+        if (match(TokenType.LPAREN)) {
+            ExpressionNode inside = parseOr();
+            expect(TokenType.RPAREN); // ★ advance削除
+            return inside;
+        }
+        throw new RuntimeException("Unexpected token: " + peek().lexeme);
+    }
+
+    // ===== トークナイザ =====
+    private static List<Token> tokenize(String src) {
+        List<Token> ts = new ArrayList<>();
+        int i = 0;
+        while (i < src.length()) {
+            char c = src.charAt(i);
+            if (Character.isWhitespace(c)) { i++; continue; }
+
+            // 数値
+            if (Character.isDigit(c)) {
+                int start = i;
+                while (i < src.length() && (Character.isDigit(src.charAt(i)) || src.charAt(i)=='.')) i++;
+                ts.add(new Token(TokenType.NUMBER, src.substring(start, i)));
+                continue;
+            }
+
+            // 文字列（ダブルクォート）
+            if (c == '"') {
+                int start = ++i;
+                StringBuilder sb = new StringBuilder();
+                while (i < src.length() && src.charAt(i) != '"') {
+                    sb.append(src.charAt(i++));
+                }
+                if (i < src.length() && src.charAt(i) == '"') i++;
+                ts.add(new Token(TokenType.STRING, "\"" + sb + "\""));
+                continue;
+            }
+
+            // 文字列（シングルクォート）
+            if (c == '\'') {
+                int start = ++i;
+                StringBuilder sb = new StringBuilder();
+                while (i < src.length() && src.charAt(i) != '\'') {
+                    sb.append(src.charAt(i++));
+                }
+                if (i < src.length() && src.charAt(i) == '\'') i++;
+                ts.add(new Token(TokenType.STRING, "\"" + sb + "\"")); // 内部表現はダブルクォートに統一
+                continue;
+            }
+
+            // 識別子
+            if (Character.isLetter(c) || c == '_') {
+                int start = i++;
+                while (i < src.length() && (Character.isLetterOrDigit(src.charAt(i)) || src.charAt(i)=='_')) i++;
+                String word = src.substring(start, i);
+                switch (word) {
+                    case "true" -> ts.add(new Token(TokenType.TRUE, word));
+                    case "false" -> ts.add(new Token(TokenType.FALSE, word));
+                    default -> ts.add(new Token(TokenType.IDENT, word));
                 }
                 continue;
             }
 
-            // 演算子検出
-            if ("=!<>&|+-*/%()".indexOf(c) >= 0) {
-                if (sb.length() > 0) {
-                    result.add(sb.toString());
-                    sb.setLength(0);
-                }
+            // 演算子（3→2→1 の順で貪欲に）
+            String two = (i + 1 < src.length()) ? src.substring(i, i + 2) : "";
+            String three = (i + 2 < src.length()) ? src.substring(i, i + 3) : "";
 
-                // 三文字演算子対応 (例: ===)
-                if (i + 2 < expr.length()) {
-                    String three = "" + c + expr.charAt(i + 1) + expr.charAt(i + 2);
-                    if ("===".equals(three)) {
-                        result.add(three);
-                        i += 2;
-                        continue;
-                    }
-                }
-
-                // 二文字演算子対応
-                if (i + 1 < expr.length()) {
-                    String two = "" + c + expr.charAt(i + 1);
-                    if (List.of("==", "!=", "<=", ">=", "&&", "||").contains(two)) {
-                        result.add(two);
-                        i++;
-                        continue;
-                    }
-                }
-
-                // 一文字演算子
-                result.add(String.valueOf(c));
-            } else {
-                sb.append(c);
+            switch (three) {
+                case "===" -> { ts.add(new Token(TokenType.EQEQEQ, three)); i += 3; continue; }
+                case "!==" -> { ts.add(new Token(TokenType.BANGEQEQ, three)); i += 3; continue; }
             }
-        }
-        if (sb.length() > 0) result.add(sb.toString());
-        return result;
-    }
-
-
-    // ===============================
-    // RPN変換 (Shunting Yardアルゴリズム)
-    // ===============================
-    private List<String> toRPN(List<String> tokens) {
-        // 優先順位: 1 (単項), 2 (乗除), 3 (加減), 4 (比較), 5 (抽象等価), 5 (厳密等価), 6 (AND), 7 (OR)
-        Map<String, Integer> prec = Map.ofEntries(
-            Map.entry("u-", 1), Map.entry("u+", 1), Map.entry("!", 1), // u-: 単項マイナス, u+: 単項プラス
-            Map.entry("*", 2), Map.entry("/", 2), Map.entry("%", 2),
-            Map.entry("+", 3), Map.entry("-", 3),
-            Map.entry("<", 4), Map.entry("<=", 4), Map.entry(">", 4), Map.entry(">=", 4),
-            Map.entry("==", 5), Map.entry("!=", 5), Map.entry("===", 5), // '===' を追加
-            Map.entry("&&", 6),
-            Map.entry("||", 7)
-        );
-
-        List<String> output = new ArrayList<>();
-        Deque<String> stack = new ArrayDeque<>();
-
-        for (int i = 0; i < tokens.size(); i++) {
-            String token = tokens.get(i);
-
-            if (prec.containsKey(token) || "===".equals(token)) {
-                String operator = token;
-
-                // 単項演算子の検出 (前が演算子、開き括弧、または式の最初の場合)
-                boolean isUnary = (i == 0 || isOperatorOrParen(tokens.get(i - 1)));
-
-                if (operator.equals("-") && isUnary) {
-                    operator = "u-"; // 単項マイナス
-                } else if (operator.equals("+") && isUnary) {
-                    operator = "u+"; // 単項プラス
-                }
-                
-                // RPNスタック処理
-                if (prec.containsKey(operator)) {
-                    while (!stack.isEmpty() && prec.containsKey(stack.peek())
-                            && prec.get(stack.peek()) < prec.get(operator)) {
-                        output.add(stack.pop());
-                    }
-                    stack.push(operator);
-                } else {
-                    // === がprecに含まれていない場合（上記のMap定義で含まれるようにしたが、念のため）
-                    stack.push(operator);
-                }
-
-            } else if ("(".equals(token)) {
-                stack.push(token);
-            } else if (")".equals(token)) {
-                while (!stack.isEmpty() && !"(".equals(stack.peek())) {
-                    output.add(stack.pop());
-                }
-                if (!stack.isEmpty() && "(".equals(stack.peek())) stack.pop(); // '(' を捨てる
-                else throw new RuntimeException("Mismatched parentheses");
-            } else {
-                output.add(token);
+            switch (two) {
+                case "==" -> { ts.add(new Token(TokenType.EQEQ, two)); i += 2; continue; }
+                case "!=" -> { ts.add(new Token(TokenType.BANGEQ, two)); i += 2; continue; }
+                case "<=" -> { ts.add(new Token(TokenType.LTE, two)); i += 2; continue; }
+                case ">=" -> { ts.add(new Token(TokenType.GTE, two)); i += 2; continue; }
+                case "&&" -> { ts.add(new Token(TokenType.ANDAND, two)); i += 2; continue; }
+                case "||" -> { ts.add(new Token(TokenType.OROR, two)); i += 2; continue; }
             }
-        }
 
-        while (!stack.isEmpty()) {
-            if ("(".equals(stack.peek()) || ")".equals(stack.peek())) throw new RuntimeException("Mismatched parentheses");
-            output.add(stack.pop());
-        }
-        return output;
-    }
-
-    private boolean isOperatorOrParen(String token) {
-        return List.of("(", "+", "-", "*", "/", "%", "<", ">", "<=", ">=", "==", "!=", "===", "&&", "||", "!", "u-", "u+").contains(token);
-    }
-
-    // ===============================
-    // AST構築
-    // ===============================
-    private ExpressionNode buildAST(List<String> rpn) {
-        Deque<ExpressionNode> stack = new ArrayDeque<>();
-
-        for (String token : rpn) {
-            switch (token) {
-                // 二項演算子
-                case "+": case "-": case "*": case "/":
-                case "%": case "<": case ">": case "<=": case ">=":
-                case "==": case "!=": case "&&": case "||": 
-                case "===": { // '===' を追加
-                    if (stack.size() < 2) throw new RuntimeException("Syntax Error: missing operands for " + token);
-                    ExpressionNode right = stack.pop();
-                    ExpressionNode left = stack.pop();
-                    stack.push(new BinaryExpressionNode(token, left, right));
-                    break;
-                }
-                // 単項演算子
-                case "!":
-                    if (stack.isEmpty()) throw new RuntimeException("Syntax Error: missing operand for !");
-                    stack.push(new UnaryExpressionNode("!", stack.pop()));
-                    break;
-                case "u-":
-                    if (stack.isEmpty()) throw new RuntimeException("Syntax Error: missing operand for u-");
-                    // 修正: Double.class -> Object.class
-                    stack.push(new UnaryExpressionNode("-", stack.pop())); 
-                    break;
-                case "u+":
-                    if (stack.isEmpty()) throw new RuntimeException("Syntax Error: missing operand for u+");
-                    // 修正: Double.class -> Object.class
-                    stack.push(new UnaryExpressionNode("+", stack.pop()));
-                    break;
-                default:
-                    stack.push(literalOrVariable(token));
+            switch (c) {
+                case '+': ts.add(new Token(TokenType.PLUS, "+")); break;
+                case '-': ts.add(new Token(TokenType.MINUS, "-")); break;
+                case '*': ts.add(new Token(TokenType.STAR, "*")); break;
+                case '/': ts.add(new Token(TokenType.SLASH, "/")); break;
+                case '%': ts.add(new Token(TokenType.PERCENT, "%")); break;
+                case '<': ts.add(new Token(TokenType.LT, "<")); break;
+                case '>': ts.add(new Token(TokenType.GT, ">")); break;
+                case '!': ts.add(new Token(TokenType.BANG, "!")); break;
+                case '~': ts.add(new Token(TokenType.TILDE, "~")); break;
+                case '(': ts.add(new Token(TokenType.LPAREN, "(")); break;
+                case ')': ts.add(new Token(TokenType.RPAREN, ")")); break;
+                default: throw new RuntimeException("Unexpected char: " + c);
             }
+            i++;
         }
-
-        if (stack.size() != 1) throw new RuntimeException("Syntax Error: invalid expression");
-        return stack.pop();
+        ts.add(new Token(TokenType.EOF, ""));
+        return ts;
     }
 
-    // ===============================
-    // リテラル or 変数ノード
-    // ===============================
-    private ExpressionNode literalOrVariable(String token) {
-        if ("true".equalsIgnoreCase(token)) return new LiteralNode(true, Boolean.class);
-        if ("false".equalsIgnoreCase(token)) return new LiteralNode(false, Boolean.class);
-
-        // クォートされた文字列リテラル対応
-        if (token.startsWith("\"") && token.endsWith("\"")) {
-             String inner = token.substring(1, token.length() - 1);
-             return new LiteralNode(inner, String.class);
-        }
-        // シングルクォート対応は元コードのコメントアウトされており、ここでは削除。
-        // もし必要なら元のコードの通り追加してください。
-
-        try {
-            if (token.contains(".")) return new LiteralNode(Double.parseDouble(token), Double.class);
-            return new LiteralNode(Long.parseLong(token), Long.class);
-        } catch (NumberFormatException e) {
-            return new VariableNode(token, null);
-        }
+    private static String unescape(String s) {
+        return s.replace("\\n", "\n").replace("\\t", "\t").replace("\\\"", "\"").replace("\\\\", "\\");
     }
-    
+
+    // ===== 内部トークン管理 =====
+    private boolean match(TokenType type) {
+        if (check(type)) { advance(); return true; }
+        return false;
+    }
+    private boolean check(TokenType type) { return !isAtEnd() && peek().type == type; }
+    private Token advance() { if (!isAtEnd()) pos++; return previous(); }
+    private boolean isAtEnd() { return peek().type == TokenType.EOF; }
+    private Token peek() { return tokens.get(pos); }
+    private Token previous() { return tokens.get(pos - 1); }
+    private void expect(TokenType type) {
+        if (!match(type)) throw new RuntimeException("Expected " + type + " but got " + peek().type);
+    }
+
+    // ===== 内部型 =====
+    private enum TokenType {
+        PLUS, MINUS, STAR, SLASH, PERCENT,
+        LT, LTE, GT, GTE,
+        EQEQ, BANGEQ, EQEQEQ, BANGEQEQ,
+        ANDAND, OROR,
+        BANG, TILDE,
+        LPAREN, RPAREN,
+        NUMBER, STRING, TRUE, FALSE, IDENT, EOF
+    }
+
+    private static final class Token {
+        final TokenType type;
+        final String lexeme;
+        Token(TokenType type, String lexeme) { this.type = type; this.lexeme = lexeme; }
+    }
 }

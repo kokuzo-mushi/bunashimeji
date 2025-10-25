@@ -1,155 +1,87 @@
 package com.group_finity.mascot.trigger.expr.eval;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.Mode;
 import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
 
 /**
- * Minimal evaluation context: variable lookup + coercion helpers + TypeCoercion provider.
+ * 評価時の変数・型変換・モード管理。
+ * D-4d fix: スナップショットの完全ディープコピー化。
  */
 public final class EvaluationContext {
 
     private final Map<String, Object> variables;
     private final TypeCoercion typeCoercion;
     private final Mode mode;
+    private final boolean immutable;
 
-    /**
-     * フルコンストラクタ
-     */
-    public EvaluationContext(Map<String, Object> variables, TypeCoercion coercion, Mode mode) {
-        this.variables = variables != null ? new HashMap<>(variables) : new HashMap<>();
-        this.typeCoercion = Objects.requireNonNull(coercion);
-        this.mode = Objects.requireNonNull(mode);
+    // --- コンストラクタ群 ---
+    public EvaluationContext(Map<String, Object> vars, TypeCoercion coercion, Mode mode, boolean immutable) {
+        this.variables = (vars != null) ? new HashMap<>(vars) : new HashMap<>();
+        this.typeCoercion = coercion;
+        this.mode = mode;
+        this.immutable = immutable;
     }
 
-    /**
-     * 簡易コンストラクタ（TypeCoercion をデフォルト実装、Mode を STRICT に）
-     * テストや簡易利用向け。
-     */
-    public EvaluationContext(Map<String, Object> variables) {
-        this(variables, new DefaultTypeCoercion(), Mode.STRICT);
+    public EvaluationContext(Map<String, Object> vars, TypeCoercion coercion, Mode mode) {
+        this(vars, coercion, mode, false);
     }
 
-    /**
-     * 中間コンストラクタ（TypeCoercion 指定だが Mode はデフォルト）
-     */
-    public EvaluationContext(Map<String, Object> variables, TypeCoercion coercion) {
-        this(variables, coercion, Mode.STRICT);
+    public EvaluationContext(Map<String, Object> vars) {
+        this(vars, new DefaultTypeCoercion(), Mode.STRICT, false);
     }
 
-    /** 値の取得（型未指定） */
-    public Object getValue(String name) {
-        return variables.get(name);
-    }
+    // --- 値アクセス ---
+    public synchronized Object getValue(String name) { return variables.get(name); }
+    public synchronized Object getVariable(String name) { return variables.get(name); }
 
-    /** 値の取得（期待型あり）。存在しない場合は null を返す。 */
-    public Object getValue(String name, Class<?> expectedType) {
-        Object v = getValue(name);
-        if (v == null) return null;
-        // coercion を使って期待型へ変換する
-        return typeCoercion.coerceTo(v, expectedType, mode);
-    }
-
-    public TypeCoercion getTypeCoercion() {
-        return typeCoercion;
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    /** 変数の設定（テスト時や実行時に値を差し替えるために便利） */
-    public void setValue(String name, Object value) {
+    public synchronized void setValue(String name, Object value) {
+        if (immutable) throw new UnsupportedOperationException("Immutable context");
         variables.put(name, value);
     }
 
-    /** 変数が存在するか */
-    public boolean hasValue(String name) {
-        return variables.containsKey(name);
-    }
+    public synchronized boolean hasValue(String name) { return variables.containsKey(name); }
 
-    // helpers used by nodes
-    public Double toNumber(Object o) {
-        if (o == null) return 0.0;
-        Object v = typeCoercion.coerceTo(o, Double.class, mode);
-        if (v instanceof Number n) return n.doubleValue();
-        try {
-            return Double.parseDouble(String.valueOf(v));
-        } catch (NumberFormatException ex) {
-            return 0.0;
+    // --- ✅ 完全ディープコピー版スナップショット ---
+    public EvaluationContext snapshotImmutable() {
+        synchronized (this) {
+            Map<String, Object> deepCopy = deepCopyMap(this.variables);
+            return new EvaluationContext(Collections.unmodifiableMap(deepCopy), typeCoercion, mode, true);
         }
     }
 
-    public Boolean toBoolean(Object o) {
-        if (o == null) return Boolean.FALSE;
-        Object v = typeCoercion.coerceTo(o, Boolean.class, mode);
-        if (v instanceof Boolean b) return b;
-        return Boolean.parseBoolean(String.valueOf(v));
-    }
-
-    @Override
-    public String toString() {
-        return "EvaluationContext(vars=" + variables + ", mode=" + mode + ")";
-    }
-}
-
-
-/*
-package com.group_finity.mascot.trigger.expr.eval;
-
-import java.util.Map;
-
-import com.group_finity.mascot.trigger.expr.type.Mode;
-import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
-
-public final class EvaluationContext {
-
-    private final Map<String, Object> variables;
-    private final TypeCoercion coercion;
-    private final Mode mode;
-
-    public EvaluationContext(Map<String, Object> variables, TypeCoercion coercion, Mode mode) {
-        this.variables = variables;
-        this.coercion = coercion;
-        this.mode = mode;
-    }
-
-    public Object getValue(String name) {
-        return variables.get(name);
-    }
-
-    public Object getValue(String name, Class<?> expectedType) {
-        Object v = getValue(name);
-        if (v == null) return null;
-        return coercion.coerceTo(v, expectedType, mode);
-    }
-
-    public TypeCoercion getTypeCoercion() {
-        return coercion;
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    // Utility coercion helpers
-    public boolean toBoolean(Object v) {
-        if (v instanceof Boolean b) return b;
-        if (v instanceof Number n) return n.doubleValue() != 0;
-        return v != null && Boolean.parseBoolean(v.toString());
-    }
-
-    public Number toNumber(Object v) {
-        if (v instanceof Number n) return n;
-        try {
-            return Double.parseDouble(String.valueOf(v));
-        } catch (Exception e) {
-            return 0.0;
+    // --- 深いコピー（List, Map, Array対応） ---
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> deepCopyMap(Map<String, Object> src) {
+        Map<String, Object> dest = new HashMap<>();
+        for (Map.Entry<String, Object> e : src.entrySet()) {
+            Object v = e.getValue();
+            if (v instanceof Map<?,?> m)
+                dest.put(e.getKey(), Collections.unmodifiableMap(deepCopyMap((Map<String, Object>) m)));
+            else if (v instanceof List<?> l)
+                dest.put(e.getKey(), Collections.unmodifiableList(new ArrayList<>(l)));
+            else if (v instanceof Object[] arr)
+                dest.put(e.getKey(), Arrays.copyOf(arr, arr.length));
+            else if (v instanceof EvaluationContext c)
+                dest.put(e.getKey(), c.snapshotImmutable());
+            else
+                dest.put(e.getKey(), v);
         }
+        return dest;
     }
+
+    public synchronized Map<String, Object> getVariablesSnapshot() {
+        return new HashMap<>(variables);
+    }
+
+    public TypeCoercion getTypeCoercion() { return typeCoercion; }
+    public Mode getMode() { return mode; }
+    public boolean isImmutable() { return immutable; }
 }
-*/

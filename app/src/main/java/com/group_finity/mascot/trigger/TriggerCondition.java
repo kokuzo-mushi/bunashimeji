@@ -13,6 +13,7 @@ import com.group_finity.mascot.trigger.expr.type.Mode;
 
 /**
  * TriggerCondition — 単一の条件式を保持し、評価を行う。
+ * （修正版: 外部EvaluationContextを優先）
  */
 public class TriggerCondition {
 
@@ -36,9 +37,10 @@ public class TriggerCondition {
         return evaluate(this.context);
     }
 
-    /** 外部から渡された EvaluationContext を使って評価 */
+    /** 外部から渡された EvaluationContext を使って評価（優先） */
     public boolean evaluate(EvaluationContext externalCtx) {
         try {
+            // ★ 修正: 外部コンテキストが渡された場合は必ずそれを使う
             EvaluationContext ctx = (externalCtx != null) ? externalCtx : this.context;
 
             ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, expr -> {
@@ -51,9 +53,17 @@ public class TriggerCondition {
                 }
             });
 
-            if (ast == null) return false;
+            if (ast == null) {
+                System.err.println("[TriggerCondition] AST is null for expression: " + expression);
+                return false;
+            }
 
             Object result = ast.evaluate(ctx, new DefaultTypeResolver(), new DefaultTypeCoercion());
+            
+            // ★ デバッグログ追加
+            System.out.printf("[TriggerCondition] Expression '%s' evaluated to: %s (context vars: %s)%n",
+                expression, result, ctx.getVariablesSnapshot());
+            
             if (result instanceof Boolean) return (Boolean) result;
             if (result instanceof Number) return ((Number) result).doubleValue() != 0.0;
             return result != null;
@@ -75,6 +85,11 @@ public class TriggerCondition {
 
     public String getExpression() {
         return expression;
+    }
+
+    @Override
+    public String toString() {
+        return "TriggerCondition{" + expression + "}";
     }
 
     public static void clearCache() {
