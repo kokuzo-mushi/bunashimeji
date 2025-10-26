@@ -1,87 +1,124 @@
 package com.group_finity.mascot.trigger.expr.eval;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
-import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.Mode;
 import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
 
 /**
- * 評価時の変数・型変換・モード管理。
- * D-4d fix: スナップショットの完全ディープコピー化。
+ * 評価時の変数・依存関係・型変換・モードを保持するコンテキスト（D-5 安定版）
+ * - 参照共有/コピーの両コンストラクタを用意
+ * - 依存トラッキング（markAccess/clearAccessLog/snapshotDependencies）
+ * - スナップショットAPI（getVariablesSnapshot/snapshotImmutable）
+ * - 互換API（getVariable/setValue）を提供
  */
-public final class EvaluationContext {
+public class EvaluationContext {
 
+    // 変数表（基本は LinkedHashMap/参照共有も可能）
     private final Map<String, Object> variables;
+
+    // 依存トラッキング用（読み取りアクセスしたキー集合）
+    private final Set<String> accessedKeys = ConcurrentHashMap.newKeySet();
+
+    // 型変換器とモード（null許容：既存コード互換）
     private final TypeCoercion typeCoercion;
     private final Mode mode;
-    private final boolean immutable;
 
-    // --- コンストラクタ群 ---
-    public EvaluationContext(Map<String, Object> vars, TypeCoercion coercion, Mode mode, boolean immutable) {
-        this.variables = (vars != null) ? new HashMap<>(vars) : new HashMap<>();
-        this.typeCoercion = coercion;
-        this.mode = mode;
-        this.immutable = immutable;
+    /** 互換：Map だけ渡されたケース（ShimejiApp から使用） */
+    public EvaluationContext(Map<String, Object> vars) {
+        this(vars, null, Mode.STRICT, false); // 既定は STRICT、コピー
     }
 
+    /** 標準：コピーして保持（従来挙動） */
     public EvaluationContext(Map<String, Object> vars, TypeCoercion coercion, Mode mode) {
         this(vars, coercion, mode, false);
     }
 
-    public EvaluationContext(Map<String, Object> vars) {
-        this(vars, new DefaultTypeCoercion(), Mode.STRICT, false);
+    /** 拡張：参照共有を選択可能（shareVariables=true で外部Mapと同一参照） */
+    public EvaluationContext(Map<String, Object> vars,
+                             TypeCoercion coercion,
+                             Mode mode,
+                             boolean shareVariables) {
+        this.typeCoercion = coercion;
+        this.mode = (mode != null ? mode : Mode.STRICT);
+        if (vars == null) {
+            this.variables = new LinkedHashMap<>();
+        } else if (shareVariables) {
+            // 参照共有：外部で put した変更がそのまま見える
+            this.variables = vars;
+        } else {
+            // コピー保持：外部変更の影響を受けない
+            this.variables = new LinkedHashMap<>(vars);
+        }
     }
 
-    // --- 値アクセス ---
-    public synchronized Object getValue(String name) { return variables.get(name); }
-    public synchronized Object getVariable(String name) { return variables.get(name); }
+    // ========= 基本アクセサ =========
 
-    public synchronized void setValue(String name, Object value) {
-        if (immutable) throw new UnsupportedOperationException("Immutable context");
+    public Map<String, Object> getVariables() {
+        return variables;
+    }
+
+    public TypeCoercion getTypeCoercion() {
+        return typeCoercion;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    // ========= 依存トラッキング =========
+
+    /** 変数アクセスの記録（VariableNode などから呼ばれる） */
+    public void markAccess(String name) {
+        if (name != null) accessedKeys.add(name);
+    }
+
+    /** 依存アクセスログのクリア（再評価直前に呼ぶ） */
+    public void clearAccessLog() {
+        accessedKeys.clear();
+    }
+
+    /** 現時点でアクセスされたキーの値スナップショット（順序安定） */
+    public Map<String, Object> snapshotDependencies() {
+        return accessedKeys.stream().collect(Collectors.toMap(
+            k -> k,
+            k -> variables.get(k),
+            (a, b) -> a,
+            LinkedHashMap::new
+        ));
+    }
+
+    // ========= スナップショットAPI =========
+
+    /** 現在の変数表のコピーを返す（STRICT 判定・ログ出力などに使用） */
+    public Map<String, Object> getVariablesSnapshot() {
+        return new LinkedHashMap<>(variables);
+    }
+
+    /**
+     * Immutability を想定した簡易スナップショット。
+     * 新しい EvaluationContext を生成し、変数表はコピーして埋め込む。
+     * （EventDispatcher のワーカー渡し用）
+     */
+    public EvaluationContext snapshotImmutable() {
+        return new EvaluationContext(new LinkedHashMap<>(variables), typeCoercion, mode, false);
+    }
+
+    // ========= 互換API（既存コード対応） =========
+
+    /** 既存：VariableNode からの読み取りで使用される */
+    public Object getVariable(String name) {
+        // 読み取り時にも依存記録する
+        if (name != null) accessedKeys.add(name);
+        return variables.get(name);
+    }
+
+    /** 既存：Main からの setValue(String, int/obj) 呼び出しに対応 */
+    public void setValue(String name, Object value) {
         variables.put(name, value);
     }
-
-    public synchronized boolean hasValue(String name) { return variables.containsKey(name); }
-
-    // --- ✅ 完全ディープコピー版スナップショット ---
-    public EvaluationContext snapshotImmutable() {
-        synchronized (this) {
-            Map<String, Object> deepCopy = deepCopyMap(this.variables);
-            return new EvaluationContext(Collections.unmodifiableMap(deepCopy), typeCoercion, mode, true);
-        }
-    }
-
-    // --- 深いコピー（List, Map, Array対応） ---
-    @SuppressWarnings("unchecked")
-    private static Map<String, Object> deepCopyMap(Map<String, Object> src) {
-        Map<String, Object> dest = new HashMap<>();
-        for (Map.Entry<String, Object> e : src.entrySet()) {
-            Object v = e.getValue();
-            if (v instanceof Map<?,?> m)
-                dest.put(e.getKey(), Collections.unmodifiableMap(deepCopyMap((Map<String, Object>) m)));
-            else if (v instanceof List<?> l)
-                dest.put(e.getKey(), Collections.unmodifiableList(new ArrayList<>(l)));
-            else if (v instanceof Object[] arr)
-                dest.put(e.getKey(), Arrays.copyOf(arr, arr.length));
-            else if (v instanceof EvaluationContext c)
-                dest.put(e.getKey(), c.snapshotImmutable());
-            else
-                dest.put(e.getKey(), v);
-        }
-        return dest;
-    }
-
-    public synchronized Map<String, Object> getVariablesSnapshot() {
-        return new HashMap<>(variables);
-    }
-
-    public TypeCoercion getTypeCoercion() { return typeCoercion; }
-    public Mode getMode() { return mode; }
-    public boolean isImmutable() { return immutable; }
 }

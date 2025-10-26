@@ -9,5 +9,7 @@ public enum Mode {
     /** 失敗時に警告を出してフォールバック値を返す */
     WARN,
     /** 可能な限り寛容に変換を試みる */
-    LENIENT
+    LENIENT,
+    
+    LOOSE;
 }

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.group_finity.mascot.trigger.expr.type.Mode;
 
@@ -12,6 +13,13 @@ import com.group_finity.mascot.trigger.expr.type.Mode;
  */
 public final class EvaluationResult {
 
+	 // --- debug flag (default: false) ---
+    private static final AtomicBoolean DEBUG = new AtomicBoolean(false);
+	
+	    /** Enable or disable debug logging for cache freshness checks. */
+    public static void setDebug(boolean enabled) {
+	        DEBUG.set(enabled);
+	    }
     private final Object value;
     private final Map<String, Object> dependencies;
     private final long timestamp;
@@ -38,7 +46,14 @@ public final class EvaluationResult {
     public Mode getMode() { return mode; }
 
     public boolean isOutdated(Map<String, Object> currentDeps) {
-        return !Objects.equals(this.dependencies, currentDeps);
+        boolean outdated = !Objects.equals(this.dependencies, currentDeps);
+        System.out.printf("[Cache] isOutdated=%s (stored=%s, current=%s)%n",
+            outdated, this.dependencies, currentDeps);
+        if (DEBUG.get()) {
+        	            System.out.printf("[Cache] isOutdated=%s (stored=%s, current=%s)%n",
+        	                    outdated, this.dependencies, currentDeps);
+        	        }
+        return outdated;
     }
 
     @Override

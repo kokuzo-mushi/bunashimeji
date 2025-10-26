@@ -1,102 +1,132 @@
 package com.group_finity.mascot.trigger;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import com.group_finity.mascot.trigger.expr.ExpressionEngine;
+import com.group_finity.mascot.trigger.expr.cache.CacheStatsTracker;
+import com.group_finity.mascot.trigger.expr.cache.EvaluationResult;
+import com.group_finity.mascot.trigger.expr.cache.ExprCacheKey;
+import com.group_finity.mascot.trigger.expr.cache.ExprCacheManager;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
 import com.group_finity.mascot.trigger.expr.parser.ExpressionParser;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
 import com.group_finity.mascot.trigger.expr.type.Mode;
+import com.group_finity.mascot.trigger.expr.type.TypeResolver;
 
 /**
- * TriggerCondition — 単一の条件式を保持し、評価を行う。
- * （修正版: 外部EvaluationContextを優先）
+ * D-5 修正版:
+ * - 取得は AST+Mode のキーのみ（依存はキーに含めない）
+ * - HIT 判定は EvaluationResult 内の依存と「現在の依存値」の比較で行う
+ * - clearAccessLog() は再評価する時だけ呼ぶ
+ * - EvaluationContext は外部変数マップを参照共有（コンストラクタ呼び出し側の責務）
  */
 public class TriggerCondition {
 
     private static final Map<String, ExpressionNode> AST_CACHE = new ConcurrentHashMap<>();
+    private static final ExprCacheManager cacheManager = new ExprCacheManager();
 
     private final String expression;
     private final ExpressionEngine engine;
-    private final EvaluationContext context;
+    private EvaluationContext context; // 参照共有される想定
 
     public TriggerCondition(String expression, Map<String, Object> variables) {
         this.expression = expression;
         this.engine = new ExpressionEngine();
-        this.engine.setTypeResolver(new DefaultTypeResolver());
-        this.engine.setTypeCoercion(new DefaultTypeCoercion());
-        this.engine.setMode(Mode.STRICT);
-        this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT);
+        if (variables == null) variables = new HashMap<>();
+        // ★ EvaluationContext 側が参照共有コンストラクタを持つ前提（下の修正②参照）
+        this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT, true);
     }
 
-    /** 内部のコンテキストを使って評価 */
+    public EvaluationContext getContext() { return context; }
+    public void setVariable(String name, Object value) {
+        if (context != null && context.getVariables() != null) {
+            context.getVariables().put(name, value);
+        }
+    }
+    public String getExpression() { return expression; }
+
     public boolean evaluate() {
         return evaluate(this.context);
     }
 
-    /** 外部から渡された EvaluationContext を使って評価（優先） */
     public boolean evaluate(EvaluationContext externalCtx) {
-        try {
-            // ★ 修正: 外部コンテキストが渡された場合は必ずそれを使う
-            EvaluationContext ctx = (externalCtx != null) ? externalCtx : this.context;
-
-            ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, expr -> {
-                try {
-                    return new ExpressionParser(expr).parse();
-                } catch (Exception e) {
-                    System.err.println("[TriggerCondition] Failed to parse expression: " + expr);
-                    e.printStackTrace();
-                    return null;
-                }
-            });
-
-            if (ast == null) {
-                System.err.println("[TriggerCondition] AST is null for expression: " + expression);
-                return false;
-            }
-
-            Object result = ast.evaluate(ctx, new DefaultTypeResolver(), new DefaultTypeCoercion());
-            
-            // ★ デバッグログ追加
-            System.out.printf("[TriggerCondition] Expression '%s' evaluated to: %s (context vars: %s)%n",
-                expression, result, ctx.getVariablesSnapshot());
-            
-            if (result instanceof Boolean) return (Boolean) result;
-            if (result instanceof Number) return ((Number) result).doubleValue() != 0.0;
-            return result != null;
-
-        } catch (Exception e) {
-            System.err.println("[TriggerCondition] Evaluation failed for expression: " + expression);
-            e.printStackTrace();
-            return false;
+        if (externalCtx == null && this.context == null) {
+            this.context = new EvaluationContext(new HashMap<>(), new DefaultTypeCoercion(), Mode.STRICT, true);
         }
-    }
+        EvaluationContext ctx = (externalCtx != null) ? externalCtx : this.context;
+        if (ctx == null) return false;
 
-    public void setVariable(String name, Object value) {
-        context.setValue(name, value);
-    }
+        // 1) AST 構築（失敗時は false リテラルでフォールバック）
+        ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, key -> {
+            try {
+                ExpressionNode parsed = new ExpressionParser(key).parse();
+                return (parsed != null) ? parsed : new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+            } catch (Exception e) {
+                System.err.println("[TriggerCondition] Parse error: " + key);
+                e.printStackTrace();
+                return new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+            }
+        });
 
-    public EvaluationContext getContext() {
-        return context;
-    }
+        // 2) AST+Mode のキーで取得（依存はキーに含めない）
+        ExprCacheKey astKey = ExprCacheKey.ofAst(ast, ctx.getMode());
+        Optional<EvaluationResult> cached = cacheManager.get(astKey);
 
-    public String getExpression() {
-        return expression;
+        // 3) 依存比較で HIT 判定（clearAccessLog はここでは呼ばない）
+        if (cached.isPresent()) {
+            Map<String, Object> currentDeps;
+            if (ctx.getMode() == Mode.STRICT) {
+            	// new: no copy; equals() compares entries, not identity
+            	currentDeps = ctx.getVariables();
+            	
+            } else {
+                // LOOSE: 前回依存していたキーのみ抽出
+                Set<String> keys = cached.get().getDependencies().keySet();
+                currentDeps = keys.stream()
+                        .collect(Collectors.toMap(k -> k, k -> ctx.getVariables().get(k),
+                                (a, b) -> a, LinkedHashMap::new));
+            }
+            if (!cached.get().isOutdated(currentDeps)) {
+                CacheStatsTracker.INSTANCE.recordHit(expression);
+                return TypeResolver.toBoolean(cached.get().getValue());
+            }
+        }
+        CacheStatsTracker.INSTANCE.recordMiss(expression);
+
+        // 4) 再評価（この時だけアクセスログをクリア）
+        ctx.clearAccessLog();
+        long start = System.nanoTime();
+        Object result;
+        try {
+            result = ast.evaluate(ctx, new DefaultTypeResolver(), new DefaultTypeCoercion());
+        } catch (Exception e) {
+            System.err.println("[TriggerCondition] Evaluation failed: " + expression);
+            e.printStackTrace();
+            result = false;
+        }
+        long end = System.nanoTime();
+
+        // 5) 依存スナップショットを保存（put は AST キーに上書き）
+        Map<String, Object> deps = ctx.snapshotDependencies();
+        EvaluationResult evalResult = new EvaluationResult(result, deps, end, end - start, ctx.getMode());
+        cacheManager.put(astKey, evalResult);
+
+        return TypeResolver.toBoolean(result);
     }
 
     @Override
-    public String toString() {
-        return "TriggerCondition{" + expression + "}";
+    public String toString() { return "TriggerCondition[" + expression + "]"; }
+    
+    public static void clearGlobalCache() {
+        cacheManager.clear();
     }
 
-    public static void clearCache() {
-        AST_CACHE.clear();
-    }
-
-    public static int getCacheSize() {
-        return AST_CACHE.size();
-    }
 }

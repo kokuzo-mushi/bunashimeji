@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class CacheStatsTracker {
 
     public static final CacheStatsTracker INSTANCE = new CacheStatsTracker();
-    private CacheStatsTracker() {}
+    public CacheStatsTracker() {}
 
     private final AtomicLong hitCount  = new AtomicLong();
     private final AtomicLong missCount = new AtomicLong();
@@ -44,5 +44,7 @@ public final class CacheStatsTracker {
         missCount.set(0);
         perTriggerHits.clear();
         perTriggerMisses.clear();
+        com.group_finity.mascot.trigger.TriggerCondition.clearGlobalCache();
+
     }
 }
