@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class CacheStatsTracker {
 
     public static final CacheStatsTracker INSTANCE = new CacheStatsTracker();
-    public CacheStatsTracker() {}
+    private CacheStatsTracker() {}
 
     private final AtomicLong hitCount  = new AtomicLong();
     private final AtomicLong missCount = new AtomicLong();

@@ -25,6 +25,7 @@ public final class EvaluationResult {
     private final long timestamp;
     private final long evalDurationNanos;
     private final Mode mode;
+    
 
     public EvaluationResult(
             Object value,
