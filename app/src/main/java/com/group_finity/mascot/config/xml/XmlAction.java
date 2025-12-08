@@ -2,6 +2,7 @@ package com.group_finity.mascot.config.xml;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class XmlAction {
     private XmlPoint point;
 
     @XmlElement(name = "ActionReference")
-    private List<XmlActionReference> actionReferences;
+    private List<XmlActionReference> actionReferences = new ArrayList<>();
 
     public String getName() { return name; }
     public String getType() { return type; }

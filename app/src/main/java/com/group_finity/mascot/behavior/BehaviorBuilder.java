@@ -1,11 +1,18 @@
 package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.action.Action;
-import com.group_finity.mascot.behavior.Behavior;
-import com.group_finity.mascot.behavior.GenericBehavior;
-import com.group_finity.mascot.trigger.TriggerCondition;
+import com.group_finity.mascot.action.SequenceAction;
+import com.group_finity.mascot.config.xml.XmlBehavior;
+import com.group_finity.mascot.config.xml.XmlBehaviors;
+import com.group_finity.mascot.config.xml.XmlActionReference;
+import com.group_finity.mascot.trigger.ExprTrigger;
+import com.group_finity.mascot.trigger.Trigger;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +41,66 @@ public class BehaviorBuilder {
     }
 
     public List<Behavior> build(Path behaviorsPath) {
-        // In a full implementation, this method would:
-        // 1. Parse the XML file.
-        // 2. For each <behavior> tag:
-        //    a. Get the condition script from the <condition> tag.
-        //    b. Get the action name from the <action>'s 'ref' attribute.
-        //    c. Look up the Action instance from the 'actions' map.
-        //    d. Create a new TriggerCondition with the script.
-        //    e. Create a new GenericBehavior, combining the condition and the action.
-        // 3. Return a list of all created behaviors.
-        return Collections.emptyList(); // Placeholder
+        try {
+            JAXBContext context = JAXBContext.newInstance(XmlBehaviors.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            XmlBehaviors xmlBehaviors = (XmlBehaviors) unmarshaller.unmarshal(behaviorsPath.toFile());
+
+            if (xmlBehaviors.getBehaviors() == null) {
+                return Collections.emptyList();
+            }
+
+            List<Behavior> builtBehaviors = new ArrayList<>();
+            for (XmlBehavior xmlBehavior : xmlBehaviors.getBehaviors()) {
+                // 条件式からTriggerを生成します。
+                Trigger trigger = new ExprTrigger(xmlBehavior.getCondition());
+
+                // 実行するActionを解決または生成します。
+                Action action = createActionForBehavior(xmlBehavior);
+
+                if (action != null) {
+                    // TriggerとActionを組み合わせてBehaviorを生成し、リストに追加します。
+                    builtBehaviors.add(new GenericBehavior(trigger, action));
+                } else {
+                    System.err.println("No valid action found for condition: " + xmlBehavior.getCondition());
+                }
+            }
+            return Collections.unmodifiableList(builtBehaviors);
+
+        } catch (JAXBException e) {
+            System.err.println("Failed to parse behaviors.xml: " + behaviorsPath);
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    private Action createActionForBehavior(XmlBehavior xmlBehavior) {
+        List<XmlActionReference> references = xmlBehavior.getActionReferences();
+        if (references == null || references.isEmpty()) {
+            return null;
+        }
+
+        if (references.size() == 1) {
+            // ActionReferenceが1つの場合は、対応するActionをそのまま返します。
+            String actionName = references.get(0).getName();
+            Action action = actions.get(actionName);
+            if (action == null) {
+                System.err.println("Action not found for behavior: " + actionName);
+            }
+            return action;
+        } else {
+            // ActionReferenceが複数の場合は、それらを順に実行するSequenceActionを動的に生成します。
+            List<Action> sequence = new ArrayList<>();
+            for (XmlActionReference ref : references) {
+                Action referencedAction = actions.get(ref.getName());
+                if (referencedAction != null) {
+                    sequence.add(referencedAction);
+                } else {
+                    System.err.println("ActionReference not found: " + ref.getName() + " in behavior with condition: " + xmlBehavior.getCondition());
+                }
+            }
+            // SequenceActionは別途実装が必要です。
+            return sequence.isEmpty() ? null : new SequenceAction(sequence);
+        }
     }
 }
