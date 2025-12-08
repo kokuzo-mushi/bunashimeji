@@ -1,8 +1,9 @@
-package com.group_finity.mascot.config;
+package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.behavior.Behavior;
-
+import com.group_finity.mascot.behavior.ActionBuilder;
+import com.group_finity.mascot.behavior.BehaviorBuilder;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,10 @@ public class Configuration {
 
     public List<Behavior> getBehaviors() {
         return behaviors;
+    }
+
+    public Map<String, Action> getActions() {
+        return actions;
     }
 
     /**

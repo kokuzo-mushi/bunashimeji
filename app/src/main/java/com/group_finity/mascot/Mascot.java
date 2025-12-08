@@ -1,6 +1,8 @@
 package com.group_finity.mascot;
 
 import com.group_finity.mascot.action.Action;
+import java.util.Map;
+import java.util.Collections;
 
 /**
  * The core class representing a single mascot character.
@@ -9,6 +11,9 @@ import com.group_finity.mascot.action.Action;
  * execution of its current {@link Action}.
  */
 public class Mascot {
+
+    // All available actions, loaded from configuration.
+    private Map<String, Action> actions = Collections.emptyMap();
 
     // The action currently being executed.
     private Action currentAction;
@@ -50,6 +55,29 @@ public class Mascot {
      */
     public void setNextAction(Action nextAction) {
         this.nextAction = nextAction;
+    }
+
+    /**
+     * Sets the map of all available actions.
+     * This is called during initialization to provide the mascot with its action repertoire.
+     * @param actions A map of action names to Action instances.
+     */
+    public void setActions(Map<String, Action> actions) {
+        this.actions = actions;
+    }
+
+    /**
+     * Finds an action by its name and schedules it for execution.
+     * This method is designed to be called by the {@code EventDispatcher}.
+     * @param actionName The name of the action to perform.
+     */
+    public void performAction(String actionName) {
+        Action action = actions.get(actionName);
+        if (action != null) {
+            setNextAction(action);
+        } else {
+            System.err.println("Action not found: " + actionName);
+        }
     }
 
     //--- Getters and Setters for State ---

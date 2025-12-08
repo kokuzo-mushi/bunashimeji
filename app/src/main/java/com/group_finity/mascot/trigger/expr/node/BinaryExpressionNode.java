@@ -29,9 +29,7 @@ public class BinaryExpressionNode extends ExpressionNode {
     public Object evaluate(EvaluationContext context, TypeResolver resolver, TypeCoercion coercion) {
         Object leftVal = left.evaluate(context, resolver, coercion);
         Object rightVal = right.evaluate(context, resolver, coercion);
-        // ここに実際の演算ロジックが入る (例: resolver.applyBinaryOp(operator, leftVal, rightVal))
-        // このサンプルでは省略
-        return null;
+        return resolver.applyBinaryOp(operator, leftVal, rightVal);
     }
 
     @Override

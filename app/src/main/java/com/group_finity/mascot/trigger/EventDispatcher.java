@@ -3,7 +3,7 @@ package com.group_finity.mascot.trigger;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.behavior.Behavior;
-import com.group_finity.mascot.event.Event;
+import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
 import java.util.List;
@@ -44,14 +44,14 @@ public class EventDispatcher {
      *
      * @param event The event that triggered the evaluation (currently unused, for future filtering).
      */
-    public void evaluateTriggers(Event event) {
+    public void evaluateTriggers(EventEnvelope<?> event) {
         if (mascot == null) {
             // Cannot execute actions without a mascot.
             return;
         }
 
         for (final Trigger trigger : triggers) {
-            if (trigger.evaluate(this.context)) {
+            if (trigger.evaluate(event, this.context)) {
                 // The trigger's condition is met.
                 // In Phase 2, the Trigger will be part of a Behavior that holds an Action.
                 // We check if the trigger is a Behavior to get the action.

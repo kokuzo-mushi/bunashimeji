@@ -2,13 +2,13 @@ package com.group_finity.mascot;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Map;
 
+import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.behavior.Behavior;
+import com.group_finity.mascot.behavior.GenericBehavior;
 import com.group_finity.mascot.trigger.CompositeTrigger;
 import com.group_finity.mascot.trigger.EventDispatcher;
-import com.group_finity.mascot.trigger.EventLog;
-import com.group_finity.mascot.trigger.EventQueue;
 import com.group_finity.mascot.trigger.TriggerCondition;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 import com.group_finity.mascot.trigger.event.EventEnvelope;
@@ -31,7 +31,8 @@ public class Main {
         vars.put("time", 500);
         vars.put("state", "idle");
 
-        EvaluationContext ctx = new EvaluationContext(vars, new DefaultTypeCoercion(), Mode.STRICT);
+        // ShimejiAppの実装に合わせ、マップを直接共有するコンストラクタを使用
+        EvaluationContext ctx = new EvaluationContext(vars);
 
         // --- 2️⃣ イベントキューとディスパッチャを初期化 ---
         Mascot mascot = new Mascot(); // Mascotインスタンスを生成
@@ -45,11 +46,30 @@ public class Main {
         CompositeTrigger trigger2 = new CompositeTrigger(List.of(cond1), CompositeTrigger.Mode.ANY);
 
         // --- 4️⃣ 登録 ---
-        dispatcher.registerTrigger(trigger1, "Action1", "Action2"); // 複数のアクションを登録
-        dispatcher.registerTrigger(trigger2, "Action3");
+        // テスト用のアクションを匿名クラスで定義
+        Action action1 = new Action() {
+            private boolean hasNext = true;
+            @Override public boolean hasNext() { return hasNext; }
+            @Override public void execute(Mascot m) {
+                System.out.println("[Action] Executing Action1 (Triggered by: " + trigger1 + ")");
+                hasNext = false; // 1回実行したら終了
+            }
+        };
+        Action action3 = new Action() {
+            private boolean hasNext = true;
+            @Override public boolean hasNext() { return hasNext; }
+            @Override public void execute(Mascot m) {
+                System.out.println("[Action] Executing Action3 (Triggered by: " + trigger2 + ")");
+                hasNext = false; // 1回実行したら終了
+            }
+        };
 
-        System.out.println("[Main] Registered triggers: " + dispatcher.getRegisteredTriggerCount());
+        // TriggerとActionをBehaviorでラップして登録する
+        dispatcher.registerTrigger(new GenericBehavior(trigger1, action1));
+        dispatcher.registerTrigger(new GenericBehavior(trigger2, action3));
 
+        // メソッド名を修正
+        System.out.println("[Main] Registered triggers: " + dispatcher.getRegisteredCount());
         // --- 5️⃣ コンテキスト変化シミュレーション ---
         int[] timeSteps = {500, 900, 1200, 1500};
         String[] states = {"idle", "active", "falling", "falling"};
@@ -59,27 +79,17 @@ public class Main {
             int t = timeSteps[i];
             String st = states[i];
 
-            // 表示用に vars を更新（任意）
-            vars.put("time", t);
-            vars.put("state", st);
-
-            // 評価に使われるのは ctx なので、必ず ctx にも反映する！
-            ctx.setValue("time", t);
-            ctx.setValue("state", st);
+            // コンテキストの変数を更新 (ShimejiAppの実装に合わせる)
+            ctx.getVariables().put("time", t);
+            ctx.getVariables().put("state", st);
 
             System.out.println("\n[Main] Step " + (i + 1) + " → Context: {time=" + t + ", state=" + st + "}");
 
-            // EventDispatcher の run() メソッドを直接呼び出す代わりに、
-            // EventDispatcher が EventQueue からイベントをポーリングして処理するロジックをシミュレート
-            // ここでは EventDispatcher が EventQueue を持っていることを前提とする
-            // EventDispatcher の内部で EventQueue.take() または EventQueue.poll() が呼ばれる想定
-            // Main クラスでは EventDispatcher にイベントをディスパッチする役割に徹する (EventDispatcher は内部でキューを管理)
-            // EventDispatcher は EventQueue を持っていないため、直接イベントをディスパッチする
-            // ここでは EventDispatcher の run() メソッドを直接呼び出す代わりに、イベントを生成してディスパッチする
-            dispatcher.dispatchEvent(new EventEnvelope<>(EventType.SYSTEM_TICK, (long)t, "Main"));
+            // メソッド名を修正し、イベントをディスパッチしてトリガーを評価
+            dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.SYSTEM_TICK, (long)t, "Main"));
 
-            // EventDispatcher は非同期でイベントを処理するため、ここではキューのポーリングは行わない
-            // イベント処理の結果は EventDispatcher の handleTriggerFired メソッドでログ出力される
+            // マスコットのtickを呼び出し、アクションを実行させる
+            mascot.tick();
 
             try {
                 Thread.sleep(500);

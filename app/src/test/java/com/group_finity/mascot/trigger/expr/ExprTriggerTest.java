@@ -26,7 +26,7 @@ public class ExprTriggerTest {
 
         ExprTrigger trigger = new ExprTrigger("velocityY > 0 && onGround == false");
 
-        assertTrue(trigger.check(null, ctx), "条件が真として評価されるべき");
+        assertTrue(trigger.evaluate(null, ctx), "条件が真として評価されるべき");
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ExprTriggerTest {
 
         ExprTrigger trigger = new ExprTrigger("velocityY > 0 && onGround == false");
 
-        assertFalse(trigger.check(null, ctx), "条件が偽として評価されるべき");
+        assertFalse(trigger.evaluate(null, ctx), "条件が偽として評価されるべき");
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ExprTriggerTest {
 
         ExprTrigger trigger = new ExprTrigger("state == \"jump\"");
 
-        assertTrue(trigger.check(null, ctx));
+        assertTrue(trigger.evaluate(null, ctx));
     }
     
     @Test
@@ -59,7 +59,7 @@ public class ExprTriggerTest {
         Map<String,Object> vars = Map.of("a", 2, "b", 3, "c", 4);
         EvaluationContext ctx = new EvaluationContext(vars, new DefaultTypeCoercion(), Mode.STRICT);
         ExprTrigger t1 = new ExprTrigger("(a + b) * c == 20"); // (2+3)*4 == 20
-        assertTrue(t1.check(null, ctx));
+        assertTrue(t1.evaluate(null, ctx));
     }
 
 }

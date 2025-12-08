@@ -1,141 +1,206 @@
-> Build starts at 2025-12-08 15:17:44
-Task :app:compileJava started
-Task :app:compileJava UP-TO-DATE
-------
+%TESTC  17 v2
+%TSTTREE2,com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest,true,2,false,1,DefaultTypeResolverTest,,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]
+%TSTTREE3,com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests,true,17,false,2,Binary Operator Tests,,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]
+%TSTTREE4,testRemainderByZero(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testRemainderByZero(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testRemainderByZero()]
+%TSTTREE5,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),true,0,false,3,testGreaterThanOrEqual(int\, int\, boolean),int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThanOrEqual(int\, int\, boolean)]
+%TSTTREE6,testBooleanAddition(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testBooleanAddition(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testBooleanAddition()]
+%TSTTREE7,testUnknownBinaryOperator(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testUnknownBinaryOperator(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testUnknownBinaryOperator()]
+%TSTTREE8,testLogicalOr(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testLogicalOr(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testLogicalOr()]
+%TSTTREE9,testMultiplication(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testMultiplication(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testMultiplication()]
+%TSTTREE10,testAddition(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testAddition(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testAddition()]
+%TSTTREE11,testEqualityWithNulls(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,Equality with null values,,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testEqualityWithNulls()]
+%TSTTREE12,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),true,0,false,3,testGreaterThan(int\, int\, boolean),int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThan(int\, int\, boolean)]
+%TSTTREE13,testStringConcatenation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testStringConcatenation(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testStringConcatenation()]
+%TSTTREE14,testDivisionByZero(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testDivisionByZero(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testDivisionByZero()]
+%TSTTREE15,testDivision(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testDivision(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testDivision()]
+%TSTTREE16,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),true,0,false,3,testEquality(Object\, Object\, boolean),java.lang.Object\, java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testEquality(java.lang.Object\, java.lang.Object\, boolean)]
+%TSTTREE17,testLogicalAnd(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testLogicalAnd(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testLogicalAnd()]
+%TSTTREE18,testRemainder(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testRemainder(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testRemainder()]
+%TSTTREE19,testSubtraction(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testSubtraction(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testSubtraction()]
+%TSTTREE20,testArithmeticWithNonNumericStringReturnsNull(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,false,3,testArithmeticWithNonNumericStringReturnsNull(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[method:testArithmeticWithNonNumericStringReturnsNull()]
+%TSTTREE21,com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests,true,5,false,2,Unary Operator Tests,,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]
+%TSTTREE22,testLogicalNotNull(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,false,21,Logical Not with null input,,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[method:testLogicalNotNull()]
+%TSTTREE23,testUnknownUnaryOperator(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,false,21,testUnknownUnaryOperator(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[method:testUnknownUnaryOperator()]
+%TSTTREE24,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),true,0,false,21,testLogicalNot(Object\, boolean),java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]
+%TSTTREE25,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),true,0,false,21,testNegation(String\, String),java.lang.String\, java.lang.String,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testNegation(java.lang.String\, java.lang.String)]
+%TSTTREE26,testUnaryPlus(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,false,21,testUnaryPlus(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[method:testUnaryPlus()]
+%TESTS  4,testRemainderByZero(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
 
-> Build starts at 2025-12-08 15:17:44
-Task :app:compileTestJava started
-Task :app:compileTestJava failed
-------
+%TESTE  4,testRemainderByZero(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
 
-Could not execute build using connection to Gradle distribution 'https://services.gradle.org/distributions/gradle-8.9-bin.zip'.
-WARNING: A restricted method in java.lang.System has been called
-WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/C:/Users/81803/.gradle/wrapper/dists/gradle-8.9-bin/90cnw93cvbtalezasaz0blq0a/gradle-8.9/lib/native-platform-0.22-milestone-26.jar)
-WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
-WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+%TSTTREE27,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,5,[1] 10\, 5\, true,int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThanOrEqual(int\, int\, boolean)]/[test-template-invocation:#1]
+%TESTS  27,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
 
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:22: エラー: クラス EventDispatcherのコンストラクタ EventDispatcherは指定された型に適用できません。
-        EventDispatcher dispatcher = new EventDispatcher(queue);
-                                     ^
-  期待値: EvaluationContext,Mascot
-  検出値:    PriorityBlockingQueue<EventTask>
-  理由: 実引数リストと仮引数リストの長さが異なります
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:27: エラー: シンボルを見つけられません
-        dispatcher.dispatch(() -> log("Task-A [LOW] executed"), EventTask.Priority.LOW);
-                  ^
-  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:28: エラー: シンボルを見つけられません
-        dispatcher.dispatch(() -> log("Task-B [HIGH] executed"), EventTask.Priority.HIGH);
-                  ^
-  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:29: エラー: シンボルを見つけられません
-        dispatcher.dispatch(() -> log("Task-C [MEDIUM] executed"), EventTask.Priority.MEDIUM);
-                  ^
-  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:30: エラー: シンボルを見つけられません
-        dispatcher.dispatch(() -> log("Task-D [HIGH] executed"), EventTask.Priority.HIGH);
-                  ^
-  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:25: エラー: クラス EventDispatcherのコンストラクタ EventDispatcherは指定された型に適用できません。
-        EventDispatcher dispatcher = new EventDispatcher(base, logQ, 2);
-                                     ^
-  期待値: EvaluationContext,Mascot
-  検出値:    EvaluationContext,EventQueue,int
-  理由: 実引数リストと仮引数リストの長さが異なります
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:36: エラー: シンボルを見つけられません
-        dispatcher.pollAndDispatch();
-                  ^
-  シンボル:   メソッド pollAndDispatch()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:49: エラー: シンボルを見つけられません
-        dispatcher.pollAndDispatch();
-                  ^
-  シンボル:   メソッド pollAndDispatch()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:65: エラー: シンボルを見つけられません
-        dispatcher.shutdownWorkers();
-                  ^
-  シンボル:   メソッド shutdownWorkers()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:66: エラー: シンボルを見つけられません
-        dispatcher.awaitWorkers(1000);
-                  ^
-  シンボル:   メソッド awaitWorkers(int)
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:31: エラー: 不適合な型: EventQueueをMascotに変換できません:
-        dispatcher = new EventDispatcher(ctx, queue);
-                                              ^
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:44: エラー: シンボルを見つけられません
-        dispatcher.pollAndDispatch();
-                  ^
-  シンボル:   メソッド pollAndDispatch()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:45: エラー: シンボルを見つけられません
-        assertEquals(1, dispatcher.getRegisteredCount());
-                                  ^
-  シンボル:   メソッド getRegisteredCount()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:50: エラー: シンボルを見つけられません
-        dispatcher.pollAndDispatch();
-                  ^
-  シンボル:   メソッド pollAndDispatch()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:64: エラー: シンボルを見つけられません
-        assertDoesNotThrow(() -> dispatcher.pollAndDispatch());
-                                           ^
-  シンボル:   メソッド pollAndDispatch()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:80: エラー: シンボルを見つけられません
-        assertEquals(2, dispatcher.getRegisteredCount());
-                                  ^
-  シンボル:   メソッド getRegisteredCount()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:81: エラー: シンボルを見つけられません
-        assertDoesNotThrow(() -> dispatcher.pollAndDispatch());
-                                           ^
-  シンボル:   メソッド pollAndDispatch()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:86: エラー: シンボルを見つけられません
-        assertEquals(0, dispatcher.getRegisteredCount());
-                                  ^
-  シンボル:   メソッド getRegisteredCount()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:87: エラー: シンボルを見つけられません
-        dispatcher.pollAndDispatch(); // Should not throw
-                  ^
-  シンボル:   メソッド pollAndDispatch()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:95: エラー: シンボルを見つけられません
-        assertEquals(1, dispatcher.getRegisteredCount());
-                                  ^
-  シンボル:   メソッド getRegisteredCount()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:97: エラー: シンボルを見つけられません
-        dispatcher.clear();
-                  ^
-  シンボル:   メソッド clear()
-  場所: タイプEventDispatcherの変数 dispatcher
-C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:98: エラー: シンボルを見つけられません
-        assertEquals(0, dispatcher.getRegisteredCount());
-                                  ^
-  シンボル:   メソッド getRegisteredCount()
-  場所: タイプEventDispatcherの変数 dispatcher
-ノート: 一部のメッセージは簡略化されています。-Xdiags:verboseで再コンパイルして完全な出力を取得してください
-エラー22個
+%TESTE  27,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
 
-FAILURE: Build failed with an exception.
+%TSTTREE28,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,5,[2] 5\, 10\, false,int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThanOrEqual(int\, int\, boolean)]/[test-template-invocation:#2]
+%TESTS  28,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
 
-* What went wrong:
-Execution failed for task ':app:compileTestJava'.
-> Compilation failed; see the compiler error output for details.
+%TESTE  28,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
 
-* Try:
-> Run with --info option to get more log output.
-> Run with --scan to get full insights.
+%TSTTREE29,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,5,[3] 10\, 10\, true,int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThanOrEqual(int\, int\, boolean)]/[test-template-invocation:#3]
+%TESTS  29,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
 
-BUILD FAILED in 1s
+%TESTE  29,testGreaterThanOrEqual(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  6,testBooleanAddition(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  6,testBooleanAddition(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  7,testUnknownBinaryOperator(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  7,testUnknownBinaryOperator(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  8,testLogicalOr(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  8,testLogicalOr(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  9,testMultiplication(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  9,testMultiplication(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  10,testAddition(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  10,testAddition(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  11,testEqualityWithNulls(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  11,testEqualityWithNulls(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE30,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,12,[1] 10\, 5\, true,int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThan(int\, int\, boolean)]/[test-template-invocation:#1]
+%TESTS  30,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  30,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE31,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,12,[2] 5\, 10\, false,int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThan(int\, int\, boolean)]/[test-template-invocation:#2]
+%TESTS  31,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  31,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE32,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,12,[3] 10\, 10\, false,int\, int\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testGreaterThan(int\, int\, boolean)]/[test-template-invocation:#3]
+%TESTS  32,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  32,testGreaterThan(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  13,testStringConcatenation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  13,testStringConcatenation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  14,testDivisionByZero(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  14,testDivisionByZero(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  15,testDivision(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  15,testDivision(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE33,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,16,[1] 10\, 10\, true,java.lang.Object\, java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testEquality(java.lang.Object\, java.lang.Object\, boolean)]/[test-template-invocation:#1]
+%TESTS  33,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  33,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE34,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,16,[2] 10\, 5\, false,java.lang.Object\, java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testEquality(java.lang.Object\, java.lang.Object\, boolean)]/[test-template-invocation:#2]
+%TESTS  34,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  34,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE35,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,16,[3] hello\, hello\, true,java.lang.Object\, java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testEquality(java.lang.Object\, java.lang.Object\, boolean)]/[test-template-invocation:#3]
+%TESTS  35,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  35,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE36,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,16,[4] hello\, world\, false,java.lang.Object\, java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testEquality(java.lang.Object\, java.lang.Object\, boolean)]/[test-template-invocation:#4]
+%TESTS  36,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  36,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TSTTREE37,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests),false,1,true,16,[5] true\, true\, true,java.lang.Object\, java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:BinaryOpTests]/[test-template:testEquality(java.lang.Object\, java.lang.Object\, boolean)]/[test-template-invocation:#5]
+%TESTS  37,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  37,testEquality(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  17,testLogicalAnd(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  17,testLogicalAnd(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  18,testRemainder(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  18,testRemainder(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  19,testSubtraction(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  19,testSubtraction(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  20,testArithmeticWithNonNumericStringReturnsNull(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTE  20,testArithmeticWithNonNumericStringReturnsNull(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$BinaryOpTests)
+
+%TESTS  22,testLogicalNotNull(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  22,testLogicalNotNull(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTS  23,testUnknownUnaryOperator(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  23,testUnknownUnaryOperator(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE38,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,24,[1] true\, false,java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]/[test-template-invocation:#1]
+%TESTS  38,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  38,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE39,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,24,[2] false\, true,java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]/[test-template-invocation:#2]
+%TESTS  39,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  39,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE40,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,24,[3] 1\, false,java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]/[test-template-invocation:#3]
+%TESTS  40,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  40,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE41,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,24,[4] 0\, true,java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]/[test-template-invocation:#4]
+%TESTS  41,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  41,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE42,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,24,[5] text\, false,java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]/[test-template-invocation:#5]
+%TESTS  42,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  42,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE43,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,24,[6] 0\, true,java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]/[test-template-invocation:#6]
+%TESTS  43,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  43,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE44,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,24,[7] \, true,java.lang.Object\, boolean,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testLogicalNot(java.lang.Object\, boolean)]/[test-template-invocation:#7]
+%TESTS  44,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  44,testLogicalNot(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE45,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,25,[1] 5\, -5,java.lang.String\, java.lang.String,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testNegation(java.lang.String\, java.lang.String)]/[test-template-invocation:#1]
+%TESTS  45,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  45,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE46,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,25,[2] 0\, 0,java.lang.String\, java.lang.String,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testNegation(java.lang.String\, java.lang.String)]/[test-template-invocation:#2]
+%TESTS  46,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  46,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE47,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,25,[3] -10\, 10,java.lang.String\, java.lang.String,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testNegation(java.lang.String\, java.lang.String)]/[test-template-invocation:#3]
+%TESTS  47,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  47,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TSTTREE48,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests),false,1,true,25,[4] 3.14\, -3.14,java.lang.String\, java.lang.String,[engine:junit-jupiter]/[class:com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest]/[nested-class:UnaryOpTests]/[test-template:testNegation(java.lang.String\, java.lang.String)]/[test-template-invocation:#4]
+%TESTS  48,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  48,testNegation(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTS  26,testUnaryPlus(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%TESTE  26,testUnaryPlus(com.group_finity.mascot.trigger.expr.type.DefaultTypeResolverTest$UnaryOpTests)
+
+%RUNTIME199
 

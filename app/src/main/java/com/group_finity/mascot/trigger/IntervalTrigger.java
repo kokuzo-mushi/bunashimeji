@@ -23,14 +23,14 @@ public class IntervalTrigger implements Trigger {
     }
 
     @Override
-    public boolean check(EventEnvelope<?> eventEnvelope, EvaluationContext context) {
+    public boolean evaluate(EventEnvelope<?> event, EvaluationContext context) {
         // このトリガーは SYSTEM_TICK イベントにのみ関心がある
-        if (eventEnvelope.getType() != EventType.SYSTEM_TICK) {
+        if (event.getType() != EventType.SYSTEM_TICK) {
             return false;
         }
 
         // ペイロードから経過時間を取得
-        Object payload = eventEnvelope.getPayload();
+        Object payload = event.getPayload();
         if (!(payload instanceof Long deltaTimeMillis)) {
             return false; // 不正なペイロードの場合は何もしない
         }

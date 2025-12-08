@@ -16,11 +16,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.group_finity.mascot.Mascot;
+import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.behavior.Behavior;
-
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
-import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
-import com.group_finity.mascot.trigger.expr.type.Mode;
 
 @ExtendWith(MockitoExtension.class)
 public class EventDispatcherTest {
@@ -35,7 +33,7 @@ public class EventDispatcherTest {
     @BeforeEach
     void setUp() {
         vars = new HashMap<>();
-        ctx = new EvaluationContext(vars, new DefaultTypeCoercion(), Mode.STRICT);
+        ctx = new EvaluationContext(vars);
         dispatcher = new EventDispatcher(ctx, mascot);
     }
 
@@ -45,7 +43,7 @@ public class EventDispatcherTest {
         // Arrange
         Behavior mockBehavior = mock(Behavior.class);
         Action mockAction = mock(Action.class);
-        when(mockBehavior.evaluate(ctx)).thenReturn(true);
+        when(mockBehavior.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
         when(mockBehavior.getAction()).thenReturn(mockAction);
 
         dispatcher.registerTrigger(mockBehavior);
@@ -61,7 +59,7 @@ public class EventDispatcherTest {
     void testTriggerDoesNotFireWhenConditionFalse() {
         // Arrange
         Behavior mockBehavior = mock(Behavior.class);
-        when(mockBehavior.evaluate(ctx)).thenReturn(false);
+        when(mockBehavior.evaluate(any(), any(EvaluationContext.class))).thenReturn(false);
         dispatcher.registerTrigger(mockBehavior);
 
         // Act
@@ -78,8 +76,8 @@ public class EventDispatcherTest {
         Behavior behavior2 = mock(Behavior.class);
         Action action2 = mock(Action.class);
 
-        when(behavior1.evaluate(ctx)).thenReturn(false);
-        when(behavior2.evaluate(ctx)).thenReturn(true);
+        when(behavior1.evaluate(any(), any(EvaluationContext.class))).thenReturn(false);
+        when(behavior2.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
         when(behavior2.getAction()).thenReturn(action2);
 
         dispatcher.registerTrigger(behavior1);
@@ -101,7 +99,7 @@ public class EventDispatcherTest {
         Behavior behavior2 = mock(Behavior.class);
 
         // Both triggers will evaluate to true
-        when(behavior1.evaluate(ctx)).thenReturn(true);
+        when(behavior1.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
         when(behavior1.getAction()).thenReturn(action1);
 
         dispatcher.registerTrigger(behavior1);
@@ -112,7 +110,7 @@ public class EventDispatcherTest {
 
         // Assert
         verify(mascot).setNextAction(action1); // Verify the first action was set
-        verify(behavior2, never()).evaluate(ctx); // Verify the second trigger was not evaluated
+        verify(behavior2, never()).evaluate(any(), any(EvaluationContext.class)); // Verify the second trigger was not evaluated
     }
 
     @Test

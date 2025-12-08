@@ -26,7 +26,7 @@ public class ExprTrigger implements Trigger {
     }
 
     @Override
-    public boolean check(EventEnvelope<?> eventEnvelope, EvaluationContext context) {
+    public boolean evaluate(EventEnvelope<?> event, EvaluationContext context) {
         // ExprTrigger はイベントのペイロード自体は直接利用せず、
         // EvaluationContext を通じて更新された最新の状態（変数）を参照して式を評価する。
         // イベントの発生が、式の再評価の「きっかけ」となる。

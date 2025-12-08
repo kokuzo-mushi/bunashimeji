@@ -1,19 +1,23 @@
 package com.group_finity.mascot;
 
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
-import com.group_finity.mascot.log.EventLog;
-import com.group_finity.mascot.log.EventLogRecord;
-import com.group_finity.mascot.trigger.EventDispatcher;
-import com.group_finity.mascot.trigger.ExprTrigger;
-import com.group_finity.mascot.trigger.IntervalTrigger;
-import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.behavior.Behavior;
+import com.group_finity.mascot.behavior.Configuration;
 import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.event.StateChangeEvent;
+import com.group_finity.mascot.log.EventLog;
+import com.group_finity.mascot.log.EventLogRecord;
+import com.group_finity.mascot.trigger.EventDispatcher;
+import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
 /**
  * ShimejiApp (EventDispatcher 統合版)
@@ -62,36 +66,45 @@ public final class ShimejiApp {
 
     /** Dispatcherとテスト用Triggerの初期化 */
     private void initialize() {
-        // マスコットインスタンス生成
+        // 1. マスコットと評価コンテキストを初期化
         this.mascot = new Mascot();
-
-        // 複数のトリガーで共有される変数を保持するマップ
         Map<String, Object> sharedVariables = new HashMap<>();
         sharedVariables.put("time", 0L);
         sharedVariables.put("mascot.state", "idle");
         sharedVariables.put("window.active", true);
-
-        // コンテキスト生成
         this.context = new EvaluationContext(sharedVariables);
 
-        // Dispatcher生成 (Mascotインスタンスを渡す)
+        // 2. EventDispatcherを生成
         this.dispatcher = new EventDispatcher(context, mascot);
 
-        // --- 様々なトリガーを登録 ---
-        // 1. 時間ベースの式トリガー: 5秒経過したら発火 -> "Sit"アクション
-        this.dispatcher.registerTrigger(new ExprTrigger("time >= 5"), "Sit");
+        // 3. 設定ファイルからアクションとビヘイビアを読み込む
+        // 注意: 現状のActionBuilderとBehaviorBuilderはプレースホルダです。
+        // 実際の動作にはXMLをパースする実装が必要です。
+        Configuration config = new Configuration(Path.of("conf/actions.xml"), Path.of("conf/behaviors.xml"));
 
-        // 2. 状態ベースの式トリガー: マスコットの状態が "active" になったら発火 -> "Jump" と "LookAtMouse" を順番に実行
-        this.dispatcher.registerTrigger(new ExprTrigger("mascot.state == 'active'"), "Jump", "LookAtMouse");
+        // 4. 読み込んだアクションのマップをマスコットに設定
+        Map<String, Action> actions = config.getActions() != null ? config.getActions() : Collections.emptyMap();
+        this.mascot.setActions(actions);
 
-        // 3. 複合条件の式トリガー: アクティブウィンドウで、かつマスコットの状態が "idle" -> "Stare"アクション
-        this.dispatcher.registerTrigger(new ExprTrigger("window.active && mascot.state == 'idle'"), "Stare");
+        // 5. 読み込んだビヘイビアをEventDispatcherに登録
+        List<Behavior> behaviors = config.getBehaviors() != null ? config.getBehaviors() : Collections.emptyList();
+        for (Behavior behavior : behaviors) {
+            // アクションがnullでないことを確認し、登録する
+            if (behavior.getAction() != null) {
+                // EventDispatcherはTrigger (Behavior) を直接受け取る
+                dispatcher.registerTrigger(behavior);
+            } else {
+                // BehaviorBuilderの段階でこれは起こらないはずだが、念のため
+                System.err.println("Warning: Behavior without an action found and was not registered: " + behavior);
+            }
+        }
 
-        // 4. 時間間隔トリガー: 1秒ごとに発火 -> "Blink"アクション
-        this.dispatcher.registerTrigger(new IntervalTrigger(1000), "Blink");
+        if (behaviors.isEmpty()) {
+            System.out.println("[ShimejiApp] No behaviors loaded from configuration. The mascot will be idle.");
+        } else {
+            System.out.printf("[ShimejiApp] Loaded and registered %d behaviors.%n", behaviors.size());
+        }
 
-        // EventDispatcherのワーカースレッドを起動
-        this.dispatcher.start();
     }
 
     /** メインループ: 擬似的にイベントを発生させ続ける */
@@ -108,24 +121,27 @@ public final class ShimejiApp {
 
             // 1. 時間経過イベントをディスパッチ
             context.getVariables().put("time", ++time);
-            dispatcher.dispatchEvent(new EventEnvelope<>(EventType.SYSTEM_TICK, deltaTime, this));
+            dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.SYSTEM_TICK, deltaTime, this));
 
             // 2. 3秒に1回くらいの確率で、マスコットの状態をランダムに変更するイベントをディスパッチ
             if (random.nextInt(10) == 0) { // 約3秒に1回 (300ms * 10)
                 String oldState = (String) context.getVariables().get("mascot.state");
                 String newState = oldState.equals("idle") ? "active" : "idle";
                 context.getVariables().put("mascot.state", newState);
-                dispatcher.dispatchEvent(new EventEnvelope<>(EventType.MASCOT_STATE_CHANGED, new StateChangeEvent("mascot.state", oldState, newState), this));
+                dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.MASCOT_STATE_CHANGED, new StateChangeEvent("mascot.state", oldState, newState), this));
                 System.out.printf("[Main] State changed to: %s%n", newState);
             }
+
+            // 3. マスコットのアクションを1フレーム進める
+            mascot.tick();
 
             sleep(300); // 300ms待機
         }
     }
 
     private void shutdown() {
-        // EventDispatcher を安全にシャットダウン
-        if (dispatcher != null) dispatcher.shutdown();
+        // EventDispatcherはスレッドを管理しなくなったため、シャットダウン処理は不要
+        System.out.println("[ShimejiApp] Shutdown process complete.");
     }
 
     private static void sleep(long ms) {

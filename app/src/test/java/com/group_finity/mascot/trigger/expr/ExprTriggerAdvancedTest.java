@@ -16,7 +16,7 @@ public class ExprTriggerAdvancedTest {
     private boolean check(String expr, Map<String, Object> vars) {
         ExprTrigger trigger = new ExprTrigger(expr);
         EvaluationContext ctx = new EvaluationContext(vars);
-        return trigger.check(null, ctx);
+        return trigger.evaluate(null, ctx);
     }
     
     private boolean evaluate(String expr) {

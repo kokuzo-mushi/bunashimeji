@@ -2,8 +2,11 @@ package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.trigger.Trigger;
-import com.group_finity.mascot.trigger.TriggerCondition;
+import com.group_finity.mascot.trigger.event.EventEnvelope;
+import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+
+import java.util.Set;
 
 /**
  * A generic, concrete implementation of the {@link Behavior} interface.
@@ -23,12 +26,17 @@ public class GenericBehavior implements Behavior {
     }
 
     @Override
-    public boolean evaluate(EvaluationContext context) {
-        return condition.evaluate(context);
+    public boolean evaluate(EventEnvelope<?> event, EvaluationContext context) {
+        return condition.evaluate(event, context);
     }
 
     @Override
     public Action getAction() {
         return action;
+    }
+
+    @Override
+    public Set<EventType> getSubscribedEventTypes() {
+        return condition.getSubscribedEventTypes();
     }
 }

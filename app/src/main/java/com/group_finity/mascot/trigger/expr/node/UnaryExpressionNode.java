@@ -22,9 +22,7 @@ public class UnaryExpressionNode extends ExpressionNode {
     @Override
     public Object evaluate(EvaluationContext context, TypeResolver resolver, TypeCoercion coercion) {
         Object value = operand.evaluate(context, resolver, coercion);
-        // ここに実際の演算ロジックが入る (例: resolver.applyUnaryOp(operator, value))
-        // このサンプルでは省略
-        return value;
+        return resolver.applyUnaryOp(operator, value);
     }
 
     @Override

@@ -19,7 +19,7 @@ public interface Trigger {
      * @param context       評価に必要な変数などを提供するコンテキスト
      * @return 条件を満たせば true
      */
-    boolean check(EventEnvelope<?> eventEnvelope, EvaluationContext context);
+    boolean evaluate(EventEnvelope<?> event, EvaluationContext context);
 
     /**
      * このトリガーが関心を持つイベントの型一覧を返します。

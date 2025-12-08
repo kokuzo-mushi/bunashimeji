@@ -25,7 +25,7 @@ public class CompositeTrigger implements Trigger {
     }
 
     @Override
-    public boolean check(EventEnvelope<?> eventEnvelope, EvaluationContext ctx) {
+    public boolean evaluate(EventEnvelope<?> event, EvaluationContext ctx) {
         if (conditions == null || conditions.isEmpty()) {
             System.err.println("[CompositeTrigger] No conditions to evaluate");
             return false;

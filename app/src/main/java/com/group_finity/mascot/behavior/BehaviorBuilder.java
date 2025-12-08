@@ -1,4 +1,4 @@
-package com.group_finity.mascot.config;
+package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.behavior.Behavior;
