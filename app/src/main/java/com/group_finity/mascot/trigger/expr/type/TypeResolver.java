@@ -9,16 +9,20 @@ public interface TypeResolver {
     Object applyBinaryOp(String operator, Object left, Object right);
 
     static boolean toBoolean(Object value) {
+        if (value == null) {
+            return false;
+        }
         if (value instanceof Boolean b) {
             return b;
         }
         if (value instanceof String s) {
-            return !s.isEmpty() && !s.equalsIgnoreCase("false");
+            // 空文字列、"false"、"0" は false として扱う
+            return !s.isEmpty() && !s.equalsIgnoreCase("false") && !s.equals("0");
         }
         if (value instanceof Number n) {
             return n.doubleValue() != 0.0;
         }
-        return value != null;
+        return true;
     }
 
     static Number toNumber(Object value) {

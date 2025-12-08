@@ -22,6 +22,11 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation("org.graalvm.js:js:25.0.0")
 
+    // --- JAXB (for XML Parsing) ---
+    // Java 9+では標準ライブラリから外れたため、明示的に追加する必要がある
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.3")
+
     // --- JUnit 5 (Jupiter) ---
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     // ✅ テストランナー（JUnit Platform Launcher）を明示的に追加

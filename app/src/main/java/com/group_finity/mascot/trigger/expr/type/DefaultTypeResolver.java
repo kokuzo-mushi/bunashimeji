@@ -22,7 +22,7 @@ public class DefaultTypeResolver implements TypeResolver {
 
     @Override
     public Object applyBinaryOp(String operator, Object left, Object right) {
-        // Logical operators (short-circuiting should be handled by parser/nodes if needed)
+        // 1. 論理演算子
         if (operator.equals("&&")) {
             return TypeResolver.toBoolean(left) && TypeResolver.toBoolean(right);
         }
@@ -30,12 +30,43 @@ public class DefaultTypeResolver implements TypeResolver {
             return TypeResolver.toBoolean(left) || TypeResolver.toBoolean(right);
         }
 
-        // Special case for string concatenation
-        if (operator.equals("+") && (left instanceof String || right instanceof String)) {
-            return String.valueOf(left) + String.valueOf(right);
+        // 2. 算術演算子 (数値変換を優先)
+        if (isArithmetic(operator)) {
+            Number leftNum = TypeResolver.toNumber(left);
+            Number rightNum = TypeResolver.toNumber(right);
+
+            // 両方のオペランドが数値に変換できる場合
+            if (leftNum != null && rightNum != null) {
+                BigDecimal leftBd = new BigDecimal(leftNum.toString());
+                BigDecimal rightBd = new BigDecimal(rightNum.toString());
+
+                return switch (operator) {
+                    case "+" -> leftBd.add(rightBd);
+                    case "-" -> leftBd.subtract(rightBd);
+                    case "*" -> leftBd.multiply(rightBd);
+                    case "/" -> {
+                        if (rightBd.compareTo(BigDecimal.ZERO) == 0) yield null; // Division by zero
+                        yield leftBd.divide(rightBd, 10, RoundingMode.HALF_UP);
+                    }
+                    case "%" -> {
+                        if (rightBd.compareTo(BigDecimal.ZERO) == 0) yield null; // Division by zero
+                        yield leftBd.remainder(rightBd);
+                    }
+                    // isArithmeticでチェック済みのためdefaultは不要だが念のため
+                    default -> throw new IllegalStateException("Unknown arithmetic operator: " + operator);
+                };
+            }
+
+            // + 演算子の場合、数値に変換できなかったら文字列結合にフォールバック
+            if (operator.equals("+")) {
+                return String.valueOf(left) + String.valueOf(right);
+            }
+
+            // 他の算術演算子で数値に変換できなかった場合はエラー（nullを返す）
+            return null;
         }
 
-        // Comparison operators
+        // 3. 比較演算子
         if (isComparison(operator)) {
             int cmp = compare(left, right);
             return switch (operator) {
@@ -49,40 +80,19 @@ public class DefaultTypeResolver implements TypeResolver {
             };
         }
 
-        // Arithmetic operators
-        Number leftNum = TypeResolver.toNumber(left);
-        Number rightNum = TypeResolver.toNumber(right);
-        if (leftNum == null || rightNum == null) {
-            return null; // One of the operands could not be converted to a number
-        }
-
-        BigDecimal leftBd = new BigDecimal(leftNum.toString());
-        BigDecimal rightBd = new BigDecimal(rightNum.toString());
-
-        return switch (operator) {
-            case "+" -> leftBd.add(rightBd);
-            case "-" -> leftBd.subtract(rightBd);
-            case "*" -> leftBd.multiply(rightBd);
-            case "/" -> {
-                if (rightBd.compareTo(BigDecimal.ZERO) == 0) {
-                    yield null; // Division by zero
-                }
-                // Provide sufficient scale for division
-                yield leftBd.divide(rightBd, 10, RoundingMode.HALF_UP);
-            }
-            case "%" -> {
-                 if (rightBd.compareTo(BigDecimal.ZERO) == 0) {
-                    yield null; // Division by zero
-                }
-                yield leftBd.remainder(rightBd);
-            }
-            default -> throw new IllegalArgumentException("Unknown binary operator: " + operator);
-        };
+        throw new IllegalArgumentException("Unknown binary operator: " + operator);
     }
 
     private boolean isComparison(String operator) {
         return switch (operator) {
             case "==", "===", "!=", "!==", "<", "<=", ">", ">=" -> true;
+            default -> false;
+        };
+    }
+
+    private boolean isArithmetic(String operator) {
+        return switch (operator) {
+            case "+", "-", "*", "/", "%" -> true;
             default -> false;
         };
     }

@@ -19,9 +19,24 @@ class DefaultTypeResolverTest {
     class UnaryOpTests {
 
         @ParameterizedTest
-        @CsvSource({"true,false", "false,true", "1,false", "0,true", "'text',false", "'',true", "null,true"})
+        @CsvSource({
+                "true,    false", // Boolean true
+                "false,   true",  // Boolean false
+                "1,       false", // Number non-zero
+                "0,       true",  // Number zero
+                "'text',  false", // Non-empty string
+                "'0',     true",  // String "0" is false, so !false is true
+                "'',      true"   // Empty string is false, so !false is true
+        })
         void testLogicalNot(Object input, boolean expected) {
             assertEquals(expected, resolver.applyUnaryOp("!", input));
+        }
+
+        @DisplayName("Logical Not with null input")
+        @Test
+        void testLogicalNotNull() {
+            // !null -> !false -> true
+            assertEquals(true, resolver.applyUnaryOp("!", null));
         }
 
         @ParameterizedTest
@@ -63,8 +78,11 @@ class DefaultTypeResolverTest {
 
         @Test
         void testStringConcatenation() {
+            // 片方が文字列の場合、文字列結合にフォールバックすることを確認
             assertEquals("hello5", resolver.applyBinaryOp("+", "hello", 5));
-            assertEquals("truefalse", resolver.applyBinaryOp("+", true, false));
+            assertEquals("5hello", resolver.applyBinaryOp("+", 5, "hello"));
+            // 数値に変換できない文字列との加算も文字列結合になる
+            assertEquals("10abc", resolver.applyBinaryOp("+", 10, "abc"));
         }
 
         @ParameterizedTest
@@ -73,14 +91,27 @@ class DefaultTypeResolverTest {
                 "10, 5, false",
                 "'hello', 'hello', true",
                 "'hello', 'world', false",
-                "true, true, true",
-                "null, null, true",
-                "10, null, false"
+                "true, true, true"
         })
         void testEquality(Object left, Object right, boolean expected) {
-            // CsvSource converts 'null' string to null object
             assertEquals(expected, resolver.applyBinaryOp("==", left, right));
             assertEquals(!expected, resolver.applyBinaryOp("!=", left, right));
+        }
+
+        @Test
+        @DisplayName("Equality with null values")
+        void testEqualityWithNulls() {
+            // null == null -> true
+            assertEquals(true, resolver.applyBinaryOp("==", null, null));
+            assertEquals(false, resolver.applyBinaryOp("!=", null, null));
+
+            // 10 == null -> false
+            assertEquals(false, resolver.applyBinaryOp("==", 10, null));
+            assertEquals(true, resolver.applyBinaryOp("!=", 10, null));
+
+            // null == "hello" -> false
+            assertEquals(false, resolver.applyBinaryOp("==", null, "hello"));
+            assertEquals(true, resolver.applyBinaryOp("!=", null, "hello"));
         }
 
         @ParameterizedTest
@@ -108,6 +139,14 @@ class DefaultTypeResolverTest {
             Object result = resolver.applyBinaryOp("+", 10, "20.5");
             assertInstanceOf(BigDecimal.class, result);
             assertEquals(0, new BigDecimal("30.5").compareTo((BigDecimal) result));
+        }
+
+        @Test
+        void testBooleanAddition() {
+            // Booleanは数値 (true=1, false=0) として扱われ、数値加算が優先されることを確認
+            Object result = resolver.applyBinaryOp("+", true, false);
+            assertInstanceOf(BigDecimal.class, result);
+            assertEquals(0, new BigDecimal("1").compareTo((BigDecimal) result));
         }
 
         @Test
@@ -150,8 +189,11 @@ class DefaultTypeResolverTest {
         }
 
         @Test
-        void testArithmeticWithInvalidNumber() {
-            assertNull(resolver.applyBinaryOp("+", 10, "abc"));
+        void testArithmeticWithNonNumericStringReturnsNull() {
+            // + 以外の算術演算子は、数値に変換できない場合 null を返すことを確認
+            assertNull(resolver.applyBinaryOp("-", 10, "abc"));
+            assertNull(resolver.applyBinaryOp("*", 10, "abc"));
+            assertNull(resolver.applyBinaryOp("/", 10, "abc"));
         }
 
         @Test
