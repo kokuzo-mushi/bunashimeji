@@ -1,8 +1,8 @@
 package com.group_finity.mascot.trigger;
 
-import com.group_finity.mascot.trigger.eval.EvaluationContext;
 import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.event.EventType;
+import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
 import java.util.Set;
 

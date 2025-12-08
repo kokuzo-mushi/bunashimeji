@@ -1,14 +1,18 @@
 package com.group_finity.mascot.trigger;
 
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
+import com.group_finity.mascot.trigger.event.EventEnvelope;
+import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
 /**
  * CompositeTrigger — 複数の TriggerCondition をまとめて評価。
  * （修正版: デバッグログ追加）
  */
-public class CompositeTrigger extends Trigger {
+public class CompositeTrigger implements Trigger {
 
     public enum Mode { ALL, ANY }
 
@@ -21,7 +25,7 @@ public class CompositeTrigger extends Trigger {
     }
 
     @Override
-    public boolean check(EvaluationContext ctx) {
+    public boolean check(EventEnvelope<?> eventEnvelope, EvaluationContext ctx) {
         if (conditions == null || conditions.isEmpty()) {
             System.err.println("[CompositeTrigger] No conditions to evaluate");
             return false;
@@ -69,5 +73,19 @@ public class CompositeTrigger extends Trigger {
                 "mode=" + mode +
                 ", conditionCount=" + (conditions == null ? 0 : conditions.size()) +
                 '}';
+    }
+
+    @Override
+    public Set<EventType> getSubscribedEventTypes() {
+        if (conditions == null || conditions.isEmpty()) {
+            return EnumSet.noneOf(EventType.class);
+        }
+
+        // 内包するすべてのTriggerConditionが購読するイベントタイプを集約する
+        final Set<EventType> allTypes = EnumSet.noneOf(EventType.class);
+        for (final TriggerCondition condition : conditions) {
+            allTypes.addAll(condition.getSubscribedEventTypes());
+        }
+        return allTypes;
     }
 }

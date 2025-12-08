@@ -4,6 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
+import com.group_finity.mascot.trigger.event.EventTask;
+import com.group_finity.mascot.trigger.event.EventWorkerPool;
+
 /**
  * Shimeji Neo: EventWorkerPool 並列動作テスト
  * フェーズ D-4a - スレッド並列検証

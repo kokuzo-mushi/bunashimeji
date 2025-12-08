@@ -1,0 +1,141 @@
+> Build starts at 2025-12-08 15:17:44
+Task :app:compileJava started
+Task :app:compileJava UP-TO-DATE
+------
+
+> Build starts at 2025-12-08 15:17:44
+Task :app:compileTestJava started
+Task :app:compileTestJava failed
+------
+
+Could not execute build using connection to Gradle distribution 'https://services.gradle.org/distributions/gradle-8.9-bin.zip'.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/C:/Users/81803/.gradle/wrapper/dists/gradle-8.9-bin/90cnw93cvbtalezasaz0blq0a/gradle-8.9/lib/native-platform-0.22-milestone-26.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:22: エラー: クラス EventDispatcherのコンストラクタ EventDispatcherは指定された型に適用できません。
+        EventDispatcher dispatcher = new EventDispatcher(queue);
+                                     ^
+  期待値: EvaluationContext,Mascot
+  検出値:    PriorityBlockingQueue<EventTask>
+  理由: 実引数リストと仮引数リストの長さが異なります
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:27: エラー: シンボルを見つけられません
+        dispatcher.dispatch(() -> log("Task-A [LOW] executed"), EventTask.Priority.LOW);
+                  ^
+  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:28: エラー: シンボルを見つけられません
+        dispatcher.dispatch(() -> log("Task-B [HIGH] executed"), EventTask.Priority.HIGH);
+                  ^
+  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:29: エラー: シンボルを見つけられません
+        dispatcher.dispatch(() -> log("Task-C [MEDIUM] executed"), EventTask.Priority.MEDIUM);
+                  ^
+  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\event\EventSystemTest.java:30: エラー: シンボルを見つけられません
+        dispatcher.dispatch(() -> log("Task-D [HIGH] executed"), EventTask.Priority.HIGH);
+                  ^
+  シンボル:   メソッド dispatch(()->log("T[...]ted"),Priority)
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:25: エラー: クラス EventDispatcherのコンストラクタ EventDispatcherは指定された型に適用できません。
+        EventDispatcher dispatcher = new EventDispatcher(base, logQ, 2);
+                                     ^
+  期待値: EvaluationContext,Mascot
+  検出値:    EvaluationContext,EventQueue,int
+  理由: 実引数リストと仮引数リストの長さが異なります
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:36: エラー: シンボルを見つけられません
+        dispatcher.pollAndDispatch();
+                  ^
+  シンボル:   メソッド pollAndDispatch()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:49: エラー: シンボルを見つけられません
+        dispatcher.pollAndDispatch();
+                  ^
+  シンボル:   メソッド pollAndDispatch()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:65: エラー: シンボルを見つけられません
+        dispatcher.shutdownWorkers();
+                  ^
+  シンボル:   メソッド shutdownWorkers()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EvaluationContextSnapshotTest.java:66: エラー: シンボルを見つけられません
+        dispatcher.awaitWorkers(1000);
+                  ^
+  シンボル:   メソッド awaitWorkers(int)
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:31: エラー: 不適合な型: EventQueueをMascotに変換できません:
+        dispatcher = new EventDispatcher(ctx, queue);
+                                              ^
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:44: エラー: シンボルを見つけられません
+        dispatcher.pollAndDispatch();
+                  ^
+  シンボル:   メソッド pollAndDispatch()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:45: エラー: シンボルを見つけられません
+        assertEquals(1, dispatcher.getRegisteredCount());
+                                  ^
+  シンボル:   メソッド getRegisteredCount()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:50: エラー: シンボルを見つけられません
+        dispatcher.pollAndDispatch();
+                  ^
+  シンボル:   メソッド pollAndDispatch()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:64: エラー: シンボルを見つけられません
+        assertDoesNotThrow(() -> dispatcher.pollAndDispatch());
+                                           ^
+  シンボル:   メソッド pollAndDispatch()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:80: エラー: シンボルを見つけられません
+        assertEquals(2, dispatcher.getRegisteredCount());
+                                  ^
+  シンボル:   メソッド getRegisteredCount()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:81: エラー: シンボルを見つけられません
+        assertDoesNotThrow(() -> dispatcher.pollAndDispatch());
+                                           ^
+  シンボル:   メソッド pollAndDispatch()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:86: エラー: シンボルを見つけられません
+        assertEquals(0, dispatcher.getRegisteredCount());
+                                  ^
+  シンボル:   メソッド getRegisteredCount()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:87: エラー: シンボルを見つけられません
+        dispatcher.pollAndDispatch(); // Should not throw
+                  ^
+  シンボル:   メソッド pollAndDispatch()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:95: エラー: シンボルを見つけられません
+        assertEquals(1, dispatcher.getRegisteredCount());
+                                  ^
+  シンボル:   メソッド getRegisteredCount()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:97: エラー: シンボルを見つけられません
+        dispatcher.clear();
+                  ^
+  シンボル:   メソッド clear()
+  場所: タイプEventDispatcherの変数 dispatcher
+C:\Users\81803\OneDrive\デスクトップ\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\trigger\EventDispatcherTest.java:98: エラー: シンボルを見つけられません
+        assertEquals(0, dispatcher.getRegisteredCount());
+                                  ^
+  シンボル:   メソッド getRegisteredCount()
+  場所: タイプEventDispatcherの変数 dispatcher
+ノート: 一部のメッセージは簡略化されています。-Xdiags:verboseで再コンパイルして完全な出力を取得してください
+エラー22個
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileTestJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 1s
+

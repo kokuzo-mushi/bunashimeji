@@ -1,5 +1,6 @@
 package com.group_finity.mascot.trigger;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,9 +14,12 @@ import com.group_finity.mascot.trigger.expr.cache.CacheStatsTracker;
 import com.group_finity.mascot.trigger.expr.cache.EvaluationResult;
 import com.group_finity.mascot.trigger.expr.cache.ExprCacheKey;
 import com.group_finity.mascot.trigger.expr.cache.ExprCacheManager;
+import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
 import com.group_finity.mascot.trigger.expr.parser.ExpressionParser;
+import com.group_finity.mascot.trigger.expr.visitor.VariableCollectorVisitor;
+import com.group_finity.mascot.trigger.util.VariableToEventTypeMapper;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
 import com.group_finity.mascot.trigger.expr.type.Mode;
@@ -36,6 +40,7 @@ public class TriggerCondition {
     private final String expression;
     private final ExpressionEngine engine;
     private EvaluationContext context; // 参照共有される想定
+    private final Set<EventType> subscribedEventTypes;
 
     public TriggerCondition(String expression, Map<String, Object> variables) {
         this.expression = expression;
@@ -43,6 +48,40 @@ public class TriggerCondition {
         if (variables == null) variables = new HashMap<>();
         // ★ EvaluationContext 側が参照共有コンストラクタを持つ前提（下の修正②参照）
         this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT, true);
+
+        // ASTの取得または生成
+        ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, key -> {
+            try {
+                ExpressionNode parsed = new ExpressionParser(key).parse();
+                return (parsed != null) ? parsed : new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+            } catch (Exception e) {
+                System.err.println("[TriggerCondition] Parse error: " + key);
+                e.printStackTrace();
+                return new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+            }
+        });
+
+        // ASTを静的解析して依存イベントを特定
+        this.subscribedEventTypes = analyzeDependencies(ast, expression);
+    }
+
+    private static Set<EventType> analyzeDependencies(ExpressionNode ast, String expressionForLogging) {
+        try {
+            if (ast == null) {
+                return EnumSet.noneOf(EventType.class);
+            }
+
+            // Visitorを使ってASTから変数名を収集
+            final VariableCollectorVisitor visitor = new VariableCollectorVisitor();
+            ast.accept(visitor); // ExpressionNode とそのサブクラスに accept() の実装が必要
+            final Set<String> variables = visitor.getCollectedVariables();
+
+            // 変数名セットをEventTypeセットにマッピング
+            return VariableToEventTypeMapper.map(variables);
+        } catch (Exception e) {
+            System.err.println("Failed to statically analyze expression: '" + expressionForLogging + "'. Falling back to broad event subscription. Error: " + e.getMessage());
+            return EnumSet.of(EventType.MASCOT_STATE_CHANGED, EventType.ENVIRONMENT_CHANGED, EventType.SYSTEM_TICK);
+        }
     }
 
     public EvaluationContext getContext() { return context; }
@@ -52,6 +91,10 @@ public class TriggerCondition {
         }
     }
     public String getExpression() { return expression; }
+
+    public Set<EventType> getSubscribedEventTypes() {
+        return subscribedEventTypes;
+    }
 
     public boolean evaluate() {
         return evaluate(this.context);

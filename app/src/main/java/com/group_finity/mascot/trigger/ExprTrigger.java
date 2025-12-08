@@ -1,14 +1,9 @@
 package com.group_finity.mascot.trigger;
 
-import com.group_finity.mascot.trigger.eval.EvaluationContext;
 import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.event.EventType;
-import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
-import com.group_finity.mascot.trigger.expr.parser.ExpressionParser;
-import com.group_finity.mascot.trigger.expr.visitor.VariableCollectorVisitor;
-import com.group_finity.mascot.trigger.util.VariableToEventTypeMapper;
+import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
-import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -27,36 +22,7 @@ public class ExprTrigger implements Trigger {
         // D-5時点のTriggerConditionコンストラクタに合わせてnullを渡す
         // TriggerCondition が内部で式のパースと静的解析を一度だけ行う
         this.condition = new TriggerCondition(expression, null);
-        this.subscribedEvents = analyzeDependencies(expression);
         this.subscribedEvents = this.condition.getSubscribedEventTypes();
-    }
-
-    /**
-     * 式を静的に解析し、依存する変数を基に購読すべきEventTypeのセットを返す。
-     */
-    private static Set<EventType> analyzeDependencies(String expression) {
-        try {
-            // 1. 式をパースしてASTを取得
-            final ExpressionParser parser = new ExpressionParser(expression);
-            final ExpressionNode ast = parser.parse();
-
-            if (ast == null) {
-                return EnumSet.noneOf(EventType.class);
-            }
-
-            // 2. Visitorを使ってASTから変数名を収集
-            final VariableCollectorVisitor visitor = new VariableCollectorVisitor();
-            ast.accept(visitor);
-            final Set<String> variables = visitor.getCollectedVariables();
-
-            // 3. 変数名セットをEventTypeセットにマッピング
-            return VariableToEventTypeMapper.map(variables);
-
-        } catch (Exception e) {
-            // 解析に失敗した場合は、安全のために従来の広範なイベントを購読する
-            System.err.println("Failed to statically analyze expression: '" + expression + "'. Falling back to broad event subscription. Error: " + e.getMessage());
-            return EnumSet.of(EventType.MASCOT_STATE_CHANGED, EventType.ENVIRONMENT_CHANGED, EventType.SYSTEM_TICK);
-        }
     }
 
     @Override
@@ -108,3 +74,4 @@ public final class ExprTrigger {
         return "ExprTrigger(" + expression + ")";
     }
 }
+*/

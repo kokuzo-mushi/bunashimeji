@@ -1,10 +1,11 @@
-package com.group_finity.mascot;
+package com.group_finity.mascot.trigger;
 
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.log.EventLog;
 import com.group_finity.mascot.log.EventLogRecord;
 import com.group_finity.mascot.trigger.EventDispatcher;

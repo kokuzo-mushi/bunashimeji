@@ -28,6 +28,10 @@ dependencies {
 
     // ✅ テストランナー（JUnit Platform Launcher）
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
+
+    // --- Mockito (テストでのモックオブジェクト作成用) ---
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.12.0")
 }
 
 // Java実行時のJVM引数（Java 25 のプレビュー機能許可）

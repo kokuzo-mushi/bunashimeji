@@ -1,6 +1,6 @@
 # Shimeji Neo — 全体設計図・進捗フロー・課題・留意点（Gemini共有用）
 
-最終更新: 2025-12-07 (Asia/Tokyo)
+最終更新: 2025-12-08 (Asia/Tokyo)
 
 この文書は、ChatGPT 側で記憶している「Shimeji Neo」設計・開発の前提と、2025年10月前半までの統合サマリ（D-5 完了時点）をベースに、**Gemini に渡して再開発を進めるための引き継ぎ用**に整理したものです。
 
@@ -23,7 +23,7 @@
 ## 2. 開発環境（固定前提）
 
 - OS: Windows 11
-- IDE: Eclipse（Pleiades 日本語版）
+- IDE: vscode
 - Build: Gradle 9.x 系想定
 - JDK: 21（Java 25 対応を見据えて設計・検討）
 
@@ -82,42 +82,15 @@ app/
 
 ---
 
-## 4. 全体アーキテクチャ（概念図）
+## 4. 全体アーキテクチャ
 
-### 4.1 コアレイヤ
-
-1) **Expression サブシステム（AST駆動）**  
-- ExpressionParser → AST(ExpressionNode) → ExprEvaluator  
-- EvaluationContext が変数・型変換・評価モードを司る  
-- Mode: STRICT / LOOSE
-
-2) **Trigger サブシステム**  
-- Trigger は「イベント発火の条件」を抽象化  
-- TriggerCondition が条件式の評価/キャッシュを担当  
-- ExprTrigger など式ベースのトリガーが中心
-
-3) **Event サブシステム**  
-- EventQueue：イベントの保持と優先度/同時実行制御の入口  
-- EventDispatcher：イベント登録/発火/Trigger連携  
-- EventWorkerPool 等で非同期処理を想定
+詳細は ARCHITECTURE.md を参照。
 
 ---
 
-## 5. 進捗フロー（Phases）
+## 5. 開発ロードマップ
 
-### 5.1 2025年10月前半までの到達点
-
-- **EventQueue**: 実装・確認済み  
-  - 今後: 優先度・同時実行制御の増強
-- **EventDispatcher**: 登録/発火処理の整理を進行  
-  - Trigger との連携方式を検討
-- **Trigger 構造**:  
-  - クリック/時間/状態変化などタイプ比較と設計の方向付け
-- **式評価（ExprEvaluator）**:  
-  - `===`・単項`+`対応  
-  - Long昇格抑制  
-  - 型変換整理  
-  - 既存テスト通過
+詳細は ROADMAP.md を参照。
 
 ---
 
@@ -154,35 +127,15 @@ app/
 
 ---
 
-## 7. 現在の課題（D-6 以降の設計論点）
+## 7. 現在のタスクリスト（Phase 1 進行中）
 
-### 7.1 キャッシュ統計の精度と活用
-- CacheStatsTracker の改善  
-- hit/miss の粒度  
-- 「高速化に寄与しているか」を測る指標の定義
+Phase 1「基盤の安定化と回復」を完了させるための当面のタスクリスト。
 
-### 7.2 差分再評価（Incremental Evaluation）
-- 依存変数の差分を用いた再評価ショートカット
-- AST変化/式文字列変化の検出と  
-  キャッシュ無効化ルール
-
-### 7.3 EventDispatcher と Trigger の最終統合
-- Dispatcher が  
-  - Trigger からの発火イベントをどう正規化するか  
-  - Queue へどの粒度で積むか  
-- 例:  
-  - 「状態変化イベント」  
-  - 「時間イベント」  
-  - 「ユーザー入力イベント」  
-  を統一的に扱う EventType/Envelope 設計
-
-### 7.4 API 破壊リスク管理
-- 過去に「コンパイルエラー修正の副作用で  
-  評価ロジックが崩壊」した経緯がある前提
-- そのため:
-  - 既存公開APIの署名変更は極力避ける
-  - フィールド削除/コンストラクタ増設は慎重に
-  - 変更時は呼び出し元整合を必ず同時に確認
+1.  **`EventDispatcher` への評価ロジック実装**:
+    - `pollAndDispatch()` に代わる、トリガーを評価・発火させる新しいメソッド（例: `evaluateTriggers`）を実装する。
+2.  **テストカバレッジの回復と再設計**:
+    - `build.gradle` に `Mockito` への依存を追加する。
+    - `EventDispatcherTest` をはじめとする無効化されたテストを、Mockito を用いて再設計し、有効化する。
 
 ---
 
@@ -239,10 +192,8 @@ app/
 - リポジトリ: https://github.com/kokuzo-mushi/bunashimeji.git
 
 目的:
-1) EventQueue / EventDispatcher / Trigger の統合設計を
-   “AST駆動の式評価/キャッシュ”と矛盾なく整理する
-2) TriggerCondition + ExprCache の
-   依存変数追跡と性能最適化を D-6 方針として具体化する
+上記の開発ロードマップ（Phase 1〜4）に従い、Shimeji Neo の開発を推進する。
+当面は Phase 1「基盤の安定化と回復」の完了を目指す。
 
 重要制約:
 - 既存APIの破壊を最小化
@@ -250,28 +201,18 @@ app/
 - 変更の影響範囲と呼び出し元整合を必ず説明
 
 依頼:
-- 現状設計の弱点と矛盾点を列挙
-- D-6 で最小リスクで効果が大きい改善順を提案
+- 現在のタスクリスト（セクション7）を達成するための具体的な実装方針とコードを提案する。
 - 必要なら疑似コード/パッチ単位で案を示す
 ```
 
 ---
 
-## 10. ここまでの要約（超短縮）
+## 10. 現状サマリー（超短縮）
 
-- Shimeji Neo は  
-  **イベント駆動 + AST式評価 + キャッシュ**を中核に  
-  デスクトップマスコットを再設計するプロジェクト。
-- 2025年10月時点で  
-  - EventQueue の基盤  
-  - ExprEvaluator の強化  
-  - TriggerCondition の評価キャッシュ（D-5）  
-  が安定。
-- 次は D-6 として  
-  **キャッシュ統計の高度化 / 差分再評価 /  
-  EventDispatcher×Trigger の最終統合**が主戦場。
-- 改修は  
-  **API破壊最小・小刻み変更・テスト最優先**で進める。
+- Shimeji Neo は **イベント駆動 + AST式評価** を中核に再設計を進めている。
+- 開発は4つのフェーズに分割され、現在は **Phase 1: 基盤の安定化と回復** に着手している。
+- 当面の目標は、`EventDispatcher` の評価ロジックを実装し、`Mockito` を使ってテストカバレッジを回復させることである。
+- 改修は引き続き **API破壊最小・小刻み変更・テスト最優先**で進める。
 
 ---
 

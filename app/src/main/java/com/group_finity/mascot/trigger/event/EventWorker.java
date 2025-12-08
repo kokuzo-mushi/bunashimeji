@@ -1,4 +1,4 @@
-package com.group_finity.mascot.event;
+package com.group_finity.mascot.trigger.event;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;

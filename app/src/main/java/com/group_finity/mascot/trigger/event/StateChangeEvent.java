@@ -1,4 +1,4 @@
-package com.group_finity.mascot.event;
+package com.group_finity.mascot.trigger.event;
 
 /**
  * 状態変化イベントのペイロード。

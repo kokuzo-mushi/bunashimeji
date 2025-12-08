@@ -1,10 +1,9 @@
 package com.group_finity.mascot.trigger;
 
 import com.group_finity.mascot.trigger.eval.EvaluationContext;
-import com.group_finity.mascot.trigger.event.EventEnvelope;
-import com.group_finity.mascot.trigger.event.EventType;
+import com.group_finity.mascot.trigger.event.EventEnvelope; // NOTE: This should be trigger.event
+import com.group_finity.mascot.trigger.event.EventType;     // NOTE: This should be trigger.event
 
-import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -20,16 +19,8 @@ public class ExprTrigger implements Trigger {
      * @param expression 発火条件を定義する式 (例: "mascot.x > 100 && window.active")
      */
     public ExprTrigger(String expression) {
-        // TriggerCondition は内部で式をパースし、キャッシュ機構を持つ
-        this.condition = new TriggerCondition(expression);
-
-        // 本来は式の静的解析などを行い、依存する変数に応じて購読イベントを決定するのが理想。
-        // ここでは簡略化のため、状態変化や時間経過の可能性があるイベント全般を購読する。
-        this.subscribedEvents = EnumSet.of(
-                EventType.MASCOT_STATE_CHANGED,
-                EventType.ENVIRONMENT_CHANGED,
-                EventType.SYSTEM_TICK // 時間経過に依存する式 (例: 'tick % 10 == 0') もあるため
-        );
+        this.condition = new TriggerCondition(expression, null);
+        this.subscribedEvents = this.condition.getSubscribedEventTypes();
     }
 
     @Override

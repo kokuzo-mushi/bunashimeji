@@ -2,6 +2,7 @@ package com.group_finity.mascot;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Map;
 
 import com.group_finity.mascot.trigger.CompositeTrigger;
@@ -10,6 +11,8 @@ import com.group_finity.mascot.trigger.EventLog;
 import com.group_finity.mascot.trigger.EventQueue;
 import com.group_finity.mascot.trigger.TriggerCondition;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.trigger.event.EventEnvelope;
+import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.Mode;
 
@@ -31,8 +34,8 @@ public class Main {
         EvaluationContext ctx = new EvaluationContext(vars, new DefaultTypeCoercion(), Mode.STRICT);
 
         // --- 2️⃣ イベントキューとディスパッチャを初期化 ---
-        EventQueue queue = new EventQueue();
-        EventDispatcher dispatcher = new EventDispatcher(ctx, queue);
+        Mascot mascot = new Mascot(); // Mascotインスタンスを生成
+        EventDispatcher dispatcher = new EventDispatcher(ctx, mascot);
 
         // --- 3️⃣ トリガー定義 ---
         TriggerCondition cond1 = new TriggerCondition("time > 1000", vars);
@@ -42,10 +45,10 @@ public class Main {
         CompositeTrigger trigger2 = new CompositeTrigger(List.of(cond1), CompositeTrigger.Mode.ANY);
 
         // --- 4️⃣ 登録 ---
-        dispatcher.registerTrigger(trigger1);
-        dispatcher.registerTrigger(trigger2);
+        dispatcher.registerTrigger(trigger1, "Action1", "Action2"); // 複数のアクションを登録
+        dispatcher.registerTrigger(trigger2, "Action3");
 
-        System.out.println("[Main] Registered triggers: " + dispatcher.getRegisteredCount());
+        System.out.println("[Main] Registered triggers: " + dispatcher.getRegisteredTriggerCount());
 
         // --- 5️⃣ コンテキスト変化シミュレーション ---
         int[] timeSteps = {500, 900, 1200, 1500};
@@ -66,12 +69,17 @@ public class Main {
 
             System.out.println("\n[Main] Step " + (i + 1) + " → Context: {time=" + t + ", state=" + st + "}");
 
-            dispatcher.pollAndDispatch();
+            // EventDispatcher の run() メソッドを直接呼び出す代わりに、
+            // EventDispatcher が EventQueue からイベントをポーリングして処理するロジックをシミュレート
+            // ここでは EventDispatcher が EventQueue を持っていることを前提とする
+            // EventDispatcher の内部で EventQueue.take() または EventQueue.poll() が呼ばれる想定
+            // Main クラスでは EventDispatcher にイベントをディスパッチする役割に徹する (EventDispatcher は内部でキューを管理)
+            // EventDispatcher は EventQueue を持っていないため、直接イベントをディスパッチする
+            // ここでは EventDispatcher の run() メソッドを直接呼び出す代わりに、イベントを生成してディスパッチする
+            dispatcher.dispatchEvent(new EventEnvelope<>(EventType.SYSTEM_TICK, (long)t, "Main"));
 
-            while (!queue.isEmpty()) {
-                EventLog log = queue.poll();
-                System.out.println("[Main] Processed Event: " + log);
-            }
+            // EventDispatcher は非同期でイベントを処理するため、ここではキューのポーリングは行わない
+            // イベント処理の結果は EventDispatcher の handleTriggerFired メソッドでログ出力される
 
             try {
                 Thread.sleep(500);

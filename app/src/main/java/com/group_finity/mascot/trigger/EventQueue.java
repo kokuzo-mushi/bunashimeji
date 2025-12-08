@@ -3,7 +3,7 @@ package com.group_finity.mascot.trigger;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.group_finity.mascot.event.EventTask;
+import com.group_finity.mascot.trigger.event.EventTask;
 
 /**
  * D-3c互換版 EventQueue

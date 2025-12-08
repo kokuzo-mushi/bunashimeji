@@ -1,4 +1,4 @@
-package com.group_finity.mascot.event;
+package com.group_finity.mascot.trigger.event;
 
 import java.util.ArrayList;
 import java.util.List;

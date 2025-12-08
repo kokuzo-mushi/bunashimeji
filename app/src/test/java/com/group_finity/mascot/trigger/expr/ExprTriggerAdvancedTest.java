@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import com.group_finity.mascot.trigger.ExprTrigger;
+import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
+import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
 public class ExprTriggerAdvancedTest {
@@ -13,7 +16,7 @@ public class ExprTriggerAdvancedTest {
     private boolean check(String expr, Map<String, Object> vars) {
         ExprTrigger trigger = new ExprTrigger(expr);
         EvaluationContext ctx = new EvaluationContext(vars);
-        return trigger.check(ctx);
+        return trigger.check(null, ctx);
     }
     
     private boolean evaluate(String expr) {
@@ -28,7 +31,7 @@ public class ExprTriggerAdvancedTest {
         var parser = new com.group_finity.mascot.trigger.expr.parser.ExpressionParser(expr);
         var node = parser.parse();
 
-        Object result = node.evaluate(ctx);
+        Object result = node.evaluate(ctx, new DefaultTypeResolver(), new DefaultTypeCoercion());
 
         if (result instanceof Boolean b) {
             return b;

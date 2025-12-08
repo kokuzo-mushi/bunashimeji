@@ -167,7 +167,7 @@ public class ExprEvaluator {
         try {
             ExpressionNode node = cache.computeIfAbsent(expression, expr -> createNode(expr));
             if (node == null) return Boolean.FALSE;
-            return node.evaluate(context);
+            return node.evaluate(context, null, null); // TypeResolver と TypeCoercion は ExpressionEngine が持つべきだが、ここではリフレクションの都合上nullを渡す
         } catch (Exception e) {
             System.err.println("[ExprEvaluator] evaluate error for \"" + expression + "\": " + e.getMessage());
             return Boolean.FALSE;
