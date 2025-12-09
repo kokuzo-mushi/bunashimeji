@@ -47,7 +47,11 @@ public class MascotView extends JWindow {
         if (animation != null) {
             Pose pose = animation.getCurrentPose();
             if (pose != null) {
-                this.currentImage = imageCache.getImage(pose.getImageName());
+                if (mascot.isLookRight()) {
+                    this.currentImage = imageCache.getImage(pose.getImageName());
+                } else {
+                    this.currentImage = imageCache.getLeftImage(pose.getImageName());
+                }
             }
         }
 
@@ -84,5 +88,13 @@ public class MascotView extends JWindow {
         if (currentImage != null) {
             g.drawImage(currentImage, 0, 0, this);
         }
+    }
+
+    /**
+     * 現在表示されているマスコットの画像の高さを返します。
+     * @return 画像の高さ。画像がない場合は0。
+     */
+    public int getMascotHeight() {
+        return (currentImage != null) ? currentImage.getHeight() : 0;
     }
 }

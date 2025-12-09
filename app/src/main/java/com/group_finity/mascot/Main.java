@@ -9,6 +9,8 @@ import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.image.ImageCache;
 import com.group_finity.mascot.view.MascotView;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,17 @@ public class Main {
 
         Map<String, Object> contextVariables = new HashMap<>();
         // NOTE: ここで定義する変数が、behaviors.xml の <condition> で使用できます。
-        contextVariables.put("mascot.isGrounded", true); // 例: 地面にいるか
+
+        // --- 2.6. 環境情報の取得とコンテキストへの追加 ---
+        Rectangle workArea = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        contextVariables.put("workArea.x", workArea.x);
+        contextVariables.put("workArea.y", workArea.y);
+        contextVariables.put("workArea.width", workArea.width);
+        contextVariables.put("workArea.height", workArea.height);
+        contextVariables.put("workArea.right", workArea.x + workArea.width);
+        contextVariables.put("workArea.bottom", workArea.y + workArea.height);
+        System.out.printf("[Main] Work area detected: %s%n", workArea);
+
         contextVariables.put("mascot.x", mascot.getX());
         contextVariables.put("mascot.y", mascot.getY());
         contextVariables.put("time", 0L);
@@ -73,11 +85,20 @@ public class Main {
         long tickCount = 0;
 
         while (!Thread.currentThread().isInterrupted()) {
+            // --- 状態更新 ---
+            // 接地判定
+            int mascotHeight = mascotView.getMascotHeight();
+            // マスコットの足元が地面の座標以上になったら接地とみなす
+            boolean isGrounded = (mascot.getY() + mascotHeight) >= workArea.bottom;
+            mascot.setGrounded(isGrounded);
+
             // コンテキスト変数を更新します。
             // これにより、ビヘイビアの条件が動的に変化します。
             context.getVariables().put("time", ++tickCount);
             context.getVariables().put("mascot.x", mascot.getX());
             context.getVariables().put("mascot.y", mascot.getY());
+            context.getVariables().put("mascot.lookRight", mascot.isLookRight());
+            context.getVariables().put("mascot.isGrounded", mascot.isGrounded());
 
             // 1. イベントをディスパッチして、条件に合うビヘイビアを探します。
             // SYSTEM_TICKは、毎フレーム発生する基本的なイベントです。
@@ -86,7 +107,7 @@ public class Main {
             // 2. マスコットのtick()を呼び出し、現在のアクションを実行させます。
             mascot.tick();
 
-            // 3. 描画処理（将来的に実装）
+            // 3. 描画処理
             mascotView.update();
 
             // 4. 少し待機して、CPU使用率を抑えます。

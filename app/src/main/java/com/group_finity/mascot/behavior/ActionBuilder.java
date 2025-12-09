@@ -4,6 +4,7 @@ import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.action.AnimateAction;
 import com.group_finity.mascot.action.MoveAction;
 import com.group_finity.mascot.action.SequenceAction;
+import com.group_finity.mascot.action.TurnAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
 import com.group_finity.mascot.config.xml.XmlActionReference;
@@ -100,6 +101,9 @@ public class ActionBuilder {
             case "Sequence":
                 // SequenceActionは参照を後で解決するため、ここでは空のインスタンスを生成します。
                 return new SequenceAction();
+            case "Turn":
+                // マスコットの向きを反転させるアクションを生成します。
+                return new TurnAction();
             default:
                 System.err.println("Unknown action type: " + xmlAction.getType());
                 return null; // 不明な型はnullを返す

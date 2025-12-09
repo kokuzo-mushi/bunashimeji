@@ -28,6 +28,7 @@ public class Mascot {
     private int x = 0;
     private int y = 0;
     private boolean lookRight = true;
+    private boolean isGrounded = false;
 
     // The animation currently being displayed.
     private Animation currentAnimation;
@@ -120,5 +121,21 @@ public class Mascot {
     public void setAnimation(Animation animation) {
         // アクションが新しいアニメーションを設定した場合、それを現在のものとして保持します。
         this.currentAnimation = animation;
+    }
+
+    public boolean isLookRight() {
+        return lookRight;
+    }
+
+    public void setLookRight(boolean lookRight) {
+        this.lookRight = lookRight;
+    }
+
+    public boolean isGrounded() {
+        return isGrounded;
+    }
+
+    public void setGrounded(boolean isGrounded) {
+        this.isGrounded = isGrounded;
     }
 }
