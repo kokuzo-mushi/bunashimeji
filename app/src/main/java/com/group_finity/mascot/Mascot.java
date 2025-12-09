@@ -29,6 +29,9 @@ public class Mascot {
     private int y = 0;
     private boolean lookRight = true;
     private boolean isGrounded = false;
+    private boolean isHittingLeftWall = false;
+    private boolean isHittingRightWall = false;
+    private boolean isBeingDragged = false;
 
     // The animation currently being displayed.
     private Animation currentAnimation;
@@ -42,6 +45,12 @@ public class Mascot {
      * 2. It then executes a single step of the current action.
      */
     public void tick() {
+        // ドラッグされている間は、自律的なアクションを実行しない
+        if (isBeingDragged) {
+            // NOTE: ここでドラッグ中のアニメーションを処理することも可能
+            return;
+        }
+
         // If the current action is null or has finished, switch to the next one.
         if (this.currentAction == null || !this.currentAction.hasNext()) {
             this.currentAction = this.nextAction;
@@ -55,6 +64,19 @@ public class Mascot {
     }
 
     /**
+     * ドラッグが開始されたときに呼び出されます。
+     */
+    public void startDrag() {
+        this.isBeingDragged = true;
+        this.currentAction = null; // 現在のアクションを中断
+        this.nextAction = null;
+    }
+
+    public void endDrag() {
+        this.isBeingDragged = false;
+    }
+
+    /**
      * Schedules the next action to be executed once the current one is complete.
      * This method is designed to be called by the {@code EventDispatcher} when a trigger fires.
      *
@@ -62,6 +84,10 @@ public class Mascot {
      */
     public void setNextAction(Action nextAction) {
         this.nextAction = nextAction;
+    }
+
+    public Action getCurrentAction() {
+        return currentAction;
     }
 
     /**
@@ -137,5 +163,25 @@ public class Mascot {
 
     public void setGrounded(boolean isGrounded) {
         this.isGrounded = isGrounded;
+    }
+
+    public boolean isHittingLeftWall() {
+        return isHittingLeftWall;
+    }
+
+    public void setHittingLeftWall(boolean isHittingLeftWall) {
+        this.isHittingLeftWall = isHittingLeftWall;
+    }
+
+    public boolean isHittingRightWall() {
+        return isHittingRightWall;
+    }
+
+    public void setHittingRightWall(boolean isHittingRightWall) {
+        this.isHittingRightWall = isHittingRightWall;
+    }
+
+    public boolean isBeingDragged() {
+        return isBeingDragged;
     }
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+
+    <!-- 待機アクション -->
+    <action Name="Stay" Type="Animate">
+        <animation>
+            <pose image="shime1.png" duration="2000" />
+            <pose image="shime2.png" duration="200" />
+            <pose image="shime1.png" duration="2000" />
+            <pose image="shime3.png" duration="200" />
+        </animation>
+    </action>
+
+    <!-- 歩くアクション (Speed属性で速度を調整) -->
+    <action Name="Walk" Type="Walk" Speed="2">
+        <animation>
+            <pose image="shime4.png" duration="300" />
+            <pose image="shime5.png" duration="300" />
+        </animation>
+    </action>
+
+    <!-- 向きを変えるアクション -->
+    <action Name="Turn" Type="Turn" />
+
+    <!-- 落下するアニメーション -->
+    <action Name="Fall" Type="Animate">
+        <animation>
+            <pose image="shime12.png" duration="100" />
+        </animation>
+    </action>
+
+    <!-- 着地するアニメーション -->
+    <action Name="Land" Type="Animate">
+        <animation>
+            <pose image="shime13.png" duration="300" />
+        </animation>
+    </action>
+
+    <!-- ドラッグされている時のアニメーション -->
+    <action Name="Dragged" Type="Animate">
+        <animation>
+            <pose image="shime14.png" duration="100" />
+        </animation>
+    </action>
+
+</actions>

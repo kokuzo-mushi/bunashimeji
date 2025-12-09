@@ -3,6 +3,7 @@ package com.group_finity.mascot.view;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.animation.Pose;
+import com.group_finity.mascot.trigger.EventDispatcher;
 import com.group_finity.mascot.image.ImageCache;
 
 import javax.swing.JWindow;
@@ -11,6 +12,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import com.group_finity.mascot.trigger.event.EventEnvelope;
+import com.group_finity.mascot.trigger.event.EventType;
 
 /**
  * マスコットを描画するためのSwingウィンドウ。
@@ -20,14 +25,19 @@ public class MascotView extends JWindow {
 
     private final Mascot mascot;
     private final ImageCache imageCache;
+    private final EventDispatcher dispatcher;
     private BufferedImage currentImage;
+    private Point dragStartOffset; // ドラッグ開始時の、ウィンドウ左上からのマウスカーソル相対位置
 
-    public MascotView(Mascot mascot, ImageCache imageCache) {
+    public MascotView(Mascot mascot, ImageCache imageCache, EventDispatcher dispatcher) {
         this.mascot = mascot;
         this.imageCache = imageCache;
+        this.dispatcher = dispatcher;
 
         // ウィンドウの初期設定
         initWindow();
+        // マウスハンドラの初期設定
+        initMouseHandlers();
     }
 
     private void initWindow() {
@@ -35,6 +45,43 @@ public class MascotView extends JWindow {
         setBackground(new Color(0, 0, 0, 0));
         // 常に最前面に表示
         setAlwaysOnTop(true);
+    }
+
+    private void initMouseHandlers() {
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // ドラッグ開始をマスコットに通知
+                mascot.startDrag();
+                dragStartOffset = e.getPoint();
+
+                // イベントディスパッチャに通知
+                dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.MOUSE_PRESSED, e, MascotView.this));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // ドラッグ終了をマスコットに通知
+                mascot.endDrag();
+                dragStartOffset = null;
+
+                // イベントディスパッチャに通知
+                dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.MOUSE_RELEASED, e, MascotView.this));
+            }
+        });
+
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (dragStartOffset != null) {
+                    Point newLoc = e.getLocationOnScreen();
+                    newLoc.translate(-dragStartOffset.x, -dragStartOffset.y);
+                    mascot.setAnchor(newLoc);
+
+                    dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.MOUSE_DRAGGED, e, MascotView.this));
+                }
+            }
+        });
     }
 
     /**
@@ -96,5 +143,13 @@ public class MascotView extends JWindow {
      */
     public int getMascotHeight() {
         return (currentImage != null) ? currentImage.getHeight() : 0;
+    }
+
+    /**
+     * 現在表示されているマスコットの画像の幅を返します。
+     * @return 画像の幅。画像がない場合は0。
+     */
+    public int getMascotWidth() {
+        return (currentImage != null) ? currentImage.getWidth() : 0;
     }
 }

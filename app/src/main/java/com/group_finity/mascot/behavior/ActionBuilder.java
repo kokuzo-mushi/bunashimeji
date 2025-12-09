@@ -4,6 +4,7 @@ import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.action.AnimateAction;
 import com.group_finity.mascot.action.MoveAction;
 import com.group_finity.mascot.action.SequenceAction;
+import com.group_finity.mascot.action.WalkAction;
 import com.group_finity.mascot.action.TurnAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
@@ -104,6 +105,14 @@ public class ActionBuilder {
             case "Turn":
                 // マスコットの向きを反転させるアクションを生成します。
                 return new TurnAction();
+            case "Walk":
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Walk action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                // Speed属性がなければデフォルト値(e.g., 1)を使う
+                int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 1;
+                return new WalkAction(xmlAction.getAnimation(), speed);
             default:
                 System.err.println("Unknown action type: " + xmlAction.getType());
                 return null; // 不明な型はnullを返す

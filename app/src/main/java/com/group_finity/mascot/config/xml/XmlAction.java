@@ -16,6 +16,9 @@ public class XmlAction {
     @XmlAttribute(name = "Type", required = true)
     private String type;
 
+    @XmlAttribute(name = "Speed")
+    private Integer speed;
+
     @XmlElement(name = "Animation")
     private XmlAnimation animation;
 
@@ -27,6 +30,7 @@ public class XmlAction {
 
     public String getName() { return name; }
     public String getType() { return type; }
+    public Integer getSpeed() { return speed; }
     public XmlAnimation getAnimation() { return animation; }
     public XmlPoint getPoint() { return point; }
     public List<XmlActionReference> getActionReferences() { return actionReferences; }

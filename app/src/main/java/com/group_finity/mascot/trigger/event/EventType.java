@@ -29,5 +29,23 @@ public enum EventType {
      * ユーザーによるマウス操作（クリックなど）。
      * Payload: java.awt.Point (クリック座標)
      */
-    MOUSE_CLICK
+    MOUSE_CLICK,
+
+    /**
+     * マスコットのウィンドウ上でマウスボタンが押されたときに発行されます。
+     * Payload: java.awt.event.MouseEvent
+     */
+    MOUSE_PRESSED,
+
+    /**
+     * マスコットのウィンドウ上でマウスボタンが離されたときに発行されます。
+     * Payload: java.awt.event.MouseEvent
+     */
+    MOUSE_RELEASED,
+
+    /**
+     * マスコットのウィンドウ上でマウスボタンが押されたままドラッグされたときに発行されます。
+     * Payload: java.awt.event.MouseEvent
+     */
+    MOUSE_DRAGGED;
 }
