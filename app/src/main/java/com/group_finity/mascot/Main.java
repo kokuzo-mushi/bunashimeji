@@ -1,103 +1,98 @@
 package com.group_finity.mascot;
 
+import com.group_finity.mascot.behavior.Behavior;
+import com.group_finity.mascot.behavior.Configuration;
+import com.group_finity.mascot.trigger.EventDispatcher;
+import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.trigger.event.EventEnvelope;
+import com.group_finity.mascot.trigger.event.EventType;
+import com.group_finity.mascot.image.ImageCache;
+import com.group_finity.mascot.view.MascotView;
+
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.group_finity.mascot.action.Action;
-import com.group_finity.mascot.behavior.Behavior;
-import com.group_finity.mascot.behavior.GenericBehavior;
-import com.group_finity.mascot.trigger.CompositeTrigger;
-import com.group_finity.mascot.trigger.EventDispatcher;
-import com.group_finity.mascot.trigger.TriggerCondition;
-import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
-import com.group_finity.mascot.trigger.event.EventEnvelope;
-import com.group_finity.mascot.trigger.event.EventType;
-import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
-import com.group_finity.mascot.trigger.expr.type.Mode;
-
 /**
- * Shimeji Neo: EventDispatcher + EventQueue 統合動作テスト
- * フェーズ D-2 検証用メインクラス
+ * アプリケーションのメインエントリーポイント。
+ * 設定を読み込み、マスコットを生成し、メインループを開始します。
  */
 public class Main {
 
     public static void main(String[] args) {
+        try {
+            new Main().run();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("An unexpected error occurred. Exiting.");
+        }
+    }
 
-        System.out.println("=== Shimeji Neo - EventDispatcher + EventQueue Test Start ===");
+    public void run() throws InterruptedException {
+        System.out.println("=== Shimeji Neo Start ===");
 
-        // --- 1️⃣ コンテキスト準備 ---
-        Map<String, Object> vars = new HashMap<>();
-        vars.put("time", 500);
-        vars.put("state", "idle");
+        // --- 1️⃣ 設定の読み込み ---
+        // actions.xml と behaviors.xml からアクションとビヘイビアの定義を読み込みます。
+        Configuration config = new Configuration(Path.of("conf/actions.xml"), Path.of("conf/behaviors.xml"));
+        List<Behavior> behaviors = config.getBehaviors();
 
-        // ShimejiAppの実装に合わせ、マップを直接共有するコンストラクタを使用
-        EvaluationContext ctx = new EvaluationContext(vars);
-
-        // --- 2️⃣ イベントキューとディスパッチャを初期化 ---
-        Mascot mascot = new Mascot(); // Mascotインスタンスを生成
-        EventDispatcher dispatcher = new EventDispatcher(ctx, mascot);
-
-        // --- 3️⃣ トリガー定義 ---
-        TriggerCondition cond1 = new TriggerCondition("time > 1000", vars);
-        TriggerCondition cond2 = new TriggerCondition("state === \"falling\"", vars);
-
-        CompositeTrigger trigger1 = new CompositeTrigger(List.of(cond1, cond2), CompositeTrigger.Mode.ALL);
-        CompositeTrigger trigger2 = new CompositeTrigger(List.of(cond1), CompositeTrigger.Mode.ANY);
-
-        // --- 4️⃣ 登録 ---
-        // テスト用のアクションを匿名クラスで定義
-        Action action1 = new Action() {
-            private boolean hasNext = true;
-            @Override public boolean hasNext() { return hasNext; }
-            @Override public void execute(Mascot m) {
-                System.out.println("[Action] Executing Action1 (Triggered by: " + trigger1 + ")");
-                hasNext = false; // 1回実行したら終了
-            }
-        };
-        Action action3 = new Action() {
-            private boolean hasNext = true;
-            @Override public boolean hasNext() { return hasNext; }
-            @Override public void execute(Mascot m) {
-                System.out.println("[Action] Executing Action3 (Triggered by: " + trigger2 + ")");
-                hasNext = false; // 1回実行したら終了
-            }
-        };
-
-        // TriggerとActionをBehaviorでラップして登録する
-        dispatcher.registerTrigger(new GenericBehavior(trigger1, action1));
-        dispatcher.registerTrigger(new GenericBehavior(trigger2, action3));
-
-        // メソッド名を修正
-        System.out.println("[Main] Registered triggers: " + dispatcher.getRegisteredCount());
-        // --- 5️⃣ コンテキスト変化シミュレーション ---
-        int[] timeSteps = {500, 900, 1200, 1500};
-        String[] states = {"idle", "active", "falling", "falling"};
-
-     // ループ内の更新箇所をこうする
-        for (int i = 0; i < timeSteps.length; i++) {
-            int t = timeSteps[i];
-            String st = states[i];
-
-            // コンテキストの変数を更新 (ShimejiAppの実装に合わせる)
-            ctx.getVariables().put("time", t);
-            ctx.getVariables().put("state", st);
-
-            System.out.println("\n[Main] Step " + (i + 1) + " → Context: {time=" + t + ", state=" + st + "}");
-
-            // メソッド名を修正し、イベントをディスパッチしてトリガーを評価
-            dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.SYSTEM_TICK, (long)t, "Main"));
-
-            // マスコットのtickを呼び出し、アクションを実行させる
-            mascot.tick();
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+        if (behaviors == null || behaviors.isEmpty()) {
+            System.err.println("No behaviors found in configuration. The mascot will not do anything.");
+            return;
         }
 
-        System.out.println("\n=== Shimeji Neo - EventDispatcher Test Complete ===");
+        // --- 2️⃣ マスコットとイベントシステムの初期化 ---
+        Mascot mascot = new Mascot();
+
+        // --- 2.5. 描画システムの初期化 ---
+        ImageCache imageCache = new ImageCache(Path.of("img"));
+        MascotView mascotView = new MascotView(mascot, imageCache);
+
+        Map<String, Object> contextVariables = new HashMap<>();
+        // NOTE: ここで定義する変数が、behaviors.xml の <condition> で使用できます。
+        contextVariables.put("mascot.isGrounded", true); // 例: 地面にいるか
+        contextVariables.put("mascot.x", mascot.getX());
+        contextVariables.put("mascot.y", mascot.getY());
+        contextVariables.put("time", 0L);
+
+        EvaluationContext context = new EvaluationContext(contextVariables);
+        EventDispatcher dispatcher = new EventDispatcher(context, mascot);
+
+        // 読み込んだビヘイビアをディスパッチャに登録します。
+        for (Behavior behavior : behaviors) {
+            dispatcher.registerTrigger(behavior);
+        }
+        System.out.printf("[Main] Loaded and registered %d behaviors.%n", dispatcher.getRegisteredCount());
+
+        // ウィンドウを可視化
+        mascotView.setVisible(true);
+
+        // --- 3️⃣ メインループ ---
+        System.out.println("[Main] Starting main loop... (Press Ctrl+C to exit)");
+        long tickCount = 0;
+
+        while (!Thread.currentThread().isInterrupted()) {
+            // コンテキスト変数を更新します。
+            // これにより、ビヘイビアの条件が動的に変化します。
+            context.getVariables().put("time", ++tickCount);
+            context.getVariables().put("mascot.x", mascot.getX());
+            context.getVariables().put("mascot.y", mascot.getY());
+
+            // 1. イベントをディスパッチして、条件に合うビヘイビアを探します。
+            // SYSTEM_TICKは、毎フレーム発生する基本的なイベントです。
+            dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.SYSTEM_TICK, tickCount, this));
+
+            // 2. マスコットのtick()を呼び出し、現在のアクションを実行させます。
+            mascot.tick();
+
+            // 3. 描画処理（将来的に実装）
+            mascotView.update();
+
+            // 4. 少し待機して、CPU使用率を抑えます。
+            Thread.sleep(30); // 約33 FPS
+        }
+
+        System.out.println("=== Shimeji Neo Shutdown ===");
     }
 }

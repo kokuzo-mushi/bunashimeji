@@ -1,6 +1,9 @@
 package com.group_finity.mascot;
 
 import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.animation.Animation;
+
+import java.awt.Point;
 import java.util.Map;
 import java.util.Collections;
 
@@ -25,6 +28,9 @@ public class Mascot {
     private int x = 0;
     private int y = 0;
     private boolean lookRight = true;
+
+    // The animation currently being displayed.
+    private Animation currentAnimation;
 
     /**
      * The main "heartbeat" method for the mascot. This should be called periodically
@@ -96,5 +102,23 @@ public class Mascot {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public Point getAnchor() {
+        return new Point(x, y);
+    }
+
+    public void setAnchor(Point anchor) {
+        this.x = anchor.x;
+        this.y = anchor.y;
+    }
+
+    public Animation getAnimation() {
+        return currentAnimation;
+    }
+
+    public void setAnimation(Animation animation) {
+        // アクションが新しいアニメーションを設定した場合、それを現在のものとして保持します。
+        this.currentAnimation = animation;
     }
 }
