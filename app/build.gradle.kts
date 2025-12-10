@@ -31,6 +31,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     // ✅ テストランナー（JUnit Platform Launcher）を明示的に追加
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
+
+    // --- Mockito (for Mocking in Tests) ---
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.12.0")
 }
 
 tasks.withType<JavaExec>().configureEach {
