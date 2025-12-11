@@ -14,7 +14,10 @@ public class WalkAction implements Action {
 
     private final Animation animation;
     private final int speed;
-    private long startTime = -1;
+
+    // テスト容易性を向上させるため、System.currentTimeMillis()への依存をなくし、
+    // アクションの残り時間を内部で管理します。
+    private int timeRemaining;
 
     public WalkAction(XmlAnimation xmlAnimation, int speed) {
         this.animation = new Animation(
@@ -23,27 +26,36 @@ public class WalkAction implements Action {
                         .collect(Collectors.toList())
         );
         this.speed = speed;
+        // アクション生成時に、アニメーションの総再生時間を残り時間として初期設定します。
+        this.timeRemaining = this.animation.getTotalDuration();
     }
 
     @Override
     public boolean hasNext() {
-        if (startTime == -1) return true;
-        long elapsedTime = System.currentTimeMillis() - startTime;
-        // アニメーションが終了するまで継続
-        return elapsedTime < animation.getTotalDuration();
+        // 残り時間がある限り、アクションは継続します。
+        return this.timeRemaining > 0;
     }
 
     @Override
     public void execute(Mascot mascot) {
-        if (startTime == -1) {
-            startTime = System.currentTimeMillis();
+        // このメソッドはメインループから毎フレーム呼び出される「tick」として機能します。
+        if (!hasNext()) {
+            return;
         }
 
+        // テストコード(WalkActionTest)やメインループ(Main)の待機時間と合わせるのが理想です。
+        // ここではテストで仮定されている40msを1フレームの時間とします。
+        final int FRAME_DURATION_MS = 40;
+
         mascot.setAnimation(animation);
-        long elapsedTime = System.currentTimeMillis() - startTime;
-        animation.tick(elapsedTime);
+
+        // Animationクラスに経過時間を渡してアニメーションを進行させます。
+        animation.tick(FRAME_DURATION_MS);
 
         int direction = mascot.isLookRight() ? 1 : -1;
         mascot.setX(mascot.getX() + speed * direction);
+
+        // 1フレーム分の時間を減算します。
+        this.timeRemaining -= FRAME_DURATION_MS;
     }
 }

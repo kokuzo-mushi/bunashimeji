@@ -35,12 +35,17 @@ public class SequenceAction implements Action {
 
     @Override
     public void execute(Mascot mascot) {
-        if (!hasNext()) return;
-
-        Action currentAction = sequence.get(currentIndex);
-        currentAction.execute(mascot);
-
-        if (!currentAction.hasNext()) {
+        // シーケンスが終了するまで、または継続中のアクションに到達するまでループ
+        while (hasNext()) {
+            Action currentAction = sequence.get(currentIndex);
+            currentAction.execute(mascot);
+    
+            // 現在のアクションがまだ継続中の場合、このフレームでの処理は終了
+            if (currentAction.hasNext()) {
+                break;
+            }
+    
+            // 現在のアクションが終了したので、次のアクションのインデックスに進む
             currentIndex++;
         }
     }

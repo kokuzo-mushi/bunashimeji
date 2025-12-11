@@ -4,12 +4,12 @@ plugins {
 }
 
 application {
-    mainClass = ("com.group_finity.buna-shimeji.Main")
+    mainClass = ("com.group_finity.mascot.Main")
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 

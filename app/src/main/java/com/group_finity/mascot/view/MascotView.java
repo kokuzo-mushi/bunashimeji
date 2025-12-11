@@ -92,7 +92,7 @@ public class MascotView extends JWindow {
         // 1. 現在のポーズから表示すべき画像を取得
         Animation animation = mascot.getAnimation();
         if (animation != null) {
-            Pose pose = animation.getCurrentPose();
+            Pose pose = animation.getPose();
             if (pose != null) {
                 if (mascot.isLookRight()) {
                     this.currentImage = imageCache.getImage(pose.getImageName());

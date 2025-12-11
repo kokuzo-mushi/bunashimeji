@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 public class AnimateAction implements Action {
 
     private final Animation animation;
-    private long startTime = -1;
+    // startTimeへの依存をなくし、アクションの残り時間を内部で管理します。
+    private int timeRemaining;
 
     public AnimateAction(XmlAnimation xmlAnimation) {
         this.animation = new Animation(
@@ -21,24 +22,32 @@ public class AnimateAction implements Action {
                         .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration()))
                         .collect(Collectors.toList())
         );
+        // アクション生成時に、アニメーションの総再生時間を残り時間として初期設定します。
+        this.timeRemaining = this.animation.getTotalDuration();
     }
 
     @Override
     public void execute(Mascot mascot) {
-        if (startTime == -1) {
-            startTime = System.currentTimeMillis();
+        // アクションが既に終了している場合は何もしない
+        if (!hasNext()) {
+            return;
         }
+
+        // 1フレームの時間を40msと仮定 (25 FPS)
+        final int FRAME_DURATION_MS = 40;
 
         mascot.setAnimation(animation);
 
-        long elapsedTime = System.currentTimeMillis() - startTime;
-        animation.tick(elapsedTime);
+        // Animationクラスに経過時間を渡してアニメーションを進行させます。
+        animation.tick(FRAME_DURATION_MS);
+
+        // 1フレーム分の時間を減算します。
+        this.timeRemaining -= FRAME_DURATION_MS;
     }
 
     @Override
     public boolean hasNext() {
-        if (startTime == -1) return true;
-        long elapsedTime = System.currentTimeMillis() - startTime;
-        return elapsedTime < animation.getTotalDuration();
+        // 残り時間がある限り、アクションは継続します。
+        return this.timeRemaining > 0;
     }
 }
