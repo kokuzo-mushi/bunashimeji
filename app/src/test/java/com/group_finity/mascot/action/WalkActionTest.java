@@ -39,7 +39,7 @@ class WalkActionTest {
         when(mockXmlAnimation.getPoses()).thenReturn(List.of(pose1, pose2));
     }
 
-    @ParameterizedTest(name = "isLookingRight={0} initialX={1} speed={2} expectedX={3}")
+    @ParameterizedTest
     @CsvSource({
             "true, 100, 2, 102",
             "false, 100, 2, 98"

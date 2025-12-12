@@ -37,6 +37,11 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:5.12.0")
 }
 
+// ✅ ソースコードのエンコーディングをUTF-8に指定（文字化け対策）
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+}
+
 tasks.withType<JavaExec>().configureEach {
     jvmArgs("--enable-preview")
 }
@@ -44,6 +49,14 @@ tasks.withType<JavaExec>().configureEach {
 // ✅ JUnit Platform を使うよう指定（重要）
 tasks.test {
     useJUnitPlatform()
+    // テスト実行時のシステムプロパティでエンコーディングをUTF-8に強制
+    systemProperty("file.encoding", "UTF-8")
+
+    testLogging {
+        events("passed", "skipped", "failed")
+        // 標準出力も表示させる（デバッグ用）
+        showStandardStreams = true
+    }
 }
 
 // ✅ 古いAPIに依存していてコンパイルエラーになるテストを一時的に除外する

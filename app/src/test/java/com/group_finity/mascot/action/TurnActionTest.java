@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 /**
- * TurnActionクラスのユニットテスト。
- * アクションが一度だけ実行され、マスコットの向きを正しく反転させることを検証します。
+ * Unit test for TurnAction.
+ * Verifies that the action is executed once and correctly toggles the mascot's direction.
  */
 class TurnActionTest {
 
@@ -33,7 +33,7 @@ class TurnActionTest {
         turnAction.execute(mockMascot);
 
         // Assert
-        // isLookRight()の返り値と逆の値でsetLookRight()が呼ばれたことを確認
+        // Verify that setLookRight() was called with the opposite value of isLookRight()
         verify(mockMascot).setLookRight(!initialLookRight);
     }
 
@@ -44,6 +44,6 @@ class TurnActionTest {
         turnAction.execute(mockMascot);
 
         // Act & Assert
-        assertFalse(turnAction.hasNext(), "execute実行後はhasNext()はfalseを返すはず");
+        assertFalse(turnAction.hasNext(), "hasNext() should return false after execution");
     }
 }

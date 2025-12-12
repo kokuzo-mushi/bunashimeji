@@ -6,14 +6,14 @@
 
 %TESTE  3,hasNext_shouldReturnFalse_afterAnimationDuration(com.group_finity.mascot.action.WalkActionTest)
 
-%TSTTREE5,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest),false,1,true,4,isLookingRight=true\, initialX=100\, speed=2\, expectedX=102,boolean\, int\, int\, int,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.WalkActionTest]/[test-template:execute_shouldMoveMascotInCorrectDirection(boolean\, int\, int\, int)]/[test-template-invocation:#1]
+%TSTTREE5,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest),false,1,true,4,[1] true\, 100\, 2\, 102,boolean\, int\, int\, int,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.WalkActionTest]/[test-template:execute_shouldMoveMascotInCorrectDirection(boolean\, int\, int\, int)]/[test-template-invocation:#1]
 %TESTS  5,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest)
 
 %TESTE  5,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest)
 
-%TSTTREE6,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest),false,1,true,4,isLookingRight=false\, initialX=100\, speed=2\, expectedX=98,boolean\, int\, int\, int,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.WalkActionTest]/[test-template:execute_shouldMoveMascotInCorrectDirection(boolean\, int\, int\, int)]/[test-template-invocation:#2]
+%TSTTREE6,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest),false,1,true,4,[2] false\, 100\, 2\, 98,boolean\, int\, int\, int,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.WalkActionTest]/[test-template:execute_shouldMoveMascotInCorrectDirection(boolean\, int\, int\, int)]/[test-template-invocation:#2]
 %TESTS  6,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest)
 
 %TESTE  6,execute_shouldMoveMascotInCorrectDirection(com.group_finity.mascot.action.WalkActionTest)
 
-%RUNTIME1261
+%RUNTIME1212
