@@ -22,10 +22,10 @@ class WalkActionTest {
 
     @BeforeEach
     void setUp() {
-        // Mascotオブジェクトのモック（偽物）を作成
+        // Create a mock of the Mascot object
         mockMascot = mock(Mascot.class);
 
-        // テスト用のアニメーション定義を作成
+        // Create animation definition for testing
         mockXmlAnimation = mock(XmlAnimation.class);
         XmlPose pose1 = mock(XmlPose.class);
         when(pose1.getDuration()).thenReturn(300);
@@ -35,14 +35,14 @@ class WalkActionTest {
         when(pose2.getDuration()).thenReturn(300);
         when(pose2.getImage()).thenReturn("test2.png");
 
-        // WalkActionのコンストラクタが必要とするPoseのリストを返すように設定
+        // Set up the mock to return the list of poses required by WalkAction constructor
         when(mockXmlAnimation.getPoses()).thenReturn(List.of(pose1, pose2));
     }
 
-    @ParameterizedTest(name = "向き={0}, 初期X座標={1}, 速度={2} のとき、期待されるX座標は {3}")
+    @ParameterizedTest(name = "isLookingRight={0} initialX={1} speed={2} expectedX={3}")
     @CsvSource({
-            "true, 100, 2, 102", // 右向きの場合: 初期座標100, 速度2 -> 期待値102
-            "false, 100, 2, 98"  // 左向きの場合: 初期座標100, 速度2 -> 期待値98
+            "true, 100, 2, 102",
+            "false, 100, 2, 98"
     })
     void execute_shouldMoveMascotInCorrectDirection(boolean isLookingRight, int initialX, int speed, int expectedX) {
         // Arrange: 準備
@@ -62,24 +62,21 @@ class WalkActionTest {
     void hasNext_shouldReturnFalse_afterAnimationDuration() {
         // Arrange
         WalkAction walkAction = new WalkAction(mockXmlAnimation, 2);
-        // アニメーションの合計時間(ms)を取得します。
-        // このテストでは 300ms + 300ms = 600ms となります。
+        // Calculate total animation duration (300ms + 300ms = 600ms)
         int totalDuration = mockXmlAnimation.getPoses().stream().mapToInt(XmlPose::getDuration).sum();
-        // 1フレームの時間(ms)を仮定します。多くのアプリケーションでは40ms(25fps)が使われます。
+        // Assume 1 frame duration (40ms)
         int frameDuration = 40;
-        // アニメーションが終了するのに必要なフレーム数を計算します（念のため+1します）。
+        // Calculate required frames to finish animation
         int requiredFrames = (totalDuration / frameDuration) + 1;
 
         // Act & Assert
-        walkAction.execute(mockMascot); // 1回目の実行でアクションが開始される
-        assertTrue(walkAction.hasNext(), "アクションは開始直後は継続しているはず");
+        walkAction.execute(mockMascot);
+        assertTrue(walkAction.hasNext(), "Action should continue immediately after start");
 
-        // Thread.sleep()の代わりに、Actionインターフェースの規約に従いexecute()を呼び出してアクションの内部時間を進めます。
-        // これにより、テストが外部のタイミングに依存しなくなり、安定します。
         for (int i = 0; i < requiredFrames && walkAction.hasNext(); i++) {
             walkAction.execute(mockMascot);
         }
-
-        assertFalse(walkAction.hasNext(), "アクションは規定時間経過後に終了しているはず");
+        
+        assertFalse(walkAction.hasNext(), "Action should finish after duration");
     }
 }
