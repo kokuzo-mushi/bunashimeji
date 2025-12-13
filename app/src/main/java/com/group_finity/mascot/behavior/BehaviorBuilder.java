@@ -5,7 +5,6 @@ import com.group_finity.mascot.action.SequenceAction;
 import com.group_finity.mascot.config.xml.XmlBehavior;
 import com.group_finity.mascot.config.xml.XmlBehaviors;
 import com.group_finity.mascot.config.xml.XmlActionReference;
-import com.group_finity.mascot.trigger.ExprTrigger;
 import com.group_finity.mascot.trigger.Trigger;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -52,15 +51,14 @@ public class BehaviorBuilder {
 
             List<Behavior> builtBehaviors = new ArrayList<>();
             for (XmlBehavior xmlBehavior : xmlBehaviors.getBehaviors()) {
-                // 条件式からTriggerを生成します。
-                Trigger trigger = new ExprTrigger(xmlBehavior.getCondition());
-
                 // 実行するActionを解決または生成します。
                 Action action = createActionForBehavior(xmlBehavior);
 
                 if (action != null) {
-                    // TriggerとActionを組み合わせてBehaviorを生成し、リストに追加します。
-                    builtBehaviors.add(new GenericBehavior(trigger, action));
+                    // Behaviorクラスを直接生成し、リストに追加します。
+                    String name = (xmlBehavior.getName() != null) ? xmlBehavior.getName() : "Behavior";
+                    boolean hidden = xmlBehavior.isHidden();
+                    builtBehaviors.add(new Behavior(name, action, xmlBehavior.getCondition(), hidden));
                 } else {
                     System.err.println("No valid action found for condition: " + xmlBehavior.getCondition());
                 }

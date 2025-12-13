@@ -14,20 +14,20 @@ import org.junit.jupiter.params.provider.CsvSource;
 import com.group_finity.mascot.trigger.event.EventType;
 
 /**
- * TriggerCondition の静的解析ロジックをテストするクラス。
+ * Test class for static analysis logic of TriggerCondition.
  * <p>
- * 式が依存する変数を基に、購読すべき EventType が正しく特定されることを検証します。
+ * Verifies that the correct EventType to subscribe to is identified based on the variables the expression depends on.
  */
 class TriggerConditionStaticAnalysisTest {
 
     /**
-     * 指定された式から生成された TriggerCondition が、期待されるイベントセットを購読するかを検証するヘルパーメソッド。
+     * Helper method to verify that the TriggerCondition generated from the specified expression subscribes to the expected event set.
      *
-     * @param expression テスト対象の式
-     * @param expectedEvents 期待される EventType のセット
+     * @param expression Expression to test
+     * @param expectedEvents Expected set of EventTypes
      */
     private void assertSubscribedEvents(String expression, Set<EventType> expectedEvents) {
-        // TriggerCondition のコンストラクタは内部で静的解析を実行する
+        // TriggerCondition constructor executes static analysis internally
         TriggerCondition condition = new TriggerCondition(expression, null);
         Set<EventType> actualEvents = condition.getSubscribedEventTypes();
 
@@ -36,32 +36,32 @@ class TriggerConditionStaticAnalysisTest {
     }
 
     @Test
-    @DisplayName("mascot.* 変数に依存する式は MASCOT_STATE_CHANGED を購読すべき")
+    @DisplayName("Expressions dependent on mascot.* variables should subscribe to MASCOT_STATE_CHANGED")
     void testMascotStateDependency() {
         assertSubscribedEvents("mascot.state == 'idle'", EnumSet.of(EventType.MASCOT_STATE_CHANGED));
     }
 
     @Test
-    @DisplayName("time/tick 変数に依存する式は SYSTEM_TICK を購読すべき")
+    @DisplayName("Expressions dependent on time/tick variables should subscribe to SYSTEM_TICK")
     void testTimeDependency() {
         assertSubscribedEvents("time > 1000", EnumSet.of(EventType.SYSTEM_TICK));
     }
 
     @Test
-    @DisplayName("window.* 変数に依存する式は ENVIRONMENT_CHANGED を購読すべき")
+    @DisplayName("Expressions dependent on window.* variables should subscribe to ENVIRONMENT_CHANGED")
     void testEnvironmentDependency() {
         assertSubscribedEvents("window.isMinimized", EnumSet.of(EventType.ENVIRONMENT_CHANGED));
     }
 
     @Test
-    @DisplayName("複数の種類の変数に依存する式は、対応するすべてのイベントを購読すべき")
+    @DisplayName("Expressions dependent on multiple types of variables should subscribe to all corresponding events")
     void testMultipleDependencies() {
         assertSubscribedEvents("mascot.x > 100 && time % 10 == 0 && window.isActive",
                 EnumSet.of(EventType.MASCOT_STATE_CHANGED, EventType.SYSTEM_TICK, EventType.ENVIRONMENT_CHANGED));
     }
 
     @Test
-    @DisplayName("変数を含まない定数式は、どのイベントも購読すべきではない")
+    @DisplayName("Constant expressions containing no variables should not subscribe to any events")
     void testConstantExpression() {
         assertSubscribedEvents("true", EnumSet.noneOf(EventType.class));
         assertSubscribedEvents("100 > 50", EnumSet.noneOf(EventType.class));
@@ -72,7 +72,7 @@ class TriggerConditionStaticAnalysisTest {
             "'tick > 0', SYSTEM_TICK",
             "'ie.isForeground', ENVIRONMENT_CHANGED"
     })
-    @DisplayName("様々な単一依存の式をテストする")
+    @DisplayName("Test various single dependency expressions")
     void testSingleDependencyWithParameters(String expression, EventType expectedType) {
         assertSubscribedEvents(expression, EnumSet.of(expectedType));
     }

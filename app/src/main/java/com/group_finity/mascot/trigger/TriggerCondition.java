@@ -2,11 +2,14 @@ package com.group_finity.mascot.trigger;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.group_finity.mascot.trigger.expr.ExpressionEngine;
@@ -26,11 +29,11 @@ import com.group_finity.mascot.trigger.expr.type.Mode;
 import com.group_finity.mascot.trigger.expr.type.TypeResolver;
 
 /**
- * D-5 修正版:
- * - 取得は AST+Mode のキーのみ（依存はキーに含めない）
- * - HIT 判定は EvaluationResult 内の依存と「現在の依存値」の比較で行う
- * - clearAccessLog() は再評価する時だけ呼ぶ
- * - EvaluationContext は外部変数マップを参照共有（コンストラクタ呼び出し側の責務）
+ * D-5 Modified version:
+ * - Get using AST+Mode key only (dependencies not included in key)
+ * - HIT judgment is done by comparing dependencies in EvaluationResult with "current dependency values"
+ * - Call clearAccessLog() only when re-evaluating
+ * - EvaluationContext shares reference to external variable map (responsibility of constructor caller)
  */
 public class TriggerCondition {
 
@@ -39,17 +42,17 @@ public class TriggerCondition {
 
     private final String expression;
     private final ExpressionEngine engine;
-    private EvaluationContext context; // 参照共有される想定
+    private EvaluationContext context; // Assumed to share reference
     private final Set<EventType> subscribedEventTypes;
 
     public TriggerCondition(String expression, Map<String, Object> variables) {
         this.expression = expression;
         this.engine = new ExpressionEngine();
         if (variables == null) variables = new HashMap<>();
-        // ★ EvaluationContext 側が参照共有コンストラクタを持つ前提（下の修正②参照）
+        // Assumes EvaluationContext has a reference-sharing constructor
         this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT, true);
 
-        // ASTの取得または生成
+        // Get or create AST
         ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, key -> {
             try {
                 ExpressionNode parsed = new ExpressionParser(key).parse();
@@ -61,27 +64,48 @@ public class TriggerCondition {
             }
         });
 
-        // ASTを静的解析して依存イベントを特定
+        // Statically analyze AST to identify dependent events
         this.subscribedEventTypes = analyzeDependencies(ast, expression);
     }
 
     private static Set<EventType> analyzeDependencies(ExpressionNode ast, String expressionForLogging) {
+        Set<EventType> events = EnumSet.noneOf(EventType.class);
         try {
-            if (ast == null) {
-                return EnumSet.noneOf(EventType.class);
+            if (ast != null) {
+                // Collect variable names from AST using Visitor
+                final VariableCollectorVisitor visitor = new VariableCollectorVisitor();
+                ast.accept(visitor); // ExpressionNode and its subclasses must implement accept()
+                final Set<String> variables = visitor.getCollectedVariables();
+
+                // Map variable name set to EventType set
+                events.addAll(VariableToEventTypeMapper.map(variables));
             }
-
-            // Visitorを使ってASTから変数名を収集
-            final VariableCollectorVisitor visitor = new VariableCollectorVisitor();
-            ast.accept(visitor); // ExpressionNode とそのサブクラスに accept() の実装が必要
-            final Set<String> variables = visitor.getCollectedVariables();
-
-            // 変数名セットをEventTypeセットにマッピング
-            return VariableToEventTypeMapper.map(variables);
         } catch (Exception e) {
             System.err.println("Failed to statically analyze expression: '" + expressionForLogging + "'. Falling back to broad event subscription. Error: " + e.getMessage());
             return EnumSet.of(EventType.MASCOT_STATE_CHANGED, EventType.ENVIRONMENT_CHANGED, EventType.SYSTEM_TICK);
         }
+
+        // Fallback: If AST analysis yielded no events (and it's not a trivial constant),
+        // use Regex to find potential variables. This handles cases where AST parsing might fail or differ (e.g. GraalVM).
+        if (events.isEmpty()) {
+            Set<String> regexVars = extractVariablesWithRegex(expressionForLogging);
+            if (!regexVars.isEmpty()) {
+                events.addAll(VariableToEventTypeMapper.map(regexVars));
+            }
+        }
+
+        return events;
+    }
+
+    private static Set<String> extractVariablesWithRegex(String expression) {
+        Set<String> vars = new HashSet<>();
+        // Simple regex to find identifiers that might be variables (e.g., mascot.state, time)
+        Pattern p = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_.]*");
+        Matcher m = p.matcher(expression);
+        while (m.find()) {
+            vars.add(m.group());
+        }
+        return vars;
     }
 
     public EvaluationContext getContext() { return context; }
@@ -107,7 +131,7 @@ public class TriggerCondition {
         EvaluationContext ctx = (externalCtx != null) ? externalCtx : this.context;
         if (ctx == null) return false;
 
-        // 1) AST 構築（失敗時は false リテラルでフォールバック）
+        // 1) Build AST (fallback to false literal on failure)
         ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, key -> {
             try {
                 ExpressionNode parsed = new ExpressionParser(key).parse();
@@ -119,11 +143,11 @@ public class TriggerCondition {
             }
         });
 
-        // 2) AST+Mode のキーで取得（依存はキーに含めない）
+        // 2) Get with AST+Mode key (dependencies not included in key)
         ExprCacheKey astKey = ExprCacheKey.ofAst(ast, ctx.getMode());
         Optional<EvaluationResult> cached = cacheManager.get(astKey);
 
-        // 3) 依存比較で HIT 判定（clearAccessLog はここでは呼ばない）
+        // 3) HIT judgment by dependency comparison (clearAccessLog is not called here)
         if (cached.isPresent()) {
             Map<String, Object> currentDeps;
             if (ctx.getMode() == Mode.STRICT) {
@@ -131,7 +155,7 @@ public class TriggerCondition {
             	currentDeps = ctx.getVariables();
             	
             } else {
-                // LOOSE: 前回依存していたキーのみ抽出
+                // LOOSE: Extract only keys depended on last time
                 Set<String> keys = cached.get().getDependencies().keySet();
                 currentDeps = keys.stream()
                         .collect(Collectors.toMap(k -> k, k -> ctx.getVariables().get(k),
@@ -144,7 +168,7 @@ public class TriggerCondition {
         }
         CacheStatsTracker.INSTANCE.recordMiss(expression);
 
-        // 4) 再評価（この時だけアクセスログをクリア）
+        // 4) Re-evaluate (clear access log only at this time)
         ctx.clearAccessLog();
         long start = System.nanoTime();
         Object result;
@@ -157,7 +181,7 @@ public class TriggerCondition {
         }
         long end = System.nanoTime();
 
-        // 5) 依存スナップショットを保存（put は AST キーに上書き）
+        // 5) Save dependency snapshot (put overwrites AST key)
         Map<String, Object> deps = ctx.snapshotDependencies();
         EvaluationResult evalResult = new EvaluationResult(result, deps, end, end - start, ctx.getMode());
         cacheManager.put(astKey, evalResult);

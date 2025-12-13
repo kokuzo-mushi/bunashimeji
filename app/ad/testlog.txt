@@ -1,76 +1,39 @@
-org.opentest4j.AssertionFailedError: Expression 'window.isMinimized' should subscribe to [ENVIRONMENT_CHANGED] ==> expected: <[ENVIRONMENT_CHANGED]> but was: <[]>
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
-	at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
-	at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
-	at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.assertSubscribedEvents(TriggerConditionStaticAnalysisTest.java:34)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.testEnvironmentDependency(TriggerConditionStaticAnalysisTest.java:53)
-	at java.base@21.0.9/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
+%TESTC  3 v2
+%TSTTREE2,com.group_finity.mascot.behavior.BehaviorTest,true,3,false,1,BehaviorTest,,[engine:junit-jupiter]/[class:com.group_finity.mascot.behavior.BehaviorTest]
+%TSTTREE3,evaluate_shouldReturnFalse_whenConditionIsNotMet(com.group_finity.mascot.behavior.BehaviorTest),false,1,false,2,evaluate_shouldReturnFalse_whenConditionIsNotMet(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.behavior.BehaviorTest]/[method:evaluate_shouldReturnFalse_whenConditionIsNotMet()]
+%TSTTREE4,evaluate_shouldReturnTrue_whenConditionIsMet(com.group_finity.mascot.behavior.BehaviorTest),false,1,false,2,evaluate_shouldReturnTrue_whenConditionIsMet(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.behavior.BehaviorTest]/[method:evaluate_shouldReturnTrue_whenConditionIsMet()]
+%TSTTREE5,getAction_shouldReturnConfiguredAction(com.group_finity.mascot.behavior.BehaviorTest),false,1,false,2,getAction_shouldReturnConfiguredAction(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.behavior.BehaviorTest]/[method:getAction_shouldReturnConfiguredAction()]
+%TESTS  3,evaluate_shouldReturnFalse_whenConditionIsNotMet(com.group_finity.mascot.behavior.BehaviorTest)
 
-	org.opentest4j.AssertionFailedError: Expression 'mascot.state == 'idle'' should subscribe to [MASCOT_STATE_CHANGED] ==> expected: <[MASCOT_STATE_CHANGED]> but was: <[]>
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
-	at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
-	at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
-	at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.assertSubscribedEvents(TriggerConditionStaticAnalysisTest.java:34)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.testMascotStateDependency(TriggerConditionStaticAnalysisTest.java:41)
-	at java.base@21.0.9/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
+%TESTE  3,evaluate_shouldReturnFalse_whenConditionIsNotMet(com.group_finity.mascot.behavior.BehaviorTest)
 
-	org.opentest4j.AssertionFailedError: Expression 'mascot.x > 100 && time % 10 == 0 && window.isActive' should subscribe to [SYSTEM_TICK, MASCOT_STATE_CHANGED, ENVIRONMENT_CHANGED] ==> expected: <[SYSTEM_TICK, MASCOT_STATE_CHANGED, ENVIRONMENT_CHANGED]> but was: <[]>
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
-	at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
-	at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
-	at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.assertSubscribedEvents(TriggerConditionStaticAnalysisTest.java:34)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.testMultipleDependencies(TriggerConditionStaticAnalysisTest.java:59)
-	at java.base@21.0.9/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
+%TESTS  4,evaluate_shouldReturnTrue_whenConditionIsMet(com.group_finity.mascot.behavior.BehaviorTest)
 
-	org.opentest4j.AssertionFailedError: Expression 'ie.isForeground' should subscribe to [ENVIRONMENT_CHANGED] ==> expected: <[ENVIRONMENT_CHANGED]> but was: <[]>
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
-	at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
-	at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
-	at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
-	at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.assertSubscribedEvents(TriggerConditionStaticAnalysisTest.java:34)
-	at app//com.group_finity.mascot.trigger.TriggerConditionStaticAnalysisTest.testSingleDependencyWithParameters(TriggerConditionStaticAnalysisTest.java:77)
-	at java.base@21.0.9/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base@21.0.9/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-	at java.base@21.0.9/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
-	at java.base@21.0.9/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
-	at java.base@21.0.9/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
-	at java.base@21.0.9/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
-	at java.base@21.0.9/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
-	at java.base@21.0.9/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
-	at java.base@21.0.9/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
-	at java.base@21.0.9/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
-	at java.base@21.0.9/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
-	at java.base@21.0.9/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
-	at java.base@21.0.9/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
-	at java.base@21.0.9/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-	at java.base@21.0.9/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base@21.0.9/java.util.ArrayList.forEach(ArrayList.java:1596)
+%FAILED 4,evaluate_shouldReturnTrue_whenConditionIsMet(com.group_finity.mascot.behavior.BehaviorTest)
+%EXPECTS
+true
+%EXPECTE
+%ACTUALS
+false
+%ACTUALE
+%TRACES 
+org.opentest4j.AssertionFailedError: Behavior should evaluate to true when condition is met ==> expected: <true> but was: <false>
+        at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+        at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+        at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+        at com.group_finity.mascot.behavior.BehaviorTest.evaluate_shouldReturnTrue_whenConditionIsMet(BehaviorTest.java:41)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+%TRACEE 
+
+%TESTE  4,evaluate_shouldReturnTrue_whenConditionIsMet(com.group_finity.mascot.behavior.BehaviorTest)
+%TESTS  5,getAction_shouldReturnConfiguredAction(com.group_finity.mascot.behavior.BehaviorTest)
+
+%TESTE  5,getAction_shouldReturnConfiguredAction(com.group_finity.mascot.behavior.BehaviorTest)
+
+%RUNTIME1219
+

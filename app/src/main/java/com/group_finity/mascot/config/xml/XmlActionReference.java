@@ -1,14 +1,18 @@
 package com.group_finity.mascot.config.xml;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
-/**
- * <ActionReference> タグに対応するJAXBモデル。
- */
+@XmlRootElement(name = "ActionReference")
 public class XmlActionReference {
-
-    @XmlAttribute(name = "Name", required = true)
     private String name;
 
-    public String getName() { return name; }
+    @XmlAttribute(name = "Name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

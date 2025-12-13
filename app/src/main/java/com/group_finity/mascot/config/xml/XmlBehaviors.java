@@ -2,16 +2,19 @@ package com.group_finity.mascot.config.xml;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * behaviors.xml のルート要素 <Behaviors> に対応するJAXBモデル。
- */
 @XmlRootElement(name = "Behaviors")
 public class XmlBehaviors {
+    private List<XmlBehavior> behaviors = new ArrayList<>();
 
     @XmlElement(name = "Behavior")
-    private List<XmlBehavior> behaviors;
+    public List<XmlBehavior> getBehaviors() {
+        return behaviors;
+    }
 
-    public List<XmlBehavior> getBehaviors() { return behaviors; }
+    public void setBehaviors(List<XmlBehavior> behaviors) {
+        this.behaviors = behaviors;
+    }
 }
