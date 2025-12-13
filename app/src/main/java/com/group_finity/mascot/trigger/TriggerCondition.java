@@ -149,17 +149,12 @@ public class TriggerCondition {
 
         // 3) HIT judgment by dependency comparison (clearAccessLog is not called here)
         if (cached.isPresent()) {
-            Map<String, Object> currentDeps;
-            if (ctx.getMode() == Mode.STRICT) {
-            	// new: no copy; equals() compares entries, not identity
-            	currentDeps = ctx.getVariables();
-            	
-            } else {
-                // LOOSE: Extract only keys depended on last time
-                Set<String> keys = cached.get().getDependencies().keySet();
-                currentDeps = keys.stream()
-                        .collect(Collectors.toMap(k -> k, k -> ctx.getVariables().get(k),
-                                (a, b) -> a, LinkedHashMap::new));
+            // 依存している変数の現在の値を取得して比較用マップを作成
+            // getVariable() を使うことでドット記法や標準関数も正しく解決する
+            Set<String> keys = cached.get().getDependencies().keySet();
+            Map<String, Object> currentDeps = new HashMap<>();
+            for (String key : keys) {
+                currentDeps.put(key, ctx.getVariable(key));
             }
             if (!cached.get().isOutdated(currentDeps)) {
                 CacheStatsTracker.INSTANCE.recordHit(expression);
@@ -194,6 +189,7 @@ public class TriggerCondition {
     
     public static void clearGlobalCache() {
         cacheManager.clear();
+        AST_CACHE.clear();
     }
 
 }

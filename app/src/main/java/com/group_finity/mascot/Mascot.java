@@ -123,6 +123,10 @@ public class Mascot {
         return currentAction;
     }
 
+    public String getState() {
+        return currentAction != null ? currentAction.toString() : null;
+    }
+
     public void setActions(Map<String, Action> actions) {
         this.actions = actions;
     }

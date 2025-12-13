@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.group_finity.mascot.trigger.expr.node.BinaryExpressionNode;
 import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
+import com.group_finity.mascot.trigger.expr.node.FunctionCallNode;
 import com.group_finity.mascot.trigger.expr.node.LiteralNode;
 import com.group_finity.mascot.trigger.expr.node.UnaryExpressionNode;
 import com.group_finity.mascot.trigger.expr.node.VariableNode;
@@ -33,7 +34,11 @@ public final class ExpressionParser {
     /** インスタンス版パース（再帰下降） */
     public ExpressionNode parse() {
         ExpressionNode node = parseOr();
-        // EOFはtokenizeで付与済み。二重チェックはしない。
+        // match(TokenType.EOF) は check() の !isAtEnd() ガードにより false になるため使えません。
+        // 直接トークンタイプを確認して、EOFでなければエラーとします。
+        if (peek().type != TokenType.EOF) {
+            throw new RuntimeException("Unexpected token at the end: " + peek().lexeme);
+        }
         return node;
     }
 
@@ -123,7 +128,20 @@ public final class ExpressionParser {
         }
         if (match(TokenType.TRUE))  return new LiteralNode(Boolean.TRUE);
         if (match(TokenType.FALSE)) return new LiteralNode(Boolean.FALSE);
-        if (match(TokenType.IDENT)) return new VariableNode(previous().lexeme);
+        if (match(TokenType.IDENT)) {
+            String name = previous().lexeme;
+            if (match(TokenType.LPAREN)) {
+                List<ExpressionNode> args = new ArrayList<>();
+                if (!check(TokenType.RPAREN)) {
+                    do {
+                        args.add(parseOr());
+                    } while (match(TokenType.COMMA));
+                }
+                expect(TokenType.RPAREN);
+                return new FunctionCallNode(name, args);
+            }
+            return new VariableNode(name);
+        }
         if (match(TokenType.LPAREN)) {
             ExpressionNode inside = parseOr();
             expect(TokenType.RPAREN); // ★ advance削除
@@ -175,7 +193,8 @@ public final class ExpressionParser {
             // 識別子
             if (Character.isLetter(c) || c == '_') {
                 int start = i++;
-                while (i < src.length() && (Character.isLetterOrDigit(src.charAt(i)) || src.charAt(i)=='_')) i++;
+                // ドット(.)も識別子の一部として許可する（mascot.state対応）
+                while (i < src.length() && (Character.isLetterOrDigit(src.charAt(i)) || src.charAt(i)=='_' || src.charAt(i)=='.')) i++;
                 String word = src.substring(start, i);
                 switch (word) {
                     case "true" -> ts.add(new Token(TokenType.TRUE, word));
@@ -214,6 +233,7 @@ public final class ExpressionParser {
                 case '~': ts.add(new Token(TokenType.TILDE, "~")); break;
                 case '(': ts.add(new Token(TokenType.LPAREN, "(")); break;
                 case ')': ts.add(new Token(TokenType.RPAREN, ")")); break;
+                case ',': ts.add(new Token(TokenType.COMMA, ",")); break;
                 default: throw new RuntimeException("Unexpected char: " + c);
             }
             i++;
@@ -247,7 +267,7 @@ public final class ExpressionParser {
         EQEQ, BANGEQ, EQEQEQ, BANGEQEQ,
         ANDAND, OROR,
         BANG, TILDE,
-        LPAREN, RPAREN,
+        LPAREN, RPAREN, COMMA,
         NUMBER, STRING, TRUE, FALSE, IDENT, EOF
     }
 

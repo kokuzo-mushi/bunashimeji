@@ -58,4 +58,10 @@ public class WalkAction implements Action {
         // 1フレーム分の時間を減算します。
         this.timeRemaining -= FRAME_DURATION_MS;
     }
+
+    @Override
+    public void reset() {
+        this.timeRemaining = this.animation.getTotalDuration();
+        this.animation.reset();
+    }
 }

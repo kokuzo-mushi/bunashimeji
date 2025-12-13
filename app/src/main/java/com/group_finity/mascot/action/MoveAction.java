@@ -65,4 +65,11 @@ public class MoveAction implements Action {
     public boolean hasNext() {
         return !this.isFinished;
     }
+
+    @Override
+    public void reset() {
+        this.startPoint = null;
+        this.timeElapsed = 0;
+        this.isFinished = false;
+    }
 }

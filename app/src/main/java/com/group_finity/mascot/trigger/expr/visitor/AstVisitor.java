@@ -2,6 +2,7 @@ package com.group_finity.mascot.trigger.expr.visitor;
 
 import com.group_finity.mascot.trigger.expr.node.BinaryExpressionNode;
 import com.group_finity.mascot.trigger.expr.node.LiteralNode;
+import com.group_finity.mascot.trigger.expr.node.FunctionCallNode;
 import com.group_finity.mascot.trigger.expr.node.UnaryExpressionNode;
 import com.group_finity.mascot.trigger.expr.node.VariableNode;
 
@@ -14,4 +15,5 @@ public interface AstVisitor {
     void visit(LiteralNode node);
     void visit(BinaryExpressionNode node);
     void visit(UnaryExpressionNode node);
+    void visit(FunctionCallNode node);
 }

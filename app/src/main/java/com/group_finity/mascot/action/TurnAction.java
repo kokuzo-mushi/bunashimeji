@@ -22,4 +22,9 @@ public class TurnAction implements Action {
     public boolean hasNext() {
         return this.hasNext;
     }
+
+    @Override
+    public void reset() {
+        this.hasNext = true;
+    }
 }

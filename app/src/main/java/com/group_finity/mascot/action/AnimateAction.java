@@ -50,4 +50,10 @@ public class AnimateAction implements Action {
         // 残り時間がある限り、アクションは継続します。
         return this.timeRemaining > 0;
     }
+
+    @Override
+    public void reset() {
+        this.timeRemaining = this.animation.getTotalDuration();
+        this.animation.reset();
+    }
 }

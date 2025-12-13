@@ -11,6 +11,8 @@ public class SequenceAction implements Action {
 
     private List<Action> sequence;
     private int currentIndex = 0;
+    private int loopCount = 1; // デフォルトは1回実行
+    private int currentLoop = 0;
 
     /**
      * ActionBuilderが使用するためのコンストラクタ。
@@ -33,6 +35,10 @@ public class SequenceAction implements Action {
         this.currentIndex = 0; // リストが再設定されたらリセット
     }
 
+    public void setLoopCount(int loopCount) {
+        this.loopCount = loopCount;
+    }
+
     @Override
     public void execute(Mascot mascot) {
         // シーケンスが終了するまで、または継続中のアクションに到達するまでループ
@@ -47,11 +53,35 @@ public class SequenceAction implements Action {
     
             // 現在のアクションが終了したので、次のアクションのインデックスに進む
             currentIndex++;
+
+            // シーケンスの最後に到達した場合
+            if (currentIndex >= sequence.size()) {
+                currentLoop++;
+                // ループ回数が残っている、または無限ループ(-1)の場合
+                if (loopCount == -1 || currentLoop < loopCount) {
+                    // シーケンスをリセットして再開
+                    resetSequence();
+                }
+            }
         }
     }
 
     @Override
     public boolean hasNext() {
+        // まだアクションが残っているか、ループ回数が残っていれば継続
         return currentIndex < sequence.size();
+    }
+
+    @Override
+    public void reset() {
+        this.currentLoop = 0;
+        resetSequence();
+    }
+
+    private void resetSequence() {
+        this.currentIndex = 0;
+        for (Action action : sequence) {
+            action.reset();
+        }
     }
 }

@@ -12,6 +12,8 @@ import com.group_finity.mascot.view.MascotView;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,8 @@ public class Main {
 
     public void run() throws InterruptedException {
         System.out.println("=== Shimeji Neo Start ===");
+
+        try { ensureConfigurationExists(); } catch (IOException e) { e.printStackTrace(); }
 
         // --- 1️⃣ 設定の読み込み ---
         // actions.xml と behaviors.xml からアクションとビヘイビアの定義を読み込みます。
@@ -153,5 +157,47 @@ public class Main {
         }
 
         System.out.println("=== Shimeji Neo Shutdown ===");
+    }
+
+    private void ensureConfigurationExists() throws IOException {
+        Path confDir = Path.of("conf");
+        if (!Files.exists(confDir)) {
+            Files.createDirectories(confDir);
+        }
+
+        Path actionsPath = confDir.resolve("actions.xml");
+        if (!Files.exists(actionsPath)) {
+            String content = """
+                <Actions>
+                    <Action Name="Stay" Type="Stay" Duration="1000" />
+                    <Action Name="Walk" Type="Walk" Speed="4">
+                        <Animation>
+                            <Pose Image="shime1.png" Duration="200" />
+                            <Pose Image="shime2.png" Duration="200" />
+                        </Animation>
+                    </Action>
+                </Actions>
+                """;
+            Files.writeString(actionsPath, content);
+            System.out.println("[Main] Created default actions.xml");
+        }
+
+        Path behaviorsPath = confDir.resolve("behaviors.xml");
+        if (!Files.exists(behaviorsPath)) {
+            String content = """
+                <Behaviors>
+                    <Behavior Name="Walk" Frequency="100">
+                        <Condition>mascot.isGrounded</Condition>
+                        <ActionReference Name="Walk" />
+                    </Behavior>
+                    <Behavior Name="Stay" Frequency="50">
+                        <Condition>mascot.isGrounded</Condition>
+                        <ActionReference Name="Stay" />
+                    </Behavior>
+                </Behaviors>
+                """;
+            Files.writeString(behaviorsPath, content);
+            System.out.println("[Main] Created default behaviors.xml");
+        }
     }
 }

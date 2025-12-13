@@ -6,6 +6,10 @@ import com.group_finity.mascot.action.MoveAction;
 import com.group_finity.mascot.action.SequenceAction;
 import com.group_finity.mascot.action.WalkAction;
 import com.group_finity.mascot.action.TurnAction;
+import com.group_finity.mascot.action.JumpAction;
+import com.group_finity.mascot.action.FallAction;
+import com.group_finity.mascot.action.DraggedAction;
+import com.group_finity.mascot.action.StayAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
 import com.group_finity.mascot.config.xml.XmlActionReference;
@@ -89,7 +93,7 @@ public class ActionBuilder {
                     return null; // or a NoOpAction
                 }
                 return new AnimateAction(xmlAction.getAnimation());
-            case "Move":
+            case "Move": {
                 if (xmlAction.getPoint() == null) {
                     System.err.println("Move action requires <Point> tag: " + xmlAction.getName());
                     return null; // or a NoOpAction
@@ -99,12 +103,38 @@ public class ActionBuilder {
                         ? xmlAction.getAnimation().getPoses().stream().mapToInt(XmlPose::getDuration).sum()
                         : 0; // アニメーションがない場合は即時移動
                 return new MoveAction(xmlAction.getPoint(), duration);
-            case "Sequence":
+            }
+            case "Sequence": {
                 // SequenceActionは参照を後で解決するため、ここでは空のインスタンスを生成します。
-                return new SequenceAction();
+                SequenceAction sequenceAction = new SequenceAction();
+                if (xmlAction.getLoop() != null) {
+                    sequenceAction.setLoopCount(xmlAction.getLoop());
+                }
+                return sequenceAction;
+            }
             case "Turn":
                 // マスコットの向きを反転させるアクションを生成します。
                 return new TurnAction();
+            case "Fall":
+                // 落下アクションを生成します。
+                return new FallAction();
+            case "Dragged": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Dragged action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                return new DraggedAction(xmlAction.getAnimation());
+            }
+            case "Jump": {
+                int vx = xmlAction.getVelocityX() != null ? xmlAction.getVelocityX() : 0;
+                int vy = xmlAction.getVelocityY() != null ? xmlAction.getVelocityY() : 0;
+                return new JumpAction(vy, vx);
+            }
+            case "Stay": {
+                // 指定時間だけ待機するアクションを生成します。
+                int duration = xmlAction.getDuration() != null ? xmlAction.getDuration() : Integer.MAX_VALUE;
+                return new StayAction(duration);
+            }
             case "Walk":
                 if (xmlAction.getAnimation() == null) {
                     System.err.println("Walk action requires <Animation> tag: " + xmlAction.getName());

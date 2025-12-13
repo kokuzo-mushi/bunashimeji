@@ -61,4 +61,11 @@ public class Animation {
         // 通常は到達しませんが、フォールバックとして最初のポーズを返します
         return poses.get(0);
     }
+
+    /**
+     * アニメーションの再生位置を先頭にリセットします。
+     */
+    public void reset() {
+        this.time = 0;
+    }
 }

@@ -18,4 +18,11 @@ public interface Action {
      * @return {@code true} if the action is ongoing, {@code false} if it has finished.
      */
     boolean hasNext();
+
+    /**
+     * Resets the state of the action so it can be executed again.
+     * Default implementation does nothing.
+     */
+    default void reset() {
+    }
 }

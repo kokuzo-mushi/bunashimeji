@@ -2,6 +2,8 @@ package com.group_finity.mascot.image;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,9 +41,10 @@ public class ImageCache {
 
         Path imagePath = imageBasePath.resolve(imageName);
         if (!Files.exists(imagePath)) {
-            System.err.println("Image file not found: " + imagePath);
-            cache.put(imageName, null); // 見つからなかった情報もキャッシュ
-            return null;
+            System.err.println("Image file not found: " + imagePath + " (Generating dummy image)");
+            BufferedImage dummy = createDummyImage(imageName);
+            cache.put(imageName, dummy);
+            return dummy;
         }
 
         try {
@@ -51,8 +54,9 @@ public class ImageCache {
         } catch (IOException e) {
             System.err.println("Failed to read image file: " + imagePath);
             e.printStackTrace();
-            cache.put(imageName, null); // エラーがあった場合もキャッシュ
-            return null;
+            BufferedImage dummy = createDummyImage(imageName);
+            cache.put(imageName, dummy);
+            return dummy;
         }
     }
 
@@ -125,5 +129,26 @@ public class ImageCache {
         return (dotIndex == -1)
                 ? baseImageName + "L" // 拡張子なし
                 : baseImageName.substring(0, dotIndex) + "L" + baseImageName.substring(dotIndex);
+    }
+
+    /**
+     * 画像が見つからない場合のダミー画像を生成します。
+     */
+    private BufferedImage createDummyImage(String name) {
+        int width = 128;
+        int height = 128;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+
+        // 名前ごとのユニークな色を生成
+        g.setColor(new Color(Math.abs(name.hashCode()) % 16777216));
+        g.fillRect(0, 0, width, height);
+        
+        g.setColor(Color.WHITE);
+        g.drawRect(0, 0, width - 1, height - 1);
+        g.drawString(name, 10, 64);
+        
+        g.dispose();
+        return image;
     }
 }

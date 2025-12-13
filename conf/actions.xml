@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actions>
+<Actions>
 
     <!-- 待機アクション -->
-    <action Name="Stay" Type="Animate">
-        <animation>
-            <pose image="shime1.png" duration="2000" />
-            <pose image="shime2.png" duration="200" />
-            <pose image="shime1.png" duration="2000" />
-            <pose image="shime3.png" duration="200" />
-        </animation>
-    </action>
+    <Action Name="Stay" Type="Animate">
+        <Animation>
+            <Pose Image="shime1.png" Duration="2000" />
+            <Pose Image="shime2.png" Duration="200" />
+            <Pose Image="shime1.png" Duration="2000" />
+            <Pose Image="shime3.png" Duration="200" />
+        </Animation>
+    </Action>
 
     <!-- 歩くアクション (Speed属性で速度を調整) -->
-    <action Name="Walk" Type="Walk" Speed="2">
-        <animation>
-            <pose image="shime4.png" duration="300" />
-            <pose image="shime5.png" duration="300" />
-        </animation>
-    </action>
+    <Action Name="Walk" Type="Walk" Speed="2">
+        <Animation>
+            <Pose Image="shime4.png" Duration="300" />
+            <Pose Image="shime5.png" Duration="300" />
+        </Animation>
+    </Action>
 
     <!-- 向きを変えるアクション -->
-    <action Name="Turn" Type="Turn" />
+    <Action Name="Turn" Type="Turn" />
 
     <!-- 落下するアニメーション -->
-    <action Name="Fall" Type="Animate">
-        <animation>
-            <pose image="shime12.png" duration="100" />
-        </animation>
-    </action>
+    <Action Name="Fall" Type="Animate">
+        <Animation>
+            <Pose Image="shime12.png" Duration="100" />
+        </Animation>
+    </Action>
 
     <!-- 着地するアニメーション -->
-    <action Name="Land" Type="Animate">
-        <animation>
-            <pose image="shime13.png" duration="300" />
-        </animation>
-    </action>
+    <Action Name="Land" Type="Animate">
+        <Animation>
+            <Pose Image="shime13.png" Duration="300" />
+        </Animation>
+    </Action>
 
     <!-- ドラッグされている時のアニメーション -->
-    <action Name="Dragged" Type="Animate">
-        <animation>
-            <pose image="shime14.png" duration="100" />
-        </animation>
-    </action>
+    <Action Name="Dragged" Type="Dragged">
+        <Animation>
+            <Pose Image="shime14.png" Duration="100" />
+        </Animation>
+    </Action>
 
-</actions>
+</Actions>
