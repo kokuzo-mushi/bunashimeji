@@ -17,7 +17,7 @@ public class FallAction implements Action {
         if (xmlAnimation != null) {
             this.animation = new Animation(
                     xmlAnimation.getPoses().stream()
-                            .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration()))
+                            .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
                             .collect(Collectors.toList())
             );
         } else {
@@ -36,6 +36,13 @@ public class FallAction implements Action {
             mascot.setVelocityX(0);
             mascot.setVelocityY(0);
             initialized = true;
+        }
+
+        // 壁に衝突したらアクションを終了する
+        // これにより、currentActionがnullになり、壁アクション（WallClimbなど）への遷移が可能になる
+        if (mascot.isHittingLeftWall() || mascot.isHittingRightWall()) {
+            finished = true;
+            return;
         }
 
         if (animation != null) {

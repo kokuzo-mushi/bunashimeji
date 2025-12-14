@@ -24,6 +24,7 @@ public class Mascot {
     private boolean grounded;
     private boolean hittingLeftWall;
     private boolean hittingRightWall;
+    private boolean hittingCeiling;
     private boolean beingDragged;
 
     private Map<String, Action> actions = Collections.emptyMap();
@@ -59,6 +60,14 @@ public class Mascot {
 
     public void setHittingRightWall(boolean hittingRightWall) {
         this.hittingRightWall = hittingRightWall;
+    }
+
+    public boolean isHittingCeiling() {
+        return hittingCeiling;
+    }
+
+    public void setHittingCeiling(boolean hittingCeiling) {
+        this.hittingCeiling = hittingCeiling;
     }
 
     public boolean isBeingDragged() {

@@ -22,7 +22,7 @@ public class WalkAction implements Action {
     public WalkAction(XmlAnimation xmlAnimation, int speed) {
         this.animation = new Animation(
                 xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration()))
+                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
                         .collect(Collectors.toList())
         );
         this.speed = speed;

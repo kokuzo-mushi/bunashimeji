@@ -55,7 +55,9 @@ public class MascotView extends JWindow {
             public void mousePressed(MouseEvent e) {
                 // ドラッグ開始をマスコットに通知
                 mascot.startDrag();
-                dragStartOffset = e.getPoint();
+                // クリック位置(スクリーン座標)とマスコット座標(足元)の差分を記録
+                Point mouseOnScreen = e.getLocationOnScreen();
+                dragStartOffset = new Point(mouseOnScreen.x - mascot.getX(), mouseOnScreen.y - mascot.getY());
                 lastMouseLocation = e.getLocationOnScreen();
                 mascot.setVelocityX(0);
                 mascot.setVelocityY(0);
@@ -108,8 +110,10 @@ public class MascotView extends JWindow {
     public void update() {
         // 1. 現在のポーズから表示すべき画像を取得
         Animation animation = mascot.getAnimation();
+        Pose pose = null;
+
         if (animation != null) {
-            Pose pose = animation.getPose();
+            pose = animation.getPose();
             if (pose != null) {
                 if (mascot.isLookRight()) {
                     this.currentImage = imageCache.getImage(pose.getImageName());
@@ -120,7 +124,7 @@ public class MascotView extends JWindow {
         }
 
         // 2. 画像がなければウィンドウを非表示にする
-        if (currentImage == null) {
+        if (currentImage == null || pose == null) {
             if (isVisible()) {
                 setVisible(false);
             }
@@ -138,7 +142,26 @@ public class MascotView extends JWindow {
         }
 
         setSize(size);
-        setLocation(anchor);
+
+        // アンカー位置の決定
+        int anchorX;
+        int anchorY;
+
+        if (pose.getImageAnchor() != null) {
+            anchorX = pose.getImageAnchor().x;
+            anchorY = pose.getImageAnchor().y;
+            // 左向きの場合は左右反転した位置をアンカーとする
+            if (!mascot.isLookRight()) {
+                anchorX = size.width - anchorX;
+            }
+        } else {
+            // デフォルト: 底辺中央
+            anchorX = size.width / 2;
+            anchorY = size.height;
+        }
+
+        // ウィンドウの左上座標 = マスコットの座標 - アンカーオフセット
+        setLocation(anchor.x - anchorX, anchor.y - anchorY);
 
         if (!isVisible()) {
             setVisible(true);

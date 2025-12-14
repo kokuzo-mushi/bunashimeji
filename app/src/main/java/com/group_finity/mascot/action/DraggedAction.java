@@ -19,7 +19,7 @@ public class DraggedAction implements Action {
     public DraggedAction(XmlAnimation xmlAnimation) {
         this.animation = new Animation(
                 xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration()))
+                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
                         .collect(Collectors.toList())
         );
     }

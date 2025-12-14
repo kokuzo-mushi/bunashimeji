@@ -6,16 +6,23 @@ import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.config.xml.XmlAnimation;
 import java.util.stream.Collectors;
 
-public class AnimateAction implements Action {
+/**
+ * 壁に沿って滑り落ちるアクション。
+ * 指定された速度で下方向に移動します。
+ */
+public class SlideDownAction implements Action {
+
     private final Animation animation;
+    private final int speed;
     private int timeRemaining;
 
-    public AnimateAction(XmlAnimation xmlAnimation) {
+    public SlideDownAction(XmlAnimation xmlAnimation, int speed) {
         this.animation = new Animation(
                 xmlAnimation.getPoses().stream()
                         .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
                         .collect(Collectors.toList())
         );
+        this.speed = speed;
         this.timeRemaining = this.animation.getTotalDuration();
     }
 
@@ -25,13 +32,12 @@ public class AnimateAction implements Action {
         final int FRAME_DURATION_MS = 40;
         mascot.setAnimation(animation);
         animation.tick(FRAME_DURATION_MS);
+        mascot.setY(mascot.getY() + speed);
         this.timeRemaining -= FRAME_DURATION_MS;
     }
 
     @Override
-    public boolean hasNext() {
-        return timeRemaining > 0;
-    }
+    public boolean hasNext() { return timeRemaining > 0; }
 
     @Override
     public void reset() {

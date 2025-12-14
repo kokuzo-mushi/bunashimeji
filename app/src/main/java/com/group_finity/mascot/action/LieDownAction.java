@@ -21,7 +21,7 @@ public class LieDownAction implements Action {
     public LieDownAction(XmlAnimation xmlAnimation, int duration) {
         this.animation = new Animation(
                 xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration()))
+                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
                         .collect(Collectors.toList())
         );
         this.maxDuration = duration > 0 ? duration : 2000; // デフォルト2秒

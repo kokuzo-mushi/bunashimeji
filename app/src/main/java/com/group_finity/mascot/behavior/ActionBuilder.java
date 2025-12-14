@@ -9,7 +9,14 @@ import com.group_finity.mascot.action.TurnAction;
 import com.group_finity.mascot.action.JumpAction;
 import com.group_finity.mascot.action.FallAction;
 import com.group_finity.mascot.action.DraggedAction;
+import com.group_finity.mascot.action.ChaseAction;
+import com.group_finity.mascot.action.ClimbAction;
+import com.group_finity.mascot.action.CeilingCrawlAction;
+import com.group_finity.mascot.action.SlideDownAction;
+import com.group_finity.mascot.action.WallJumpAction;
+import com.group_finity.mascot.action.WallClingAction;
 import com.group_finity.mascot.action.LieDownAction;
+import com.group_finity.mascot.action.RandomChoiceAction;
 import com.group_finity.mascot.action.StayAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
@@ -68,6 +75,9 @@ public class ActionBuilder {
                 // ここでは仮に SequenceAction というクラスを想定しています。
                 if (action instanceof SequenceAction) {
                     resolveSequenceAction((SequenceAction) action, xmlAction, builtActions);
+                } else if (action instanceof RandomChoiceAction) {
+                    // RandomChoiceAction の参照解決
+                    resolveRandomChoiceAction((RandomChoiceAction) action, xmlAction, builtActions);
                 }
             }
 
@@ -113,6 +123,9 @@ public class ActionBuilder {
                 }
                 return sequenceAction;
             }
+            case "RandomChoice": {
+                return new RandomChoiceAction();
+            }
             case "Turn":
                 // マスコットの向きを反転させるアクションを生成します。
                 return new TurnAction();
@@ -143,6 +156,47 @@ public class ActionBuilder {
                 }
                 return new LieDownAction(xmlAction.getAnimation(), xmlAction.getDuration() != null ? xmlAction.getDuration() : 4000);
             }
+            case "WallCling": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("WallCling action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 1000;
+                return new WallClingAction(xmlAction.getAnimation(), duration);
+            }
+            case "Climb": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Climb action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
+                return new ClimbAction(xmlAction.getAnimation(), speed);
+            }
+            case "CeilingCrawl": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("CeilingCrawl action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
+                return new CeilingCrawlAction(xmlAction.getAnimation(), speed);
+            }
+            case "SlideDown": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("SlideDown action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 4;
+                return new SlideDownAction(xmlAction.getAnimation(), speed);
+            }
+            case "WallJump": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("WallJump action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int vx = xmlAction.getVelocityX() != null ? xmlAction.getVelocityX() : 5;
+                int vy = xmlAction.getVelocityY() != null ? xmlAction.getVelocityY() : 20;
+                return new WallJumpAction(xmlAction.getAnimation(), vy, vx);
+            }
             case "Walk":
                 if (xmlAction.getAnimation() == null) {
                     System.err.println("Walk action requires <Animation> tag: " + xmlAction.getName());
@@ -151,6 +205,14 @@ public class ActionBuilder {
                 // Speed属性がなければデフォルト値(e.g., 1)を使う
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 1;
                 return new WalkAction(xmlAction.getAnimation(), speed);
+            case "Chase":
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Chase action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int chaseSpeed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 4;
+                int chaseDuration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 5000;
+                return new ChaseAction(xmlAction.getAnimation(), chaseSpeed, chaseDuration);
             default:
                 System.err.println("Unknown action type: " + xmlAction.getType());
                 return null; // 不明な型はnullを返す
@@ -171,5 +233,18 @@ public class ActionBuilder {
             }
         }
         sequenceAction.setSequence(sequence);
+    }
+
+    private void resolveRandomChoiceAction(RandomChoiceAction randomAction, XmlAction xmlAction, Map<String, Action> builtActions) {
+        List<Action> candidates = new ArrayList<>();
+        for (XmlActionReference ref : xmlAction.getActionReferences()) {
+            Action referencedAction = builtActions.get(ref.getName());
+            if (referencedAction != null) {
+                candidates.add(referencedAction);
+            } else {
+                System.err.println("ActionReference not found: " + ref.getName() + " in RandomChoice " + xmlAction.getName());
+            }
+        }
+        randomAction.setCandidates(candidates);
     }
 }

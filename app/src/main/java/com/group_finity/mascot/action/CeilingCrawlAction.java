@@ -6,16 +6,22 @@ import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.config.xml.XmlAnimation;
 import java.util.stream.Collectors;
 
-public class AnimateAction implements Action {
+/**
+ * 天井を伝って歩くアクション。
+ */
+public class CeilingCrawlAction implements Action {
+
     private final Animation animation;
+    private final int speed;
     private int timeRemaining;
 
-    public AnimateAction(XmlAnimation xmlAnimation) {
+    public CeilingCrawlAction(XmlAnimation xmlAnimation, int speed) {
         this.animation = new Animation(
                 xmlAnimation.getPoses().stream()
                         .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
                         .collect(Collectors.toList())
         );
+        this.speed = speed;
         this.timeRemaining = this.animation.getTotalDuration();
     }
 
@@ -25,13 +31,13 @@ public class AnimateAction implements Action {
         final int FRAME_DURATION_MS = 40;
         mascot.setAnimation(animation);
         animation.tick(FRAME_DURATION_MS);
+        int move = mascot.isLookRight() ? speed : -speed;
+        mascot.setX(mascot.getX() + move);
         this.timeRemaining -= FRAME_DURATION_MS;
     }
 
     @Override
-    public boolean hasNext() {
-        return timeRemaining > 0;
-    }
+    public boolean hasNext() { return timeRemaining > 0; }
 
     @Override
     public void reset() {
