@@ -31,7 +31,7 @@ public class ExprTriggerAdvancedTest {
         var parser = new com.group_finity.mascot.trigger.expr.parser.ExpressionParser(expr);
         var node = parser.parse();
 
-        Object result = node.evaluate(ctx, new DefaultTypeResolver(), new DefaultTypeCoercion());
+        Object result = node.evaluate(ctx);
 
         if (result instanceof Boolean b) {
             return b;

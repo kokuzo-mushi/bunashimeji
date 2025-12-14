@@ -36,6 +36,7 @@ public class Main {
 
     public void run() throws InterruptedException {
         System.out.println("=== Shimeji Neo Start ===");
+        System.out.println("[Main] Current working directory: " + System.getProperty("user.dir"));
 
         try { ensureConfigurationExists(); } catch (IOException e) { e.printStackTrace(); }
 
@@ -65,8 +66,7 @@ public class Main {
         contextVariables.put("workArea.bottom", workArea.y + workArea.height);
         System.out.printf("[Main] Work area detected: %s%n", workArea);
 
-        contextVariables.put("mascot.x", mascot.getX());
-        contextVariables.put("mascot.y", mascot.getY());
+        contextVariables.put("mascot", mascot);
         contextVariables.put("time", 0L);
 
         EvaluationContext context = new EvaluationContext(contextVariables);
@@ -133,14 +133,6 @@ public class Main {
             // コンテキスト変数を更新します。
             // これにより、ビヘイビアの条件が動的に変化します。
             context.getVariables().put("time", ++tickCount);
-            context.getVariables().put("mascot.x", mascot.getX());
-            context.getVariables().put("mascot.y", mascot.getY());
-            context.getVariables().put("mascot.lookRight", mascot.isLookRight());
-            context.getVariables().put("mascot.isGrounded", isNowGrounded);
-            context.getVariables().put("mascot.isHittingLeftWall", isHittingLeftWall);
-            context.getVariables().put("mascot.isHittingRightWall", isHittingRightWall);
-            context.getVariables().put("mascot.isBeingDragged", mascot.isBeingDragged());
-            context.getVariables().put("mascot.currentAction", mascot.getCurrentAction());
 
             // 1. イベントをディスパッチして、条件に合うビヘイビアを探します。
             // SYSTEM_TICKは、毎フレーム発生する基本的なイベントです。

@@ -19,9 +19,9 @@ import com.group_finity.mascot.trigger.expr.cache.ExprCacheKey;
 import com.group_finity.mascot.trigger.expr.cache.ExprCacheManager;
 import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
-import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
+import com.group_finity.mascot.trigger.expr.ast.Expression;
+import com.group_finity.mascot.trigger.expr.ast.LiteralExpression;
 import com.group_finity.mascot.trigger.expr.parser.ExpressionParser;
-import com.group_finity.mascot.trigger.expr.visitor.VariableCollectorVisitor;
 import com.group_finity.mascot.trigger.util.VariableToEventTypeMapper;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
@@ -37,7 +37,7 @@ import com.group_finity.mascot.trigger.expr.type.TypeResolver;
  */
 public class TriggerCondition {
 
-    private static final Map<String, ExpressionNode> AST_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, Expression> AST_CACHE = new ConcurrentHashMap<>();
     private static final ExprCacheManager cacheManager = new ExprCacheManager();
 
     private final String expression;
@@ -53,14 +53,14 @@ public class TriggerCondition {
         this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT, true);
 
         // Get or create AST
-        ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, key -> {
+        Expression ast = AST_CACHE.computeIfAbsent(expression, key -> {
             try {
-                ExpressionNode parsed = new ExpressionParser(key).parse();
-                return (parsed != null) ? parsed : new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+                Expression parsed = new ExpressionParser(key).parse();
+                return (parsed != null) ? parsed : new LiteralExpression(false);
             } catch (Exception e) {
                 System.err.println("[TriggerCondition] Parse error: " + key);
                 e.printStackTrace();
-                return new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+                return new LiteralExpression(false);
             }
         });
 
@@ -68,22 +68,8 @@ public class TriggerCondition {
         this.subscribedEventTypes = analyzeDependencies(ast, expression);
     }
 
-    private static Set<EventType> analyzeDependencies(ExpressionNode ast, String expressionForLogging) {
+    private static Set<EventType> analyzeDependencies(Expression ast, String expressionForLogging) {
         Set<EventType> events = EnumSet.noneOf(EventType.class);
-        try {
-            if (ast != null) {
-                // Collect variable names from AST using Visitor
-                final VariableCollectorVisitor visitor = new VariableCollectorVisitor();
-                ast.accept(visitor); // ExpressionNode and its subclasses must implement accept()
-                final Set<String> variables = visitor.getCollectedVariables();
-
-                // Map variable name set to EventType set
-                events.addAll(VariableToEventTypeMapper.map(variables));
-            }
-        } catch (Exception e) {
-            System.err.println("Failed to statically analyze expression: '" + expressionForLogging + "'. Falling back to broad event subscription. Error: " + e.getMessage());
-            return EnumSet.of(EventType.MASCOT_STATE_CHANGED, EventType.ENVIRONMENT_CHANGED, EventType.SYSTEM_TICK);
-        }
 
         // Fallback: If AST analysis yielded no events (and it's not a trivial constant),
         // use Regex to find potential variables. This handles cases where AST parsing might fail or differ (e.g. GraalVM).
@@ -132,14 +118,14 @@ public class TriggerCondition {
         if (ctx == null) return false;
 
         // 1) Build AST (fallback to false literal on failure)
-        ExpressionNode ast = AST_CACHE.computeIfAbsent(expression, key -> {
+        Expression ast = AST_CACHE.computeIfAbsent(expression, key -> {
             try {
-                ExpressionNode parsed = new ExpressionParser(key).parse();
-                return (parsed != null) ? parsed : new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+                Expression parsed = new ExpressionParser(key).parse();
+                return (parsed != null) ? parsed : new LiteralExpression(false);
             } catch (Exception e) {
                 System.err.println("[TriggerCondition] Parse error: " + key);
                 e.printStackTrace();
-                return new com.group_finity.mascot.trigger.expr.node.LiteralNode(false);
+                return new LiteralExpression(false);
             }
         });
 
@@ -168,7 +154,7 @@ public class TriggerCondition {
         long start = System.nanoTime();
         Object result;
         try {
-            result = ast.evaluate(ctx, new DefaultTypeResolver(), new DefaultTypeCoercion());
+            result = ast.evaluate(ctx);
         } catch (Exception e) {
             System.err.println("[TriggerCondition] Evaluation failed: " + expression);
             e.printStackTrace();

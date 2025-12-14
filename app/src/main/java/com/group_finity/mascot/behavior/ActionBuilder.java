@@ -117,7 +117,7 @@ public class ActionBuilder {
                 return new TurnAction();
             case "Fall":
                 // 落下アクションを生成します。
-                return new FallAction();
+                return new FallAction(xmlAction.getAnimation());
             case "Dragged": {
                 if (xmlAction.getAnimation() == null) {
                     System.err.println("Dragged action requires <Animation> tag: " + xmlAction.getName());
@@ -128,7 +128,7 @@ public class ActionBuilder {
             case "Jump": {
                 int vx = xmlAction.getVelocityX() != null ? xmlAction.getVelocityX() : 0;
                 int vy = xmlAction.getVelocityY() != null ? xmlAction.getVelocityY() : 0;
-                return new JumpAction(vy, vx);
+                return new JumpAction(xmlAction.getAnimation(), vy, vx);
             }
             case "Stay": {
                 // 指定時間だけ待機するアクションを生成します。

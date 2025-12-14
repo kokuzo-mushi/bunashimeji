@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Behaviors>
 
+    <!-- クリックされたらジャンプする (優先度高) -->
+    <Behavior Name="JumpOnClick" Frequency="100">
+        <Condition>event.type == 'MOUSE_PRESSED'</Condition>
+        <ActionReference Name="Jump" />
+    </Behavior>
+
     <!-- ■ 基本的な振る舞い -->
 
     <!-- 地面にいて、何もしていない時、500フレームに1回くらいの確率で歩き始める -->

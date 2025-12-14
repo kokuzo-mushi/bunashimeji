@@ -43,4 +43,11 @@
         </Animation>
     </Action>
 
+    <!-- ジャンプアクション (VelocityY=20 で上方向にジャンプ) -->
+    <Action Name="Jump" Type="Jump" VelocityY="20" VelocityX="5">
+        <Animation>
+            <Pose Image="shime1.png" Duration="1000" />
+        </Animation>
+    </Action>
+
 </Actions>

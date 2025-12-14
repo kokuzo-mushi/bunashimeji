@@ -1,8 +1,25 @@
 package com.group_finity.mascot.trigger.event;
 
-/**
- * 状態変化イベントのペイロード。
- * どのプロパティが、どのように変化したかを保持します。
- */
-public record StateChangeEvent(String propertyName, Object oldValue, Object newValue) {
+public class StateChangeEvent {
+    private final String propertyName;
+    private final Object oldValue;
+    private final Object newValue;
+
+    public StateChangeEvent(String propertyName, Object oldValue, Object newValue) {
+        this.propertyName = propertyName;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public Object getOldValue() {
+        return oldValue;
+    }
+
+    public Object getNewValue() {
+        return newValue;
+    }
 }

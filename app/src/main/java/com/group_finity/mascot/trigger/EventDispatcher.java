@@ -50,19 +50,27 @@ public class EventDispatcher {
             return;
         }
 
-        for (final Trigger trigger : triggers) {
-            if (trigger.evaluate(event, this.context)) {
-                // The trigger's condition is met.
-                // In Phase 2, the Trigger will be part of a Behavior that holds an Action.
-                // We check if the trigger is a Behavior to get the action.
-                if (trigger instanceof Behavior) {
-                    Action action = ((Behavior) trigger).getAction();
-                    this.mascot.setNextAction(action);
-                }
+        // イベント変数をコンテキストに注入して、条件式から参照できるようにする
+        this.context.setValue("event", event);
 
-                // Stop after the first successful trigger, as a mascot can only perform one action at a time.
-                break;
+        try {
+            for (final Trigger trigger : triggers) {
+                if (trigger.evaluate(event, this.context)) {
+                    // The trigger's condition is met.
+                    // In Phase 2, the Trigger will be part of a Behavior that holds an Action.
+                    // We check if the trigger is a Behavior to get the action.
+                    if (trigger instanceof Behavior) {
+                        Action action = ((Behavior) trigger).getAction();
+                        this.mascot.setNextAction(action);
+                    }
+
+                    // Stop after the first successful trigger, as a mascot can only perform one action at a time.
+                    break;
+                }
             }
+        } finally {
+            // 評価終了後にイベント変数を削除
+            this.context.removeVariable("event");
         }
     }
 

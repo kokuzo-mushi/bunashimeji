@@ -18,28 +18,28 @@ class FallActionTest {
     @BeforeEach
     void setUp() {
         mockMascot = mock(Mascot.class);
-        action = new FallAction();
+        action = new FallAction(null);
     }
 
     @Test
     void execute_shouldIncreaseY_whenInAir() {
         // Arrange
-        when(mockMascot.isOnGround()).thenReturn(false);
+        when(mockMascot.isGrounded()).thenReturn(false);
         when(mockMascot.getY()).thenReturn(100);
 
         // Act
         action.execute(mockMascot);
 
         // Assert
-        // Should fall by FALL_SPEED (4)
-        verify(mockMascot).setY(104);
+        // Initial velocity 0 -> adds gravity (2) -> velocity 2. Y becomes 100 + 2 = 102.
+        verify(mockMascot).setY(102);
         assertTrue(action.hasNext(), "Action should continue while in air");
     }
 
     @Test
     void execute_shouldFinish_whenOnGround() {
         // Arrange
-        when(mockMascot.isOnGround()).thenReturn(true);
+        when(mockMascot.isGrounded()).thenReturn(true);
 
         // Act
         action.execute(mockMascot);

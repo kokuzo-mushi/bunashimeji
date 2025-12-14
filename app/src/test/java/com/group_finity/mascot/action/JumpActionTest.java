@@ -23,9 +23,9 @@ class JumpActionTest {
     void execute_shouldMoveUpInitially() {
         // Arrange
         // Initial velocity -10 (Upward)
-        JumpAction action = new JumpAction(-10, 0);
+        JumpAction action = new JumpAction(null, -10, 0);
         when(mockMascot.getY()).thenReturn(100);
-        when(mockMascot.isOnGround()).thenReturn(true); // Start on ground
+        when(mockMascot.isGrounded()).thenReturn(true); // Start on ground
 
         // Act
         action.execute(mockMascot);
@@ -38,24 +38,30 @@ class JumpActionTest {
     @Test
     void execute_shouldApplyGravity() {
         // Arrange
-        JumpAction action = new JumpAction(0, 0); // Start at apex (velocity 0)
+        JumpAction action = new JumpAction(null, 0, 0); // Start at apex (velocity 0)
         when(mockMascot.getY()).thenReturn(100);
-        when(mockMascot.isOnGround()).thenReturn(false);
+        when(mockMascot.isGrounded()).thenReturn(false);
 
-        // Act 1 (Velocity 0 applied, then becomes 1)
+        // Act 1 (Velocity 0 applied, then becomes 2)
         action.execute(mockMascot);
         verify(mockMascot).setY(100); // 100 + 0
 
-        // Act 2 (Velocity 1 applied, then becomes 2)
+        // Act 2 (Velocity 2 applied, then becomes 4)
         action.execute(mockMascot);
-        verify(mockMascot).setY(101); // 100 + 1
+        verify(mockMascot).setY(102); // 100 + 2
     }
 
     @Test
-    void execute_shouldFinish_whenLanding() {
+    void execute_shouldFinish_whenLanding() throws Exception {
         // Arrange
-        JumpAction action = new JumpAction(10, 0); // Falling down
-        when(mockMascot.isOnGround()).thenReturn(true);
+        JumpAction action = new JumpAction(null, 10, 0); // Falling down
+        
+        // リフレクションを使って強制的に落下状態(速度正)にする
+        java.lang.reflect.Field velocityField = JumpAction.class.getDeclaredField("currentVelocityY");
+        velocityField.setAccessible(true);
+        velocityField.setInt(action, 10); // 落下速度 10
+
+        when(mockMascot.isGrounded()).thenReturn(true);
 
         // Act
         action.execute(mockMascot);

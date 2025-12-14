@@ -1,66 +1,43 @@
-=== Shimeji Neo Start ===
-Failed to parse actions.xml: conf\actions.xml
-jakarta.xml.bind.UnmarshalException: 予期しない要素(URI:""、ローカル:"actions")です。予期される要素は<{}ActionReference>,<{}Actions>です
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext.handleEvent(UnmarshallingContext.java:693)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.Loader.reportError(Loader.java:230)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.Loader.reportError(Loader.java:225)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.Loader.reportUnexpectedChildElement(Loader.java:92)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext$DefaultRootLoader.childElement(UnmarshallingContext.java:1102)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext._startElement(UnmarshallingContext.java:527)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext.startElement(UnmarshallingContext.java:509)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.SAXConnector.startElement(SAXConnector.java:137)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.startElement(AbstractSAXParser.java:518)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.scanStartElement(XMLNSDocumentScannerImpl.java:376)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl$NSContentDriver.scanRootElementHook(XMLNSDocumentScannerImpl.java:615)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:3079)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$PrologDriver.next(XMLDocumentScannerImpl.java:836)   
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:605)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:114)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:542)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:889)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:825)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1224)
-        at java.xml/com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:637)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallerImpl.unmarshal0(UnmarshallerImpl.java:218)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallerImpl.unmarshal(UnmarshallerImpl.java:189)
-        at jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:146)
-        at jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:188)
-        at jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:172)
-        at com.group_finity.mascot.behavior.ActionBuilder.build(ActionBuilder.java:49)
-        at com.group_finity.mascot.behavior.Configuration.<init>(Configuration.java:21)
-        at com.group_finity.mascot.Main.run(Main.java:44)
-        at com.group_finity.mascot.Main.main(Main.java:30)
-Failed to parse behaviors.xml: conf\behaviors.xml
-jakarta.xml.bind.UnmarshalException: 予期しない要素(URI:""、ローカル:"behaviors")です。予期される要素は<{}ActionReference>,<{}Behavior>,<{}Behaviors>です
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext.handleEvent(UnmarshallingContext.java:693)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.Loader.reportError(Loader.java:230)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.Loader.reportError(Loader.java:225)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.Loader.reportUnexpectedChildElement(Loader.java:92)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext$DefaultRootLoader.childElement(UnmarshallingContext.java:1102)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext._startElement(UnmarshallingContext.java:527)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallingContext.startElement(UnmarshallingContext.java:509)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.SAXConnector.startElement(SAXConnector.java:137)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.startElement(AbstractSAXParser.java:518)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.scanStartElement(XMLNSDocumentScannerImpl.java:376)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl$NSContentDriver.scanRootElementHook(XMLNSDocumentScannerImpl.java:615)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:3079)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$PrologDriver.next(XMLDocumentScannerImpl.java:836)   
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:605)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:114)
-        at java.xml/com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:542)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:889)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:825)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
-        at java.xml/com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1224)
-        at java.xml/com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:637)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallerImpl.unmarshal0(UnmarshallerImpl.java:218)
-        at org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.UnmarshallerImpl.unmarshal(UnmarshallerImpl.java:189)
-        at jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:146)
-        at jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:188)
-        at jakarta.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:172)
-        at com.group_finity.mascot.behavior.BehaviorBuilder.build(BehaviorBuilder.java:46)
-        at com.group_finity.mascot.behavior.Configuration.<init>(Configuration.java:25)
-        at com.group_finity.mascot.Main.run(Main.java:44)
-        at com.group_finity.mascot.Main.main(Main.java:30)
-No behaviors found in configuration. The mascot will not do anything.
+%TESTC  2 v2
+%TSTTREE2,com.group_finity.mascot.action.FallActionTest,true,2,false,1,FallActionTest,,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.FallActionTest]
+%TSTTREE3,execute_shouldFinish_whenOnGround(com.group_finity.mascot.action.FallActionTest),false,1,false,2,execute_shouldFinish_whenOnGround(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.FallActionTest]/[method:execute_shouldFinish_whenOnGround()]
+%TSTTREE4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest),false,1,false,2,execute_shouldIncreaseY_whenInAir(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.FallActionTest]/[method:execute_shouldIncreaseY_whenInAir()]
+%TESTS  3,execute_shouldFinish_whenOnGround(com.group_finity.mascot.action.FallActionTest)
+
+%TESTE  3,execute_shouldFinish_whenOnGround(com.group_finity.mascot.action.FallActionTest)
+
+%TESTS  4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest)
+
+%FAILED 4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest)
+%EXPECTS
+mascot.setY(104);
+%EXPECTE
+%ACTUALS
+mascot.isGrounded();
+mascot.getY();
+mascot.setY(102);
+
+%ACTUALE
+%TRACES 
+Argument(s) are different! Wanted:
+mascot.setY(104);
+-> at com.group_finity.mascot.Mascot.setY(Mascot.java:91)
+Actual invocations have different arguments:
+mascot.isGrounded();
+-> at com.group_finity.mascot.action.FallAction.execute(FallAction.java:34)
+mascot.getY();
+-> at com.group_finity.mascot.action.FallAction.execute(FallAction.java:41)
+mascot.setY(102);
+-> at com.group_finity.mascot.action.FallAction.execute(FallAction.java:41)
+
+        at com.group_finity.mascot.Mascot.setY(Mascot.java:91)
+        at com.group_finity.mascot.action.FallActionTest.execute_shouldIncreaseY_whenInAir(FallActionTest.java:35)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+%TRACEE 
+%TESTE  4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest)
+
+%RUNTIME1195
+

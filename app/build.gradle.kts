@@ -72,7 +72,6 @@ tasks.test {
 sourceSets {
     test {
         java {
-            exclude("**/EventSystemTest.java")
             exclude("**/EvaluationContextSnapshotTest.java")
             exclude("**/EventDispatcherTest.java")
         }
