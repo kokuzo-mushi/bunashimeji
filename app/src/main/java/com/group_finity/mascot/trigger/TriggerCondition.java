@@ -129,6 +129,9 @@ public class TriggerCondition {
             }
         });
 
+        // FIXME: Mascotオブジェクトのようなミュータブルな変数の内部状態変化を検知できないため、
+        // 一時的にキャッシュを無効化して常に再評価するように修正
+        /*
         // 2) Get with AST+Mode key (dependencies not included in key)
         ExprCacheKey astKey = ExprCacheKey.ofAst(ast, ctx.getMode());
         Optional<EvaluationResult> cached = cacheManager.get(astKey);
@@ -148,6 +151,7 @@ public class TriggerCondition {
             }
         }
         CacheStatsTracker.INSTANCE.recordMiss(expression);
+        */
 
         // 4) Re-evaluate (clear access log only at this time)
         ctx.clearAccessLog();
@@ -162,10 +166,12 @@ public class TriggerCondition {
         }
         long end = System.nanoTime();
 
+        /*
         // 5) Save dependency snapshot (put overwrites AST key)
         Map<String, Object> deps = ctx.snapshotDependencies();
         EvaluationResult evalResult = new EvaluationResult(result, deps, end, end - start, ctx.getMode());
         cacheManager.put(astKey, evalResult);
+        */
 
         return TypeResolver.toBoolean(result);
     }

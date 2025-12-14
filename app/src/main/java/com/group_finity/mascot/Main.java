@@ -161,13 +161,48 @@ public class Main {
         if (!Files.exists(actionsPath)) {
             String content = """
                 <Actions>
-                    <Action Name="Stay" Type="Stay" Duration="1000" />
-                    <Action Name="Walk" Type="Walk" Speed="4">
+                    <Action Name="Stay" Type="Animate">
+                        <Animation>
+                            <Pose Image="shime1.png" Duration="1000" />
+                        </Animation>
+                    </Action>
+                    <Action Name="Land" Type="Animate">
+                        <Animation>
+                            <Pose Image="shime1.png" Duration="1000" />
+                        </Animation>
+                    </Action>
+                    <Action Name="LieDown" Type="LieDown" Duration="4000">
+                        <Animation>
+                            <Pose Image="shime18.png" Duration="4000" />
+                        </Animation>
+                    </Action>
+                    <Action Name="Fall" Type="Fall">
+                        <Animation>
+                            <Pose Image="shime4.png" Duration="100" />
+                        </Animation>
+                    </Action>
+                    <Action Name="Walk" Type="Walk" Speed="2">
                         <Animation>
                             <Pose Image="shime1.png" Duration="200" />
                             <Pose Image="shime2.png" Duration="200" />
                         </Animation>
                     </Action>
+                    <Action Name="Dragged" Type="Dragged">
+                        <Animation>
+                            <Pose Image="shime1.png" Duration="100" />
+                        </Animation>
+                    </Action>
+                    <Action Name="Jump" Type="Jump" VelocityY="20" VelocityX="5">
+                        <Animation>
+                            <Pose Image="shime1.png" Duration="1000" />
+                        </Animation>
+                    </Action>
+                    <Action Name="FallSequence" Type="Sequence">
+                        <ActionReference Name="Fall" />
+                        <ActionReference Name="LieDown" />
+                        <ActionReference Name="Land" />
+                    </Action>
+                    <Action Name="Turn" Type="Turn" />
                 </Actions>
                 """;
             Files.writeString(actionsPath, content);
@@ -178,12 +213,36 @@ public class Main {
         if (!Files.exists(behaviorsPath)) {
             String content = """
                 <Behaviors>
+                    <Behavior Name="Dragged" Frequency="100">
+                        <Condition>mascot.isBeingDragged</Condition>
+                        <ActionReference Name="Dragged" />
+                    </Behavior>
+                    <Behavior Name="JumpOnClick" Frequency="100">
+                        <Condition>event.type == 'MOUSE_PRESSED'</Condition>
+                        <ActionReference Name="Jump" />
+                    </Behavior>
+                    <Behavior Name="Fall" Frequency="100">
+                        <Condition>!mascot.isGrounded</Condition>
+                        <ActionReference Name="FallSequence" />
+                    </Behavior>
+                    <Behavior Name="TurnLeft" Frequency="100">
+                        <Condition>mascot.isHittingLeftWall &amp;&amp; !mascot.isLookRight</Condition>
+                        <ActionReference Name="Turn" />
+                    </Behavior>
+                    <Behavior Name="TurnRight" Frequency="100">
+                        <Condition>mascot.isHittingRightWall &amp;&amp; mascot.isLookRight</Condition>
+                        <ActionReference Name="Turn" />
+                    </Behavior>
+                    <Behavior Name="TurnRandomly" Frequency="10">
+                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <ActionReference Name="Turn" />
+                    </Behavior>
                     <Behavior Name="Walk" Frequency="100">
-                        <Condition>mascot.isGrounded</Condition>
+                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="Walk" />
                     </Behavior>
-                    <Behavior Name="Stay" Frequency="50">
-                        <Condition>mascot.isGrounded</Condition>
+                    <Behavior Name="Stay" Frequency="100">
+                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="Stay" />
                     </Behavior>
                 </Behaviors>

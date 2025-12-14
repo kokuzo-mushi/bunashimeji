@@ -58,7 +58,8 @@ public class BehaviorBuilder {
                     // Behaviorクラスを直接生成し、リストに追加します。
                     String name = (xmlBehavior.getName() != null) ? xmlBehavior.getName() : "Behavior";
                     boolean hidden = xmlBehavior.isHidden();
-                    builtBehaviors.add(new Behavior(name, action, xmlBehavior.getCondition(), hidden));
+                    int frequency = (xmlBehavior.getFrequency() != null) ? xmlBehavior.getFrequency() : 1;
+                    builtBehaviors.add(new Behavior(name, action, xmlBehavior.getCondition(), hidden, frequency));
                 } else {
                     System.err.println("No valid action found for condition: " + xmlBehavior.getCondition());
                 }

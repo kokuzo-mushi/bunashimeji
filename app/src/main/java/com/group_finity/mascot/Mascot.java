@@ -13,6 +13,8 @@ import java.util.Map;
 public class Mascot {
     private int x;
     private int y;
+    private int velocityX;
+    private int velocityY;
     private boolean lookRight;
     private Animation animation;
     private Action nextAction;
@@ -89,6 +91,22 @@ public class Mascot {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(int velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public int getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(int velocityY) {
+        this.velocityY = velocityY;
     }
 
     public boolean isLookRight() {

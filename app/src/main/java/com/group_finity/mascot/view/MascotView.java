@@ -9,6 +9,7 @@ import com.group_finity.mascot.image.ImageCache;
 import javax.swing.JWindow;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -28,6 +29,7 @@ public class MascotView extends JWindow {
     private final EventDispatcher dispatcher;
     private BufferedImage currentImage;
     private Point dragStartOffset; // ドラッグ開始時の、ウィンドウ左上からのマウスカーソル相対位置
+    private Point lastMouseLocation; // 速度計算用の直前のマウス位置
 
     public MascotView(Mascot mascot, ImageCache imageCache, EventDispatcher dispatcher) {
         this.mascot = mascot;
@@ -54,6 +56,9 @@ public class MascotView extends JWindow {
                 // ドラッグ開始をマスコットに通知
                 mascot.startDrag();
                 dragStartOffset = e.getPoint();
+                lastMouseLocation = e.getLocationOnScreen();
+                mascot.setVelocityX(0);
+                mascot.setVelocityY(0);
 
                 // イベントディスパッチャに通知
                 dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.MOUSE_PRESSED, e, MascotView.this));
@@ -74,9 +79,21 @@ public class MascotView extends JWindow {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (dragStartOffset != null) {
-                    Point newLoc = e.getLocationOnScreen();
-                    newLoc.translate(-dragStartOffset.x, -dragStartOffset.y);
-                    mascot.setAnchor(newLoc);
+                    Point newLoc = e.getLocationOnScreen(); // 現在のマウス位置(スクリーン座標)
+
+                    // 直前の位置との差分を速度として設定
+                    if (lastMouseLocation != null) {
+                        int vx = newLoc.x - lastMouseLocation.x;
+                        int vy = newLoc.y - lastMouseLocation.y;
+                        mascot.setVelocityX(vx);
+                        mascot.setVelocityY(vy);
+                        System.out.printf("[MascotView] Drag velocity: (%d, %d)%n", vx, vy);
+                    }
+                    lastMouseLocation = newLoc;
+
+                    // マスコットの位置を更新
+                    Point mascotPosition = new Point(newLoc.x - dragStartOffset.x, newLoc.y - dragStartOffset.y);
+                    mascot.setAnchor(mascotPosition);
 
                     dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.MOUSE_DRAGGED, e, MascotView.this));
                 }
@@ -131,9 +148,15 @@ public class MascotView extends JWindow {
 
     @Override
     public void paint(Graphics g) {
-        // super.paint(g) は呼び出さない（背景描画をスキップするため）
+        Graphics2D g2d = (Graphics2D) g;
+
+        // 前回の描画内容をクリア（透明色で塗りつぶす）
+        // これを行わないと、前のフレームの画像が残ってしまいます
+        g2d.setBackground(new Color(0, 0, 0, 0));
+        g2d.clearRect(0, 0, getWidth(), getHeight());
+
         if (currentImage != null) {
-            g.drawImage(currentImage, 0, 0, this);
+            g2d.drawImage(currentImage, 0, 0, this);
         }
     }
 

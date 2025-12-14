@@ -37,8 +37,13 @@ public class MemberAccessExpression implements Expression {
                     Method method = clazz.getMethod("is" + capitalized);
                     return method.invoke(targetVal);
                 } catch (NoSuchMethodException e2) {
-                    // 3. フィールド直接アクセスは今回は行わない（MascotクラスはGetter完備のため）
-                    // 必要であれば clazz.getField(memberName).get(targetVal) を追加
+                    // 3. そのままのメソッド名を試す (例: mascot.isGrounded -> isGrounded())
+                    try {
+                        Method method = clazz.getMethod(memberName);
+                        return method.invoke(targetVal);
+                    } catch (NoSuchMethodException e3) {
+                        // アクセス失敗
+                    }
                 }
             }
         } catch (Exception e) {

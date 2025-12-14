@@ -112,12 +112,15 @@ public class ImageCache {
         String leftImageName = deriveLeftImageName(rightImageName);
 
         // 2. 左向き専用の画像が存在するか確認する
-        // getImageは内部でキャッシュとファイル存在チェックを行う
-        BufferedImage specificLeftImage = getImage(leftImageName);
+        // 注意: getImage()を直接呼ぶと、ファイルがない場合にダミー画像を生成して返してしまうため、
+        // 先にキャッシュまたはファイルシステムを確認して、本当に存在する場合のみ読み込むようにする。
+        if (cache.containsKey(leftImageName)) {
+            return cache.get(leftImageName);
+        }
 
-        if (specificLeftImage != null) {
-            // 3. 専用画像が見つかった場合はそれを返す
-            return specificLeftImage;
+        Path leftImagePath = imageBasePath.resolve(leftImageName);
+        if (Files.exists(leftImagePath)) {
+            return getImage(leftImageName);
         }
 
         // 4. 見つからなかった場合は、元の画像を反転させて返す（下位互換性のため）

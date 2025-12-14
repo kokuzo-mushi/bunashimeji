@@ -6,7 +6,9 @@ import com.group_finity.mascot.behavior.Behavior;
 import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -50,28 +52,55 @@ public class EventDispatcher {
             return;
         }
 
+        List<Behavior> candidates = new ArrayList<>();
+
         // イベント変数をコンテキストに注入して、条件式から参照できるようにする
         this.context.setValue("event", event);
 
         try {
             for (final Trigger trigger : triggers) {
                 if (trigger.evaluate(event, this.context)) {
-                    // The trigger's condition is met.
-                    // In Phase 2, the Trigger will be part of a Behavior that holds an Action.
-                    // We check if the trigger is a Behavior to get the action.
                     if (trigger instanceof Behavior) {
-                        Action action = ((Behavior) trigger).getAction();
-                        this.mascot.setNextAction(action);
+                        candidates.add((Behavior) trigger);
                     }
-
-                    // Stop after the first successful trigger, as a mascot can only perform one action at a time.
-                    break;
                 }
             }
         } finally {
             // 評価終了後にイベント変数を削除
             this.context.removeVariable("event");
         }
+
+        if (candidates.isEmpty()) {
+            return;
+        }
+
+        // 候補の中からFrequencyに基づいて抽選を行う
+        Behavior selectedBehavior = selectBehavior(candidates);
+        if (selectedBehavior != null) {
+            Action action = selectedBehavior.getAction();
+
+            // 現在実行中のアクションと同じインスタンスであれば、リセット・再設定を行わない
+            // これにより、毎フレーム条件を満たすアクション（Fallなど）がリセットされずに継続実行され、加速などが有効になる
+            if (this.mascot.getCurrentAction() == action) {
+                return;
+            }
+
+            action.reset(); // アクションを再利用する前に必ず初期化する
+            this.mascot.setNextAction(action);
+        }
+    }
+
+    private Behavior selectBehavior(List<Behavior> candidates) {
+        int totalFrequency = candidates.stream().mapToInt(Behavior::getFrequency).sum();
+        if (totalFrequency == 0) return candidates.get(0);
+
+        int random = new Random().nextInt(totalFrequency);
+        int current = 0;
+        for (Behavior behavior : candidates) {
+            current += behavior.getFrequency();
+            if (random < current) return behavior;
+        }
+        return candidates.get(candidates.size() - 1);
     }
 
     public void clear() {

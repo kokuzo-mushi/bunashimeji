@@ -9,6 +9,7 @@ import com.group_finity.mascot.action.TurnAction;
 import com.group_finity.mascot.action.JumpAction;
 import com.group_finity.mascot.action.FallAction;
 import com.group_finity.mascot.action.DraggedAction;
+import com.group_finity.mascot.action.LieDownAction;
 import com.group_finity.mascot.action.StayAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
@@ -134,6 +135,13 @@ public class ActionBuilder {
                 // 指定時間だけ待機するアクションを生成します。
                 int duration = xmlAction.getDuration() != null ? xmlAction.getDuration() : Integer.MAX_VALUE;
                 return new StayAction(duration);
+            }
+            case "LieDown": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("LieDown action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                return new LieDownAction(xmlAction.getAnimation(), xmlAction.getDuration() != null ? xmlAction.getDuration() : 4000);
             }
             case "Walk":
                 if (xmlAction.getAnimation() == null) {

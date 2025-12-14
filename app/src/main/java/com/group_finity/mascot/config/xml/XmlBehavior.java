@@ -11,6 +11,7 @@ public class XmlBehavior {
 
     private String name;
     private String condition;
+    private Integer frequency;
     private boolean hidden;
     private List<XmlActionReference> actionReferences = new ArrayList<>();
 
@@ -30,6 +31,15 @@ public class XmlBehavior {
 
     public void setCondition(String condition) {
         this.condition = condition;
+    }
+
+    @XmlAttribute(name = "Frequency")
+    public Integer getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Integer frequency) {
+        this.frequency = frequency;
     }
 
     @XmlAttribute(name = "Hidden")

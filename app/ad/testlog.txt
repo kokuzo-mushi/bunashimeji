@@ -1,43 +1,135 @@
-%TESTC  2 v2
-%TSTTREE2,com.group_finity.mascot.action.FallActionTest,true,2,false,1,FallActionTest,,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.FallActionTest]
-%TSTTREE3,execute_shouldFinish_whenOnGround(com.group_finity.mascot.action.FallActionTest),false,1,false,2,execute_shouldFinish_whenOnGround(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.FallActionTest]/[method:execute_shouldFinish_whenOnGround()]
-%TSTTREE4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest),false,1,false,2,execute_shouldIncreaseY_whenInAir(),,[engine:junit-jupiter]/[class:com.group_finity.mascot.action.FallActionTest]/[method:execute_shouldIncreaseY_whenInAir()]
-%TESTS  3,execute_shouldFinish_whenOnGround(com.group_finity.mascot.action.FallActionTest)
-
-%TESTE  3,execute_shouldFinish_whenOnGround(com.group_finity.mascot.action.FallActionTest)
-
-%TESTS  4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest)
-
-%FAILED 4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest)
-%EXPECTS
-mascot.setY(104);
-%EXPECTE
-%ACTUALS
-mascot.isGrounded();
-mascot.getY();
-mascot.setY(102);
-
-%ACTUALE
-%TRACES 
-Argument(s) are different! Wanted:
-mascot.setY(104);
--> at com.group_finity.mascot.Mascot.setY(Mascot.java:91)
-Actual invocations have different arguments:
-mascot.isGrounded();
--> at com.group_finity.mascot.action.FallAction.execute(FallAction.java:34)
-mascot.getY();
--> at com.group_finity.mascot.action.FallAction.execute(FallAction.java:41)
-mascot.setY(102);
--> at com.group_finity.mascot.action.FallAction.execute(FallAction.java:41)
-
-        at com.group_finity.mascot.Mascot.setY(Mascot.java:91)
-        at com.group_finity.mascot.action.FallActionTest.execute_shouldIncreaseY_whenInAir(FallActionTest.java:35)
-        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-
-%TRACEE 
-%TESTE  4,execute_shouldIncreaseY_whenInAir(com.group_finity.mascot.action.FallActionTest)
-
-%RUNTIME1195
-
+=== Shimeji Neo Start ===
+[Main] Current working directory: C:\bunashimeji\bunashimeji
+[Main] Created default actions.xml
+[Main] Created default behaviors.xml
+[Main] Work area detected: java.awt.Rectangle[x=0,y=0,width=1920,height=1032]
+[Main] Loaded and registered 8 behaviors.
+[Main] Starting main loop... (Press Ctrl+C to exit)
+[FallAction] Initialized with velocity: (0, 0)
+[MascotView] Drag velocity: (0, -1)
+[MascotView] Drag velocity: (69, 51)
+[MascotView] Drag velocity: (70, 50)
+[FallAction] Initialized with velocity: (70, 50)
+[MascotView] Drag velocity: (73, 47)
+[MascotView] Drag velocity: (71, 49)
+[MascotView] Drag velocity: (72, 48)
+[MascotView] Drag velocity: (73, 46)
+[MascotView] Drag velocity: (72, 48)
+[MascotView] Drag velocity: (71, 48)
+[MascotView] Drag velocity: (75, 43)
+[MascotView] Drag velocity: (73, 45)
+[MascotView] Drag velocity: (74, 41)
+[MascotView] Drag velocity: (72, 46)
+[MascotView] Drag velocity: (74, 43)
+[FallAction] Initialized with velocity: (74, 43)
+[MascotView] Drag velocity: (69, 50)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (73, 44)
+[MascotView] Drag velocity: (71, 45)
+[MascotView] Drag velocity: (70, 49)
+[MascotView] Drag velocity: (70, 47)
+[MascotView] Drag velocity: (71, 46)
+[MascotView] Drag velocity: (74, 40)
+[MascotView] Drag velocity: (72, 43)
+[MascotView] Drag velocity: (71, 45)
+[MascotView] Drag velocity: (70, 48)
+[MascotView] Drag velocity: (70, 47)
+[MascotView] Drag velocity: (71, 46)
+[FallAction] Initialized with velocity: (71, 46)
+[MascotView] Drag velocity: (73, 45)
+[MascotView] Drag velocity: (69, 49)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (69, 51)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (67, 51)
+[MascotView] Drag velocity: (69, 51)
+[MascotView] Drag velocity: (68, 49)
+[MascotView] Drag velocity: (68, 51)
+[FallAction] Initialized with velocity: (68, 51)
+[MascotView] Drag velocity: (70, 50)
+[MascotView] Drag velocity: (68, 47)
+[MascotView] Drag velocity: (69, 51)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (68, 52)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (67, 52)
+[MascotView] Drag velocity: (67, 52)
+[FallAction] Initialized with velocity: (67, 52)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (68, 52)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (69, 51)
+[MascotView] Drag velocity: (67, 50)
+[MascotView] Drag velocity: (69, 50)
+[MascotView] Drag velocity: (69, 50)
+[MascotView] Drag velocity: (67, 49)
+[MascotView] Drag velocity: (69, 52)
+[MascotView] Drag velocity: (68, 50)
+[FallAction] Initialized with velocity: (68, 50)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (69, 50)
+[MascotView] Drag velocity: (69, 50)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (69, 50)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (70, 49)
+[MascotView] Drag velocity: (69, 48)
+[MascotView] Drag velocity: (70, 49)
+[MascotView] Drag velocity: (71, 45)
+[MascotView] Drag velocity: (70, 47)
+[MascotView] Drag velocity: (68, 49)
+[MascotView] Drag velocity: (69, 50)
+[FallAction] Initialized with velocity: (69, 50)
+[MascotView] Drag velocity: (69, 51)
+[MascotView] Drag velocity: (67, 51)
+[MascotView] Drag velocity: (69, 50)
+[MascotView] Drag velocity: (69, 49)
+[MascotView] Drag velocity: (68, 49)
+[MascotView] Drag velocity: (69, 49)
+[MascotView] Drag velocity: (69, 48)
+[MascotView] Drag velocity: (69, 49)
+[FallAction] Initialized with velocity: (69, 49)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (67, 51)
+[MascotView] Drag velocity: (68, 52)
+[MascotView] Drag velocity: (67, 52)
+[MascotView] Drag velocity: (68, 53)
+[MascotView] Drag velocity: (67, 52)
+[MascotView] Drag velocity: (68, 51)
+[MascotView] Drag velocity: (69, 48)
+[FallAction] Initialized with velocity: (69, 48)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (68, 50)
+[MascotView] Drag velocity: (69, 51)
+[MascotView] Drag velocity: (67, 50)
+[MascotView] Drag velocity: (68, 52)
+[MascotView] Drag velocity: (67, 51)
+[MascotView] Drag velocity: (68, 53)
+[FallAction] Initialized with velocity: (68, 53)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[FallAction] Initialized with velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (67, 52)
+[MascotView] Drag velocity: (67, 52)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (67, 52)
+[FallAction] Initialized with velocity: (67, 52)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[FallAction] Initialized with velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[FallAction] Initialized with velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[FallAction] Initialized with velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[MascotView] Drag velocity: (67, 53)
+[FallAction] Initialized with velocity: (67, 53)
