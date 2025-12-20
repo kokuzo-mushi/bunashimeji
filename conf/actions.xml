@@ -1,0 +1,165 @@
+<Actions>
+    <Action Name="Stay" Type="Stay" Duration="1000">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="Sit" Type="Stay" Duration="8000">
+        <Animation>
+            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="8000" />
+        </Animation>
+    </Action>
+    <Action Name="AfterSit" Type="RandomChoice">
+        <ActionReference Name="Stay" />
+        <ActionReference Name="Stay" />
+        <ActionReference Name="Stay" />
+        <ActionReference Name="LieDown" />
+    </Action>
+    <Action Name="SitSequence" Type="Sequence">
+        <ActionReference Name="Sit" />
+        <ActionReference Name="AfterSit" />
+    </Action>
+    <Action Name="Land" Type="Animate">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="LieDown" Type="LieDown" Duration="4000">
+        <Animation>
+            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="4000" />
+        </Animation>
+    </Action>
+    <Action Name="Breed" Type="Breed" Duration="4000">
+        <Point X="0" Y="-100" />
+        <Animation>
+            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="BreedJump" Type="Breed" Duration="4000" VelocityX="20" VelocityY="-40">
+        <Point X="0" Y="-100" />
+        <Animation>
+            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="3600" />
+        </Animation>
+    </Action>
+    <Action Name="Dig" Type="Dig" Duration="2000">
+        <Animation>
+            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="Gather" Type="Gather" Speed="2" Duration="4000">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="Fall" Type="Fall">
+        <Animation>
+            <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
+        </Animation>
+    </Action>
+    <Action Name="Walk" Type="Walk" Speed="2">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="Chase" Type="Chase" Speed="8" Duration="5000">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="50" />
+            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
+        </Animation>
+    </Action>
+    <Action Name="Dragged" Type="Dragged">
+        <Animation>
+            <!-- 順序: 左速, 左遅, 静止, 右遅, 右速 -->
+            <!-- 左・速 (例: 走る/飛ぶポーズ) -->
+            <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
+            <!-- 左・遅 (例: 歩く/揺れるポーズ) -->
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+            <!-- 静止 (例: つままれポーズ) -->
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+            <!-- 右・遅 -->
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+            <!-- 右・速 -->
+            <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
+        </Animation>
+    </Action>
+    <Action Name="Jump" Type="Jump" VelocityY="20" VelocityX="5">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="JumpLeft" Type="Jump" VelocityY="20" VelocityX="-5">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="RandomJumpAction" Type="RandomChoice">
+        <ActionReference Name="Jump" />
+        <ActionReference Name="JumpLeft" />
+    </Action>
+    <Action Name="TripFall" Type="Animate">
+        <Animation>
+            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="500" />
+        </Animation>
+    </Action>
+    <Action Name="TripSequence" Type="Sequence">
+        <ActionReference Name="TripFall" />
+        <ActionReference Name="Sit" />
+    </Action>
+    <Action Name="WallCling" Type="WallCling" Duration="2000">
+        <Animation>
+            <Pose Image="shime15.png" ImageAnchor="64,128" Duration="2000" />
+        </Animation>
+    </Action>
+    <Action Name="Climb" Type="Climb" Speed="2">
+        <Animation>
+            <Pose Image="shime15.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime16.png" ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="CeilingCrawl" Type="CeilingCrawl" Speed="1" Duration="2000">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="CeilingStay" Type="Stay" Duration="5000">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="CeilingRandomMove" Type="RandomChoice">
+        <ActionReference Name="CeilingCrawl" />
+        <ActionReference Name="CeilingStay" />
+    </Action>
+    <Action Name="SlideDown" Type="SlideDown" Speed="4">
+        <Animation>
+            <Pose Image="shime17.png" ImageAnchor="64,128" Duration="400" />
+        </Animation>
+    </Action>
+    <Action Name="WallJump" Type="WallJump" VelocityY="20" VelocityX="15">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="WallRandomMove" Type="RandomChoice">
+        <ActionReference Name="Climb" />
+        <ActionReference Name="SlideDown" />
+        <ActionReference Name="WallJump" />
+    </Action>
+    <Action Name="WallComplexSequence" Type="Sequence">
+        <ActionReference Name="WallCling" />
+        <ActionReference Name="WallRandomMove" />
+    </Action>
+    <Action Name="FallSequence" Type="Sequence">
+        <ActionReference Name="Fall" />
+        <ActionReference Name="LieDown" />
+        <ActionReference Name="Land" />
+    </Action>
+    <Action Name="Turn" Type="Turn" />
+</Actions>

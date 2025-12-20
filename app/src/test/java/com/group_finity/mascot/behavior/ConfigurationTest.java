@@ -177,7 +177,7 @@ class ConfigurationTest {
         SequenceAction infiniteSeq = new SequenceAction();
         infiniteSeq.setLoopCount(-1);
         // 短いStayActionを1つ追加
-        infiniteSeq.setSequence(List.of(new StayAction(10))); 
+        infiniteSeq.setSequence(List.of(new StayAction(null, 10))); 
         
         infiniteSeq.execute(mascot); // 1回目開始
         assertTrue(infiniteSeq.hasNext());

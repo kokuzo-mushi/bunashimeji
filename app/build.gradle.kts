@@ -37,6 +37,9 @@ dependencies {
     // --- Mockito (for Mocking in Tests) ---
     testImplementation("org.mockito:mockito-core:5.12.0")
     testImplementation("org.mockito:mockito-junit-jupiter:5.12.0")
+
+    implementation("net.java.dev.jna:jna:5.13.0")
+    implementation("net.java.dev.jna:jna-platform:5.13.0")
 }
 
 // ✅ ソースコードのエンコーディングをUTF-8に指定（文字化け対策）

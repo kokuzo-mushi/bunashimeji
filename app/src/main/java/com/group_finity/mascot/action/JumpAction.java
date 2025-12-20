@@ -32,7 +32,7 @@ public class JumpAction implements Action {
     @Override
     public void execute(Mascot mascot) {
         // 壁に衝突したらアクションを終了する
-        if (mascot.isHittingLeftWall() || mascot.isHittingRightWall()) {
+        if (mascot.isHittingLeftWall() || mascot.isHittingRightWall() || mascot.isHittingCeiling()) {
             finished = true;
             return;
         }

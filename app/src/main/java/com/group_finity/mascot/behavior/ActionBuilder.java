@@ -18,6 +18,9 @@ import com.group_finity.mascot.action.WallClingAction;
 import com.group_finity.mascot.action.LieDownAction;
 import com.group_finity.mascot.action.RandomChoiceAction;
 import com.group_finity.mascot.action.StayAction;
+import com.group_finity.mascot.action.BreedAction;
+import com.group_finity.mascot.action.DigAction;
+import com.group_finity.mascot.action.GatherAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
 import com.group_finity.mascot.config.xml.XmlActionReference;
@@ -146,8 +149,8 @@ public class ActionBuilder {
             }
             case "Stay": {
                 // 指定時間だけ待機するアクションを生成します。
-                int duration = xmlAction.getDuration() != null ? xmlAction.getDuration() : Integer.MAX_VALUE;
-                return new StayAction(duration);
+                int duration = xmlAction.getDuration() != null ? xmlAction.getDuration() : 1000;
+                return new StayAction(xmlAction.getAnimation(), duration);
             }
             case "LieDown": {
                 if (xmlAction.getAnimation() == null) {
@@ -155,6 +158,37 @@ public class ActionBuilder {
                     return null;
                 }
                 return new LieDownAction(xmlAction.getAnimation(), xmlAction.getDuration() != null ? xmlAction.getDuration() : 4000);
+            }
+            case "Breed": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Breed action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 2000;
+                // Pointタグがあれば生成位置のオフセットとして使用 (デフォルトは真上 -100)
+                int bornX = (xmlAction.getPoint() != null) ? xmlAction.getPoint().getX() : 0;
+                int bornY = (xmlAction.getPoint() != null) ? xmlAction.getPoint().getY() : -100;
+                // Velocity属性があれば生成時の初速として使用
+                int bornVX = (xmlAction.getVelocityX() != null) ? xmlAction.getVelocityX() : 0;
+                int bornVY = (xmlAction.getVelocityY() != null) ? xmlAction.getVelocityY() : 0;
+                return new BreedAction(xmlAction.getAnimation(), duration, bornX, bornY, bornVX, bornVY);
+            }
+            case "Dig": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Dig action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 2000;
+                return new DigAction(xmlAction.getAnimation(), duration);
+            }
+            case "Gather": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Gather action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 4000;
+                return new GatherAction(xmlAction.getAnimation(), speed, duration);
             }
             case "WallCling": {
                 if (xmlAction.getAnimation() == null) {
@@ -178,7 +212,8 @@ public class ActionBuilder {
                     return null;
                 }
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
-                return new CeilingCrawlAction(xmlAction.getAnimation(), speed);
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 5000;
+                return new CeilingCrawlAction(xmlAction.getAnimation(), speed, duration);
             }
             case "SlideDown": {
                 if (xmlAction.getAnimation() == null) {

@@ -11,7 +11,7 @@ class StayActionTest {
     void hasNext_shouldReturnTrue_withinDuration() {
         // Arrange
         int duration = 500; // 長めに設定して即時終了を防ぐ
-        StayAction action = new StayAction(duration);
+        StayAction action = new StayAction(null, duration);
         Mascot mascot = new Mascot();
 
         // Act
@@ -25,7 +25,7 @@ class StayActionTest {
     void hasNext_shouldReturnFalse_afterDuration() throws InterruptedException {
         // Arrange
         int duration = 50;
-        StayAction action = new StayAction(duration);
+        StayAction action = new StayAction(null, duration);
         Mascot mascot = new Mascot();
 
         // Act

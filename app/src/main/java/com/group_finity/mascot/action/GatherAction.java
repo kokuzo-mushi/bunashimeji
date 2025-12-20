@@ -1,25 +1,24 @@
 package com.group_finity.mascot.action;
 
+import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.util.stream.Collectors;
 
 /**
- * マウスカーソルを追いかけるアクション。
+ * 他のマスコットの近くに集まるアクション。
  */
-public class ChaseAction implements Action {
+public class GatherAction implements Action {
 
     private final Animation animation;
     private final int speed;
     private final int duration;
     private int timeRemaining;
-    private final int targetDistance = 5; // 追いついたとみなす距離
+    private final int targetDistance = 50; // この距離まで近づいたら停止
 
-    public ChaseAction(XmlAnimation xmlAnimation, int speed, int duration) {
+    public GatherAction(XmlAnimation xmlAnimation, int speed, int duration) {
         this.animation = new Animation(
                 xmlAnimation.getPoses().stream()
                         .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
@@ -34,39 +33,29 @@ public class ChaseAction implements Action {
     public void execute(Mascot mascot) {
         if (!hasNext()) return;
 
+        // 最も近いマスコットを探す
+        Mascot target = Main.getInstance().getNearestMascot(mascot);
+
+        // ターゲットがいない、または既に十分近い場合は終了
+        if (target == null || Math.abs(target.getX() - mascot.getX()) < targetDistance) {
+            timeRemaining = 0;
+            return;
+        }
+
         final int FRAME_DURATION_MS = 40;
         mascot.setAnimation(animation);
         animation.tick(FRAME_DURATION_MS);
 
-        // マウス位置の取得
-        Point mousePos = MouseInfo.getPointerInfo().getLocation();
-        int distance = mousePos.x - mascot.getX();
-
-        // 向きの更新と移動
-        if (Math.abs(distance) >= targetDistance) {
-            mascot.setLookRight(distance > 0);
-
-            // 壁にぶつかっていて、かつその方向に進もうとしている場合は終了
-            if ((mascot.isHittingLeftWall() && !mascot.isLookRight()) ||
-                (mascot.isHittingRightWall() && mascot.isLookRight())) {
-                timeRemaining = 0;
-                return;
-            }
-
-            int move = (distance > 0) ? speed : -speed;
-            mascot.setX(mascot.getX() + move);
-        } else {
-            // 追いついたら終了
-            timeRemaining = 0;
-        }
+        // ターゲットに向かって移動
+        mascot.setLookRight(target.getX() > mascot.getX());
+        int move = mascot.isLookRight() ? speed : -speed;
+        mascot.setX(mascot.getX() + move);
 
         this.timeRemaining -= FRAME_DURATION_MS;
     }
 
     @Override
-    public boolean hasNext() {
-        return timeRemaining > 0;
-    }
+    public boolean hasNext() { return timeRemaining > 0; }
 
     @Override
     public void reset() {

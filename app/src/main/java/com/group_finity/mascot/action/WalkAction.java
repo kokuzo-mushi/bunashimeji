@@ -43,6 +43,14 @@ public class WalkAction implements Action {
             return;
         }
 
+        // 壁にぶつかっている、かつその壁に向かって歩いている場合はアクションを終了する
+        // これにより、次のフレームでWallAction（壁しがみつき等）へ遷移できるようになる
+        if ((mascot.isHittingLeftWall() && !mascot.isLookRight()) ||
+            (mascot.isHittingRightWall() && mascot.isLookRight())) {
+            this.timeRemaining = 0;
+            return;
+        }
+
         // テストコード(WalkActionTest)やメインループ(Main)の待機時間と合わせるのが理想です。
         // ここではテストで仮定されている40msを1フレームの時間とします。
         final int FRAME_DURATION_MS = 40;

@@ -40,7 +40,7 @@ public class FallAction implements Action {
 
         // 壁に衝突したらアクションを終了する
         // これにより、currentActionがnullになり、壁アクション（WallClimbなど）への遷移が可能になる
-        if (mascot.isHittingLeftWall() || mascot.isHittingRightWall()) {
+        if (mascot.isHittingLeftWall() || mascot.isHittingRightWall() || mascot.isHittingCeiling()) {
             finished = true;
             return;
         }
