@@ -21,6 +21,8 @@ import com.group_finity.mascot.action.StayAction;
 import com.group_finity.mascot.action.BreedAction;
 import com.group_finity.mascot.action.DigAction;
 import com.group_finity.mascot.action.GatherAction;
+import com.group_finity.mascot.action.GrabAction;
+import com.group_finity.mascot.action.ThrowAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
 import com.group_finity.mascot.config.xml.XmlActionReference;
@@ -248,6 +250,18 @@ public class ActionBuilder {
                 int chaseSpeed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 4;
                 int chaseDuration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 5000;
                 return new ChaseAction(xmlAction.getAnimation(), chaseSpeed, chaseDuration);
+            case "Grab":
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Grab action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                return new GrabAction(xmlAction.getAnimation());
+            case "Throw":
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Throw action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                return new ThrowAction(xmlAction.getAnimation());
             default:
                 System.err.println("Unknown action type: " + xmlAction.getType());
                 return null; // 不明な型はnullを返す

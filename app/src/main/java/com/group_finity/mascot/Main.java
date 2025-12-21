@@ -12,6 +12,7 @@ import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.image.ImageCache;
 import com.group_finity.mascot.view.MascotView;
 
+import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import java.awt.GraphicsEnvironment;
@@ -64,6 +65,7 @@ public class Main {
     private final List<MascotInstance> mascotInstances = new ArrayList<>();
     private Configuration config;
     private ImageCache imageCache;
+    private final List<HWND> thrownWindows = new ArrayList<>();
     private Rectangle workArea;
 
     public static void main(String[] args) {
@@ -189,6 +191,7 @@ public class Main {
                 // 現在の床情報を保存（次フレームの追従用）
                 instance.currentFloorWindow = envInfo.floorWindow;
                 instance.currentFloorRect = envInfo.floorRect;
+                mascot.setFloorWindow(envInfo.floorWindow); // マスコットにも足元のウィンドウを伝える
                 instance.currentCeilingWindow = envInfo.ceilingWindow;
                 instance.currentCeilingRect = envInfo.ceilingRect;
                 instance.currentLeftWallWindow = envInfo.leftWallWindow;
@@ -319,12 +322,16 @@ public class Main {
             MenuItem oneItem = new MenuItem("一匹にする");
             oneItem.addActionListener(e -> restoreToOne());
 
+            MenuItem restoreItem = new MenuItem("ウィンドウを戻す");
+            restoreItem.addActionListener(e -> restoreWindows());
+
             MenuItem exitItem = new MenuItem("ばいばい");
             exitItem.addActionListener(e -> System.exit(0));
 
             popup.add(createItem);
             popup.add(gatherItem);
             popup.add(oneItem);
+            popup.add(restoreItem);
             popup.addSeparator();
             popup.add(exitItem);
 
@@ -359,6 +366,33 @@ public class Main {
         for (int i = 1; i < currentInstances.size(); i++) {
             removeMascot(currentInstances.get(i).mascot);
         }
+    }
+
+    /**
+     * 投げられたウィンドウをリストに追加します。
+     */
+    public void addThrownWindow(HWND window) {
+        if (window != null) {
+            thrownWindows.add(window);
+        }
+    }
+
+    private void restoreWindows() {
+        int count = 0;
+        for (HWND hwnd : thrownWindows) {
+            if (Win32.INSTANCE.IsWindow(hwnd)) {
+                RECT rect = new RECT();
+                Win32.INSTANCE.GetWindowRect(hwnd, rect);
+                int width = rect.right - rect.left;
+                int height = rect.bottom - rect.top;
+                
+                // 画面左上付近に戻す
+                User32.INSTANCE.MoveWindow(hwnd, 100, 100, width, height, true);
+                count++;
+            }
+        }
+        thrownWindows.clear();
+        System.out.println("[Main] Restored " + count + " windows.");
     }
 
     /**
@@ -669,6 +703,17 @@ public class Main {
                         <ActionReference Name="Land" />
                     </Action>
                     <Action Name="Turn" Type="Turn" />
+                    <Action Name="Grab" Type="Grab" Duration="5000">
+                        <Animation>
+                            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="5000" />
+                        </Animation>
+                    </Action>
+                    <Action Name="Throw" Type="Throw">
+                        <Animation>
+                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="50" />
+                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
+                        </Animation>
+                    </Action>
                 </Actions>
                 """;
             Files.writeString(actionsPath, content);
@@ -742,6 +787,14 @@ public class Main {
                     <Behavior Name="Stay" Frequency="100">
                         <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="Stay" />
+                    </Behavior>
+                    <Behavior Name="Grab" Frequency="50">
+                        <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; mascot.currentAction == null</Condition>
+                        <ActionReference Name="Grab" />
+                    </Behavior>
+                    <Behavior Name="Throw" Frequency="500">
+                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <ActionReference Name="Throw" />
                     </Behavior>
                 </Behaviors>
                 """;

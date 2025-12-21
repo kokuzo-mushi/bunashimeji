@@ -7,6 +7,7 @@ import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.ptr.IntByReference;
 
 import java.awt.Rectangle;
+import java.nio.charset.Charset;
 
 /**
  * マスコットを取り巻く環境（ウィンドウや画面端）を認識するクラス。
@@ -97,7 +98,7 @@ public class Environment {
                 }
                 
                 // 特定のシステムウィンドウは無視する（これらが手前にあると遮蔽判定で床が見えなくなるため）
-                String title = new String(titleBuffer, 0, titleLength).trim();
+                String title = new String(titleBuffer, 0, titleLength, Charset.forName("MS932")).trim();
                 if (title.equals("Default IME") || title.equals("MSCTFIME UI") || title.equals("Program Manager")) {
                     return true;
                 }
@@ -149,7 +150,7 @@ public class Environment {
                             info.floorRect.right = rect.right;
                             info.floorRect.bottom = rect.bottom;
                             // デバッグログ: 床として認識したウィンドウを表示
-                            // System.out.println("[Env] Floor found: " + title);
+                            System.out.println("[Env] Floor found: " + title);
                         }
 
                         // 天井判定: ウィンドウの下端がマスコットの頭上付近、または上にある
@@ -170,7 +171,7 @@ public class Environment {
                         if (rect.top < y - searchThreshold && rect.bottom >= y) {
                             isFloorBlocked[0] = true;
                             // デバッグログ: 遮蔽物として判定されたウィンドウを表示
-                            // System.out.println("[Env] Blocked by: " + title);
+                            System.out.println("[Env] Blocked by: " + title);
                         }
                     }
                 }
@@ -227,5 +228,70 @@ public class Environment {
         }, null);
 
         return info;
+    }
+
+    /**
+     * マスコットの近くにある操作可能なウィンドウ（ターゲット）を探します。
+     *
+     * @param x マスコットのX座標
+     * @param y マスコットのY座標
+     * @param height マスコットの高さ（中心座標計算用）
+     * @param searchRadius 探索半径（ピクセル）
+     * @return 最も近いターゲットウィンドウのハンドル。見つからない場合はnull。
+     */
+    public HWND findTargetWindow(int x, int y, int height, int searchRadius) {
+        final int currentPid = Kernel32.INSTANCE.GetCurrentProcessId();
+        final HWND[] target = { null };
+        final double[] minDistanceSq = { Double.MAX_VALUE };
+        final int mascotCenterX = x;
+        final int mascotCenterY = y - height / 2;
+        final double searchRadiusSq = (double) searchRadius * searchRadius;
+
+        Win32.INSTANCE.EnumWindows(new Win32.WNDENUMPROC() {
+            @Override
+            public boolean callback(HWND hWnd, com.sun.jna.Pointer arg) {
+                if (!Win32.INSTANCE.IsWindowVisible(hWnd) || Win32.INSTANCE.IsIconic(hWnd)) {
+                    return true;
+                }
+
+                // 最大化されているウィンドウは無視
+                if (Win32.INSTANCE.IsZoomed(hWnd)) {
+                    return true;
+                }
+
+                // タイトルチェック
+                byte[] titleBuffer = new byte[1024];
+                int titleLength = Win32.INSTANCE.GetWindowTextA(hWnd, titleBuffer, titleBuffer.length);
+                if (titleLength == 0) return true;
+
+                String title = new String(titleBuffer, 0, titleLength, Charset.forName("MS932")).trim();
+                if (title.equals("Default IME") || title.equals("MSCTFIME UI") || title.equals("Program Manager") || title.equals("Task Manager")) {
+                    return true;
+                }
+
+                // 自分自身を除外
+                IntByReference pid = new IntByReference();
+                Win32.INSTANCE.GetWindowThreadProcessId(hWnd, pid);
+                if (pid.getValue() == currentPid) return true;
+
+                RECT rect = new RECT();
+                Win32.INSTANCE.GetWindowRect(hWnd, rect);
+                if (rect.right - rect.left <= 0 || rect.bottom - rect.top <= 0) return true;
+
+                // マスコット中心からウィンドウ矩形への最短距離を計算
+                int dx = Math.max(rect.left - mascotCenterX, Math.max(0, mascotCenterX - rect.right));
+                int dy = Math.max(rect.top - mascotCenterY, Math.max(0, mascotCenterY - rect.bottom));
+                double distSq = dx * dx + dy * dy;
+
+                if (distSq <= searchRadiusSq && distSq < minDistanceSq[0]) {
+                    minDistanceSq[0] = distSq;
+                    target[0] = hWnd;
+                }
+
+                return true;
+            }
+        }, null);
+
+        return target[0];
     }
 }

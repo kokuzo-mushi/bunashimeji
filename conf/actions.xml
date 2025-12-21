@@ -162,4 +162,15 @@
         <ActionReference Name="Land" />
     </Action>
     <Action Name="Turn" Type="Turn" />
+    <Action Name="Grab" Type="Grab" Duration="5000">
+        <Animation>
+            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="5000" />
+        </Animation>
+    </Action>
+    <Action Name="Throw" Type="Throw">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="50" />
+            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
+        </Animation>
+    </Action>
 </Actions>

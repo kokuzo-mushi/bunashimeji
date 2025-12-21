@@ -2,6 +2,7 @@ package com.group_finity.mascot;
 
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.animation.Animation;
+import com.sun.jna.platform.win32.WinDef.HWND;
 import java.awt.Point;
 import java.util.Collections;
 import java.util.Map;
@@ -26,6 +27,10 @@ public class Mascot {
     private boolean hittingRightWall;
     private boolean hittingCeiling;
     private boolean beingDragged;
+    
+    // ウィンドウ操作用
+    private HWND floorWindow;
+    private HWND holdingWindow;
 
     private Map<String, Action> actions = Collections.emptyMap();
 
@@ -80,10 +85,27 @@ public class Mascot {
 
     public void startDrag() {
         setBeingDragged(true);
+        setHoldingWindow(null);
     }
 
     public void endDrag() {
         setBeingDragged(false);
+    }
+
+    public HWND getFloorWindow() {
+        return floorWindow;
+    }
+
+    public void setFloorWindow(HWND floorWindow) {
+        this.floorWindow = floorWindow;
+    }
+
+    public HWND getHoldingWindow() {
+        return holdingWindow;
+    }
+
+    public void setHoldingWindow(HWND holdingWindow) {
+        this.holdingWindow = holdingWindow;
     }
 
     public int getX() {

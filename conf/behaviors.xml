@@ -63,4 +63,12 @@
         <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
         <ActionReference Name="Stay" />
     </Behavior>
+    <Behavior Name="Grab" Frequency="50">
+        <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; mascot.currentAction == null</Condition>
+        <ActionReference Name="Grab" />
+    </Behavior>
+    <Behavior Name="Throw" Frequency="500">
+        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+        <ActionReference Name="Throw" />
+    </Behavior>
 </Behaviors>

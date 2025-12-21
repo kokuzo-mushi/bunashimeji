@@ -20,9 +20,13 @@ public interface Win32 extends StdCallLibrary {
 
     boolean EnumWindows(WNDENUMPROC lpEnumFunc, Pointer arg);
 
+    boolean IsWindow(HWND hWnd);
+
     boolean IsWindowVisible(HWND hWnd);
 
     boolean IsIconic(HWND hWnd);
+
+    boolean IsZoomed(HWND hWnd);
 
     int GetWindowRect(HWND hWnd, RECT r);
 
