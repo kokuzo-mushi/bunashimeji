@@ -122,6 +122,19 @@
             <Pose Image="shime16.png" ImageAnchor="64,128" Duration="200" />
         </Animation>
     </Action>
+        <Action Name="Teeter" Type="Teeter" Duration="4000">
+        <Animation>
+            <Pose Image="shime45.png" ImageAnchor="64,128" Duration="100" />
+            <Pose Image="shime46.png" ImageAnchor="64,128" Duration="100" />
+            <Pose Image="shime45.png" ImageAnchor="64,128" Duration="100" />
+            <Pose Image="shime46.png" ImageAnchor="64,128" Duration="100" />
+        </Animation>
+    </Action>
+    <Action Name="PullUp" Type="PullUp" Duration="1000">
+        <Animation>
+            <Pose Image="shime13.png" ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
     <Action Name="CeilingCrawl" Type="CeilingCrawl" Speed="1" Duration="2000">
         <Animation>
             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />

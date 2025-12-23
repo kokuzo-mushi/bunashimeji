@@ -5,6 +5,7 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.Pointer;
 
 import java.awt.Rectangle;
 import java.nio.charset.Charset;
@@ -49,9 +50,11 @@ public class Environment {
      * @param previousCeiling 前回張り付いていた天井ウィンドウ
      * @param previousLeftWall 前回張り付いていた左壁ウィンドウ
      * @param previousRightWall 前回張り付いていた右壁ウィンドウ
+     * @param holdingWindow 現在マスコットが掴んでいるウィンドウ（除外用）
+     * @param targetWindow 現在マスコットがターゲットにしているウィンドウ（除外用）
      * @return 環境情報
      */
-    public EnvironmentInfo getEnvironmentInfo(int x, int y, int width, int height, Rectangle workArea, HWND previousFloor, HWND previousCeiling, HWND previousLeftWall, HWND previousRightWall) {
+    public EnvironmentInfo getEnvironmentInfo(int x, int y, int width, int height, Rectangle workArea, HWND previousFloor, HWND previousCeiling, HWND previousLeftWall, HWND previousRightWall, HWND holdingWindow, HWND targetWindow) {
         final EnvironmentInfo info = new EnvironmentInfo();
         // 初期値は画面の端
         info.floorY = workArea.y + workArea.height;
@@ -110,6 +113,16 @@ public class Environment {
                     return true;
                 }
 
+                // マスコットが掴んでいるウィンドウは環境（床・壁・天井）として認識しない
+                if (isSameWindow(hWnd, holdingWindow)) {
+                    return true;
+                }
+
+                // マスコットがターゲットにしているウィンドウも環境として認識しない（めり込んで掴むため）
+                if (isSameWindow(hWnd, targetWindow)) {
+                    return true;
+                }
+
                 RECT rect = new RECT();
                 Win32.INSTANCE.GetWindowRect(hWnd, rect);
 
@@ -119,10 +132,10 @@ public class Environment {
                 }
 
                 // 前回乗っていたウィンドウなら、判定を甘くする（粘着させる）
-                boolean isPrevious = previousFloor != null && hWnd.equals(previousFloor);
-                boolean isPreviousCeiling = previousCeiling != null && hWnd.equals(previousCeiling);
-                boolean isPreviousLeft = previousLeftWall != null && hWnd.equals(previousLeftWall);
-                boolean isPreviousRight = previousRightWall != null && hWnd.equals(previousRightWall);
+                boolean isPrevious = isSameWindow(hWnd, previousFloor);
+                boolean isPreviousCeiling = isSameWindow(hWnd, previousCeiling);
+                boolean isPreviousLeft = isSameWindow(hWnd, previousLeftWall);
+                boolean isPreviousRight = isSameWindow(hWnd, previousRightWall);
 
                 int searchThreshold = isPrevious ? 500 : DEFAULT_SEARCH_THRESHOLD; // 追従中は縦方向の許容範囲を大幅に広げる
                 int ceilingThreshold = isPreviousCeiling ? 500 : DEFAULT_SEARCH_THRESHOLD; // 天井の許容範囲
@@ -150,7 +163,7 @@ public class Environment {
                             info.floorRect.right = rect.right;
                             info.floorRect.bottom = rect.bottom;
                             // デバッグログ: 床として認識したウィンドウを表示
-                            System.out.println("[Env] Floor found: " + title);
+                            // System.out.println("[Env] Floor found: " + title);
                         }
 
                         // 天井判定: ウィンドウの下端がマスコットの頭上付近、または上にある
@@ -171,7 +184,7 @@ public class Environment {
                         if (rect.top < y - searchThreshold && rect.bottom >= y) {
                             isFloorBlocked[0] = true;
                             // デバッグログ: 遮蔽物として判定されたウィンドウを表示
-                            System.out.println("[Env] Blocked by: " + title);
+                            // System.out.println("[Env] Blocked by: " + title);
                         }
                     }
                 }
@@ -239,7 +252,7 @@ public class Environment {
      * @param searchRadius 探索半径（ピクセル）
      * @return 最も近いターゲットウィンドウのハンドル。見つからない場合はnull。
      */
-    public HWND findTargetWindow(int x, int y, int height, int searchRadius) {
+    public HWND findTargetWindow(int x, int y, int height, int searchRadius, HWND excludeWindow) {
         final int currentPid = Kernel32.INSTANCE.GetCurrentProcessId();
         final HWND[] target = { null };
         final double[] minDistanceSq = { Double.MAX_VALUE };
@@ -274,6 +287,11 @@ public class Environment {
                 Win32.INSTANCE.GetWindowThreadProcessId(hWnd, pid);
                 if (pid.getValue() == currentPid) return true;
 
+                // 除外対象のウィンドウ（足元のウィンドウなど）は無視
+                if (isSameWindow(hWnd, excludeWindow)) {
+                    return true;
+                }
+
                 RECT rect = new RECT();
                 Win32.INSTANCE.GetWindowRect(hWnd, rect);
                 if (rect.right - rect.left <= 0 || rect.bottom - rect.top <= 0) return true;
@@ -293,5 +311,10 @@ public class Environment {
         }, null);
 
         return target[0];
+    }
+
+    private boolean isSameWindow(HWND w1, HWND w2) {
+        if (w1 == null || w2 == null) return false;
+        return Pointer.nativeValue(w1.getPointer()) == Pointer.nativeValue(w2.getPointer());
     }
 }

@@ -11,6 +11,14 @@
         <Condition>!mascot.isGrounded &amp;&amp; !mascot.isHittingLeftWall &amp;&amp; !mascot.isHittingRightWall &amp;&amp; !mascot.isHittingCeiling &amp;&amp; mascot.currentAction == null</Condition>
         <ActionReference Name="FallSequence" />
     </Behavior>
+    <Behavior Name="Teeter" Frequency="5000">
+        <Condition>mascot.isGrounded &amp;&amp; mascot.isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
+        <ActionReference Name="Teeter" />
+    </Behavior>
+    <Behavior Name="PullUp" Frequency="200">
+        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; mascot.distToWallTop &lt; 64 &amp;&amp; mascot.currentAction == null</Condition>
+        <ActionReference Name="PullUp" />
+    </Behavior>
     <Behavior Name="WallAction" Frequency="100">
         <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; mascot.currentAction == null</Condition>
         <ActionReference Name="WallComplexSequence" />
@@ -67,7 +75,7 @@
         <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; mascot.currentAction == null</Condition>
         <ActionReference Name="Grab" />
     </Behavior>
-    <Behavior Name="Throw" Frequency="500">
+    <Behavior Name="Throw" Frequency="2">
         <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
         <ActionReference Name="Throw" />
     </Behavior>

@@ -67,7 +67,8 @@ public class StayAction implements Action {
         } else {
             // 通常時のランダム方向転換: 約8秒に1回 (200フレームに1回)
             if (random.nextInt(200) == 0) {
-                mascot.setLookRight(!mascot.isLookRight());
+                // 検証のため一時的に無効化
+                // mascot.setLookRight(!mascot.isLookRight());
             }
             // 低確率でマウス追従モードに入る: 約10秒に1回 (250フレームに1回)
             if (random.nextInt(250) == 0) {

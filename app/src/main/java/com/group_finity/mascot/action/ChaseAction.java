@@ -4,6 +4,9 @@ import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.config.xml.XmlAnimation;
+import com.group_finity.mascot.nativeaccess.Win32;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.RECT;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.stream.Collectors;
@@ -34,6 +37,12 @@ public class ChaseAction implements Action {
     public void execute(Mascot mascot) {
         if (!hasNext()) return;
 
+        // 接地していない場合はアクションを終了する（落下させるため）
+        if (!mascot.isGrounded()) {
+            this.timeRemaining = 0;
+            return;
+        }
+
         final int FRAME_DURATION_MS = 40;
         mascot.setAnimation(animation);
         animation.tick(FRAME_DURATION_MS);
@@ -54,7 +63,27 @@ public class ChaseAction implements Action {
             }
 
             int move = (distance > 0) ? speed : -speed;
-            mascot.setX(mascot.getX() + move);
+            int nextX = mascot.getX() + move;
+
+            // 床の端チェック: 次の一歩で床から落ちるなら止まる
+            if (mascot.isGrounded()) {
+                HWND floor = mascot.getFloorWindow();
+                if (floor != null && Win32.INSTANCE.IsWindow(floor)) {
+                    RECT rect = new RECT();
+                    Win32.INSTANCE.GetWindowRect(floor, rect);
+                    if (nextX <= rect.left || nextX >= rect.right) {
+                        // 端ギリギリまで移動して止まる
+                        int direction = (nextX - mascot.getX() > 0) ? 1 : -1;
+                        int edgeX = (direction > 0) ? rect.right - 1 : rect.left + 1;
+                        mascot.setX(edgeX);
+
+                        timeRemaining = 0;
+                        return;
+                    }
+                }
+            }
+
+            mascot.setX(nextX);
         } else {
             // 追いついたら終了
             timeRemaining = 0;

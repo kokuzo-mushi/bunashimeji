@@ -11,6 +11,9 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 
+import java.awt.Point;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
@@ -26,6 +29,7 @@ public class ThrowAction implements Action {
         LIFTING,
         CARRYING,
         THROWING,
+        CELEBRATING,
         FINISHED
     }
 
@@ -35,15 +39,20 @@ public class ThrowAction implements Action {
         HWND targetWindow;
         boolean initialized = false;
         Animation animation; // マスコットごとのアニメーションインスタンス
+        Animation celebrateAnimation; // 勝利ポーズ用アニメーション
 
         // 持ち上げアニメーション用
         int liftPhase = 0;
         int initialWindowX, initialWindowY, windowWidth, windowHeight;
         int grabOffsetX; // 掴んだ時のマスコットとのX座標差分
+        int liftStartY; // 持ち上げ開始時のマスコットY座標
 
         // 投擲用
         int throwVelocityX;
         int throwVelocityY;
+
+        // 勝利ポーズ用
+        int celebrateTime;
         
         ThrowState(XmlAnimation xmlAnimation) {
             if (xmlAnimation != null) {
@@ -53,6 +62,10 @@ public class ThrowAction implements Action {
                                 .collect(Collectors.toList())
                 );
             }
+            // 勝利ポーズ（座り）のアニメーションを作成
+            this.celebrateAnimation = new Animation(Collections.singletonList(
+                    new Pose("shime11.png", 2000, new Point(64, 128))
+            ));
         }
 
         void reset() {
@@ -62,8 +75,9 @@ public class ThrowAction implements Action {
             if (animation != null) animation.reset();
             liftPhase = 0;
             initialWindowX = 0; initialWindowY = 0; windowWidth = 0; windowHeight = 0;
-            grabOffsetX = 0;
+            grabOffsetX = 0; liftStartY = 0;
             throwVelocityX = 0; throwVelocityY = 0;
+            celebrateTime = 0;
         }
     }
 
@@ -71,7 +85,7 @@ public class ThrowAction implements Action {
     private final Map<Mascot, ThrowState> states = new WeakHashMap<>();
     private Mascot lastMascot; // hasNext()判定用
     
-    private static final int REACH_DISTANCE = 32; // 到達判定距離 (より近づいて掴むように調整)
+    private static final int REACH_DISTANCE = 4; // 到達判定距離 (ほぼ重なるまで近づく)
     private static final int SEARCH_RADIUS = 600; // 探索半径
     private static final int SPEED = 8; // 移動速度 (倍増)
     private static final int LIFT_DURATION = 20; // 持ち上げにかかるフレーム数
@@ -92,6 +106,7 @@ public class ThrowAction implements Action {
         // 以前の実行で終了していた場合はリセットして再開
         if (s.state == State.FINISHED) {
             s.reset();
+            mascot.setTargetWindow(null);
         }
 
         if (!s.initialized && s.state == State.APPROACHING) {
@@ -99,21 +114,26 @@ public class ThrowAction implements Action {
             s.targetWindow = Environment.getInstance().findTargetWindow(
                     mascot.getX(), mascot.getY(), 
                     100, 
-                    SEARCH_RADIUS);
+                    SEARCH_RADIUS,
+                    mascot.getFloorWindow());
             
             if (s.targetWindow == null) {
                 // System.out.println("[ThrowAction] No target found.");
                 s.state = State.FINISHED;
+                mascot.setTargetWindow(null);
                 return;
             }
-            System.out.println("[ThrowAction] Target found: " + s.targetWindow);
+            System.out.println("[ThrowAction] Target found: " + s.targetWindow + " (Mascot: " + mascot.getX() + ", " + mascot.getY() + ")");
             s.initialized = true;
+            mascot.setTargetWindow(s.targetWindow); // 壁判定から除外するためにセット
         }
 
         // ターゲットの存在確認
-        if (!Win32.INSTANCE.IsWindow(s.targetWindow) || !Win32.INSTANCE.IsWindowVisible(s.targetWindow)) {
-             System.out.println("[ThrowAction] Target lost.");
+        // 最小化(IsIconic)された場合もターゲットから外す
+        if (!Win32.INSTANCE.IsWindow(s.targetWindow) || !Win32.INSTANCE.IsWindowVisible(s.targetWindow) || Win32.INSTANCE.IsIconic(s.targetWindow)) {
+             System.out.println("[ThrowAction] Target lost: Window invalid, invisible, or minimized.");
              s.state = State.FINISHED;
+             mascot.setTargetWindow(null);
              return;
         }
 
@@ -126,7 +146,10 @@ public class ThrowAction implements Action {
             int mascotX = mascot.getX();
             int distLeft = Math.abs(mascotX - rect.left);
             int distRight = Math.abs(mascotX - rect.right);
-            int targetX = (distLeft < distRight) ? rect.left : rect.right;
+            
+            // ウィンドウの内側へ少し入り込んだ位置をターゲットとする
+            int innerOffset = 10;
+            int targetX = (distLeft < distRight) ? rect.left + innerOffset : rect.right - innerOffset;
             
             // 距離計算
             int distance = targetX - mascotX;
@@ -143,7 +166,9 @@ public class ThrowAction implements Action {
 
             // 移動または到達判定
             if (Math.abs(distance) <= REACH_DISTANCE || blockedByWall) {
-                System.out.println("[ThrowAction] Reached target! Starting lift.");
+                System.out.printf("[ThrowAction] Reached target (Dist: %d, Blocked: %b). Starting lift.%n", distance, blockedByWall);
+                System.out.printf("  [PosDebug] MascotX: %d, Window: [%d, %d], TargetX: %d, Offset: %d, DistL: %d, DistR: %d%n",
+                        mascotX, rect.left, rect.right, targetX, innerOffset, distLeft, distRight);
                 s.state = State.LIFTING;
                 s.liftPhase = 0;
                 
@@ -156,7 +181,12 @@ public class ThrowAction implements Action {
                 // 掴んだ位置のオフセットを保存 (X軸)
                 s.grabOffsetX = s.initialWindowX - mascot.getX();
                 
+                // 持ち上げ開始時のマスコットY座標を保存 (Y軸の基準固定)
+                s.liftStartY = mascot.getY();
+                System.out.printf("[ThrowAction] Lift params: LiftStartY=%d, WindowTop=%d, GrabOffset=%d%n", s.liftStartY, rect.top, s.grabOffsetX);
+                
                 mascot.setHoldingWindow(s.targetWindow);
+                mascot.setTargetWindow(null); // 掴んだ後はholdingWindowとして除外されるのでtargetWindowは解除
             } else {
                 mascot.setLookRight(movingRight);
                 int move = mascot.isLookRight() ? SPEED : -SPEED;
@@ -168,9 +198,9 @@ public class ThrowAction implements Action {
             
             // 目標座標: 
             // X: 掴んだ時の相対位置を維持
-            // Y: マスコットの頭上(Y-128)にウィンドウの下端が来るように
+            // Y: マスコットの頭上(Y-90)にウィンドウの下端が来るように
             int destX = mascot.getX() + s.grabOffsetX;
-            int destY = mascot.getY() - 128 - s.windowHeight;
+            int destY = s.liftStartY - 90 - s.windowHeight;
             
             // 補間計算 (EaseOut)
             double progress = (double) s.liftPhase / LIFT_DURATION;
@@ -180,22 +210,39 @@ public class ThrowAction implements Action {
             int currentX = (int) (s.initialWindowX + (destX - s.initialWindowX) * progress);
             int currentY = (int) (s.initialWindowY + (destY - s.initialWindowY) * progress);
             
+            System.out.printf("[ThrowAction] Lifting: Phase=%d/%d, Progress=%.2f, DestY=%d, CurY=%d (InitY=%d, StartY=%d, H=%d)%n",
+                    s.liftPhase, LIFT_DURATION, progress, destY, currentY, s.initialWindowY, s.liftStartY, s.windowHeight);
+
             User32.INSTANCE.MoveWindow(s.targetWindow, currentX, currentY, s.windowWidth, s.windowHeight, true);
             
             if (s.liftPhase >= LIFT_DURATION) {
-                System.out.println("[ThrowAction] Lift complete. Carrying to wall.");
+                boolean hitLeft = mascot.isHittingLeftWall();
+                boolean hitRight = mascot.isHittingRightWall();
+                System.out.printf("[ThrowAction] Lift complete. Wall: L=%b, R=%b. LookRight: %b%n", hitLeft, hitRight, mascot.isLookRight());
                 s.state = State.CARRYING;
+
+                // 壁際にいる場合は、反対側の壁に向かって運ぶように向きを変える
+                if (hitLeft) {
+                    mascot.setLookRight(true);
+                    System.out.println("[ThrowAction] Turn Right (was hitting left)");
+                } else if (hitRight) {
+                    mascot.setLookRight(false);
+                    System.out.println("[ThrowAction] Turn Left (was hitting right)");
+                }
             }
         } else if (s.state == State.CARRYING) {
-            // 壁に到達したら終了（投げるフェーズへ）
-            if (mascot.isHittingLeftWall() || mascot.isHittingRightWall()) {
-                System.out.println("[ThrowAction] Reached wall. Throwing!");
+            // 進行方向の壁に到達したら終了（投げるフェーズへ）
+            boolean reachedWall = (mascot.isLookRight() && mascot.isHittingRightWall()) ||
+                                  (!mascot.isLookRight() && mascot.isHittingLeftWall());
+
+            if (reachedWall) {
+                System.out.printf("[ThrowAction] Reached wall. HitR=%b, LookR=%b. Throwing!%n", mascot.isHittingRightWall(), mascot.isLookRight());
                 s.state = State.THROWING;
 
                 // 投げる方向（壁の外側）: 左壁なら左(-1)、右壁なら右(1)
                 int direction = mascot.isHittingRightWall() ? 1 : -1;
-                s.throwVelocityX = direction * 20; // 初速X
-                s.throwVelocityY = -15; // 初速Y (上へ)
+                s.throwVelocityX = direction * 25; // 初速X (より遠くへ)
+                s.throwVelocityY = -35; // 初速Y (より高く)
 
                 mascot.setHoldingWindow(null); // マスコットの手から離す
                 return;
@@ -213,7 +260,7 @@ public class ThrowAction implements Action {
 
             // ウィンドウ同期（頭上に維持）
             int currentX = mascot.getX() + s.grabOffsetX;
-            int currentY = mascot.getY() - 128 - s.windowHeight;
+            int currentY = mascot.getY() - 90 - s.windowHeight;
             User32.INSTANCE.MoveWindow(s.targetWindow, currentX, currentY, s.windowWidth, s.windowHeight, true);
         } else if (s.state == State.THROWING) {
             // ウィンドウの現在位置を取得
@@ -229,13 +276,26 @@ public class ThrowAction implements Action {
             User32.INSTANCE.MoveWindow(s.targetWindow, nextX, nextY, s.windowWidth, s.windowHeight, true);
 
             // 重力適用
-            s.throwVelocityY += 2;
+            s.throwVelocityY += 1; // 重力を弱めて滞空時間を延ばす
 
             // 画面外判定 (簡易的に十分遠くへ行ったら終了とする)
             boolean outOfBounds = (nextY > 3000) || (nextX < -3000) || (nextX > 5000);
             if (outOfBounds) {
-                System.out.println("[ThrowAction] Window thrown away.");
-                Main.getInstance().addThrownWindow(s.targetWindow);
+                System.out.printf("[ThrowAction] Window thrown away. (Pos: %d, %d)%n", nextX, nextY);
+                Main.getInstance().addThrownWindow(s.targetWindow, s.initialWindowX, s.initialWindowY, s.windowWidth, s.windowHeight);
+                mascot.setTargetWindow(null);
+                
+                // 勝利ポーズへ移行
+                s.state = State.CELEBRATING;
+                s.celebrateTime = 2000; // 2秒間
+            }
+        } else if (s.state == State.CELEBRATING) {
+            if (s.celebrateAnimation != null) {
+                mascot.setAnimation(s.celebrateAnimation);
+                s.celebrateAnimation.tick(40);
+            }
+            s.celebrateTime -= 40;
+            if (s.celebrateTime <= 0) {
                 s.state = State.FINISHED;
             }
         }

@@ -4,6 +4,9 @@ import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.config.xml.XmlAnimation;
+import com.group_finity.mascot.nativeaccess.Win32;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.RECT;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +46,12 @@ public class WalkAction implements Action {
             return;
         }
 
+        // 接地していない場合はアクションを終了する（落下させるため）
+        if (!mascot.isGrounded()) {
+            this.timeRemaining = 0;
+            return;
+        }
+
         // 壁にぶつかっている、かつその壁に向かって歩いている場合はアクションを終了する
         // これにより、次のフレームでWallAction（壁しがみつき等）へ遷移できるようになる
         if ((mascot.isHittingLeftWall() && !mascot.isLookRight()) ||
@@ -61,7 +70,26 @@ public class WalkAction implements Action {
         animation.tick(FRAME_DURATION_MS);
 
         int direction = mascot.isLookRight() ? 1 : -1;
-        mascot.setX(mascot.getX() + speed * direction);
+        int nextX = mascot.getX() + speed * direction;
+
+        // 床の端チェック: 次の一歩で床から落ちるなら止まる
+        if (mascot.isGrounded()) {
+            HWND floor = mascot.getFloorWindow();
+            if (floor != null && Win32.INSTANCE.IsWindow(floor)) {
+                RECT rect = new RECT();
+                Win32.INSTANCE.GetWindowRect(floor, rect);
+                if (nextX <= rect.left || nextX >= rect.right) {
+                    // 端ギリギリまで移動して止まる（確実にisOnEdge判定させるため）
+                    int edgeX = (direction > 0) ? rect.right - 1 : rect.left + 1;
+                    mascot.setX(edgeX);
+                    
+                    this.timeRemaining = 0;
+                    return;
+                }
+            }
+        }
+
+        mascot.setX(nextX);
 
         // 1フレーム分の時間を減算します。
         this.timeRemaining -= FRAME_DURATION_MS;

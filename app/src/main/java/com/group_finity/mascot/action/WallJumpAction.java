@@ -15,6 +15,8 @@ public class WallJumpAction implements Action {
     private final int velocityX;
     private int currentVelocityY;
     private boolean finished = false;
+    private int direction = 0;
+    private boolean initialized = false;
 
     public WallJumpAction(XmlAnimation xmlAnimation, int velocityY, int velocityX) {
         if (xmlAnimation != null) {
@@ -34,6 +36,14 @@ public class WallJumpAction implements Action {
 
     @Override
     public void execute(Mascot mascot) {
+        if (!initialized) {
+            // 初回実行時にジャンプ方向を決定（左壁なら右へ、それ以外なら左へ）
+            this.direction = mascot.isHittingLeftWall() ? 1 : -1;
+            // 飛ぶ方向に向きを変える
+            mascot.setLookRight(this.direction > 0);
+            initialized = true;
+        }
+
         if (animation != null) {
             mascot.setAnimation(animation);
             animation.tick(40);
@@ -45,16 +55,19 @@ public class WallJumpAction implements Action {
             return;
         }
 
+        // 進んでいる方向の壁にぶつかったら終了（張り付きアクションへ移行するため）
+        if ((direction > 0 && mascot.isHittingRightWall()) || 
+            (direction < 0 && mascot.isHittingLeftWall())) {
+            finished = true;
+            return;
+        }
+
         // Y軸の更新（重力適用）
         mascot.setY(mascot.getY() + currentVelocityY);
         if (currentVelocityY < 20) currentVelocityY += 2;
 
-        // X軸の更新（壁と反対方向に飛ぶ）
-        // 左壁にいるなら右へ(1)、右壁なら左へ(-1)
-        int direction = mascot.isHittingLeftWall() ? 1 : -1;
+        // X軸の更新（決定した方向へ移動）
         mascot.setX(mascot.getX() + (velocityX * direction));
-        // 飛ぶ方向に向きを変える
-        mascot.setLookRight(direction > 0);
     }
 
     @Override
@@ -64,6 +77,7 @@ public class WallJumpAction implements Action {
     public void reset() {
         this.currentVelocityY = this.initialVelocityY;
         this.finished = false;
+        this.initialized = false;
         if (animation != null) animation.reset();
     }
 }

@@ -47,6 +47,13 @@ public class GrabAction implements Action {
             return;
         }
 
+        // 接地していない場合はアクションを終了する
+        if (!mascot.isGrounded()) {
+            mascot.setHoldingWindow(null);
+            this.isHolding = false;
+            return;
+        }
+
         // アニメーション再生
         if (animation != null) {
             mascot.setAnimation(animation);
@@ -85,7 +92,8 @@ public class GrabAction implements Action {
                 timeToChangeDirection = 2000 + random.nextInt(3000);
                 // 50%の確率で向きを反転
                 if (random.nextBoolean()) {
-                    mascot.setLookRight(!mascot.isLookRight());
+                    // 検証のため一時的に無効化
+                    // mascot.setLookRight(!mascot.isLookRight());
                 }
             }
             timeToChangeDirection -= 40;
@@ -126,7 +134,13 @@ public class GrabAction implements Action {
             if (mascot.getX() != clampedX || mascot.getY() != correctedY) {
                 // X座標が補正された＝ウィンドウの端に到達したとみなして向きを反転
                 if (mascot.getX() != clampedX) {
-                    mascot.setLookRight(!mascot.isLookRight());
+                    // ウィンドウが端に到達して動けなくなった場合、アクションを終了する
+                    // これにより、Teeter（バランス）等の次のアクションへ遷移できる
+                    mascot.setHoldingWindow(null);
+                    this.isHolding = false;
+                    mascot.setX(clampedX);
+                    mascot.setY(correctedY);
+                    return;
                 }
                 mascot.setX(clampedX);
                 mascot.setY(correctedY);

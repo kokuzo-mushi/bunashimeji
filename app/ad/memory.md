@@ -1,4 +1,5 @@
 **IMPORTANT: YOU MUST FOLLOW THESE RULES AT ALL TIMES.**
+# Project Roadmap: Shimeji Neo
 
 1.  **LANGUAGE:** You MUST respond in **JAPANESE (日本語)**.
     - Even if the code is in English, the explanation MUST be in Japanese.

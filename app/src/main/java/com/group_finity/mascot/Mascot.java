@@ -27,10 +27,14 @@ public class Mascot {
     private boolean hittingRightWall;
     private boolean hittingCeiling;
     private boolean beingDragged;
+    private boolean ignoreWalls;
     
     // ウィンドウ操作用
     private HWND floorWindow;
     private HWND holdingWindow;
+    private HWND targetWindow;
+    private HWND leftWallWindow;
+    private HWND rightWallWindow;
 
     private Map<String, Action> actions = Collections.emptyMap();
 
@@ -92,6 +96,14 @@ public class Mascot {
         setBeingDragged(false);
     }
 
+    public boolean isIgnoringWalls() {
+        return ignoreWalls;
+    }
+
+    public void setIgnoreWalls(boolean ignoreWalls) {
+        this.ignoreWalls = ignoreWalls;
+    }
+
     public HWND getFloorWindow() {
         return floorWindow;
     }
@@ -106,6 +118,30 @@ public class Mascot {
 
     public void setHoldingWindow(HWND holdingWindow) {
         this.holdingWindow = holdingWindow;
+    }
+
+    public HWND getTargetWindow() {
+        return targetWindow;
+    }
+
+    public void setTargetWindow(HWND targetWindow) {
+        this.targetWindow = targetWindow;
+    }
+
+    public HWND getLeftWallWindow() {
+        return leftWallWindow;
+    }
+
+    public void setLeftWallWindow(HWND leftWallWindow) {
+        this.leftWallWindow = leftWallWindow;
+    }
+
+    public HWND getRightWallWindow() {
+        return rightWallWindow;
+    }
+
+    public void setRightWallWindow(HWND rightWallWindow) {
+        this.rightWallWindow = rightWallWindow;
     }
 
     public int getX() {

@@ -15,6 +15,7 @@ import com.group_finity.mascot.view.MascotView;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
+import com.sun.jna.platform.win32.WinUser;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.SystemTray;
@@ -55,6 +56,27 @@ public class Main {
         long bornTime;
     }
 
+    // 投げられたウィンドウの情報を保持するクラス
+    private static class ThrownWindowInfo {
+        HWND hwnd;
+        int originalX, originalY, width, height;
+        long thrownTime;
+        
+        // 復帰アニメーション用
+        boolean isRestoring = false;
+        long restoreStartTime;
+        int startX, startY;
+
+        ThrownWindowInfo(HWND hwnd, int x, int y, int w, int h) {
+            this.hwnd = hwnd;
+            this.originalX = x;
+            this.originalY = y;
+            this.width = w;
+            this.height = h;
+            this.thrownTime = System.currentTimeMillis();
+        }
+    }
+
     private static Main instance;
 
     public static Main getInstance() {
@@ -65,7 +87,7 @@ public class Main {
     private final List<MascotInstance> mascotInstances = new ArrayList<>();
     private Configuration config;
     private ImageCache imageCache;
-    private final List<HWND> thrownWindows = new ArrayList<>();
+    private final List<ThrownWindowInfo> thrownWindows = new ArrayList<>();
     private Rectangle workArea;
 
     public static void main(String[] args) {
@@ -186,7 +208,7 @@ public class Main {
 
                 Environment.EnvironmentInfo envInfo = Environment.getInstance().getEnvironmentInfo(
                         mascot.getX(), mascot.getY(), mascotWidth, mascotHeight, workArea,
-                        floorWindowForEnv, ceilingWindowForEnv, leftWallWindowForEnv, rightWallWindowForEnv);
+                        floorWindowForEnv, ceilingWindowForEnv, leftWallWindowForEnv, rightWallWindowForEnv, mascot.getHoldingWindow(), mascot.getTargetWindow());
 
                 // 現在の床情報を保存（次フレームの追従用）
                 instance.currentFloorWindow = envInfo.floorWindow;
@@ -198,6 +220,8 @@ public class Main {
                 instance.currentLeftWallRect = envInfo.leftWallRect;
                 instance.currentRightWallWindow = envInfo.rightWallWindow;
                 instance.currentRightWallRect = envInfo.rightWallRect;
+                mascot.setLeftWallWindow(envInfo.leftWallWindow);
+                mascot.setRightWallWindow(envInfo.rightWallWindow);
 
                 // 接地判定と座標補正
                 boolean wasGrounded = mascot.isGrounded();
@@ -257,8 +281,8 @@ public class Main {
                 mascot.setHittingRightWall(isHittingRightWall);
                 mascot.setHittingCeiling(isHittingCeiling);
 
-                // ドラッグ中でなければ、画面内に押し戻す（壁として機能させる）
-                if (!mascot.isBeingDragged()) {
+                // ドラッグ中や壁無視フラグが立っていなければ、画面内に押し戻す（壁として機能させる）
+                if (!mascot.isBeingDragged() && !mascot.isIgnoringWalls()) {
                     if (isHittingLeftWall) {
                         mascot.setX(envInfo.leftWallX + halfWidth);
                     }
@@ -270,16 +294,56 @@ public class Main {
                     }
                 }
 
+                // 壁の上端までの距離を計算（PullUpアクション判定用）
+                int distToWallTop = Integer.MAX_VALUE;
+                if (mascot.isHittingLeftWall() && instance.currentLeftWallRect != null) {
+                    // マスコットの頭上と壁の上端の距離
+                    distToWallTop = Math.abs(mascot.getY() - mascotHeight - instance.currentLeftWallRect.top);
+                } else if (mascot.isHittingRightWall() && instance.currentRightWallRect != null) {
+                    distToWallTop = Math.abs(mascot.getY() - mascotHeight - instance.currentRightWallRect.top);
+                }
+
+                // 床の端までの距離を計算（Teeterアクション判定用）
+                int distToFloorLeft = Integer.MAX_VALUE;
+                int distToFloorRight = Integer.MAX_VALUE;
+                boolean isOnEdge = false;
+                if (mascot.isGrounded() && instance.currentFloorRect != null) {
+                    distToFloorLeft = Math.abs(mascot.getX() - instance.currentFloorRect.left);
+                    distToFloorRight = Math.abs(mascot.getX() - instance.currentFloorRect.right);
+                    
+                    // 端付近（マスコットの半身 + 余裕）にいるか判定
+                    if (distToFloorLeft < halfWidth + 10 || distToFloorRight < halfWidth + 10) {
+                        isOnEdge = true;
+                    }
+                }
+
                 // コンテキスト変数を更新します。
                 context.getVariables().put("time", tickCount);
                 context.getVariables().put("mouse.x", mousePos.x);
                 context.getVariables().put("mouse.y", mousePos.y);
+                context.getVariables().put("mascot.distToWallTop", distToWallTop);
+                context.getVariables().put("mascot.distToFloorLeft", distToFloorLeft);
+                context.getVariables().put("mascot.distToFloorRight", distToFloorRight);
+                context.getVariables().put("mascot.isOnEdge", isOnEdge);
+
+                // デバッグ用ログ: 端にいるときの状態を確認
+                if (isOnEdge) {
+                    System.out.printf("[Debug] isOnEdge=true. isGrounded=%b, Action=%s, DistL=%d, DistR=%d%n",
+                        mascot.isGrounded(),
+                        (mascot.getCurrentAction() != null ? mascot.getCurrentAction().getClass().getSimpleName() : "null"),
+                        distToFloorLeft,
+                        distToFloorRight
+                    );
+                }
 
                 // 4. 描画処理
                 mascotView.update();
             }
 
             tickCount++;
+
+            // 自動復帰チェック
+            checkAutoRestoreWindows();
 
             // 5. 少し待機して、CPU使用率を抑えます。
             Thread.sleep(30); // 約33 FPS
@@ -371,28 +435,88 @@ public class Main {
     /**
      * 投げられたウィンドウをリストに追加します。
      */
-    public void addThrownWindow(HWND window) {
+    public void addThrownWindow(HWND window, int x, int y, int width, int height) {
         if (window != null) {
-            thrownWindows.add(window);
+            thrownWindows.add(new ThrownWindowInfo(window, x, y, width, height));
         }
     }
 
     private void restoreWindows() {
         int count = 0;
-        for (HWND hwnd : thrownWindows) {
-            if (Win32.INSTANCE.IsWindow(hwnd)) {
-                RECT rect = new RECT();
-                Win32.INSTANCE.GetWindowRect(hwnd, rect);
-                int width = rect.right - rect.left;
-                int height = rect.bottom - rect.top;
-                
-                // 画面左上付近に戻す
-                User32.INSTANCE.MoveWindow(hwnd, 100, 100, width, height, true);
+        // リストのコピーを作成してイテレーション
+        for (ThrownWindowInfo info : new ArrayList<>(thrownWindows)) {
+            if (Win32.INSTANCE.IsWindow(info.hwnd)) {
+                // 最小化されている場合は復元する
+                if (Win32.INSTANCE.IsIconic(info.hwnd)) {
+                    User32.INSTANCE.ShowWindow(info.hwnd, WinUser.SW_RESTORE);
+                }
+                // 元の位置に戻す
+                User32.INSTANCE.MoveWindow(info.hwnd, info.originalX, info.originalY, info.width, info.height, true);
                 count++;
             }
         }
         thrownWindows.clear();
         System.out.println("[Main] Restored " + count + " windows.");
+    }
+
+    private void checkAutoRestoreWindows() {
+        long now = System.currentTimeMillis();
+        long RESTORE_DELAY = 5000; // 5秒後に復帰
+        long ANIMATION_DURATION = 2000; // 2.0秒かけて戻る
+
+        List<ThrownWindowInfo> toRestore = new ArrayList<>();
+        List<ThrownWindowInfo> toRemove = new ArrayList<>();
+
+        for (ThrownWindowInfo info : thrownWindows) {
+            // ウィンドウが無効になっていたら削除リストへ
+            if (!Win32.INSTANCE.IsWindow(info.hwnd)) {
+                toRemove.add(info);
+                continue;
+            }
+
+            if (!info.isRestoring) {
+                // 待機中: 時間が来たらアニメーション開始
+                if (now - info.thrownTime >= RESTORE_DELAY) {
+                    info.isRestoring = true;
+                    info.restoreStartTime = now;
+
+                    // 現在位置を取得して開始位置とする
+                    RECT rect = new RECT();
+                    Win32.INSTANCE.GetWindowRect(info.hwnd, rect);
+                    info.startX = rect.left;
+                    info.startY = rect.top;
+
+                    // 最小化されている場合は復元する
+                    if (Win32.INSTANCE.IsIconic(info.hwnd)) {
+                        User32.INSTANCE.ShowWindow(info.hwnd, WinUser.SW_RESTORE);
+                    }
+                    System.out.println("[Main] Start restoring window animation: " + info.hwnd);
+                }
+            } else {
+                // アニメーション中
+                long elapsed = now - info.restoreStartTime;
+                double progress = (double) elapsed / ANIMATION_DURATION;
+
+                if (progress >= 1.0) {
+                    // アニメーション完了
+                    User32.INSTANCE.MoveWindow(info.hwnd, info.originalX, info.originalY, info.width, info.height, true);
+                    System.out.println("[Main] Auto-restored window complete: " + info.hwnd);
+                    toRemove.add(info);
+                } else {
+                    // イージング (EaseOutBack) で少し行き過ぎてから戻る動きに変更
+                    double c1 = 1.70158;
+                    double c3 = c1 + 1;
+                    double ease = 1 + c3 * Math.pow(progress - 1, 3) + c1 * Math.pow(progress - 1, 2);
+
+                    int currentX = (int) (info.startX + (info.originalX - info.startX) * ease);
+                    int currentY = (int) (info.startY + (info.originalY - info.startY) * ease);
+                    
+                    User32.INSTANCE.MoveWindow(info.hwnd, currentX, currentY, info.width, info.height, true);
+                }
+            }
+        }
+
+        thrownWindows.removeAll(toRemove);
     }
 
     /**
@@ -663,6 +787,19 @@ public class Main {
                             <Pose Image="shime16.png" ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
+                    <Action Name="Teeter" Type="Teeter" Duration="4000">
+                        <Animation>
+                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="100" />
+                        </Animation>
+                    </Action>
+                    <Action Name="PullUp" Type="PullUp" Duration="1000">
+                        <Animation>
+                            <Pose Image="shime13.png" ImageAnchor="64,128" Duration="1000" />
+                        </Animation>
+                    </Action>
                     <Action Name="CeilingCrawl" Type="CeilingCrawl" Speed="1" Duration="2000">
                         <Animation>
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
@@ -736,6 +873,14 @@ public class Main {
                         <Condition>!mascot.isGrounded &amp;&amp; !mascot.isHittingLeftWall &amp;&amp; !mascot.isHittingRightWall &amp;&amp; !mascot.isHittingCeiling &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="FallSequence" />
                     </Behavior>
+                    <Behavior Name="Teeter" Frequency="5000">
+                        <Condition>mascot.isGrounded &amp;&amp; mascot.isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
+                        <ActionReference Name="Teeter" />
+                    </Behavior>
+                    <Behavior Name="PullUp" Frequency="200">
+                        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; mascot.distToWallTop &lt; 64 &amp;&amp; mascot.currentAction == null</Condition>
+                        <ActionReference Name="PullUp" />
+                    </Behavior>
                     <Behavior Name="WallAction" Frequency="100">
                         <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="WallComplexSequence" />
@@ -792,7 +937,7 @@ public class Main {
                         <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="Grab" />
                     </Behavior>
-                    <Behavior Name="Throw" Frequency="500">
+                    <Behavior Name="Throw" Frequency="2">
                         <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="Throw" />
                     </Behavior>
