@@ -21,8 +21,8 @@ public class Behavior implements Trigger {
     private final String name;
     private final Action action;
     private final TriggerCondition condition;
-    private final boolean hidden;
-    private final int frequency;
+    private boolean hidden;
+    private int frequency;
 
     /**
      * Creates a new Behavior.
@@ -70,8 +70,16 @@ public class Behavior implements Trigger {
         return hidden;
     }
 
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
     public int getFrequency() {
         return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
 
     @Override

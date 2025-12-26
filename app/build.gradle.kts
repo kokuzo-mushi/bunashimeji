@@ -49,7 +49,9 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.withType<JavaExec>().configureEach {
-    jvmArgs("--enable-preview")
+    // DPI Awarenessを有効にする（Windowsでの座標ズレ対策）
+    // sun.java2d.uiScale は強制的に倍率を指定する場合に使うが、まずはOSの設定に従わせる
+    jvmArgs("--enable-preview", "--enable-native-access=ALL-UNNAMED", "-Dsun.java2d.dpiaware=true")
 }
 
 // ✅ JUnit Platform を使うよう指定（重要）
@@ -58,7 +60,7 @@ tasks.test {
     // テスト実行時のシステムプロパティでエンコーディングをUTF-8に強制
     systemProperty("file.encoding", "UTF-8")
     // ✅ Java 21のプレビュー機能をテスト時にも有効化（重要）
-    jvmArgs("--enable-preview")
+    jvmArgs("--enable-preview", "--enable-native-access=ALL-UNNAMED")
 
     testLogging {
         events("passed", "skipped", "failed")

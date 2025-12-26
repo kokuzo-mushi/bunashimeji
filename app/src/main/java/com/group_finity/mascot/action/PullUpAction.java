@@ -80,7 +80,11 @@ public class PullUpAction implements Action {
                 // 目標地点: 壁の上端(Y) と 壁の内側(X)
                 s.targetY = rect.top;
                 // 少し内側に入り込む
-                s.targetX = isLeft ? rect.left + 40 : rect.right - 40;
+                int width = rect.right - rect.left;
+                int offset = Math.min(40, width / 2);
+                
+                // isLeft(左壁ヒット)=ウィンドウ右側面にいる -> rect.right側へ着地
+                s.targetX = isLeft ? rect.right - offset : rect.left + offset;
                 
                 // マスコットの向きを壁に向ける
                 mascot.setLookRight(!isLeft);
@@ -105,11 +109,11 @@ public class PullUpAction implements Action {
         }
 
         // 軌道の調整: Y軸（上昇）を先行させ、後半でX軸（乗り込み）を行う
-        // Y: EaseOutSine
-        double easeY = Math.sin(progress * Math.PI / 2);
+        // Y: EaseInOutCubic (最初はゆっくり力を込め、中盤で加速し、最後はゆっくり着地することで重量感を出す)
+        double easeY = progress < 0.5 ? 4 * Math.pow(progress, 3) : 1 - Math.pow(-2 * progress + 2, 3) / 2;
         
-        // X: 後半から動き出す (progress^3 などを利用)
-        double easeX = Math.pow(progress, 3);
+        // X: EaseInQuad (徐々に加速して乗り込む)
+        double easeX = Math.pow(progress, 2);
 
         int currentX = (int) (s.startX + (s.targetX - s.startX) * easeX);
         int currentY = (int) (s.startY + (s.targetY - s.startY) * easeY);
@@ -119,6 +123,10 @@ public class PullUpAction implements Action {
 
         if (progress >= 1.0) {
             // 完了時に接地状態にする
+            // Main.javaの接地判定(getY() >= floorY)を確実にパスさせるため、
+            // ターゲット位置より1px深く設定する（直後のフレームでMainにより補正される）
+            mascot.setX(s.targetX);
+            mascot.setY(s.targetY + 1);
             mascot.setGrounded(true);
             // 壁判定を解除して、次のフレームで床判定されるようにする
             mascot.setHittingLeftWall(false);

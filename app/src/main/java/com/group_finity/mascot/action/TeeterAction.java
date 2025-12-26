@@ -16,12 +16,14 @@ public class TeeterAction implements Action {
     private final Animation animation;
     private final int duration;
     private int time = 0;
+    private final double fallProbability;
 
-    public TeeterAction(XmlAnimation xmlAnimation, int duration) {
+    public TeeterAction(XmlAnimation xmlAnimation, int duration, double fallProbability) {
         this.animation = new Animation(xmlAnimation.getPoses().stream()
                 .map(p -> new Pose(p.getImage(), p.getDuration(), p.getImageAnchorPoint()))
                 .collect(Collectors.toList()));
         this.duration = duration;
+        this.fallProbability = fallProbability;
     }
 
     @Override
@@ -51,8 +53,8 @@ public class TeeterAction implements Action {
 
         // アクション終了時に確率で落下させる
         if (time >= duration) {
-            // 20%の確率でバランスを崩して落ちる
-            if (Math.random() < 0.2) {
+            // バランスを崩して落ちる確率 (0.0 〜 1.0)
+            if (Math.random() < this.fallProbability) {
                 // 向いている方向（崖側）に少しずらして、床から落とす
                 int shift = mascot.isLookRight() ? 10 : -10;
                 mascot.setX(mascot.getX() + shift);

@@ -6,23 +6,33 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Current File",
+            "name": "PanamaPoC",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "com.group_finity.mascot.nativeaccess.PanamaPoC",
+            "projectName": "app",
+            "vmArgs": "--enable-preview --enable-native-access=ALL-UNNAMED"
         },
         {
             "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "com.group_finity.mascot.Main",
-            "projectName": "app"
+            "projectName": "app",
+            "vmArgs": "--enable-preview --enable-native-access=ALL-UNNAMED"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
         },
         {
             "type": "java",
             "name": "ShimejiApp",
             "request": "launch",
             "mainClass": "com.group_finity.mascot.ShimejiApp",
-            "projectName": "app"
+            "projectName": "app",
+            "vmArgs": "--enable-preview --enable-native-access=ALL-UNNAMED"
         },
         {
             "type": "java",

@@ -80,7 +80,7 @@ public class WalkAction implements Action {
                 Win32.INSTANCE.GetWindowRect(floor, rect);
                 if (nextX <= rect.left || nextX >= rect.right) {
                     // 端ギリギリまで移動して止まる（確実にisOnEdge判定させるため）
-                    int edgeX = (direction > 0) ? rect.right - 1 : rect.left + 1;
+                    int edgeX = (direction > 0) ? rect.right - 5 : rect.left + 5;
                     mascot.setX(edgeX);
                     
                     this.timeRemaining = 0;

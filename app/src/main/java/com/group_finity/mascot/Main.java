@@ -4,6 +4,7 @@ import com.group_finity.mascot.behavior.Behavior;
 import com.group_finity.mascot.behavior.Configuration;
 import com.group_finity.mascot.environment.Environment;
 import com.group_finity.mascot.nativeaccess.Win32;
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
 import com.group_finity.mascot.trigger.EventDispatcher;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 import com.group_finity.mascot.trigger.event.StateChangeEvent;
@@ -12,11 +13,17 @@ import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.image.ImageCache;
 import com.group_finity.mascot.view.MascotView;
 
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import com.sun.jna.platform.win32.WinUser;
+import java.lang.foreign.MemorySegment;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
+import java.awt.geom.AffineTransform;
 import java.awt.Rectangle;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
@@ -24,6 +31,7 @@ import java.awt.PopupMenu;
 import java.awt.MenuItem;
 import java.awt.Image;
 import java.io.IOException;
+import java.awt.Toolkit;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -32,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import java.io.File;
+import javax.swing.SwingUtilities;
 
 /**
  * アプリケーションのメインエントリーポイント。
@@ -90,6 +99,15 @@ public class Main {
     private final List<ThrownWindowInfo> thrownWindows = new ArrayList<>();
     private Rectangle workArea;
 
+    // WinUser.SPI_GETWORKAREA が解決できない場合があるため、定数を直接定義
+    private static final int SPI_GETWORKAREA = 0x0030;
+
+    // JNAのUser32でSystemParametersInfoのシグネチャ不一致が起きる場合の回避用インターフェース
+    public interface User32SPI extends com.sun.jna.win32.StdCallLibrary {
+        User32SPI INSTANCE = com.sun.jna.Native.load("user32", User32SPI.class, com.sun.jna.win32.W32APIOptions.DEFAULT_OPTIONS);
+        boolean SystemParametersInfoW(int uiAction, int uiParam, RECT pvParam, int fWinIni);
+    }
+
     public static void main(String[] args) {
         try {
             new Main().run();
@@ -101,7 +119,7 @@ public class Main {
 
     public void run() throws InterruptedException {
         instance = this;
-        System.out.println("=== Shimeji Neo Start ===");
+        System.out.println("=== Shimeji Neo Start (Deep Debug Mode) ===");
         System.out.println("[Main] Current working directory: " + System.getProperty("user.dir"));
 
         try { ensureConfigurationExists(); } catch (IOException e) { e.printStackTrace(); }
@@ -117,8 +135,41 @@ public class Main {
         }
 
         // --- 2️⃣ 環境情報の取得 ---
-        workArea = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        System.out.printf("[Main] Work area detected: %s%n", workArea);
+        // Windows API (SystemParametersInfo) を使用して正確なワークエリアを取得する
+        // これが最も確実な方法（タスクバーやドッキングされたツールバーを除外した領域が返る）
+        RECT workAreaRect = new RECT();
+        
+        // DPIスケーリングを考慮するための準備
+        GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+        AffineTransform transform = gc.getDefaultTransform();
+        double scaleX = transform.getScaleX();
+        double scaleY = transform.getScaleY();
+        Rectangle awtBounds = gc.getBounds();
+        
+        System.out.printf("[Debug] AWT Screen Bounds: %s%n", awtBounds);
+        System.out.printf("[Debug] AWT Scale Factor: X=%.2f, Y=%.2f%n", scaleX, scaleY);
+        System.out.printf("[Debug] Java Runtime Version: %s%n", System.getProperty("java.version"));
+
+        if (User32SPI.INSTANCE.SystemParametersInfoW(SPI_GETWORKAREA, 0, workAreaRect, 0)) {
+             int nativeWidth = workAreaRect.right - workAreaRect.left;
+             int nativeHeight = workAreaRect.bottom - workAreaRect.top;
+
+             // JNAが物理ピクセルを返している場合（AWTの論理サイズより大きい場合）、論理ピクセルに変換する
+             if (nativeWidth > awtBounds.width + 10) { // 誤差許容
+                 System.out.printf("[Main] DPI Scaling detected (Native: %dx%d, AWT: %dx%d). Applying scale factor (%.2f, %.2f).%n", 
+                     nativeWidth, nativeHeight, awtBounds.width, awtBounds.height, scaleX, scaleY);
+                 // ★ここが怪しいポイント：scaleXが1.0なのにnativeWidthが大きい場合、JavaがDPIUnawareになっている可能性がある
+                 workArea = new Rectangle((int)(workAreaRect.left / scaleX), (int)(workAreaRect.top / scaleY), (int)(nativeWidth / scaleX), (int)(nativeHeight / scaleY));
+             } else {
+                 workArea = new Rectangle(workAreaRect.left, workAreaRect.top, nativeWidth, nativeHeight);
+             }
+             System.out.printf("[Main] Work area loaded via SPI_GETWORKAREA: %s%n", workArea);
+        } else {
+            // 取得失敗時のフォールバック（従来のJava API）
+            System.err.println("[Main] SPI_GETWORKAREA failed. Falling back to Java API.");
+            workArea = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+            System.out.printf("[Main] Work area loaded via Java API: %s%n", workArea);
+        }
 
         // 画像キャッシュの初期化
         imageCache = new ImageCache(Path.of("img"));
@@ -129,6 +180,9 @@ public class Main {
         // --- 3️⃣ マスコットの生成 ---
         // 最初の一体を生成
         createMascot();
+
+        // 開発用: 起動時に設定画面を自動で開く
+        openSettings();
 
         // --- 4️⃣ メインループ ---
         System.out.println("[Main] Starting main loop... (Press Ctrl+C to exit)");
@@ -188,12 +242,6 @@ public class Main {
                     rightWallMove = applyWindowMove(mascot, instance.currentRightWallWindow, instance.currentRightWallRect, movedWindow);
                 }
 
-                // 接地していない、かつアクション中でない場合、重力を適用する（環境認識の前に移動）
-                // これにより、重力適用後の位置で接地判定が行われ、めり込みが即座に補正される
-                if (!mascot.isGrounded() && mascot.getCurrentAction() == null && !mascot.isHittingCeiling() && !mascot.isBeingDragged()) {
-                    mascot.setY(mascot.getY() + GRAVITY);
-                }
-
                 // --- 3. 物理演算と座標補正 ---
                 // マスコットのサイズを取得
                 int mascotWidth = mascotView.getMascotWidth();
@@ -210,6 +258,17 @@ public class Main {
                         mascot.getX(), mascot.getY(), mascotWidth, mascotHeight, workArea,
                         floorWindowForEnv, ceilingWindowForEnv, leftWallWindowForEnv, rightWallWindowForEnv, mascot.getHoldingWindow(), mascot.getTargetWindow());
 
+                // ★★★ 修正: Environmentが返す床のY座標を、workAreaの底でクリップする ★★★
+                // これにより、ウィンドウが見つからない場合にfloorYが意図せず大きな値になり、
+                // タスクバーを貫通して落下し続ける問題を防止する。
+                int effectiveFloorY = Math.min(envInfo.floorY, workArea.y + workArea.height);
+
+                // ★デバッグ: マスコットが画面下部にいるときの座標情報を出力
+                if (mascot.getY() > workArea.height - 200 && tickCount % 60 == 0) {
+                    System.out.printf("[Debug] MascotY=%d, FloorY=%d, WorkAreaH=%d, Grounded=%b%n", 
+                        mascot.getY(), effectiveFloorY, workArea.height, mascot.isGrounded());
+                }
+
                 // 現在の床情報を保存（次フレームの追従用）
                 instance.currentFloorWindow = envInfo.floorWindow;
                 instance.currentFloorRect = envInfo.floorRect;
@@ -225,14 +284,14 @@ public class Main {
 
                 // 接地判定と座標補正
                 boolean wasGrounded = mascot.isGrounded();
-                boolean isNowGrounded = mascot.getY() >= envInfo.floorY;
+                boolean isNowGrounded = mascot.getY() >= effectiveFloorY;
 
                 // ウィンドウが下に動いた場合、追従の遅れで一時的に浮いてしまうのを防ぐため、
                 // 前回と同じ床に乗っていて、かつジャンプ中（VelocityY < 0）でなければ、
                 // 移動量に応じた許容範囲内なら接地しているとみなす（吸着処理）
                 if (!isNowGrounded && wasGrounded && envInfo.floorWindow != null && envInfo.floorWindow.equals(instance.currentFloorWindow)) {
                     int tolerance = (floorMove.y > 0) ? floorMove.y + 10 : 5; // ウィンドウが動いた分 + α を許容
-                    if (mascot.getY() >= envInfo.floorY - tolerance && mascot.getVelocityY() >= 0) {
+                    if (mascot.getY() >= effectiveFloorY - tolerance && mascot.getVelocityY() >= 0) {
                         isNowGrounded = true;
                     }
                 }
@@ -240,7 +299,13 @@ public class Main {
                 mascot.setGrounded(isNowGrounded);
 
                 if (isNowGrounded) {
-                    mascot.setY(envInfo.floorY);
+                    mascot.setY(effectiveFloorY);
+                }
+
+                // 接地していない、かつアクション中でない場合、重力を適用する
+                // 環境認識の後に移動することで、移動直後のフレームで不当に落下して接地判定が外れるのを防ぐ
+                if (!mascot.isGrounded() && mascot.getCurrentAction() == null && !mascot.isHittingCeiling() && !mascot.isBeingDragged()) {
+                    mascot.setY(mascot.getY() + GRAVITY);
                 }
 
                 // 接地状態が変化した場合、イベントを発行する
@@ -296,11 +361,14 @@ public class Main {
 
                 // 壁の上端までの距離を計算（PullUpアクション判定用）
                 int distToWallTop = Integer.MAX_VALUE;
+                int signedDistToWallTop = Integer.MAX_VALUE;
                 if (mascot.isHittingLeftWall() && instance.currentLeftWallRect != null) {
                     // マスコットの頭上と壁の上端の距離
-                    distToWallTop = Math.abs(mascot.getY() - mascotHeight - instance.currentLeftWallRect.top);
+                    signedDistToWallTop = mascot.getY() - mascotHeight - instance.currentLeftWallRect.top;
+                    distToWallTop = Math.abs(signedDistToWallTop);
                 } else if (mascot.isHittingRightWall() && instance.currentRightWallRect != null) {
-                    distToWallTop = Math.abs(mascot.getY() - mascotHeight - instance.currentRightWallRect.top);
+                    signedDistToWallTop = mascot.getY() - mascotHeight - instance.currentRightWallRect.top;
+                    distToWallTop = Math.abs(signedDistToWallTop);
                 }
 
                 // 床の端までの距離を計算（Teeterアクション判定用）
@@ -311,8 +379,8 @@ public class Main {
                     distToFloorLeft = Math.abs(mascot.getX() - instance.currentFloorRect.left);
                     distToFloorRight = Math.abs(mascot.getX() - instance.currentFloorRect.right);
                     
-                    // 端付近（マスコットの半身 + 余裕）にいるか判定
-                    if (distToFloorLeft < halfWidth + 10 || distToFloorRight < halfWidth + 10) {
+                    // 中心が端から20px以内まで近づいた場合のみ「端」とみなす（手前での発動防止）
+                    if (distToFloorLeft < 20 || distToFloorRight < 20) {
                         isOnEdge = true;
                     }
                 }
@@ -321,10 +389,11 @@ public class Main {
                 context.getVariables().put("time", tickCount);
                 context.getVariables().put("mouse.x", mousePos.x);
                 context.getVariables().put("mouse.y", mousePos.y);
-                context.getVariables().put("mascot.distToWallTop", distToWallTop);
+                context.getVariables().put("distToWallTop", distToWallTop);
+                context.getVariables().put("signedDistToWallTop", signedDistToWallTop);
                 context.getVariables().put("mascot.distToFloorLeft", distToFloorLeft);
                 context.getVariables().put("mascot.distToFloorRight", distToFloorRight);
-                context.getVariables().put("mascot.isOnEdge", isOnEdge);
+                context.getVariables().put("isOnEdge", isOnEdge);
 
                 // デバッグ用ログ: 端にいるときの状態を確認
                 if (isOnEdge) {
@@ -380,6 +449,9 @@ public class Main {
             MenuItem createItem = new MenuItem("増やす");
             createItem.addActionListener(e -> createMascot());
             
+            MenuItem settingsItem = new MenuItem("設定");
+            settingsItem.addActionListener(e -> openSettings());
+            
             MenuItem gatherItem = new MenuItem("あつまれ！");
             gatherItem.addActionListener(e -> gatherAllMascots());
 
@@ -393,6 +465,7 @@ public class Main {
             exitItem.addActionListener(e -> System.exit(0));
 
             popup.add(createItem);
+            popup.add(settingsItem);
             popup.add(gatherItem);
             popup.add(oneItem);
             popup.add(restoreItem);
@@ -409,6 +482,13 @@ public class Main {
             e.printStackTrace();
             System.err.println("[Main] Failed to setup system tray.");
         }
+    }
+
+    private void openSettings() {
+        if (config == null || config.getBehaviors() == null) return;
+        SwingUtilities.invokeLater(() -> {
+            new SettingsWindow(config.getBehaviors()).setVisible(true);
+        });
     }
 
     private void gatherAllMascots() {
@@ -603,6 +683,15 @@ public class Main {
 
         mascotInstances.add(instance);
         System.out.println("[Main] Created a new mascot instance. Total: " + mascotInstances.size());
+
+        // // --- Project Panama Demo ---
+        // // 最初の1体だけ、実験的に半透明にする (NativeWindowUtilを使用)
+        // // if (mascotInstances.size() == 1 && mascotView instanceof java.awt.Window) {
+        // //     // ウィンドウが表示され、ネイティブハンドルが確定した後に実行
+        // //     SwingUtilities.invokeLater(() -> {
+        // //         applyTransparencyDemo((java.awt.Window) mascotView);
+        // //     });
+        // // }
     }
 
     /**
@@ -661,8 +750,12 @@ public class Main {
         }
 
         Path actionsPath = confDir.resolve("actions.xml");
-        if (!Files.exists(actionsPath)) {
-            String content = """
+        // ファイルが既に存在する場合は上書きしない（ユーザー設定を保持するため）
+        if (Files.exists(actionsPath)) {
+            System.out.println("[Main] actions.xml exists. Skipping overwrite.");
+        } else {
+        // 開発中は常に最新の設定で上書きする
+        String actionsContent = """
                 <Actions>
                     <Action Name="Stay" Type="Stay" Duration="1000">
                         <Animation>
@@ -787,17 +880,18 @@ public class Main {
                             <Pose Image="shime16.png" ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
-                    <Action Name="Teeter" Type="Teeter" Duration="4000">
+                    <Action Name="Teeter" Type="Teeter" Duration="2000" FallProbability="0.2">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="100" />
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="150" />
+                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="150" />
+                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="150" />
+                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="150" />
                         </Animation>
                     </Action>
-                    <Action Name="PullUp" Type="PullUp" Duration="1000">
+                    <Action Name="PullUp" Type="PullUp" Duration="2000">
                         <Animation>
-                            <Pose Image="shime13.png" ImageAnchor="64,128" Duration="1000" />
+                            <Pose Image="shime15.png" ImageAnchor="64,128" Duration="500" />
+                            <Pose Image="shime13.png" ImageAnchor="64,128" Duration="1500" />
                         </Animation>
                     </Action>
                     <Action Name="CeilingCrawl" Type="CeilingCrawl" Speed="1" Duration="2000">
@@ -827,8 +921,6 @@ public class Main {
                     </Action>
                     <Action Name="WallRandomMove" Type="RandomChoice">
                         <ActionReference Name="Climb" />
-                        <ActionReference Name="SlideDown" />
-                        <ActionReference Name="WallJump" />
                     </Action>
                     <Action Name="WallComplexSequence" Type="Sequence">
                         <ActionReference Name="WallCling" />
@@ -853,13 +945,17 @@ public class Main {
                     </Action>
                 </Actions>
                 """;
-            Files.writeString(actionsPath, content);
-            System.out.println("[Main] Created default actions.xml");
+        Files.writeString(actionsPath, actionsContent);
+        System.out.println("[Main] Updated actions.xml");
         }
 
         Path behaviorsPath = confDir.resolve("behaviors.xml");
-        if (!Files.exists(behaviorsPath)) {
-            String content = """
+        // ファイルが既に存在する場合は上書きしない
+        if (Files.exists(behaviorsPath)) {
+            System.out.println("[Main] behaviors.xml exists. Skipping overwrite.");
+        } else {
+        // 開発中は常に最新の設定で上書きする
+        String behaviorsContent = """
                 <Behaviors>
                     <Behavior Name="Dragged" Frequency="100">
                         <Condition>mascot.isBeingDragged</Condition>
@@ -874,11 +970,11 @@ public class Main {
                         <ActionReference Name="FallSequence" />
                     </Behavior>
                     <Behavior Name="Teeter" Frequency="5000">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded &amp;&amp; isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="Teeter" />
                     </Behavior>
                     <Behavior Name="PullUp" Frequency="200">
-                        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; mascot.distToWallTop &lt; 64 &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="PullUp" />
                     </Behavior>
                     <Behavior Name="WallAction" Frequency="100">
@@ -934,7 +1030,7 @@ public class Main {
                         <ActionReference Name="Stay" />
                     </Behavior>
                     <Behavior Name="Grab" Frequency="50">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; !isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
                         <ActionReference Name="Grab" />
                     </Behavior>
                     <Behavior Name="Throw" Frequency="2">
@@ -943,8 +1039,40 @@ public class Main {
                     </Behavior>
                 </Behaviors>
                 """;
-            Files.writeString(behaviorsPath, content);
-            System.out.println("[Main] Created default behaviors.xml");
+        Files.writeString(behaviorsPath, behaviorsContent);
+        System.out.println("[Main] Updated behaviors.xml");
+        }
+    }
+
+    /**
+     * Project Panama を使用してウィンドウを半透明にするデモメソッド。
+     * NativeWindowUtil を使用してネイティブAPIを直接呼び出します。
+     */
+    private void applyTransparencyDemo(java.awt.Window window) {
+        try {
+            // JNAを使用してウィンドウハンドルを取得 (Panamaにはまだ標準的な方法がないため)
+            Pointer hwndPointer = Native.getComponentPointer(window);
+            long hwndValue = Pointer.nativeValue(hwndPointer);
+            
+            // PanamaのMemorySegmentに変換
+            MemorySegment hwndSegment = MemorySegment.ofAddress(hwndValue);
+
+            System.out.println("[Main] Applying transparency via Project Panama...");
+
+            // 1. 現在の拡張スタイルを取得
+            long oldStyle = NativeWindowUtil.getWindowLongPtr(hwndSegment, NativeWindowUtil.GWL_EXSTYLE);
+
+            // 2. WS_EX_LAYERED を追加
+            long newStyle = oldStyle | NativeWindowUtil.WS_EX_LAYERED;
+            NativeWindowUtil.setWindowLongPtr(hwndSegment, NativeWindowUtil.GWL_EXSTYLE, newStyle);
+
+            // 3. アルファ値を設定 (128 = 約50%の透明度)
+            NativeWindowUtil.setLayeredWindowAttributes(hwndSegment, 0, (byte) 128, NativeWindowUtil.LWA_ALPHA);
+
+            System.out.println("[Main] Transparency applied (Alpha=128).");
+        } catch (Throwable e) {
+            System.err.println("[Main] Failed to apply transparency demo: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

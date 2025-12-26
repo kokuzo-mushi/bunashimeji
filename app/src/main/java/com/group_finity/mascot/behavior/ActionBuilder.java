@@ -23,6 +23,8 @@ import com.group_finity.mascot.action.DigAction;
 import com.group_finity.mascot.action.GatherAction;
 import com.group_finity.mascot.action.GrabAction;
 import com.group_finity.mascot.action.ThrowAction;
+import com.group_finity.mascot.action.TeeterAction;
+import com.group_finity.mascot.action.PullUpAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
 import com.group_finity.mascot.config.xml.XmlActionReference;
@@ -262,6 +264,23 @@ public class ActionBuilder {
                     return null;
                 }
                 return new ThrowAction(xmlAction.getAnimation());
+            case "Teeter": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("Teeter action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 4000;
+                double fallProbability = (xmlAction.getFallProbability() != null) ? xmlAction.getFallProbability() : 0.2;
+                return new TeeterAction(xmlAction.getAnimation(), duration, fallProbability);
+            }
+            case "PullUp": {
+                if (xmlAction.getAnimation() == null) {
+                    System.err.println("PullUp action requires <Animation> tag: " + xmlAction.getName());
+                    return null;
+                }
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 1000;
+                return new PullUpAction(xmlAction.getAnimation(), duration);
+            }
             default:
                 System.err.println("Unknown action type: " + xmlAction.getType());
                 return null; // 不明な型はnullを返す

@@ -1,6 +1,6 @@
 # Shimeji Neo — 全体アーキテクチャ
 
-最終更新: 2025-12-08 (Asia/Tokyo)
+最終更新: 2025-12-26 (Asia/Tokyo)
 
 この文書は、Shimeji Neo プロジェクトの全体アーキテクチャを定義します。
 
@@ -24,7 +24,38 @@
      - アニメーション再生、移動ロジック、状態変更を含む。
    - **Behavior**: `Trigger` と `Action` を結びつけるルール。
 
-## 2. データフロー
+## 2. 近代化戦略 (Modernization Strategy)
+
+技術監査に基づき、以下の技術スタックへの移行を推進する。
+
+1) **GUIレイヤ (View)**:
+   - **Current**: Swing / AWT (Java 2D)
+   - **Target**: **JetBrains Compose Multiplatform** (Skia)
+   - **目的**: 高DPI対応、宣言的UIによる状態管理の簡素化、レンダリングパフォーマンスの向上。
+
+2) **ネイティブ連携 (Native Interface)**:
+   - **Current**: JNA (Java Native Access)
+   - **Target**: **Project Panama (Foreign Function & Memory API)**
+   - **目的**: 型安全性・メモリ安全性の確保、JIT最適化による呼び出しオーバーヘッドの削減。
+
+3) **並行処理 (Concurrency)**:
+   - **Current**: Platform Threads
+   - **Target**: **Virtual Threads (Project Loom)**
+   - **目的**: マスコット個体数増加時のリソース消費抑制とスループット向上。
+
+## 4. セキュリティ設計 (Security Architecture)
+
+外部リソース（マスコットデータ、設定ファイル）を取り扱う際のセキュリティ基準を定義する。
+
+1) **XML処理 (XXE対策)**:
+   - 全てのXMLパーサー (`DocumentBuilder`, `SAXParser`) において、DTD宣言と外部エンティティ参照を明示的に無効化する。
+   - これにより、悪意あるXMLによるローカルファイル漏洩やDoS攻撃を防止する。
+
+2) **アーカイブ展開 (Zip Slip対策)**:
+   - マスコットデータのZIP展開時、エントリのパスを検証し、展開先ディレクトリ外への書き込み（パストラバーサル）をブロックする。
+   - 実装詳細は `SECURITY_IMPLEMENTATION_GUIDE.md` を参照のこと。
+
+## 3. データフロー
 
 ```mermaid
 graph TD

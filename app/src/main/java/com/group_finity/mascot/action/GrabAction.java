@@ -54,6 +54,18 @@ public class GrabAction implements Action {
             return;
         }
 
+        // 床の端にいる場合はアクションを終了する（Teeter等のため）
+        if (mascot.getFloorWindow() != null) {
+            RECT rect = new RECT();
+            Win32.INSTANCE.GetWindowRect(mascot.getFloorWindow(), rect);
+            // Main.javaのisOnEdge判定(40px)と合わせる
+            if (Math.abs(mascot.getX() - rect.left) < 40 || Math.abs(mascot.getX() - rect.right) < 40) {
+                mascot.setHoldingWindow(null);
+                this.isHolding = false;
+                return;
+            }
+        }
+
         // アニメーション再生
         if (animation != null) {
             mascot.setAnimation(animation);
@@ -121,7 +133,7 @@ public class GrabAction implements Action {
             Win32.INSTANCE.GetWindowRect(holding, actualRect);
 
             // マスコットのX座標をウィンドウの範囲内（マージン考慮）にクランプする
-            int margin = 10; // 端から10px内側まで
+            int margin = 2; // 端から2px内側まで（WalkActionの停止位置 5px より小さくする）
             int windowWidth = actualRect.right - actualRect.left;
             int minX = actualRect.left + Math.min(margin, windowWidth / 2);
             int maxX = actualRect.right - Math.min(margin, windowWidth / 2);

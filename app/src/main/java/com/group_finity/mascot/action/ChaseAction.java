@@ -74,7 +74,7 @@ public class ChaseAction implements Action {
                     if (nextX <= rect.left || nextX >= rect.right) {
                         // 端ギリギリまで移動して止まる
                         int direction = (nextX - mascot.getX() > 0) ? 1 : -1;
-                        int edgeX = (direction > 0) ? rect.right - 1 : rect.left + 1;
+                        int edgeX = (direction > 0) ? rect.right - 5 : rect.left + 5;
                         mascot.setX(edgeX);
 
                         timeRemaining = 0;
