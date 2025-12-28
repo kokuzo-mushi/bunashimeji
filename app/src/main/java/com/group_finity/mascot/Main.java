@@ -11,7 +11,9 @@ import com.group_finity.mascot.trigger.event.StateChangeEvent;
 import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.image.ImageCache;
-import com.group_finity.mascot.view.MascotView;
+import com.group_finity.mascot.view.MascotWindow;
+import com.group_finity.mascot.script.ScriptEngineManager;
+import org.graalvm.polyglot.Context;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -50,7 +52,7 @@ public class Main {
     // マスコット1体分の管理情報をまとめるクラス
     private static class MascotInstance {
         Mascot mascot;
-        MascotView view;
+        MascotWindow view;
         EventDispatcher dispatcher;
         EvaluationContext context;
         HWND currentFloorWindow;
@@ -97,6 +99,10 @@ public class Main {
     private ImageCache imageCache;
     private final List<ThrownWindowInfo> thrownWindows = new ArrayList<>();
     private Rectangle workArea;
+    private String currentSkin = "Default";
+    private volatile int gravity = 1;
+    private volatile double timeScale = 1.0;
+    private volatile HWND limitWindow = null;
 
     // WinUser.SPI_GETWORKAREA が解決できない場合があるため、定数を直接定義
     private static final int SPI_GETWORKAREA = 0x0030;
@@ -114,6 +120,37 @@ public class Main {
             e.printStackTrace();
             System.err.println("An unexpected error occurred. Exiting.");
         }
+    }
+
+    public int getGravity() { return gravity; }
+    public void setGravity(int gravity) { this.gravity = gravity; }
+
+    public double getTimeScale() { return timeScale; }
+    public void setTimeScale(double timeScale) { this.timeScale = timeScale; }
+
+    public void setLimitWindow(HWND hwnd) {
+        this.limitWindow = hwnd;
+        if (hwnd == null) {
+            System.out.println("[Main] Limit window cleared.");
+        } else {
+            char[] buffer = new char[512];
+            User32.INSTANCE.GetWindowText(hwnd, buffer, 512);
+            System.out.println("[Main] Limit window set to: " + Native.toString(buffer));
+        }
+    }
+
+    public void setLimitToActiveWindowDelayed(int delayMs) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(delayMs);
+                HWND foreground = User32.INSTANCE.GetForegroundWindow();
+                if (foreground != null) {
+                    setLimitWindow(foreground);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void run() throws InterruptedException {
@@ -154,12 +191,18 @@ public class Main {
         // --- 4️⃣ メインループ ---
         System.out.println("[Main] Starting main loop... (Press Ctrl+C to exit)");
         long tickCount = 0;
-
+        
         while (!Thread.currentThread().isInterrupted()) {
-            final int GRAVITY = 3; // 1フレームあたりの落下量
+            long startTime = System.nanoTime();
+            int currentGravity = this.gravity;
+            double currentScale = this.timeScale;
+            long optimalTime = (long) (1000000000 / (60.0 * currentScale));
 
             // マウス座標の更新
             java.awt.Point mousePos = java.awt.MouseInfo.getPointerInfo().getLocation();
+            Map<String, Integer> mouseMap = new HashMap<>();
+            mouseMap.put("x", mousePos.x);
+            mouseMap.put("y", mousePos.y);
 
             // リストのコピーを作成してイテレーション（ループ中の追加削除に備える）
             List<MascotInstance> currentInstances = new ArrayList<>(mascotInstances);
@@ -171,7 +214,7 @@ public class Main {
                 Mascot mascot = instance.mascot;
                 EventDispatcher dispatcher = instance.dispatcher;
                 EvaluationContext context = instance.context;
-                MascotView mascotView = instance.view;
+                MascotWindow mascotView = instance.view;
 
                 // 1. イベントをディスパッチして、条件に合うビヘイビアを探します。
                 dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.SYSTEM_TICK, tickCount, this));
@@ -214,21 +257,87 @@ public class Main {
                 int mascotWidth = mascotView.getMascotWidth();
                 int mascotHeight = mascotView.getMascotHeight();
 
+                // ★修正: MascotViewから現在の画像の正確なアンカーポイントを取得する
+                java.awt.Point anchor = mascotView.getAnchor();
+
+                // デバッグ: アンカー情報の確認
+                if (tickCount % 300 == 0) {
+                    System.out.printf("[Main] Mascot Anchor: (%d, %d) Size: %dx%d%n", anchor.x, anchor.y, mascotWidth, mascotHeight);
+                }
+
+                double scale = 1.0; // デフォルトスケール
+                boolean targetWindowMinimized = false;
                 // --- ワークエリアの動的更新 (DPI & マルチモニタ対応) ---
                 // マスコットがいるモニタの正確なワークエリアを取得する
                 if (mascotView instanceof java.awt.Window) {
+                    java.awt.Window window = (java.awt.Window) mascotView;
                     try {
-                        Pointer hwndPointer = Native.getComponentPointer((java.awt.Window) mascotView);
+                        Pointer hwndPointer = Native.getComponentPointer(window);
                         MemorySegment hwndSegment = MemorySegment.ofAddress(Pointer.nativeValue(hwndPointer));
                         
-                        Rectangle currentMonitorWorkArea = NativeWindowUtil.getWorkAreaForWindow(hwndSegment);
-                        if (currentMonitorWorkArea != null) {
-                            // ワークエリアが変化した場合のみログ出力（スパム防止）
-                            if (!currentMonitorWorkArea.equals(workArea)) {
-                                System.out.printf("[Main] WorkArea updated: %s (Mascot: %s)%n", currentMonitorWorkArea, mascot);
-                                workArea = currentMonitorWorkArea;
+                        // 1. 物理ワークエリアとDPIを取得
+                        Rectangle physicalWorkArea = NativeWindowUtil.getPhysicalWorkArea(hwndSegment);
+                        int dpi = NativeWindowUtil.getDpiForWindow(hwndSegment);
+                        scale = (dpi == 0) ? 1.0 : dpi / 96.0; // 0除算ガード
+
+                        Rectangle logicalWorkArea = null;
+
+                        // ★ウィンドウ限定モードの判定
+                        if (limitWindow != null) {
+                            if (Win32.INSTANCE.IsWindow(limitWindow)) {
+                                if (Win32.INSTANCE.IsIconic(limitWindow)) {
+                                    targetWindowMinimized = true;
+                                } else {
+                                    RECT rect = new RECT();
+                                    Win32.INSTANCE.GetWindowRect(limitWindow, rect);
+                                    // 物理座標 -> 論理座標
+                                    int lx = (int) (rect.left / scale);
+                                    int ly = (int) (rect.top / scale);
+                                    int lw = (int) ((rect.right - rect.left) / scale);
+                                    int lh = (int) ((rect.bottom - rect.top) / scale);
+                                    logicalWorkArea = new Rectangle(lx, ly, lw, lh);
+                                }
+                            } else {
+                                limitWindow = null; // 無効なウィンドウなら解除
                             }
                         }
+
+                        // 限定モードでない、または解除された場合はモニタのワークエリアを使用
+                        // ただし、限定モードで最小化されている場合はここに入らないようにする（デスクトップ全体に解放しないため）
+                        if (logicalWorkArea == null && physicalWorkArea != null && (limitWindow == null || !targetWindowMinimized)) {
+                            // 2. 論理ワークエリアに変換 (物理 / スケール)
+                            int logicalLeft = (int) (physicalWorkArea.x / scale);
+                            int logicalTop = (int) (physicalWorkArea.y / scale);
+                            int logicalRight = (int) ((physicalWorkArea.x + physicalWorkArea.width) / scale);
+                            int logicalBottom = (int) ((physicalWorkArea.y + physicalWorkArea.height) / scale);
+                            logicalWorkArea = new Rectangle(logicalLeft, logicalTop, logicalRight - logicalLeft, logicalBottom - logicalTop);
+                        }
+
+                        // ワークエリアが変化した場合のみ更新
+                        if (logicalWorkArea != null && !logicalWorkArea.equals(workArea)) {
+                            System.out.printf("[Main] WorkArea updated (Logical): %s (Scale: %.2f)%n", logicalWorkArea, scale);
+                            workArea = logicalWorkArea;
+                        }
+
+                        // 3. 物理座標によるウィンドウ配置 (AWTの自動スケーリング回避)
+                        // マスコットの論理座標(Anchor位置)から、ウィンドウの左上座標を算出する
+                        // 以前は (Width/2, Height) と仮定していたが、実際のAnchorを使用することでズレを防ぐ
+                        int logicalX = mascot.getX() - anchor.x;
+                        int logicalY = mascot.getY() - anchor.y;
+                        
+                        int physicalX = (int) (logicalX * scale);
+                        int physicalY = (int) (logicalY * scale);
+                        int physicalWidth = (int) (mascotWidth * scale);
+                        int physicalHeight = (int) (mascotHeight * scale);
+
+                        try {
+                            NativeWindowUtil.setWindowPosPhysical(hwndSegment, physicalX, physicalY, physicalWidth, physicalHeight);
+                        } catch (Throwable t) {
+                            // ネイティブ呼び出し失敗時のフォールバック: AWTで配置（DPIズレのリスクはあるが表示はされる）
+                            // System.err.println("[Main] Native setWindowPos failed, falling back to AWT: " + t.getMessage());
+                            window.setBounds(logicalX, logicalY, mascotWidth, mascotHeight);
+                        }
+
                     } catch (Exception e) {
                         // 取得失敗時は前回の値を維持
                     }
@@ -244,6 +353,34 @@ public class Main {
                 Environment.EnvironmentInfo envInfo = Environment.getInstance().getEnvironmentInfo(
                         mascot.getX(), mascot.getY(), mascotWidth, mascotHeight, workArea,
                         floorWindowForEnv, ceilingWindowForEnv, leftWallWindowForEnv, rightWallWindowForEnv, mascot.getHoldingWindow(), mascot.getTargetWindow());
+
+                // ★★★ 修正: Environmentが返す物理座標を論理座標に正規化する ★★★
+                // EnvironmentはWin32 API(物理座標)でウィンドウ位置を取得しているが、
+                // マスコットは論理座標で動作するため、ここでDPIスケール分だけ縮小して整合性を取る。
+                // ただし、Windowがnullの場合(画面端など)は既にworkArea(論理)を使っているため変換しない。
+                if (scale != 1.0) {
+                    if (envInfo.floorWindow != null) {
+                        envInfo.floorY = (int) (envInfo.floorY / scale);
+                        if (envInfo.floorRect != null) scaleRect(envInfo.floorRect, scale);
+                    }
+                    if (envInfo.ceilingWindow != null) {
+                        envInfo.ceilingY = (int) (envInfo.ceilingY / scale);
+                        if (envInfo.ceilingRect != null) scaleRect(envInfo.ceilingRect, scale);
+                    }
+                    if (envInfo.leftWallWindow != null) {
+                        envInfo.leftWallX = (int) (envInfo.leftWallX / scale);
+                        if (envInfo.leftWallRect != null) scaleRect(envInfo.leftWallRect, scale);
+                    }
+                    if (envInfo.rightWallWindow != null) {
+                        envInfo.rightWallX = (int) (envInfo.rightWallX / scale);
+                        if (envInfo.rightWallRect != null) scaleRect(envInfo.rightWallRect, scale);
+                    }
+                    
+                    // デバッグ: ウィンドウに乗っている場合の座標確認
+                    if (envInfo.floorWindow != null && tickCount % 60 == 0) {
+                        System.out.printf("[Main] On Window Floor (Logical): Y=%d, Scale=%.2f%n", envInfo.floorY, scale);
+                    }
+                }
 
                 // ★★★ 修正: Environmentが返す床のY座標を、workAreaの底でクリップする ★★★
                 // これにより、ウィンドウが見つからない場合にfloorYが意図せず大きな値になり、
@@ -273,6 +410,11 @@ public class Main {
                 boolean wasGrounded = mascot.isGrounded();
                 boolean isNowGrounded = mascot.getY() >= effectiveFloorY;
 
+                // 吸着処理強化: 落下中かつ床の直前(5px以内)にいる場合、DPI誤差を考慮して接地とみなす
+                if (!isNowGrounded && mascot.getVelocityY() >= 0 && mascot.getY() >= effectiveFloorY - 5) {
+                    isNowGrounded = true;
+                }
+
                 // ウィンドウが下に動いた場合、追従の遅れで一時的に浮いてしまうのを防ぐため、
                 // 前回と同じ床に乗っていて、かつジャンプ中（VelocityY < 0）でなければ、
                 // 移動量に応じた許容範囲内なら接地しているとみなす（吸着処理）
@@ -292,7 +434,7 @@ public class Main {
                 // 接地していない、かつアクション中でない場合、重力を適用する
                 // 環境認識の後に移動することで、移動直後のフレームで不当に落下して接地判定が外れるのを防ぐ
                 if (!mascot.isGrounded() && mascot.getCurrentAction() == null && !mascot.isHittingCeiling() && !mascot.isBeingDragged()) {
-                    mascot.setY(mascot.getY() + GRAVITY);
+                    mascot.setY(mascot.getY() + currentGravity);
                 }
 
                 // 接地状態が変化した場合、イベントを発行する
@@ -304,21 +446,21 @@ public class Main {
                 }
 
                 // 壁衝突判定と座標補正
-                int halfWidth = mascotWidth / 2;
+                // ★修正: アンカーポイントに基づいて左右の衝突境界を計算する
                 
                 // 左壁吸着: ウィンドウが左(dx < 0)に動いて壁が離れる場合、許容範囲を広げる
                 int leftWallTolerance = 0;
                 if (mascot.isHittingLeftWall() && envInfo.leftWallWindow != null && envInfo.leftWallWindow.equals(instance.currentLeftWallWindow)) {
                     leftWallTolerance = (leftWallMove.x < 0) ? -leftWallMove.x + 10 : 10;
                 }
-                boolean isHittingLeftWall = (mascot.getX() - halfWidth) <= envInfo.leftWallX + leftWallTolerance;
+                boolean isHittingLeftWall = (mascot.getX() - anchor.x) <= envInfo.leftWallX + leftWallTolerance;
 
                 // 右壁吸着: ウィンドウが右(dx > 0)に動いて壁が離れる場合、許容範囲を広げる
                 int rightWallTolerance = 0;
                 if (mascot.isHittingRightWall() && envInfo.rightWallWindow != null && envInfo.rightWallWindow.equals(instance.currentRightWallWindow)) {
                     rightWallTolerance = (rightWallMove.x > 0) ? rightWallMove.x + 10 : 10;
                 }
-                boolean isHittingRightWall = (mascot.getX() + halfWidth) >= envInfo.rightWallX - rightWallTolerance;
+                boolean isHittingRightWall = (mascot.getX() + (mascotWidth - anchor.x)) >= envInfo.rightWallX - rightWallTolerance;
 
                 // 天井吸着: ウィンドウが上(dy < 0)に動いて天井が離れる場合、許容範囲を広げる
                 int ceilingTolerance = 0;
@@ -327,7 +469,8 @@ public class Main {
                 }
                 // 足元が画面内にある場合のみ天井判定を行う（初期落下時に天井に張り付かないようにするため）
                 // さらに、生成直後（約3秒間 = 3000ms）は天井判定を無効にする
-                boolean isHittingCeiling = (System.currentTimeMillis() - instance.bornTime > 3000) && (mascot.getY() - mascotHeight) <= envInfo.ceilingY + ceilingTolerance && mascot.getY() > envInfo.ceilingY;
+                // ★修正: 生成直後の落下中に天井に張り付かないよう、猶予期間を10秒に延長
+                boolean isHittingCeiling = (System.currentTimeMillis() - instance.bornTime > 10000) && (mascot.getY() - anchor.y) <= envInfo.ceilingY + ceilingTolerance;
 
                 mascot.setHittingLeftWall(isHittingLeftWall);
                 mascot.setHittingRightWall(isHittingRightWall);
@@ -336,13 +479,13 @@ public class Main {
                 // ドラッグ中や壁無視フラグが立っていなければ、画面内に押し戻す（壁として機能させる）
                 if (!mascot.isBeingDragged() && !mascot.isIgnoringWalls()) {
                     if (isHittingLeftWall) {
-                        mascot.setX(envInfo.leftWallX + halfWidth);
+                        mascot.setX(envInfo.leftWallX + anchor.x);
                     }
                     if (isHittingRightWall) {
-                        mascot.setX(envInfo.rightWallX - halfWidth);
+                        mascot.setX(envInfo.rightWallX - (mascotWidth - anchor.x));
                     }
                     if (isHittingCeiling) {
-                        mascot.setY(envInfo.ceilingY + mascotHeight);
+                        mascot.setY(envInfo.ceilingY + anchor.y);
                     }
                 }
 
@@ -350,11 +493,11 @@ public class Main {
                 int distToWallTop = Integer.MAX_VALUE;
                 int signedDistToWallTop = Integer.MAX_VALUE;
                 if (mascot.isHittingLeftWall() && instance.currentLeftWallRect != null) {
-                    // マスコットの頭上と壁の上端の距離
-                    signedDistToWallTop = mascot.getY() - mascotHeight - instance.currentLeftWallRect.top;
+                    // マスコットの頭上(Y - Anchor.y)と壁の上端の距離
+                    signedDistToWallTop = (mascot.getY() - anchor.y) - instance.currentLeftWallRect.top;
                     distToWallTop = Math.abs(signedDistToWallTop);
                 } else if (mascot.isHittingRightWall() && instance.currentRightWallRect != null) {
-                    signedDistToWallTop = mascot.getY() - mascotHeight - instance.currentRightWallRect.top;
+                    signedDistToWallTop = (mascot.getY() - anchor.y) - instance.currentRightWallRect.top;
                     distToWallTop = Math.abs(signedDistToWallTop);
                 }
 
@@ -374,8 +517,7 @@ public class Main {
 
                 // コンテキスト変数を更新します。
                 context.getVariables().put("time", tickCount);
-                context.getVariables().put("mouse.x", mousePos.x);
-                context.getVariables().put("mouse.y", mousePos.y);
+                context.getVariables().put("mouse", mouseMap);
                 context.getVariables().put("distToWallTop", distToWallTop);
                 context.getVariables().put("signedDistToWallTop", signedDistToWallTop);
                 context.getVariables().put("mascot.distToFloorLeft", distToFloorLeft);
@@ -393,7 +535,14 @@ public class Main {
                 }
 
                 // 4. 描画処理
-                mascotView.update();
+                if (targetWindowMinimized) {
+                    if (mascotView.isVisible()) mascotView.setVisible(false);
+                } else {
+                    if (!mascotView.isVisible()) {
+                        mascotView.setVisible(true);
+                    }
+                    mascotView.draw();
+                }
             }
 
             tickCount++;
@@ -401,8 +550,18 @@ public class Main {
             // 自動復帰チェック
             checkAutoRestoreWindows();
 
-            // 5. 少し待機して、CPU使用率を抑えます。
-            Thread.sleep(30); // 約33 FPS
+            // 5. FPS制御 (60FPS固定)
+            long endTime = System.nanoTime();
+            long elapsed = endTime - startTime;
+            long wait = optimalTime - elapsed;
+
+            if (wait > 0) {
+                // 残り時間がある場合はスリープしてCPUを休ませる
+                Thread.sleep(wait / 1000000);
+            } else {
+                // 処理落ちしている場合はスリープせず即座に次フレームへ
+                // System.out.println("[Main] Frame drop detected!");
+            }
         }
 
         System.out.println("=== Shimeji Neo Shutdown ===");
@@ -422,14 +581,8 @@ public class Main {
             
             // アイコン画像の読み込み（shime1.pngを使用）
             // 本来は専用のアイコン画像(icon.png等)を用意するのが望ましい
-            File iconFile = new File("img/shime1.png");
-            Image image = null;
-            if (iconFile.exists()) {
-                image = ImageIO.read(iconFile);
-            } else {
-                // 画像がない場合のフォールバック（16x16の空画像）
-                image = new java.awt.image.BufferedImage(16, 16, java.awt.image.BufferedImage.TYPE_INT_ARGB);
-            }
+            // ImageCacheを利用することで、外部ファイル優先・リソースフォールバックの恩恵を受ける
+            Image image = imageCache.getImage("shime1.png");
 
             PopupMenu popup = new PopupMenu();
 
@@ -473,8 +626,38 @@ public class Main {
 
     private void openSettings() {
         if (config == null || config.getBehaviors() == null) return;
+
+        // スキン一覧の取得 (imgフォルダ内のサブディレクトリを列挙)
+        List<String> skins = new ArrayList<>();
+        skins.add("Default"); // img直下
+        File imgDir = new File("img");
+        if (imgDir.exists() && imgDir.isDirectory()) {
+            File[] files = imgDir.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (f.isDirectory()) {
+                        skins.add(f.getName());
+                    }
+                }
+            }
+        }
+
         SwingUtilities.invokeLater(() -> {
-            new SettingsWindow(config.getBehaviors()).setVisible(true);
+            new SettingsWindow(
+                config.getBehaviors(),
+                skins,
+                currentSkin,
+                (newSkin) -> {
+                    currentSkin = newSkin;
+                    Path newPath = "Default".equals(newSkin) ? Path.of("img") : Path.of("img", newSkin);
+                    imageCache.updateBaseDirectory(newPath);
+                    System.out.println("[Main] Skin changed to: " + newSkin);
+                },
+                this.gravity, this::setGravity,
+                this.timeScale, this::setTimeScale,
+                () -> setLimitToActiveWindowDelayed(3000), // 3秒後にアクティブなウィンドウに限定
+                () -> setLimitWindow(null)                 // 解除
+            ).setVisible(true);
         });
     }
 
@@ -635,12 +818,14 @@ public class Main {
         Mascot mascot = new Mascot();
 
         Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("workArea.x", workArea.x);
-        contextVariables.put("workArea.y", workArea.y);
-        contextVariables.put("workArea.width", workArea.width);
-        contextVariables.put("workArea.height", workArea.height);
-        contextVariables.put("workArea.right", workArea.x + workArea.width);
-        contextVariables.put("workArea.bottom", workArea.y + workArea.height);
+        Map<String, Integer> workAreaMap = new HashMap<>();
+        workAreaMap.put("x", workArea.x);
+        workAreaMap.put("y", workArea.y);
+        workAreaMap.put("width", workArea.width);
+        workAreaMap.put("height", workArea.height);
+        workAreaMap.put("right", workArea.x + workArea.width);
+        workAreaMap.put("bottom", workArea.y + workArea.height);
+        contextVariables.put("workArea", workAreaMap);
 
         mascot.setAnchor(new java.awt.Point(x, y));
         mascot.setVelocityX(velocityX);
@@ -649,10 +834,22 @@ public class Main {
         contextVariables.put("mascot", mascot);
         contextVariables.put("time", 0L);
 
+        // 初期変数の注入 (ReferenceError回避)
+        contextVariables.put("mouse", new HashMap<String, Integer>() {{ put("x", 0); put("y", 0); }});
+        contextVariables.put("distToWallTop", 0);
+        contextVariables.put("signedDistToWallTop", 0);
+        contextVariables.put("mascot.distToFloorLeft", 0);
+        contextVariables.put("mascot.distToFloorRight", 0);
+        contextVariables.put("isOnEdge", false);
+
+        // GraalJS Context Init
+        Context jsContext = ScriptEngineManager.getInstance().createMascotContext(contextVariables);
+        mascot.setJsContext(jsContext);
+
         EvaluationContext context = new EvaluationContext(contextVariables);
         EventDispatcher dispatcher = new EventDispatcher(context, mascot);
 
-        MascotView mascotView = new MascotView(mascot, imageCache, dispatcher);
+        MascotWindow mascotView = new MascotWindow(mascot, imageCache);
 
         // ビヘイビアの登録
         for (Behavior behavior : config.getBehaviors()) {
@@ -698,6 +895,10 @@ public class Main {
             if (target.view instanceof java.awt.Window) {
                 ((java.awt.Window) target.view).dispose();
             }
+            // JS Contextの解放
+            if (target.mascot.getJsContext() != null) {
+                target.mascot.getJsContext().close();
+            }
             mascotInstances.remove(target);
             System.out.println("[Main] Removed a mascot. Total: " + mascotInstances.size());
         }
@@ -738,10 +939,8 @@ public class Main {
 
         Path actionsPath = confDir.resolve("actions.xml");
         // ファイルが既に存在する場合は上書きしない（ユーザー設定を保持するため）
-        if (Files.exists(actionsPath)) {
-            System.out.println("[Main] actions.xml exists. Skipping overwrite.");
-        } else {
-        // 開発中は常に最新の設定で上書きする
+        // ★修正: 開発中は常に最新の設定で上書きする (古い設定による誤動作防止)
+        {
         String actionsContent = """
                 <Actions>
                     <Action Name="Stay" Type="Stay" Duration="1000">
@@ -781,7 +980,7 @@ public class Main {
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
-                    <Action Name="BreedJump" Type="Breed" Duration="4000" VelocityX="20" VelocityY="-40">
+                    <Action Name="BreedJump" Type="Breed" Duration="4000" VelocityX="10" VelocityY="-25">
                         <Point X="0" Y="-100" />
                         <Animation>
                             <Pose Image="shime11.png" ImageAnchor="64,128" Duration="200" />
@@ -795,7 +994,7 @@ public class Main {
                             <Pose Image="shime18.png" ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
-                    <Action Name="Gather" Type="Gather" Speed="2" Duration="4000">
+                    <Action Name="Gather" Type="Gather" Speed="1" Duration="4000">
                         <Animation>
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
                             <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
@@ -806,13 +1005,13 @@ public class Main {
                             <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
                         </Animation>
                     </Action>
-                    <Action Name="Walk" Type="Walk" Speed="2">
+                    <Action Name="Walk" Type="Walk" Speed="1">
                         <Animation>
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
                             <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
-                    <Action Name="Chase" Type="Chase" Speed="8" Duration="5000">
+                    <Action Name="Chase" Type="Chase" Speed="4" Duration="5000">
                         <Animation>
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="50" />
                             <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
@@ -833,12 +1032,12 @@ public class Main {
                             <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
                         </Animation>
                     </Action>
-                    <Action Name="Jump" Type="Jump" VelocityY="20" VelocityX="5">
+                    <Action Name="Jump" Type="Jump" VelocityY="12" VelocityX="3">
                         <Animation>
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
-                    <Action Name="JumpLeft" Type="Jump" VelocityY="20" VelocityX="-5">
+                    <Action Name="JumpLeft" Type="Jump" VelocityY="12" VelocityX="-3">
                         <Animation>
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
                         </Animation>
@@ -861,7 +1060,7 @@ public class Main {
                             <Pose Image="shime15.png" ImageAnchor="64,128" Duration="2000" />
                         </Animation>
                     </Action>
-                    <Action Name="Climb" Type="Climb" Speed="2">
+                    <Action Name="Climb" Type="Climb" Speed="1">
                         <Animation>
                             <Pose Image="shime15.png" ImageAnchor="64,128" Duration="200" />
                             <Pose Image="shime16.png" ImageAnchor="64,128" Duration="200" />
@@ -896,12 +1095,12 @@ public class Main {
                         <ActionReference Name="CeilingCrawl" />
                         <ActionReference Name="CeilingStay" />
                     </Action>
-                    <Action Name="SlideDown" Type="SlideDown" Speed="4">
+                    <Action Name="SlideDown" Type="SlideDown" Speed="2">
                         <Animation>
                             <Pose Image="shime17.png" ImageAnchor="64,128" Duration="400" />
                         </Animation>
                     </Action>
-                    <Action Name="WallJump" Type="WallJump" VelocityY="20" VelocityX="15">
+                    <Action Name="WallJump" Type="WallJump" VelocityY="12" VelocityX="10">
                         <Animation>
                             <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
                         </Animation>
@@ -937,15 +1136,12 @@ public class Main {
         }
 
         Path behaviorsPath = confDir.resolve("behaviors.xml");
-        // ファイルが既に存在する場合は上書きしない
-        if (Files.exists(behaviorsPath)) {
-            System.out.println("[Main] behaviors.xml exists. Skipping overwrite.");
-        } else {
-        // 開発中は常に最新の設定で上書きする
+        // ★修正: 開発中は常に最新の設定で上書きする
+        {
         String behaviorsContent = """
                 <Behaviors>
                     <Behavior Name="Dragged" Frequency="100">
-                        <Condition>mascot.isBeingDragged</Condition>
+                        <Condition>mascot.isBeingDragged()</Condition>
                         <ActionReference Name="Dragged" />
                     </Behavior>
                     <Behavior Name="JumpOnClick" Frequency="100">
@@ -953,75 +1149,75 @@ public class Main {
                         <ActionReference Name="Jump" />
                     </Behavior>
                     <Behavior Name="Fall" Frequency="100">
-                        <Condition>!mascot.isGrounded &amp;&amp; !mascot.isHittingLeftWall &amp;&amp; !mascot.isHittingRightWall &amp;&amp; !mascot.isHittingCeiling &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>!mascot.isGrounded() &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="FallSequence" />
                     </Behavior>
                     <Behavior Name="Teeter" Frequency="5000">
-                        <Condition>mascot.isGrounded &amp;&amp; isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; isOnEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Teeter" />
                     </Behavior>
                     <Behavior Name="PullUp" Frequency="200">
-                        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="PullUp" />
                     </Behavior>
                     <Behavior Name="WallAction" Frequency="100">
-                        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="WallComplexSequence" />
                     </Behavior>
                     <Behavior Name="CeilingAction" Frequency="100">
-                        <Condition>mascot.isHittingCeiling &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="CeilingRandomMove" />
                     </Behavior>
                     <Behavior Name="TurnRandomly" Frequency="10">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Turn" />
                     </Behavior>
                     <Behavior Name="ChaseMouse" Frequency="30">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null &amp;&amp; ((mascot.x - mouse.x &gt; 150) || (mouse.x - mascot.x &gt; 150))</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null &amp;&amp; ((mascot.getX() - mouse.x &gt; 150) || (mouse.x - mascot.getX() &gt; 150))</Condition>
                         <ActionReference Name="Chase" />
                     </Behavior>
                     <Behavior Name="Walk" Frequency="100">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Walk" />
                     </Behavior>
                     <Behavior Name="Trip" Frequency="10">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="TripSequence" />
                     </Behavior>
                     <Behavior Name="RandomJump" Frequency="10">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="RandomJumpAction" />
                     </Behavior>
                     <Behavior Name="Sit" Frequency="50">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="SitSequence" />
                     </Behavior>
                     <Behavior Name="Breed" Frequency="2">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Breed" />
                     </Behavior>
                     <Behavior Name="BreedJump" Frequency="2">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="BreedJump" />
                     </Behavior>
                     <Behavior Name="Dig" Frequency="1">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Dig" />
                     </Behavior>
                     <Behavior Name="Gather" Frequency="5">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Gather" />
                     </Behavior>
                     <Behavior Name="Stay" Frequency="100">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Stay" />
                     </Behavior>
                     <Behavior Name="Grab" Frequency="50">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; !isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getFloorWindow() != null &amp;&amp; !isOnEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Grab" />
                     </Behavior>
                     <Behavior Name="Throw" Frequency="2">
-                        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getFloorWindow() != null &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Throw" />
                     </Behavior>
                 </Behaviors>
@@ -1061,5 +1257,16 @@ public class Main {
             System.err.println("[Main] Failed to apply transparency demo: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * RECT構造体の値をDPIスケールで除算して論理座標に変換するヘルパー
+     */
+    private void scaleRect(RECT rect, double scale) {
+        if (rect == null || scale == 0) return;
+        rect.left = (int) (rect.left / scale);
+        rect.right = (int) (rect.right / scale);
+        rect.top = (int) (rect.top / scale);
+        rect.bottom = (int) (rect.bottom / scale);
     }
 }

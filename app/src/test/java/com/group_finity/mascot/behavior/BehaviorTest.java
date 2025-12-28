@@ -1,8 +1,11 @@
 package com.group_finity.mascot.behavior;
 
+import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.script.ScriptEngineManager;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
-import com.group_finity.mascot.trigger.TriggerCondition;
+import org.graalvm.polyglot.Context;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,21 +21,38 @@ class BehaviorTest {
     @Mock
     private Action mockAction;
 
+    private Mascot mascot;
+    private Context jsContext;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        TriggerCondition.clearGlobalCache();
+        
+        // Mascot と GraalJS Context の初期化
+        mascot = new Mascot();
+        Map<String, Object> globals = new HashMap<>();
+        globals.put("mascot", mascot);
+        jsContext = ScriptEngineManager.getInstance().createMascotContext(globals);
+        mascot.setJsContext(jsContext);
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (jsContext != null) {
+            jsContext.close();
+        }
     }
 
     @Test
     void evaluate_shouldReturnTrue_whenConditionIsMet() {
         // Arrange
-        String condition = "mascot.state == \"idle\"";
-        Behavior behavior = new Behavior("TestBehavior", mockAction, condition);
+        // JSコンテキストに変数を注入して条件をテスト
+        jsContext.getBindings("js").putMember("testVar", "idle");
+        String condition = "testVar == 'idle'";
+        
+        // コンストラクタ引数を修正 (name, action, condition, hidden, frequency)
+        Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
 
-        // mascot.state を解決できるように、ネストしたMap構造を作成する
-        Map<String, Object> mascot = new HashMap<>();
-        mascot.put("state", "idle");
         Map<String, Object> vars = new HashMap<>();
         vars.put("mascot", mascot);
         EvaluationContext context = new EvaluationContext(vars);
@@ -47,12 +67,11 @@ class BehaviorTest {
     @Test
     void evaluate_shouldReturnFalse_whenConditionIsNotMet() {
         // Arrange
-        String condition = "mascot.state == \"idle\"";
-        Behavior behavior = new Behavior("TestBehavior", mockAction, condition);
+        jsContext.getBindings("js").putMember("testVar", "running");
+        String condition = "testVar == 'idle'";
+        
+        Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
 
-        // mascot.state を解決できるように、ネストしたMap構造を作成する
-        Map<String, Object> mascot = new HashMap<>();
-        mascot.put("state", "running");
         Map<String, Object> vars = new HashMap<>();
         vars.put("mascot", mascot);
         EvaluationContext context = new EvaluationContext(vars);
@@ -66,7 +85,7 @@ class BehaviorTest {
 
     @Test
     void getAction_shouldReturnConfiguredAction() {
-        Behavior behavior = new Behavior("TestBehavior", mockAction, "true");
+        Behavior behavior = new Behavior("TestBehavior", mockAction, "true", false, 1);
         assertEquals(mockAction, behavior.getAction());
     }
 
@@ -75,8 +94,11 @@ class BehaviorTest {
         // Arrange
         // Math.random() は 0.0 以上 1.0 未満の値を返すため、常に true となる条件
         String condition = "Math.random() < 2.0";
-        Behavior behavior = new Behavior("TestBehavior", mockAction, condition);
-        EvaluationContext context = new EvaluationContext(new HashMap<>());
+        Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
+        
+        Map<String, Object> vars = new HashMap<>();
+        vars.put("mascot", mascot);
+        EvaluationContext context = new EvaluationContext(vars);
 
         // Act & Assert
         assertTrue(behavior.evaluate(null, context), "Math.random() should be parsed and evaluated correctly");
@@ -87,8 +109,11 @@ class BehaviorTest {
         // Arrange
         // Math.max(10, 20) returns 20, so 20 > 15 is true
         String condition = "Math.max(10, 20) > 15";
-        Behavior behavior = new Behavior("TestBehavior", mockAction, condition);
-        EvaluationContext context = new EvaluationContext(new HashMap<>());
+        Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
+        
+        Map<String, Object> vars = new HashMap<>();
+        vars.put("mascot", mascot);
+        EvaluationContext context = new EvaluationContext(vars);
 
         // Act & Assert
         assertTrue(behavior.evaluate(null, context), "Math.max(10, 20) should return 20 and satisfy the condition");

@@ -1,19 +1,11 @@
-=== Shimeji Neo Start (Deep Debug Mode) ===
-[Main] Current working directory: C:\bunashimeji\bunashimeji
-[Main] actions.xml exists. Skipping overwrite.
-[Main] behaviors.xml exists. Skipping overwrite.
-[Debug] AWT Screen Bounds: java.awt.Rectangle[x=0,y=0,width=1920,height=1080]
-[Debug] AWT Scale Factor: X=1.00, Y=1.00
-[Debug] Java Runtime Version: 21.0.9
-[Main] Work area loaded via SPI_GETWORKAREA: java.awt.Rectangle[x=0,y=0,width=1920,height=1032]
-[Main] System tray icon added.
-[Main] Created a new mascot instance. Total: 1
-[Main] Starting main loop... (Press Ctrl+C to exit)
-[FallAction] Initialized with velocity: (0.00, 0)
-[Debug] MascotY=874, FloorY=1032, WorkAreaH=1032, Grounded=false
-[FallAction] Grounded at Y=1032, VelocityY=20, VelocityX=0.00
-[FallAction] Grounded at Y=1032, VelocityY=9, VelocityX=0.00
-[Debug] MascotY=1032, FloorY=1032, WorkAreaH=1032, Grounded=true
-[Debug] MascotY=1032, FloorY=1032, WorkAreaH=1032, Grounded=true
-[Debug] MascotY=1032, FloorY=1032, WorkAreaH=1032, Grounded=true
-PS C:\bunashimeji\bunashimeji> 
+PS C:\bunashimeji\bunashimeji> ./gradlew jpackage 
+
+> Task :app:compileJava
+繝弱・繝・ C:\bunashimeji\bunashimeji\app\src\main\java\com\group_finity\mascot\Main.java縺ｯJava SE 21縺ｮ繝励Ξ繝薙Η繝ｼ讖溯・繧剃ｽｿ逕ｨ縺 励∪縺吶・
+         繝弱・繝・ 隧ｳ邏ｰ縺ｯ縲・Xlint:preview繧ｪ繝励す繝ｧ繝ｳ繧呈欠螳壹＠縺ｦ蜀阪さ繝ｳ繝代う繝ｫ縺励※縺上□縺輔＞縲・
+
+> Task :app:jre
+・ｽx・ｽ・ｽ:  --compress・ｽ・ｽ2・ｽ・ｽ・ｽ・ｽ・ｽﾍ非推擾ｿｽ・ｽﾅゑｿｽ・ｽ・ｽA・ｽ・ｽ・ｽ・ｽﾌ・ｿｽ・ｽ・ｽ・ｽ[・ｽX・ｽﾅ削除・ｽ・ｽ・ｽ・ｽ・ｽﾂ能・ｽ・ｽ・ｽ ・ｽ・ｽ・ｽ・ｽ・ｽﾜゑｿｽ
+
+BUILD SUCCESSFUL in 35s
+8 actionable tasks: 7 executed, 1 up-to-date

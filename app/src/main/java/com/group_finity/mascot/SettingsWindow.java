@@ -11,9 +11,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
+import java.util.Hashtable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * ビヘイビアの設定（頻度など）を動的に変更するためのウィンドウ。
@@ -25,14 +27,100 @@ public class SettingsWindow extends JFrame {
     private final JTable table;
     private final Set<Integer> changedRows = new HashSet<>();
 
-    public SettingsWindow(List<Behavior> behaviors) {
+    public SettingsWindow(
+            List<Behavior> behaviors,
+            List<String> skins,
+            String currentSkin,
+            Consumer<String> onSkinChange,
+            int initialGravity,
+            Consumer<Integer> onGravityChange,
+            double initialTimeScale,
+            Consumer<Double> onTimeScaleChange,
+            Runnable onLimitToActiveWindow,
+            Runnable onResetLimit
+    ) {
         this.behaviors = behaviors;
         setTitle("設定 - Action Frequency");
-        setSize(500, 400);
+        setSize(500, 550); // UIが増えたので高さを拡張
         setLocationRelativeTo(null);
         // 常に手前に表示して、マスコットに隠れないようにする
         setAlwaysOnTop(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // --- Control Panel (Skin, Gravity, Speed) ---
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+
+        // 1. Skin Selection
+        JPanel skinPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        skinPanel.add(new JLabel("Skin:"));
+        JComboBox<String> skinBox = new JComboBox<>(skins.toArray(new String[0]));
+        skinBox.setSelectedItem(currentSkin);
+        skinBox.addActionListener(e -> {
+            String selected = (String) skinBox.getSelectedItem();
+            onSkinChange.accept(selected);
+        });
+        skinPanel.add(skinBox);
+        controlPanel.add(skinPanel);
+
+        // 2. Gravity Slider
+        JPanel gravityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        gravityPanel.add(new JLabel("Gravity:"));
+        JSlider gravitySlider = new JSlider(0, 5, initialGravity);
+        gravitySlider.setMajorTickSpacing(1);
+        gravitySlider.setPaintTicks(true);
+        gravitySlider.setPaintLabels(true);
+        gravitySlider.addChangeListener(e -> {
+            int val = gravitySlider.getValue();
+            onGravityChange.accept(val);
+        });
+        gravityPanel.add(gravitySlider);
+        controlPanel.add(gravityPanel);
+
+        // 3. Speed Slider (Time Scale)
+        JPanel speedPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        speedPanel.add(new JLabel("Speed:"));
+        // 10% to 300% (Default 100%)
+        int initialSpeed = (int) (initialTimeScale * 100);
+        JSlider speedSlider = new JSlider(10, 300, initialSpeed);
+        speedSlider.setMajorTickSpacing(50);
+        speedSlider.setMinorTickSpacing(10);
+        speedSlider.setPaintTicks(true);
+        speedSlider.setPaintLabels(true);
+        
+        // ラベルのカスタマイズ
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+        labelTable.put(100, new JLabel("1.0x"));
+        labelTable.put(200, new JLabel("2.0x"));
+        labelTable.put(300, new JLabel("3.0x"));
+        speedSlider.setLabelTable(labelTable);
+
+        speedSlider.addChangeListener(e -> {
+            double val = speedSlider.getValue() / 100.0;
+            onTimeScaleChange.accept(val);
+        });
+        speedPanel.add(speedSlider);
+        controlPanel.add(speedPanel);
+
+        // 4. Window Limit
+        JPanel limitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        limitPanel.add(new JLabel("Limit:"));
+        
+        JButton limitBtn = new JButton("Active Window (3s)");
+        limitBtn.setToolTipText("Click and switch to target window within 3 seconds.");
+        limitBtn.addActionListener(e -> {
+            onLimitToActiveWindow.run();
+            limitBtn.setText("Wait 3s...");
+            new Timer(3000, evt -> limitBtn.setText("Active Window (3s)")).start();
+        });
+        limitPanel.add(limitBtn);
+
+        JButton resetLimitBtn = new JButton("Reset");
+        resetLimitBtn.addActionListener(e -> onResetLimit.run());
+        limitPanel.add(resetLimitBtn);
+        controlPanel.add(limitPanel);
+
+        add(controlPanel, BorderLayout.NORTH);
 
         // テーブルモデルの作成
         String[] columnNames = {"Behavior Name", "Frequency", "Hidden"};

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ScriptingTest",
+            "request": "launch",
+            "mainClass": "com.group_finity.mascot.script.ScriptingTest",
+            "projectName": "app"
+        },
+        {
+            "type": "java",
             "name": "PanamaPoC",
             "request": "launch",
             "mainClass": "com.group_finity.mascot.nativeaccess.PanamaPoC",

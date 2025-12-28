@@ -144,24 +144,9 @@ public class MascotView extends JWindow {
         setSize(size);
 
         // アンカー位置の決定
-        int anchorX;
-        int anchorY;
-
-        if (pose.getImageAnchor() != null) {
-            anchorX = pose.getImageAnchor().x;
-            anchorY = pose.getImageAnchor().y;
-            // 左向きの場合は左右反転した位置をアンカーとする
-            if (!mascot.isLookRight()) {
-                anchorX = size.width - anchorX;
-            }
-        } else {
-            // デフォルト: 底辺中央
-            anchorX = size.width / 2;
-            anchorY = size.height;
-        }
-
+        Point imageAnchor = getAnchor();
         // ウィンドウの左上座標 = マスコットの座標 - アンカーオフセット
-        setLocation(anchor.x - anchorX, anchor.y - anchorY);
+        setLocation(anchor.x - imageAnchor.x, anchor.y - imageAnchor.y);
 
         if (!isVisible()) {
             setVisible(true);
@@ -197,5 +182,58 @@ public class MascotView extends JWindow {
      */
     public int getMascotWidth() {
         return (currentImage != null) ? currentImage.getWidth() : 0;
+    }
+
+    /**
+     * 現在のマスコットの状態（アニメーション・向き）に基づき、
+     * 画像の左上を原点としたアンカーポイント（基準点）を計算して返します。
+     * Mainクラスでの座標計算に使用されます。
+     */
+    public Point getAnchor() {
+        Animation animation = mascot.getAnimation();
+        Pose pose = (animation != null) ? animation.getPose() : null;
+
+        if (pose == null) {
+            return new Point(0, 0);
+        }
+
+        // 画像サイズが必要なためキャッシュから取得（描画更新前でも最新の情報を取得するため）
+        BufferedImage image;
+        if (mascot.isLookRight()) {
+            image = imageCache.getImage(pose.getImageName());
+        } else {
+            image = imageCache.getLeftImage(pose.getImageName());
+        }
+
+        if (image == null) {
+            return new Point(0, 0);
+        }
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int anchorX;
+        int anchorY;
+
+        if (pose.getImageAnchor() != null) {
+            anchorX = pose.getImageAnchor().x;
+            anchorY = pose.getImageAnchor().y;
+            // 左向きの場合は左右反転した位置をアンカーとする
+            if (!mascot.isLookRight()) {
+                anchorX = width - anchorX;
+            }
+        } else {
+            // デフォルト: 底辺中央
+            anchorX = width / 2;
+            anchorY = height;
+        }
+
+        // ★修正: アンカーYが0の場合（XML設定ミスやパース失敗の可能性）、
+        // 強制的に画像の下端（足元）をアンカーとする。
+        // これにより「頭がタスクバーに張り付く」「天井を突き抜ける」現象を防ぐ。
+        if (anchorY == 0 && height > 0) {
+            anchorY = height;
+        }
+
+        return new Point(anchorX, anchorY);
     }
 }

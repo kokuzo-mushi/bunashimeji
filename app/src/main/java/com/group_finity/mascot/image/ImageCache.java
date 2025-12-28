@@ -17,11 +17,20 @@ import java.util.Map;
  */
 public class ImageCache {
 
-    private final Path imageBasePath;
+    private Path imageBasePath;
     private final Map<String, BufferedImage> cache = new HashMap<>();
 
     public ImageCache(Path imageBasePath) {
         this.imageBasePath = imageBasePath;
+    }
+
+    /**
+     * 画像の読み込み元ディレクトリを変更し、キャッシュをクリアします。
+     * @param newBasePath 新しい画像ディレクトリのパス
+     */
+    public void updateBaseDirectory(Path newBasePath) {
+        this.imageBasePath = newBasePath;
+        this.cache.clear();
     }
 
     /**
@@ -39,25 +48,34 @@ public class ImageCache {
             return cache.get(imageName);
         }
 
+        // 1. ファイルシステム（外部フォルダ）を確認
         Path imagePath = imageBasePath.resolve(imageName);
-        if (!Files.exists(imagePath)) {
-            System.err.println("Image file not found: " + imagePath + " (Generating dummy image)");
-            BufferedImage dummy = createDummyImage(imageName);
-            cache.put(imageName, dummy);
-            return dummy;
+        if (Files.exists(imagePath)) {
+            try {
+                return loadAndCache(imageName, ImageIO.read(imagePath.toFile()));
+            } catch (IOException e) {
+                System.err.println("Failed to read image file: " + imagePath);
+                e.printStackTrace();
+            }
         }
 
-        try {
-            BufferedImage image = ImageIO.read(imagePath.toFile());
-            cache.put(imageName, image);
-            return image;
-        } catch (IOException e) {
-            System.err.println("Failed to read image file: " + imagePath);
-            e.printStackTrace();
-            BufferedImage dummy = createDummyImage(imageName);
-            cache.put(imageName, dummy);
-            return dummy;
+        // 2. クラスパス（JAR内リソース）を確認
+        // src/main/resources/images/ に画像がある想定
+        var resourceUrl = getClass().getResource("/images/" + imageName);
+        if (resourceUrl != null) {
+            try {
+                return loadAndCache(imageName, ImageIO.read(resourceUrl));
+            } catch (IOException e) {
+                System.err.println("Failed to read image resource: " + resourceUrl);
+                e.printStackTrace();
+            }
         }
+
+        // 3. 見つからない場合はダミー
+        System.err.println("Image not found: " + imageName + " (Generating dummy image)");
+        BufferedImage dummy = createDummyImage(imageName);
+        cache.put(imageName, dummy);
+        return dummy;
     }
 
     /**
@@ -83,7 +101,7 @@ public class ImageCache {
         }
 
         // 水平反転した画像を生成
-        BufferedImage flippedImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage flippedImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
         Graphics2D g = flippedImage.createGraphics();
         g.drawImage(originalImage, originalImage.getWidth(), 0, -originalImage.getWidth(), originalImage.getHeight(), null);
         g.dispose();
@@ -134,13 +152,23 @@ public class ImageCache {
                 : baseImageName.substring(0, dotIndex) + "L" + baseImageName.substring(dotIndex);
     }
 
+    private BufferedImage loadAndCache(String key, BufferedImage source) {
+        // 強制的に TYPE_INT_ARGB_PRE に変換して、MascotWindowでの高速描画に対応させる
+        BufferedImage converted = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+        Graphics2D g = converted.createGraphics();
+        g.drawImage(source, 0, 0, null);
+        g.dispose();
+        cache.put(key, converted);
+        return converted;
+    }
+
     /**
      * 画像が見つからない場合のダミー画像を生成します。
      */
     private BufferedImage createDummyImage(String name) {
         int width = 128;
         int height = 128;
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE);
         Graphics2D g = image.createGraphics();
 
         // 名前ごとのユニークな色を生成

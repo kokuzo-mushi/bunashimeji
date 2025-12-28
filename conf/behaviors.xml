@@ -1,83 +1,82 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Behaviors>
-    <Behavior Name="Dragged" Frequency="100" Hidden="false">
-        <Condition>mascot.isBeingDragged</Condition>
-        <ActionReference Name="Dragged"/>
+    <Behavior Name="Dragged" Frequency="100">
+        <Condition>mascot.isBeingDragged()</Condition>
+        <ActionReference Name="Dragged" />
     </Behavior>
-    <Behavior Name="JumpOnClick" Frequency="100" Hidden="false">
+    <Behavior Name="JumpOnClick" Frequency="100">
         <Condition>event.type == 'MOUSE_PRESSED'</Condition>
-        <ActionReference Name="Jump"/>
+        <ActionReference Name="Jump" />
     </Behavior>
-    <Behavior Name="Fall" Frequency="100" Hidden="false">
-        <Condition>!mascot.isGrounded &amp;&amp; !mascot.isHittingLeftWall &amp;&amp; !mascot.isHittingRightWall &amp;&amp; !mascot.isHittingCeiling &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="FallSequence"/>
+    <Behavior Name="Fall" Frequency="100">
+        <Condition>!mascot.isGrounded() &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="FallSequence" />
     </Behavior>
-    <Behavior Name="Teeter" Frequency="5000" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Teeter"/>
+    <Behavior Name="Teeter" Frequency="5000">
+        <Condition>mascot.isGrounded() &amp;&amp; isOnEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Teeter" />
     </Behavior>
-    <Behavior Name="PullUp" Frequency="200" Hidden="false">
-        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="PullUp"/>
+    <Behavior Name="PullUp" Frequency="200">
+        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="PullUp" />
     </Behavior>
-    <Behavior Name="WallAction" Frequency="100" Hidden="false">
-        <Condition>(mascot.isHittingLeftWall || mascot.isHittingRightWall) &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="WallComplexSequence"/>
+    <Behavior Name="WallAction" Frequency="100">
+        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="WallComplexSequence" />
     </Behavior>
-    <Behavior Name="CeilingAction" Frequency="100" Hidden="false">
-        <Condition>mascot.isHittingCeiling &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="CeilingRandomMove"/>
+    <Behavior Name="CeilingAction" Frequency="100">
+        <Condition>mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="CeilingRandomMove" />
     </Behavior>
-    <Behavior Name="TurnRandomly" Frequency="10" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Turn"/>
+    <Behavior Name="TurnRandomly" Frequency="10">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Turn" />
     </Behavior>
-    <Behavior Name="ChaseMouse" Frequency="30" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null &amp;&amp; ((mascot.x - mouse.x &gt; 150) || (mouse.x - mascot.x &gt; 150))</Condition>
-        <ActionReference Name="Chase"/>
+    <Behavior Name="ChaseMouse" Frequency="30">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null &amp;&amp; ((mascot.getX() - mouse.x &gt; 150) || (mouse.x - mascot.getX() &gt; 150))</Condition>
+        <ActionReference Name="Chase" />
     </Behavior>
-    <Behavior Name="Walk" Frequency="100" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Walk"/>
+    <Behavior Name="Walk" Frequency="100">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Walk" />
     </Behavior>
-    <Behavior Name="Trip" Frequency="10" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="TripSequence"/>
+    <Behavior Name="Trip" Frequency="10">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="TripSequence" />
     </Behavior>
-    <Behavior Name="RandomJump" Frequency="10" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="RandomJumpAction"/>
+    <Behavior Name="RandomJump" Frequency="10">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="RandomJumpAction" />
     </Behavior>
-    <Behavior Name="Sit" Frequency="50" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="SitSequence"/>
+    <Behavior Name="Sit" Frequency="50">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="SitSequence" />
     </Behavior>
-    <Behavior Name="Breed" Frequency="2" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Breed"/>
+    <Behavior Name="Breed" Frequency="2">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Breed" />
     </Behavior>
-    <Behavior Name="BreedJump" Frequency="2" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="BreedJump"/>
+    <Behavior Name="BreedJump" Frequency="2">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="BreedJump" />
     </Behavior>
-    <Behavior Name="Dig" Frequency="1" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Dig"/>
+    <Behavior Name="Dig" Frequency="1">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Dig" />
     </Behavior>
-    <Behavior Name="Gather" Frequency="5" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Gather"/>
+    <Behavior Name="Gather" Frequency="5">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Gather" />
     </Behavior>
-    <Behavior Name="Stay" Frequency="100" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Stay"/>
+    <Behavior Name="Stay" Frequency="100">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Stay" />
     </Behavior>
-    <Behavior Name="Grab" Frequency="50" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.floorWindow != null &amp;&amp; !isOnEdge &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Grab"/>
+    <Behavior Name="Grab" Frequency="50">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getFloorWindow() != null &amp;&amp; !isOnEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Grab" />
     </Behavior>
-    <Behavior Name="Throw" Frequency="2" Hidden="false">
-        <Condition>mascot.isGrounded &amp;&amp; mascot.currentAction == null</Condition>
-        <ActionReference Name="Throw"/>
+    <Behavior Name="Throw" Frequency="2">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getFloorWindow() != null &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="Throw" />
     </Behavior>
 </Behaviors>
