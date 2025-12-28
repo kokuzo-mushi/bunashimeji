@@ -1,107 +1,222 @@
 package com.group_finity.mascot.nativeaccess;
 
+import java.awt.Point;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import static java.lang.foreign.ValueLayout.*;
+import java.util.Optional;
 
 /**
- * Project Panama (Foreign Function & Memory API) を使用したネイティブウィンドウ操作ユーティリティ。
- * JNAを使用せず、直接ネイティブ関数を呼び出すことで高速な動作を実現する。
- * <p>
- * Java 21 Preview機能を使用しているため、実行時には --enable-preview が必要。
- * </p>
+ * Project Panama (Foreign Function & Memory API) を使用した
+ * Windows Native API へのアクセスユーティリティ。
+ * 
+ * 主に DPI スケーリングの座標変換と、ウィンドウの透過処理に使用します。
  */
 public class NativeWindowUtil {
 
-    private static final Linker LINKER = Linker.nativeLinker();
-    private static final SymbolLookup USER32 = SymbolLookup.libraryLookup("User32.dll", Arena.global());
-
-    // MethodHandles
-    private static final MethodHandle GET_WINDOW_LONG_PTR;
-    private static final MethodHandle SET_WINDOW_LONG_PTR;
-    private static final MethodHandle SET_LAYERED_WINDOW_ATTRIBUTES;
-    private static final MethodHandle MOVE_WINDOW;
-    private static final MethodHandle GET_DESKTOP_WINDOW;
-
-    // Constants
+    // --- Constants for Window Styles & Attributes ---
     public static final int GWL_EXSTYLE = -20;
-    public static final int WS_EX_LAYERED = 0x80000;
+    public static final long WS_EX_LAYERED = 0x80000L;
     public static final int LWA_ALPHA = 0x2;
+    public static final int MONITOR_DEFAULTTONEAREST = 0x00000002;
+
+    // --- FFM API Setup ---
+    private static final Linker LINKER = Linker.nativeLinker();
+    private static final SymbolLookup USER32 = SymbolLookup.libraryLookup("user32", Arena.global());
+
+    // --- Struct Layouts ---
+    public static final StructLayout POINT_LAYOUT = MemoryLayout.structLayout(
+        ValueLayout.JAVA_INT.withName("x"),
+        ValueLayout.JAVA_INT.withName("y")
+    );
+    
+    public static final StructLayout RECT_LAYOUT = MemoryLayout.structLayout(
+        ValueLayout.JAVA_INT.withName("left"),
+        ValueLayout.JAVA_INT.withName("top"),
+        ValueLayout.JAVA_INT.withName("right"),
+        ValueLayout.JAVA_INT.withName("bottom")
+    );
+
+    public static final StructLayout MONITORINFO_LAYOUT = MemoryLayout.structLayout(
+        ValueLayout.JAVA_INT.withName("cbSize"),
+        RECT_LAYOUT.withName("rcMonitor"),
+        RECT_LAYOUT.withName("rcWork"),
+        ValueLayout.JAVA_INT.withName("dwFlags")
+    );
+
+    // --- Method Handles ---
+    private static final MethodHandle PhysicalToLogicalPointForPerMonitorDPI;
+    private static final MethodHandle GetWindowLongPtrW;
+    private static final MethodHandle SetWindowLongPtrW;
+    private static final MethodHandle SetLayeredWindowAttributes;
+    private static final MethodHandle MonitorFromWindow;
+    private static final MethodHandle GetMonitorInfoW;
 
     static {
-        try {
-            // Windows APIの関数ポインタを取得
-            GET_WINDOW_LONG_PTR = find("GetWindowLongPtrW", JAVA_LONG, ADDRESS, JAVA_INT);
-            SET_WINDOW_LONG_PTR = find("SetWindowLongPtrW", JAVA_LONG, ADDRESS, JAVA_INT, JAVA_LONG);
-            SET_LAYERED_WINDOW_ATTRIBUTES = find("SetLayeredWindowAttributes", JAVA_INT, ADDRESS, JAVA_INT, JAVA_BYTE, JAVA_INT);
-            MOVE_WINDOW = find("MoveWindow", JAVA_INT, ADDRESS, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_BOOLEAN);
-            GET_DESKTOP_WINDOW = find("GetDesktopWindow", ADDRESS);
-        } catch (Throwable e) {
-            throw new ExceptionInInitializerError(e);
+        // 1. PhysicalToLogicalPointForPerMonitorDPI
+        // BOOL PhysicalToLogicalPointForPerMonitorDPI(HWND hWnd, LPPOINT lpPoint);
+        PhysicalToLogicalPointForPerMonitorDPI = findFunction("PhysicalToLogicalPointForPerMonitorDPI",
+            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+
+        // 2. GetWindowLongPtrW (Fallback to GetWindowLongW for 32-bit compatibility if needed, but we target 64-bit)
+        // LONG_PTR GetWindowLongPtrW(HWND hWnd, int nIndex);
+        MethodHandle getWindowLong = findFunctionOptional("GetWindowLongPtrW",
+            FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
+        if (getWindowLong == null) {
+            getWindowLong = findFunction("GetWindowLongW",
+                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT)); // Note: Returns 32-bit int extended to long
         }
+        GetWindowLongPtrW = getWindowLong;
+
+        // 3. SetWindowLongPtrW (Fallback to SetWindowLongW)
+        // LONG_PTR SetWindowLongPtrW(HWND hWnd, int nIndex, LONG_PTR dwNewLong);
+        MethodHandle setWindowLong = findFunctionOptional("SetWindowLongPtrW",
+            FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG));
+        if (setWindowLong == null) {
+            setWindowLong = findFunction("SetWindowLongW",
+                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG));
+        }
+        SetWindowLongPtrW = setWindowLong;
+
+        // 4. SetLayeredWindowAttributes
+        // BOOL SetLayeredWindowAttributes(HWND hwnd, COLORREF crKey, BYTE bAlpha, DWORD dwFlags);
+        SetLayeredWindowAttributes = findFunction("SetLayeredWindowAttributes",
+            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_BYTE, ValueLayout.JAVA_INT));
+            
+        // 5. MonitorFromWindow
+        // HMONITOR MonitorFromWindow(HWND hwnd, DWORD dwFlags);
+        MonitorFromWindow = findFunction("MonitorFromWindow",
+            FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
+
+        // 6. GetMonitorInfoW
+        // BOOL GetMonitorInfoW(HMONITOR hMonitor, LPMONITORINFO lpmi);
+        GetMonitorInfoW = findFunction("GetMonitorInfoW",
+            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
     }
 
-    private static MethodHandle find(String name, MemoryLayout resLayout, MemoryLayout... argLayouts) {
+    /**
+     * ヘルパー: 関数シンボルを検索し、MethodHandle を取得する。見つからない場合は例外をスロー。
+     */
+    private static MethodHandle findFunction(String name, FunctionDescriptor descriptor) {
         return LINKER.downcallHandle(
-            USER32.find(name).orElseThrow(() -> new UnsatisfiedLinkError(name)),
-            FunctionDescriptor.of(resLayout, argLayouts)
+            USER32.find(name).orElseThrow(() -> new UnsatisfiedLinkError("Symbol not found: " + name)),
+            descriptor
         );
     }
 
     /**
-     * ウィンドウの属性を取得します。
+     * ヘルパー: 関数シンボルを検索し、MethodHandle を取得する。見つからない場合は null を返す。
      */
-    public static long getWindowLongPtr(MemorySegment hWnd, int nIndex) {
-        try {
-            return (long) GET_WINDOW_LONG_PTR.invokeExact(hWnd, nIndex);
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to call GetWindowLongPtrW", e);
+    private static MethodHandle findFunctionOptional(String name, FunctionDescriptor descriptor) {
+        return USER32.find(name)
+            .map(symbol -> LINKER.downcallHandle(symbol, descriptor))
+            .orElse(null);
+    }
+
+    /**
+     * 物理座標を論理座標に変換します (Per-Monitor DPI 対応)。
+     * 
+     * @param hwndSegment ウィンドウハンドル (HWND)
+     * @param x 物理 X 座標
+     * @param y 物理 Y 座標
+     * @return 論理座標 (Point)。変換に失敗した場合は入力座標をそのまま返します。
+     */
+    public static Point convertPhysicalToLogical(MemorySegment hwndSegment, int x, int y) {
+        try (Arena arena = Arena.ofConfined()) {
+            // POINT 構造体の割り当て
+            MemorySegment point = arena.allocate(POINT_LAYOUT);
+            point.set(ValueLayout.JAVA_INT, 0, x);
+            point.set(ValueLayout.JAVA_INT, 4, y); // offset 4 bytes for y
+
+            // API 呼び出し
+            int result = (int) PhysicalToLogicalPointForPerMonitorDPI.invokeExact(hwndSegment, point);
+
+            if (result != 0) {
+                // 成功: 構造体から変換後の値を取得
+                int logicalX = point.get(ValueLayout.JAVA_INT, 0);
+                int logicalY = point.get(ValueLayout.JAVA_INT, 4);
+                return new Point(logicalX, logicalY);
+            } else {
+                // 失敗: 元の値を返す (ログ出力などを検討しても良い)
+                return new Point(x, y);
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return new Point(x, y);
         }
     }
 
     /**
-     * ウィンドウの属性を設定します。
+     * ウィンドウの属性 (LongPtr) を取得します。
      */
-    public static long setWindowLongPtr(MemorySegment hWnd, int nIndex, long dwNewLong) {
+    public static long getWindowLongPtr(MemorySegment hwnd, int index) {
         try {
-            return (long) SET_WINDOW_LONG_PTR.invokeExact(hWnd, nIndex, dwNewLong);
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to call SetWindowLongPtrW", e);
+            return (long) GetWindowLongPtrW.invokeExact(hwnd, index);
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to call GetWindowLongPtrW", t);
         }
     }
 
     /**
-     * レイヤードウィンドウの属性（透過度など）を設定します。
+     * ウィンドウの属性 (LongPtr) を設定します。
      */
-    public static boolean setLayeredWindowAttributes(MemorySegment hWnd, int crKey, byte bAlpha, int dwFlags) {
+    public static long setWindowLongPtr(MemorySegment hwnd, int index, long newValue) {
         try {
-            int result = (int) SET_LAYERED_WINDOW_ATTRIBUTES.invokeExact(hWnd, crKey, bAlpha, dwFlags);
+            return (long) SetWindowLongPtrW.invokeExact(hwnd, index, newValue);
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to call SetWindowLongPtrW", t);
+        }
+    }
+
+    /**
+     * レイヤードウィンドウの属性 (透明度など) を設定します。
+     */
+    public static boolean setLayeredWindowAttributes(MemorySegment hwnd, int crKey, byte bAlpha, int dwFlags) {
+        try {
+            int result = (int) SetLayeredWindowAttributes.invokeExact(hwnd, crKey, bAlpha, dwFlags);
             return result != 0;
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to call SetLayeredWindowAttributes", e);
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to call SetLayeredWindowAttributes", t);
         }
     }
 
     /**
-     * ウィンドウの位置とサイズを変更します。
+     * 指定されたウィンドウがあるモニタのワークエリア（タスクバーを除いた領域）を取得します。
+     * 物理座標から論理座標への変換も行います。
+     * 
+     * @param hwndSegment ウィンドウハンドル
+     * @return 論理座標ベースのワークエリア (Rectangle)
      */
-    public static boolean moveWindow(MemorySegment hWnd, int x, int y, int width, int height, boolean repaint) {
-        try {
-            int result = (int) MOVE_WINDOW.invokeExact(hWnd, x, y, width, height, repaint);
-            return result != 0;
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to call MoveWindow", e);
-        }
-    }
+    public static java.awt.Rectangle getWorkAreaForWindow(MemorySegment hwndSegment) {
+        try (Arena arena = Arena.ofConfined()) {
+            // 1. MonitorFromWindow でモニタハンドルを取得
+            MemorySegment hMonitor = (MemorySegment) MonitorFromWindow.invokeExact(hwndSegment, MONITOR_DEFAULTTONEAREST);
 
-    /**
-     * デスクトップウィンドウのハンドルを取得します。
-     */
-    public static MemorySegment getDesktopWindow() {
-        try {
-            return (MemorySegment) GET_DESKTOP_WINDOW.invokeExact();
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to call GetDesktopWindow", e);
+            // 2. MONITORINFO 構造体を準備
+            MemorySegment monitorInfo = arena.allocate(MONITORINFO_LAYOUT);
+            monitorInfo.set(ValueLayout.JAVA_INT, 0, (int) MONITORINFO_LAYOUT.byteSize()); // cbSize
+
+            // 3. GetMonitorInfoW を呼び出し
+            int result = (int) GetMonitorInfoW.invokeExact(hMonitor, monitorInfo);
+            if (result == 0) {
+                // 失敗時はデフォルト（画面全体など）を返すべきだが、ここではnullを返して呼び出し元で対処
+                return null;
+            }
+
+            // 4. rcWork (物理座標) を取得
+            // rcWork は offset 20 (cbSize:4 + rcMonitor:16)
+            long rcWorkOffset = 4 + 16; 
+            int left = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset);
+            int top = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 4);
+            int right = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 8);
+            int bottom = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 12);
+
+            // 5. 物理座標 -> 論理座標 変換
+            Point topLeft = convertPhysicalToLogical(hwndSegment, left, top);
+            Point bottomRight = convertPhysicalToLogical(hwndSegment, right, bottom);
+
+            return new java.awt.Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to get work area", t);
         }
     }
 }

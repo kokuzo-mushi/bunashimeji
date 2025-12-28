@@ -1,1 +1,15 @@
-ドラッグ自体を禁止する（マウスで掴めなくする）設定を追加することはできるか？
+=== Shimeji Neo Start (Deep Debug Mode) ===
+[Main] Current working directory: C:\bunashimeji\bunashimeji
+[Main] actions.xml exists. Skipping overwrite.
+[Main] behaviors.xml exists. Skipping overwrite.
+[Debug] AWT Screen Bounds: java.awt.Rectangle[x=0,y=0,width=1920,height=1080]
+[Debug] Java Runtime Version: 21.0.9
+[Main] Work area loaded via SPI_GETWORKAREA (Physical -> Logical): java.awt.Rectangle[x=0,y=0,width=1920,height=1032]
+[Main] System tray icon added.
+[Main] Created a new mascot instance. Total: 1
+[Main] Starting main loop... (Press Ctrl+C to exit)
+[FallAction] Initialized with velocity: (0.00, 0)
+[Debug] MascotY=874, FloorY=1032, WorkAreaH=1032, Grounded=false
+[FallAction] Grounded at Y=1032, VelocityY=20, VelocityX=0.00
+[FallAction] Grounded at Y=1032, VelocityY=9, VelocityX=0.00
+[Debug] MascotY=1032, FloorY=1032, WorkAreaH=1032, Grounded=true

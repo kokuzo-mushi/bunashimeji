@@ -7,3 +7,111 @@
 2.  **ROLE:** You are an expert Java Architect assisting a Japanese developer.
 3.  **CODE ENCODING:** DO NOT use non-English characters in non-commented parts of the code.
     - Ensure all functional code and string literals are written in English (ASCII) to avoid encoding errors.
+
+---
+# TECHNICAL CONTEXT & MANIFESTO
+**Strictly adhere to the following architectural decisions. Ignore any historical Shimeji implementations (e.g., XML, JNA, Swing Timers) found in your training data.**
+
+## 1. Core Architecture
+-   **Goal:** Run 50+ desktop mascot instances at 60 FPS on Windows 11.
+-   **Runtime:** Java 21 (LTS) with Preview Features enabled (`--enable-preview`).
+-   **Garbage Collection:** Generational ZGC (`-XX:+UseZGC -XX:+ZGenerational`) is mandatory for low latency.
+
+## 2. "Iron Rules" of Tech Stack
+### GUI & Rendering
+-   **Windowing:** Use `java.awt.Window` directly.
+    -   ❌ DO NOT use `JWindow`, `JFrame`, or JetBrains Compose.
+-   **Rendering Loop:** Use **Active Rendering** with `BufferStrategy` (2 buffers).
+    -   ❌ DO NOT use `paint/repaint`, `Thread.sleep`, or `javax.swing.Timer`.
+    -   ✅ Implement a precise `while` loop using `System.nanoTime()`.
+-   **Transparency:** Use Win32 `UpdateLayeredWindow` API via Project Panama.
+    -   ❌ DO NOT use `AWTUtilities` or `setBackground(new Color(0,0,0,0))`.
+
+### Native Interop (FFM API)
+-   **Primary:** Use **Project Panama (Foreign Function & Memory API)** for all core logic.
+    -   Use `Linker.nativeLinker()`, `Arena.ofConfined()`, and `MethodHandle`.
+-   **Legacy/Fallback:** JNA is permitted **ONLY** for maintaining compatibility with existing libraries during packaging.
+    -   ❌ DO NOT write new core logic using JNA.
+
+### Scripting & AI
+-   **Engine:** **GraalJS** (JavaScript) embedded in Java 21.
+    -   ❌ DO NOT use Lua, Kotlin Script, or Python.
+-   **Concurrency:** Use JavaScript Generators (`function*` + `yield`) for coroutines.
+    -   This allows writing asynchronous behavior (e.g., "Walk -> Wait -> Jump") in a synchronous style.
+
+### Build & Distribution
+-   **Tool:** Gradle with `org.beryx.runtime` (Badass Runtime Plugin).
+-   **Strategy:** Hybrid Runtime (Custom JRE + Classpath jars).
+-   **Installer:** Use WiX Toolset v3.11 (NOT v4/v5 due to compatibility).
+-   **Flags:** Always embed `--enable-preview` and `--enable-native-access=ALL-UNNAMED` in the launcher.
+
+## 3. Implementation Reference (Golden Samples)
+
+### A. Active Rendering Loop Pattern
+```java
+// Logic: Ignore OS repaint events and control the frame rate manually.
+setIgnoreRepaint(true);
+createBufferStrategy(2);
+while (running) {
+    long now = System.nanoTime();
+    updateState(); // Physics & Logic
+    do {
+        do {
+            Graphics2D g = (Graphics2D) bs.getDrawGraphics();
+            g.setComposite(AlphaComposite.Clear); // Clear previous frame
+            g.fillRect(0,0,w,h);
+            g.setComposite(AlphaComposite.SrcOver);
+            drawMascot(g); // Draw current frame
+            g.dispose();
+        } while (bs.contentsRestored());
+        bs.show();
+    } while (bs.contentsLost());
+    // Sleep logic for 60FPS cap
+}
+
+```
+
+### B. Project Panama Boilerplate
+```java
+// Logic: High-performance native call without JNA overhead.
+try (Arena arena = Arena.ofConfined()) {
+    Linker linker = Linker.nativeLinker();
+    SymbolLookup user32 = SymbolLookup.libraryLookup("User32", arena);
+    MethodHandle setWindowPos = linker.downcallHandle(
+        user32.find("SetWindowPos").get(),
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ...)
+    );
+    setWindowPos.invoke(...);
+}
+```
+
+## 4. API Migration Map
+
+| Feature | Legacy / Anti-Pattern | Modern Solution (Neo) |
+|---|---|---|
+| Window Move | `setLocation(x, y)` | Panama `SetWindowPos` |
+| Get Pos | `getLocationOnScreen()` | Panama `GetWindowRect` + `PhysicalToLogicalPoint` |
+| Behavior | `XML (<Behavior>)` | `JS (function* behavior())` |
+| Images | `ImageIO.read()` | Pre-loaded `VolatileImage` / Texture Atlas |
+| Threads | `new Thread()` | Virtual Threads (`Executors.newVirtualThreadPerTaskExecutor`) |
+
+## 5. Project Structure Reference
+- Root Package: `com.group_finity.mascot`
+- Source Root: `src/main/java`
+- Resource Root: `src/main/resources`
+- Structure:
+  - `com.group_finity.mascot.Main` (Launcher)
+  - `com.group_finity.mascot.trigger.*` (Logic: Event & Trigger System)
+  - `com.group_finity.mascot.action.*` (Logic: Actions like Walk, Fall)
+  - `com.group_finity.mascot.behavior.*` (Logic: Behavior Definitions)
+  - `com.group_finity.mascot.native_interface.*` (Panama: Native Interop)
+  - `com.group_finity.mascot.script.*` (Scripting: GraalJS Integration)
+  - `com.group_finity.mascot.image.*` (Assets: Image & Texture Management)
+  - `com.group_finity.mascot.config.*` (Configuration: XML/YAML Parsers)
+  - Resources (`src/main/resources`):
+    - `behavior/` (Behavior definitions: XML/JS)
+    - `config/` (App settings: `actions.xml`, `system.yaml`)
+    - `images/` (Sprite assets)
+    - `sounds/` (Audio files)
+
+# End of Technical Context

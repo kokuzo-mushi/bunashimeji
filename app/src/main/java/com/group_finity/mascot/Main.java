@@ -23,7 +23,6 @@ import java.lang.foreign.MemorySegment;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
-import java.awt.geom.AffineTransform;
 import java.awt.Rectangle;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
@@ -134,42 +133,10 @@ public class Main {
             return;
         }
 
-        // --- 2️⃣ 環境情報の取得 ---
-        // Windows API (SystemParametersInfo) を使用して正確なワークエリアを取得する
-        // これが最も確実な方法（タスクバーやドッキングされたツールバーを除外した領域が返る）
-        RECT workAreaRect = new RECT();
-        
-        // DPIスケーリングを考慮するための準備
-        GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-        AffineTransform transform = gc.getDefaultTransform();
-        double scaleX = transform.getScaleX();
-        double scaleY = transform.getScaleY();
-        Rectangle awtBounds = gc.getBounds();
-        
-        System.out.printf("[Debug] AWT Screen Bounds: %s%n", awtBounds);
-        System.out.printf("[Debug] AWT Scale Factor: X=%.2f, Y=%.2f%n", scaleX, scaleY);
-        System.out.printf("[Debug] Java Runtime Version: %s%n", System.getProperty("java.version"));
-
-        if (User32SPI.INSTANCE.SystemParametersInfoW(SPI_GETWORKAREA, 0, workAreaRect, 0)) {
-             int nativeWidth = workAreaRect.right - workAreaRect.left;
-             int nativeHeight = workAreaRect.bottom - workAreaRect.top;
-
-             // JNAが物理ピクセルを返している場合（AWTの論理サイズより大きい場合）、論理ピクセルに変換する
-             if (nativeWidth > awtBounds.width + 10) { // 誤差許容
-                 System.out.printf("[Main] DPI Scaling detected (Native: %dx%d, AWT: %dx%d). Applying scale factor (%.2f, %.2f).%n", 
-                     nativeWidth, nativeHeight, awtBounds.width, awtBounds.height, scaleX, scaleY);
-                 // ★ここが怪しいポイント：scaleXが1.0なのにnativeWidthが大きい場合、JavaがDPIUnawareになっている可能性がある
-                 workArea = new Rectangle((int)(workAreaRect.left / scaleX), (int)(workAreaRect.top / scaleY), (int)(nativeWidth / scaleX), (int)(nativeHeight / scaleY));
-             } else {
-                 workArea = new Rectangle(workAreaRect.left, workAreaRect.top, nativeWidth, nativeHeight);
-             }
-             System.out.printf("[Main] Work area loaded via SPI_GETWORKAREA: %s%n", workArea);
-        } else {
-            // 取得失敗時のフォールバック（従来のJava API）
-            System.err.println("[Main] SPI_GETWORKAREA failed. Falling back to Java API.");
-            workArea = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-            System.out.printf("[Main] Work area loaded via Java API: %s%n", workArea);
-        }
+        // --- 2️⃣ 環境情報の初期化 ---
+        // 初期ワークエリアはJava APIで仮設定しておく（後でメインループ内で正確な値に更新される）
+        workArea = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        System.out.printf("[Main] Initial work area (Java API): %s%n", workArea);
 
         // 画像キャッシュの初期化
         imageCache = new ImageCache(Path.of("img"));
@@ -246,6 +213,26 @@ public class Main {
                 // マスコットのサイズを取得
                 int mascotWidth = mascotView.getMascotWidth();
                 int mascotHeight = mascotView.getMascotHeight();
+
+                // --- ワークエリアの動的更新 (DPI & マルチモニタ対応) ---
+                // マスコットがいるモニタの正確なワークエリアを取得する
+                if (mascotView instanceof java.awt.Window) {
+                    try {
+                        Pointer hwndPointer = Native.getComponentPointer((java.awt.Window) mascotView);
+                        MemorySegment hwndSegment = MemorySegment.ofAddress(Pointer.nativeValue(hwndPointer));
+                        
+                        Rectangle currentMonitorWorkArea = NativeWindowUtil.getWorkAreaForWindow(hwndSegment);
+                        if (currentMonitorWorkArea != null) {
+                            // ワークエリアが変化した場合のみログ出力（スパム防止）
+                            if (!currentMonitorWorkArea.equals(workArea)) {
+                                System.out.printf("[Main] WorkArea updated: %s (Mascot: %s)%n", currentMonitorWorkArea, mascot);
+                                workArea = currentMonitorWorkArea;
+                            }
+                        }
+                    } catch (Exception e) {
+                        // 取得失敗時は前回の値を維持
+                    }
+                }
 
                 // 環境情報の取得（床、天井、壁の位置）
                 // ウィンドウが動いている場合のみ、そのウィンドウを「前回乗っていたウィンドウ」として渡し、粘着力を高める
