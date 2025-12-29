@@ -2,9 +2,6 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 public class JumpAction implements Action {
     private final Animation animation;
@@ -13,16 +10,8 @@ public class JumpAction implements Action {
     private int currentVelocityY;
     private boolean finished = false;
 
-    public JumpAction(XmlAnimation xmlAnimation, int velocityY, int velocityX) {
-        if (xmlAnimation != null) {
-            this.animation = new Animation(
-                    xmlAnimation.getPoses().stream()
-                            .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                            .collect(Collectors.toList())
-            );
-        } else {
-            this.animation = null;
-        }
+    public JumpAction(Animation animation, int velocityY, int velocityX) {
+        this.animation = animation;
         // XMLのVelocityYは正の値で指定されることが多いが、画面座標系では上方向はマイナス
         this.initialVelocityY = -Math.abs(velocityY);
         this.velocityX = velocityX;

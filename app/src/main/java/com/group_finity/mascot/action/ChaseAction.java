@@ -2,14 +2,11 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.nativeaccess.Win32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.util.stream.Collectors;
 
 /**
  * マウスカーソルを追いかけるアクション。
@@ -22,12 +19,8 @@ public class ChaseAction implements Action {
     private int timeRemaining;
     private final int targetDistance = 5; // 追いついたとみなす距離
 
-    public ChaseAction(XmlAnimation xmlAnimation, int speed, int duration) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public ChaseAction(Animation animation, int speed, int duration) {
+        this.animation = animation;
         this.speed = speed;
         this.duration = duration;
         this.timeRemaining = duration;

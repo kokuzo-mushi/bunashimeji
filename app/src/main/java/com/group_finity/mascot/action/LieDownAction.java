@@ -2,10 +2,7 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * 寝転がるアクション。
@@ -18,12 +15,8 @@ public class LieDownAction implements Action {
     private int timeRemaining;
     private final Random random = new Random();
 
-    public LieDownAction(XmlAnimation xmlAnimation, int duration) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public LieDownAction(Animation animation, int duration) {
+        this.animation = animation;
         this.maxDuration = duration > 0 ? duration : 2000; // デフォルト2秒
         reset();
     }

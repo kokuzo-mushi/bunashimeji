@@ -2,9 +2,6 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 public class FallAction implements Action {
     private final Animation animation;
@@ -13,16 +10,8 @@ public class FallAction implements Action {
     private boolean finished = false;
     private boolean initialized = false;
 
-    public FallAction(XmlAnimation xmlAnimation) {
-        if (xmlAnimation != null) {
-            this.animation = new Animation(
-                    xmlAnimation.getPoses().stream()
-                            .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                            .collect(Collectors.toList())
-            );
-        } else {
-            this.animation = null;
-        }
+    public FallAction(Animation animation) {
+        this.animation = animation;
     }
 
     @Override

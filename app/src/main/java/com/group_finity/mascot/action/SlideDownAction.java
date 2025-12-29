@@ -2,9 +2,6 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 /**
  * 壁に沿って滑り落ちるアクション。
@@ -16,12 +13,8 @@ public class SlideDownAction implements Action {
     private final int speed;
     private int timeRemaining;
 
-    public SlideDownAction(XmlAnimation xmlAnimation, int speed) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public SlideDownAction(Animation animation, int speed) {
+        this.animation = animation;
         this.speed = speed;
         this.timeRemaining = this.animation.getTotalDuration();
     }

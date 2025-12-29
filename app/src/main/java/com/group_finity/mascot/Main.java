@@ -1000,12 +1000,12 @@ public class Main {
                 <Actions>
                     <Action Name="Stay" Type="Stay" Duration="1000">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="Sit" Type="Stay" Duration="8000">
                         <Animation>
-                            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="8000" />
+                            <Pose ImageAnchor="64,128" Duration="8000" />
                         </Animation>
                     </Action>
                     <Action Name="AfterSit" Type="RandomChoice">
@@ -1020,81 +1020,81 @@ public class Main {
                     </Action>
                     <Action Name="Land" Type="Animate">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="LieDown" Type="LieDown" Duration="4000">
                         <Animation>
-                            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="4000" />
+                            <Pose ImageAnchor="64,128" Duration="4000" />
                         </Animation>
                     </Action>
                     <Action Name="Breed" Type="Breed" Duration="4000">
                         <Point X="0" Y="-100" />
                         <Animation>
-                            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="BreedJump" Type="Breed" Duration="4000" VelocityX="10" VelocityY="-25">
                         <Point X="0" Y="-100" />
                         <Animation>
-                            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="3600" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="3600" />
                         </Animation>
                     </Action>
                     <Action Name="Dig" Type="Dig" Duration="2000">
                         <Animation>
-                            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="Gather" Type="Gather" Speed="1" Duration="4000">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="Fall" Type="Fall">
                         <Animation>
-                            <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose ImageAnchor="64,128" Duration="100" />
                         </Animation>
                     </Action>
                     <Action Name="Walk" Type="Walk" Speed="1">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose Duration="200" />
+                            <Pose Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="Chase" Type="Chase" Speed="4" Duration="5000">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="50" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
+                            <Pose ImageAnchor="64,128" Duration="50" />
+                            <Pose ImageAnchor="64,128" Duration="50" />
                         </Animation>
                     </Action>
                     <Action Name="Dragged" Type="Dragged">
                         <Animation>
                             <!-- 順序: 左速, 左遅, 静止, 右遅, 右速 -->
                             <!-- 左・速 (例: 走る/飛ぶポーズ) -->
-                            <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose ImageAnchor="64,128" Duration="100" />
                             <!-- 左・遅 (例: 歩く/揺れるポーズ) -->
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose ImageAnchor="64,128" Duration="100" />
                             <!-- 静止 (例: つままれポーズ) -->
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose ImageAnchor="64,128" Duration="100" />
                             <!-- 右・遅 -->
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose ImageAnchor="64,128" Duration="100" />
                             <!-- 右・速 -->
-                            <Pose Image="shime4.png" ImageAnchor="64,128" Duration="100" />
+                            <Pose ImageAnchor="64,128" Duration="100" />
                         </Animation>
                     </Action>
                     <Action Name="Jump" Type="Jump" VelocityY="12" VelocityX="3">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="JumpLeft" Type="Jump" VelocityY="12" VelocityX="-3">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="RandomJumpAction" Type="RandomChoice">
@@ -1103,7 +1103,7 @@ public class Main {
                     </Action>
                     <Action Name="TripFall" Type="Animate">
                         <Animation>
-                            <Pose Image="shime18.png" ImageAnchor="64,128" Duration="500" />
+                            <Pose ImageAnchor="64,128" Duration="500" />
                         </Animation>
                     </Action>
                     <Action Name="TripSequence" Type="Sequence">
@@ -1112,38 +1112,38 @@ public class Main {
                     </Action>
                     <Action Name="WallCling" Type="WallCling" Duration="2000">
                         <Animation>
-                            <Pose Image="shime15.png" ImageAnchor="64,128" Duration="2000" />
+                            <Pose ImageAnchor="64,128" Duration="2000" />
                         </Animation>
                     </Action>
                     <Action Name="Climb" Type="Climb" Speed="1">
                         <Animation>
-                            <Pose Image="shime15.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime16.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="Teeter" Type="Teeter" Duration="2000" FallProbability="0.2">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="150" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="150" />
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="150" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="150" />
+                            <Pose ImageAnchor="64,128" Duration="150" />
+                            <Pose ImageAnchor="64,128" Duration="150" />
+                            <Pose ImageAnchor="64,128" Duration="150" />
+                            <Pose ImageAnchor="64,128" Duration="150" />
                         </Animation>
                     </Action>
                     <Action Name="PullUp" Type="PullUp" Duration="2000">
                         <Animation>
-                            <Pose Image="shime15.png" ImageAnchor="64,128" Duration="500" />
-                            <Pose Image="shime13.png" ImageAnchor="64,128" Duration="1500" />
+                            <Pose ImageAnchor="64,128" Duration="500" />
+                            <Pose ImageAnchor="64,128" Duration="1500" />
                         </Animation>
                     </Action>
                     <Action Name="CeilingCrawl" Type="CeilingCrawl" Speed="1" Duration="2000">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="CeilingStay" Type="Stay" Duration="5000">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="CeilingRandomMove" Type="RandomChoice">
@@ -1152,12 +1152,12 @@ public class Main {
                     </Action>
                     <Action Name="SlideDown" Type="SlideDown" Speed="2">
                         <Animation>
-                            <Pose Image="shime17.png" ImageAnchor="64,128" Duration="400" />
+                            <Pose ImageAnchor="64,128" Duration="400" />
                         </Animation>
                     </Action>
                     <Action Name="WallJump" Type="WallJump" VelocityY="12" VelocityX="10">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="WallRandomMove" Type="RandomChoice">
@@ -1175,20 +1175,24 @@ public class Main {
                     <Action Name="Turn" Type="Turn" />
                     <Action Name="Grab" Type="Grab" Duration="5000">
                         <Animation>
-                            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="5000" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="Throw" Type="Throw">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="50" />
-                            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
+                            <Pose ImageAnchor="64,128" Duration="50" />
+                            <Pose ImageAnchor="64,128" Duration="50" />
                         </Animation>
+                        <ActionReference Name="Bow" />
                     </Action>
                     <Action Name="Bow" Type="Animate">
                         <Animation>
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
-                            <Pose Image="shime34.png" ImageAnchor="64,128" Duration="500" />
-                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="500" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="LookRight" Type="Look" VelocityX="1" />
@@ -1224,8 +1228,8 @@ public class Main {
                         <Condition>!mascot.isGrounded() &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="FallSequence" />
                     </Behavior>
-                    <Behavior Name="Teeter" Frequency="5000">
-                        <Condition>mascot.isGrounded() &amp;&amp; isOnEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                    <Behavior Name="Teeter" Frequency="100">
+                        <Condition>mascot.isGrounded() &amp;&amp; isOnEdge &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Teeter" />
                     </Behavior>
                     <Behavior Name="PullUp" Frequency="200">

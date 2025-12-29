@@ -2,9 +2,6 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 /**
  * 壁を蹴って反対方向にジャンプするアクション。
@@ -18,16 +15,8 @@ public class WallJumpAction implements Action {
     private int direction = 0;
     private boolean initialized = false;
 
-    public WallJumpAction(XmlAnimation xmlAnimation, int velocityY, int velocityX) {
-        if (xmlAnimation != null) {
-            this.animation = new Animation(
-                    xmlAnimation.getPoses().stream()
-                            .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                            .collect(Collectors.toList())
-            );
-        } else {
-            this.animation = null;
-        }
+    public WallJumpAction(Animation animation, int velocityY, int velocityX) {
+        this.animation = animation;
         // 上方向への初速
         this.initialVelocityY = -Math.abs(velocityY);
         this.velocityX = Math.abs(velocityX);

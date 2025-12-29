@@ -2,6 +2,8 @@ package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.action.AnimateAction;
+import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.action.MoveAction;
 import com.group_finity.mascot.action.SequenceAction;
 import com.group_finity.mascot.action.WalkAction;
@@ -29,6 +31,7 @@ import com.group_finity.mascot.action.LookAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
 import com.group_finity.mascot.config.xml.XmlActionReference;
+import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.config.xml.XmlActions;
 import com.group_finity.mascot.config.XmlSecurity;
 import jakarta.xml.bind.JAXBContext;
@@ -94,6 +97,8 @@ public class ActionBuilder {
                 } else if (action instanceof RandomChoiceAction) {
                     // RandomChoiceAction の参照解決
                     resolveRandomChoiceAction((RandomChoiceAction) action, xmlAction, builtActions);
+                } else if (action instanceof ThrowAction) {
+                    resolveThrowAction((ThrowAction) action, xmlAction, builtActions);
                 }
             }
 
@@ -106,6 +111,23 @@ public class ActionBuilder {
         }
     }
 
+    private Animation createAnimationFromXml(XmlAnimation xmlAnimation, String actionName) {
+        if (xmlAnimation == null || xmlAnimation.getPoses() == null) {
+            return null;
+        }
+        List<Pose> poses = new ArrayList<>();
+        int index = 1;
+        for (XmlPose xmlPose : xmlAnimation.getPoses()) {
+            String imageName = xmlPose.getImage();
+            if (imageName == null || imageName.isEmpty()) {
+                imageName = actionName + index + ".png";
+            }
+            poses.add(new Pose(imageName, xmlPose.getDuration(), xmlPose.getImageAnchorPoint()));
+            index++;
+        }
+        return new Animation(poses);
+    }
+
     /**
      * XmlActionから具体的なActionインスタンスを生成するヘルパーメソッド。
      * "Type"属性に基づいて適切なActionクラスをインスタンス化します。
@@ -115,11 +137,12 @@ public class ActionBuilder {
         // Actionの実行時に遅延初期化する必要があります。
         switch (xmlAction.getType()) {
             case "Animate":
-                if (xmlAction.getAnimation() == null) {
+                Animation anim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                if (anim == null) {
                     System.err.println("Animate action requires <Animation> tag: " + xmlAction.getName());
                     return null; // or a NoOpAction
                 }
-                return new AnimateAction(xmlAction.getAnimation());
+                return new AnimateAction(anim);
             case "Move": {
                 if (xmlAction.getPoint() == null) {
                     System.err.println("Move action requires <Point> tag: " + xmlAction.getName());
@@ -152,30 +175,41 @@ public class ActionBuilder {
                 return new LookAction(lookRight);
             case "Fall":
                 // 落下アクションを生成します。
-                return new FallAction(xmlAction.getAnimation());
+                Animation fallAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                return new FallAction(fallAnim);
             case "Dragged": {
-                if (xmlAction.getAnimation() == null) {
+                XmlAnimation xmlAnim = xmlAction.getAnimation();
+                if (xmlAnim == null || xmlAnim.getPoses() == null) {
                     System.err.println("Dragged action requires <Animation> tag: " + xmlAction.getName());
                     return null;
                 }
-                return new DraggedAction(xmlAction.getAnimation());
+                List<Animation> poseAnims = new ArrayList<>();
+                int index = 1;
+                for (XmlPose xmlPose : xmlAnim.getPoses()) {
+                    String imageName = xmlPose.getImage();
+                    if (imageName == null || imageName.isEmpty()) {
+                        imageName = xmlAction.getName() + index + ".png";
+                    }
+                    poseAnims.add(new Animation(List.of(new Pose(imageName, xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))));
+                    index++;
+                }
+                return new DraggedAction(poseAnims);
             }
             case "Jump": {
                 int vx = xmlAction.getVelocityX() != null ? xmlAction.getVelocityX() : 0;
                 int vy = xmlAction.getVelocityY() != null ? xmlAction.getVelocityY() : 0;
-                return new JumpAction(xmlAction.getAnimation(), vy, vx);
+                Animation jumpAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                return new JumpAction(jumpAnim, vy, vx);
             }
             case "Stay": {
                 // 指定時間だけ待機するアクションを生成します。
                 int duration = xmlAction.getDuration() != null ? xmlAction.getDuration() : 1000;
-                return new StayAction(xmlAction.getAnimation(), duration);
+                Animation stayAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                return new StayAction(stayAnim, duration);
             }
             case "LieDown": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("LieDown action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
-                return new LieDownAction(xmlAction.getAnimation(), xmlAction.getDuration() != null ? xmlAction.getDuration() : 4000);
+                Animation lieDownAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                return new LieDownAction(lieDownAnim, xmlAction.getDuration() != null ? xmlAction.getDuration() : 4000);
             }
             case "Breed": {
                 if (xmlAction.getAnimation() == null) {
@@ -189,111 +223,97 @@ public class ActionBuilder {
                 // Velocity属性があれば生成時の初速として使用
                 int bornVX = (xmlAction.getVelocityX() != null) ? xmlAction.getVelocityX() : 0;
                 int bornVY = (xmlAction.getVelocityY() != null) ? xmlAction.getVelocityY() : 0;
-                return new BreedAction(xmlAction.getAnimation(), duration, bornX, bornY, bornVX, bornVY);
+                Animation breedAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                return new BreedAction(breedAnim, duration, bornX, bornY, bornVX, bornVY);
             }
             case "Dig": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("Dig action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
+                Animation digAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 2000;
-                return new DigAction(xmlAction.getAnimation(), duration);
+                return new DigAction(digAnim, duration);
             }
             case "Gather": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("Gather action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
+                Animation gatherAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
                 int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 4000;
-                return new GatherAction(xmlAction.getAnimation(), speed, duration);
+                return new GatherAction(gatherAnim, speed, duration);
             }
             case "WallCling": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("WallCling action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
+                Animation wallClingAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 1000;
-                return new WallClingAction(xmlAction.getAnimation(), duration);
+                return new WallClingAction(wallClingAnim, duration);
             }
             case "Climb": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("Climb action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
+                Animation climbAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
-                return new ClimbAction(xmlAction.getAnimation(), speed);
+                return new ClimbAction(climbAnim, speed);
             }
             case "CeilingCrawl": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("CeilingCrawl action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
+                Animation ceilingCrawlAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
                 int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 5000;
-                return new CeilingCrawlAction(xmlAction.getAnimation(), speed, duration);
+                return new CeilingCrawlAction(ceilingCrawlAnim, speed, duration);
             }
             case "SlideDown": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("SlideDown action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
+                Animation slideDownAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 4;
-                return new SlideDownAction(xmlAction.getAnimation(), speed);
+                return new SlideDownAction(slideDownAnim, speed);
             }
             case "WallJump": {
-                if (xmlAction.getAnimation() == null) {
-                    System.err.println("WallJump action requires <Animation> tag: " + xmlAction.getName());
-                    return null;
-                }
+                Animation wallJumpAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int vx = xmlAction.getVelocityX() != null ? xmlAction.getVelocityX() : 5;
                 int vy = xmlAction.getVelocityY() != null ? xmlAction.getVelocityY() : 20;
-                return new WallJumpAction(xmlAction.getAnimation(), vy, vx);
+                return new WallJumpAction(wallJumpAnim, vy, vx);
             }
             case "Walk":
-                if (xmlAction.getAnimation() == null) {
+                Animation walkAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                if (walkAnim == null) {
                     System.err.println("Walk action requires <Animation> tag: " + xmlAction.getName());
                     return null;
                 }
                 // Speed属性がなければデフォルト値(e.g., 1)を使う
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 1;
-                return new WalkAction(xmlAction.getAnimation(), speed);
+                return new WalkAction(walkAnim, speed);
             case "Chase":
-                if (xmlAction.getAnimation() == null) {
+                Animation chaseAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                if (chaseAnim == null) {
                     System.err.println("Chase action requires <Animation> tag: " + xmlAction.getName());
                     return null;
                 }
                 int chaseSpeed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 4;
                 int chaseDuration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 5000;
-                return new ChaseAction(xmlAction.getAnimation(), chaseSpeed, chaseDuration);
+                return new ChaseAction(chaseAnim, chaseSpeed, chaseDuration);
             case "Grab":
-                if (xmlAction.getAnimation() == null) {
+                Animation grabAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                if (grabAnim == null) {
                     System.err.println("Grab action requires <Animation> tag: " + xmlAction.getName());
                     return null;
                 }
-                return new GrabAction(xmlAction.getAnimation());
+                return new GrabAction(grabAnim);
             case "Throw":
-                if (xmlAction.getAnimation() == null) {
+                Animation throwAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                if (throwAnim == null) {
                     System.err.println("Throw action requires <Animation> tag: " + xmlAction.getName());
                     return null;
                 }
-                return new ThrowAction(xmlAction.getAnimation());
+                return new ThrowAction(throwAnim);
             case "Teeter": {
-                if (xmlAction.getAnimation() == null) {
+                Animation teeterAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                if (teeterAnim == null) {
                     System.err.println("Teeter action requires <Animation> tag: " + xmlAction.getName());
                     return null;
                 }
                 int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 4000;
                 double fallProbability = (xmlAction.getFallProbability() != null) ? xmlAction.getFallProbability() : 0.2;
-                return new TeeterAction(xmlAction.getAnimation(), duration, fallProbability);
+                return new TeeterAction(teeterAnim, duration, fallProbability);
             }
             case "PullUp": {
-                if (xmlAction.getAnimation() == null) {
+                Animation pullUpAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                if (pullUpAnim == null) {
                     System.err.println("PullUp action requires <Animation> tag: " + xmlAction.getName());
                     return null;
                 }
                 int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 1000;
-                return new PullUpAction(xmlAction.getAnimation(), duration);
+                return new PullUpAction(pullUpAnim, duration);
             }
             default:
                 System.err.println("Unknown action type: " + xmlAction.getType());
@@ -328,5 +348,23 @@ public class ActionBuilder {
             }
         }
         randomAction.setCandidates(candidates);
+    }
+
+    private void resolveThrowAction(ThrowAction throwAction, XmlAction xmlAction, Map<String, Action> builtActions) {
+        // ThrowActionがActionReferenceを持っている場合、それを勝利ポーズとして使用する
+        if (xmlAction.getActionReferences() != null && !xmlAction.getActionReferences().isEmpty()) {
+            String refName = xmlAction.getActionReferences().get(0).getName();
+            Action referencedAction = builtActions.get(refName);
+            
+            if (referencedAction != null) {
+                if (referencedAction instanceof StayAction) {
+                    throwAction.setCelebrationAnimation(((StayAction) referencedAction).getAnimation());
+                } else if (referencedAction instanceof AnimateAction) {
+                    throwAction.setCelebrationAnimation(((AnimateAction) referencedAction).getAnimation());
+                }
+            } else {
+                System.err.println("ActionReference not found: " + refName + " in Throw " + xmlAction.getName());
+            }
+        }
     }
 }

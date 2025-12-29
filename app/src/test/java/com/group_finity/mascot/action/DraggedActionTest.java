@@ -1,7 +1,6 @@
 package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,9 +21,8 @@ class DraggedActionTest {
     void setUp() {
         mockMascot = mock(Mascot.class);
 
-        XmlAnimation mockAnimation = mock(XmlAnimation.class);
-        when(mockAnimation.getPoses()).thenReturn(Collections.emptyList());
-        action = new DraggedAction(mockAnimation);
+        // DraggedAction now takes List<Animation>
+        action = new DraggedAction(Collections.emptyList());
     }
 
     @Test

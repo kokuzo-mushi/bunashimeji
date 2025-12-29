@@ -3,9 +3,6 @@ package com.group_finity.mascot.action;
 import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 /**
  * 地面を掘って消えるアクション。
@@ -17,12 +14,8 @@ public class DigAction implements Action {
     private final int duration;
     private int timeRemaining;
 
-    public DigAction(XmlAnimation xmlAnimation, int duration) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public DigAction(Animation animation, int duration) {
+        this.animation = animation;
         this.duration = duration;
         this.timeRemaining = duration;
     }

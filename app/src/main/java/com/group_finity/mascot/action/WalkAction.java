@@ -2,12 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.nativeaccess.Win32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
-import java.util.stream.Collectors;
 
 /**
  * アニメーションを再生しながら、水平方向に一定時間歩き続けるアクション。
@@ -22,12 +19,8 @@ public class WalkAction implements Action {
     // アクションの残り時間を内部で管理します。
     private int timeRemaining;
 
-    public WalkAction(XmlAnimation xmlAnimation, int speed) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public WalkAction(Animation animation, int speed) {
+        this.animation = animation;
         this.speed = speed;
         // アクション生成時に、アニメーションの総再生時間を残り時間として初期設定します。
         this.timeRemaining = this.animation.getTotalDuration();
@@ -79,9 +72,8 @@ public class WalkAction implements Action {
                 RECT rect = new RECT();
                 Win32.INSTANCE.GetWindowRect(floor, rect);
                 if (nextX <= rect.left || nextX >= rect.right) {
-                    // 端ギリギリまで移動して止まる（確実にisOnEdge判定させるため）
-                    int edgeX = (direction > 0) ? rect.right - 5 : rect.left + 5;
-                    mascot.setX(edgeX);
+                    // 端に到達。壁にぴったりくっつける。
+                    mascot.setX((direction > 0) ? rect.right : rect.left);
                     
                     this.timeRemaining = 0;
                     return;

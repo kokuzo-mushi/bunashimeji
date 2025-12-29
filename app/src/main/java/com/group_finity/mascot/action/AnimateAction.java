@@ -2,20 +2,13 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 public class AnimateAction implements Action {
     private final Animation animation;
     private int timeRemaining;
 
-    public AnimateAction(XmlAnimation xmlAnimation) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public AnimateAction(Animation animation) {
+        this.animation = animation;
         this.timeRemaining = this.animation.getTotalDuration();
     }
 
@@ -37,5 +30,9 @@ public class AnimateAction implements Action {
     public void reset() {
         this.timeRemaining = this.animation.getTotalDuration();
         this.animation.reset();
+    }
+
+    public Animation getAnimation() {
+        return animation;
     }
 }

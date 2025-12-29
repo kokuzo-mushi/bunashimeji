@@ -2,10 +2,7 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * 天井を伝って歩くアクション。
@@ -20,12 +17,8 @@ public class CeilingCrawlAction implements Action {
     private int elapsedFrames = 0;
     private boolean finished = false;
 
-    public CeilingCrawlAction(XmlAnimation xmlAnimation, int speed, int duration) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public CeilingCrawlAction(Animation animation, int speed, int duration) {
+        this.animation = animation;
         this.speed = speed;
         this.duration = duration;
         this.timeRemaining = duration;

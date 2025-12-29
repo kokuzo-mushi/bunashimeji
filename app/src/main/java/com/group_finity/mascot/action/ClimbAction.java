@@ -2,12 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.nativeaccess.Win32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
-import java.util.stream.Collectors;
 
 /**
  * 壁を登るアクション。
@@ -19,12 +16,8 @@ public class ClimbAction implements Action {
     private final int speed;
     private int timeRemaining;
 
-    public ClimbAction(XmlAnimation xmlAnimation, int speed) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public ClimbAction(Animation animation, int speed) {
+        this.animation = animation;
         this.speed = speed;
         this.timeRemaining = this.animation.getTotalDuration();
     }

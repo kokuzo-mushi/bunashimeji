@@ -3,19 +3,14 @@ package com.group_finity.mascot.action;
 import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.environment.Environment;
 import com.group_finity.mascot.nativeaccess.Win32;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 
-import java.awt.Point;
-import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.stream.Collectors;
 
 /**
  * ターゲットウィンドウに向かって移動し、投げる（予定）アクション。
@@ -53,18 +48,9 @@ public class ThrowAction implements Action {
         // 勝利ポーズ用
         int celebrateTime;
         
-        ThrowState(XmlAnimation xmlAnimation) {
-            if (xmlAnimation != null) {
-                this.animation = new Animation(
-                        xmlAnimation.getPoses().stream()
-                                .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                                .collect(Collectors.toList())
-                );
-            }
-            // 勝利ポーズ（座り）のアニメーションを作成
-            this.celebrateAnimation = new Animation(Collections.singletonList(
-                    new Pose("shime11.png", 2000, new Point(64, 128))
-            ));
+        ThrowState(Animation animation, Animation celebrateAnimation) {
+            this.animation = animation;
+            this.celebrateAnimation = celebrateAnimation;
         }
 
         void reset() {
@@ -80,7 +66,8 @@ public class ThrowAction implements Action {
         }
     }
 
-    private final XmlAnimation xmlAnimation; // アニメーション生成用テンプレート
+    private final Animation animationTemplate; // アニメーション生成用テンプレート
+    private Animation celebrationAnimationTemplate; // 勝利ポーズ用テンプレート
     private final Map<Mascot, ThrowState> states = new WeakHashMap<>();
     private Mascot lastMascot; // hasNext()判定用
     
@@ -89,12 +76,16 @@ public class ThrowAction implements Action {
     private static final int SPEED = 8; // 移動速度 (倍増)
     private static final int LIFT_DURATION = 20; // 持ち上げにかかるフレーム数
 
-    public ThrowAction(XmlAnimation xmlAnimation) {
-        this.xmlAnimation = xmlAnimation;
+    public ThrowAction(Animation animation) {
+        this.animationTemplate = animation;
+    }
+
+    public void setCelebrationAnimation(Animation animation) {
+        this.celebrationAnimationTemplate = animation;
     }
 
     private ThrowState getState(Mascot mascot) {
-        return states.computeIfAbsent(mascot, m -> new ThrowState(xmlAnimation));
+        return states.computeIfAbsent(mascot, m -> new ThrowState(animationTemplate, celebrationAnimationTemplate));
     }
 
     @Override
@@ -286,7 +277,11 @@ public class ThrowAction implements Action {
                 
                 // 勝利ポーズへ移行
                 s.state = State.CELEBRATING;
-                s.celebrateTime = 2000; // 2秒間
+                if (s.celebrateAnimation != null) {
+                    s.celebrateTime = s.celebrateAnimation.getTotalDuration();
+                } else {
+                    s.celebrateTime = 2000; // デフォルト2秒
+                }
             }
         } else if (s.state == State.CELEBRATING) {
             if (s.celebrateAnimation != null) {

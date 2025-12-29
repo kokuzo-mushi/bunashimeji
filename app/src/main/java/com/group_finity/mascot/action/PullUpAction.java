@@ -2,15 +2,12 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.nativeaccess.Win32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.stream.Collectors;
 
 /**
  * 壁の上端からよじ登ってウィンドウの上に着地するアクション。
@@ -31,28 +28,20 @@ public class PullUpAction implements Action {
         }
     }
 
-    private final XmlAnimation xmlAnimation;
+    private final Animation animationTemplate;
     private final int duration;
     private final Map<Mascot, PullUpState> states = new WeakHashMap<>();
     private Mascot lastMascot;
 
-    public PullUpAction(XmlAnimation xmlAnimation, int duration) {
-        this.xmlAnimation = xmlAnimation;
+    public PullUpAction(Animation animation, int duration) {
+        this.animationTemplate = animation;
         this.duration = duration;
     }
 
     @Override
     public void execute(Mascot mascot) {
         lastMascot = mascot;
-        PullUpState s = states.computeIfAbsent(mascot, m -> {
-            Animation anim = null;
-            if (xmlAnimation != null) {
-                anim = new Animation(xmlAnimation.getPoses().stream()
-                        .map(p -> new Pose(p.getImage(), p.getDuration(), p.getImageAnchorPoint()))
-                        .collect(Collectors.toList()));
-            }
-            return new PullUpState(anim, duration);
-        });
+        PullUpState s = states.computeIfAbsent(mascot, m -> new PullUpState(animationTemplate, duration));
 
         if (!s.initialized) {
             s.startX = mascot.getX();

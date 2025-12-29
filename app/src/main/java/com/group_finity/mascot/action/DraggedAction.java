@@ -2,8 +2,6 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,17 +28,8 @@ public class DraggedAction implements Action {
     private static final int SPEED_FAST = 15;
     private static final int SPEED_SLOW = 2;
 
-    public DraggedAction(XmlAnimation xmlAnimation) {
-        if (xmlAnimation != null) {
-            // XMLに定義されたポーズを順番に読み込み、それぞれ単独のアニメーションとして保持する
-            for (var xmlPose : xmlAnimation.getPoses()) {
-                Pose pose = new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint());
-                Animation anim = new Animation(List.of(pose));
-                // 初期化のために一度tickしておく（ポーズを確定させるため）
-                anim.tick(0);
-                this.poseAnimations.add(anim);
-            }
-        }
+    public DraggedAction(List<Animation> poseAnimations) {
+        this.poseAnimations.addAll(poseAnimations);
     }
 
     @Override

@@ -2,12 +2,8 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.nativeaccess.Win32;
 import com.sun.jna.platform.win32.WinDef.RECT;
-
-import java.util.stream.Collectors;
 
 /**
  * ウィンドウの端でバランスをとるアクション。
@@ -18,10 +14,8 @@ public class TeeterAction implements Action {
     private int time = 0;
     private final double fallProbability;
 
-    public TeeterAction(XmlAnimation xmlAnimation, int duration, double fallProbability) {
-        this.animation = new Animation(xmlAnimation.getPoses().stream()
-                .map(p -> new Pose(p.getImage(), p.getDuration(), p.getImageAnchorPoint()))
-                .collect(Collectors.toList()));
+    public TeeterAction(Animation animation, int duration, double fallProbability) {
+        this.animation = animation;
         this.duration = duration;
         this.fallProbability = fallProbability;
     }

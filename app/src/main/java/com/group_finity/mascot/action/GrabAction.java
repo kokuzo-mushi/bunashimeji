@@ -2,15 +2,12 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import com.group_finity.mascot.nativeaccess.Win32;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * 足元のウィンドウを掴んで、マスコットの移動に合わせてウィンドウを動かすアクション。
@@ -30,12 +27,8 @@ public class GrabAction implements Action {
     private int timeToChangeDirection = 0;
     private static final int MOVE_SPEED = 4;
 
-    public GrabAction(XmlAnimation xmlAnimation) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public GrabAction(Animation animation) {
+        this.animation = animation;
     }
 
     @Override

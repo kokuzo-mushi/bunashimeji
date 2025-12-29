@@ -2,12 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * 待機アクション。
@@ -21,16 +18,8 @@ public class StayAction implements Action {
     private final Random random = new Random();
     private int lookingAtMouseTime = 0;
 
-    public StayAction(XmlAnimation xmlAnimation, int duration) {
-        if (xmlAnimation != null) {
-            this.animation = new Animation(
-                    xmlAnimation.getPoses().stream()
-                            .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                            .collect(Collectors.toList())
-            );
-        } else {
-            this.animation = null;
-        }
+    public StayAction(Animation animation, int duration) {
+        this.animation = animation;
         this.duration = duration;
         reset(); // 初期化時にもランダム時間を設定
     }
@@ -98,5 +87,9 @@ public class StayAction implements Action {
         if (this.animation != null) {
             this.animation.reset();
         }
+    }
+
+    public Animation getAnimation() {
+        return animation;
     }
 }

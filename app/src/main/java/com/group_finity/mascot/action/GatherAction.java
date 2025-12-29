@@ -3,9 +3,6 @@ package com.group_finity.mascot.action;
 import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 /**
  * 他のマスコットの近くに集まるアクション。
@@ -18,12 +15,8 @@ public class GatherAction implements Action {
     private int timeRemaining;
     private final int targetDistance = 50; // この距離まで近づいたら停止
 
-    public GatherAction(XmlAnimation xmlAnimation, int speed, int duration) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public GatherAction(Animation animation, int speed, int duration) {
+        this.animation = animation;
         this.speed = speed;
         this.duration = duration;
         this.timeRemaining = duration;

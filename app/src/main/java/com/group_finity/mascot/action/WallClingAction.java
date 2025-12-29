@@ -2,9 +2,6 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.config.xml.XmlAnimation;
-import java.util.stream.Collectors;
 
 /**
  * 壁にしがみつくアクション。
@@ -16,12 +13,8 @@ public class WallClingAction implements Action {
     private int timeRemaining;
     private boolean initialized = false;
 
-    public WallClingAction(XmlAnimation xmlAnimation, int duration) {
-        this.animation = new Animation(
-                xmlAnimation.getPoses().stream()
-                        .map(xmlPose -> new Pose(xmlPose.getImage(), xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))
-                        .collect(Collectors.toList())
-        );
+    public WallClingAction(Animation animation, int duration) {
+        this.animation = animation;
         this.duration = duration;
         this.timeRemaining = duration;
     }
