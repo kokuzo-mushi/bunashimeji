@@ -5,17 +5,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
-import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.behavior.Behavior;
 import com.group_finity.mascot.behavior.Configuration;
 import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.event.StateChangeEvent;
-import com.group_finity.mascot.log.EventLog;
-import com.group_finity.mascot.log.EventLogRecord;
 import com.group_finity.mascot.trigger.EventDispatcher;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
@@ -81,10 +77,6 @@ public final class ShimejiApp {
         // 注意: 現状のActionBuilderとBehaviorBuilderはプレースホルダです。
         // 実際の動作にはXMLをパースする実装が必要です。
         Configuration config = new Configuration(Path.of("conf/actions.xml"), Path.of("conf/behaviors.xml"));
-
-        // 4. 読み込んだアクションのマップをマスコットに設定
-        Map<String, Action> actions = config.getActions() != null ? config.getActions() : Collections.emptyMap();
-        this.mascot.setActions(actions);
 
         // 5. 読み込んだビヘイビアをEventDispatcherに登録
         List<Behavior> behaviors = config.getBehaviors() != null ? config.getBehaviors() : Collections.emptyList();

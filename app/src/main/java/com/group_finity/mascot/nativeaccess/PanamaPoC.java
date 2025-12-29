@@ -13,6 +13,7 @@ import static java.lang.foreign.ValueLayout.*;
  * 
  * <p>実行には JVM オプション --enable-preview --enable-native-access=ALL-UNNAMED が必要です。</p>
  */
+@SuppressWarnings("preview")
 public class PanamaPoC {
 
     // Windows API Constants
@@ -83,7 +84,7 @@ public class PanamaPoC {
         // Panama Benchmark
         long startPanama = System.nanoTime();
         for(int i=0; i<1_000_000; i++) {
-            long style = (long) getWindowLongPtr.invoke(hwndSegment, GWL_EXSTYLE);
+            getWindowLongPtr.invoke(hwndSegment, GWL_EXSTYLE);
         }
         long endPanama = System.nanoTime();
         double panamaMs = (endPanama - startPanama) / 1_000_000.0;

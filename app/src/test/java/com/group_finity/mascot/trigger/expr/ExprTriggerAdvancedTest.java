@@ -7,8 +7,6 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import com.group_finity.mascot.trigger.ExprTrigger;
-import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
-import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
 public class ExprTriggerAdvancedTest {

@@ -6,7 +6,6 @@ import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.config.xml.XmlAnimation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * ドラッグ中のアクション。
@@ -48,7 +47,6 @@ public class DraggedAction implements Action {
     public void execute(Mascot mascot) {
         int currentX = mascot.getX();
         int currentY = mascot.getY();
-        final int FRAME_DURATION_MS = 40; // 1フレームの時間(ms)
 
         if (firstFrame) {
             previousX = currentX;

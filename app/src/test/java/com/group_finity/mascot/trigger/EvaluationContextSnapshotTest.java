@@ -1,7 +1,5 @@
 package com.group_finity.mascot.trigger;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -3,9 +3,6 @@ package com.group_finity.mascot.view;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.animation.Pose;
-import com.group_finity.mascot.trigger.EventDispatcher;
-import com.group_finity.mascot.trigger.event.EventEnvelope;
-import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.image.ImageCache;
 import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
 import com.sun.jna.Native;
@@ -20,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.ValueLayout;
 
 /**
  * Active Rendering と UpdateLayeredWindow を使用した
@@ -29,6 +25,7 @@ import java.lang.foreign.ValueLayout;
  * Swing (JWindow) ではなく java.awt.Window を直接使用し、
  * OSの再描画イベントに依存せず、メインループから draw() を呼び出すことで描画します。
  */
+@SuppressWarnings("preview")
 public class MascotWindow extends Window {
 
     private final Mascot mascot;

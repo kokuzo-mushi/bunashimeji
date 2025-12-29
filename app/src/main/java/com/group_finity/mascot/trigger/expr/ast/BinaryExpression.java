@@ -1,6 +1,8 @@
 package com.group_finity.mascot.trigger.expr.ast;
 
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
+import com.group_finity.mascot.trigger.expr.type.Mode;
 
 public class BinaryExpression implements Expression {
     private final Expression left;
@@ -16,15 +18,21 @@ public class BinaryExpression implements Expression {
     @Override
     public Object evaluate(EvaluationContext context) {
         Object leftVal = left.evaluate(context);
+        TypeCoercion coercer = context.getTypeCoercion();
+        Mode mode = context.getMode();
 
         // 短絡評価 (Short-circuit evaluation)
         if (operator.equals("and") || operator.equals("&&")) {
-            if (!asBoolean(leftVal)) return false;
-            return asBoolean(right.evaluate(context));
+            Boolean l = coercer.coerceTo(leftVal, Boolean.class, mode);
+            if (!Boolean.TRUE.equals(l)) return false;
+            Boolean r = coercer.coerceTo(right.evaluate(context), Boolean.class, mode);
+            return Boolean.TRUE.equals(r);
         }
         if (operator.equals("or") || operator.equals("||")) {
-            if (asBoolean(leftVal)) return true;
-            return asBoolean(right.evaluate(context));
+            Boolean l = coercer.coerceTo(leftVal, Boolean.class, mode);
+            if (Boolean.TRUE.equals(l)) return true;
+            Boolean r = coercer.coerceTo(right.evaluate(context), Boolean.class, mode);
+            return Boolean.TRUE.equals(r);
         }
 
         Object rightVal = right.evaluate(context);
@@ -38,23 +46,21 @@ public class BinaryExpression implements Expression {
             case "<=": return compare(leftVal, rightVal) <= 0;
             case ">":  return compare(leftVal, rightVal) > 0;
             case ">=": return compare(leftVal, rightVal) >= 0;
-            case "+":  return asDouble(leftVal) + asDouble(rightVal);
-            case "-":  return asDouble(leftVal) - asDouble(rightVal);
-            case "*":  return asDouble(leftVal) * asDouble(rightVal);
-            case "/":  return asDouble(leftVal) / asDouble(rightVal);
-            case "%":  return asDouble(leftVal) % asDouble(rightVal);
+            case "+":
+                if (leftVal instanceof String || rightVal instanceof String) {
+                    return String.valueOf(leftVal) + String.valueOf(rightVal);
+                }
+                return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) + toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            case "-":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) - toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            case "*":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) * toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            case "/":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) / toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            case "%":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) % toDouble(coercer.coerceTo(rightVal, Double.class, mode));
             default: throw new RuntimeException("Unknown operator: " + operator);
         }
     }
 
-    private boolean asBoolean(Object val) {
-        if (val instanceof Boolean) return (Boolean) val;
-        return val != null;
-    }
-
-    private double asDouble(Object val) {
-        if (val instanceof Number) return ((Number) val).doubleValue();
-        return 0.0;
+    private double toDouble(Double d) {
+        return d != null ? d : 0.0;
     }
 
     private boolean equals(Object a, Object b) {
@@ -86,7 +92,7 @@ public class BinaryExpression implements Expression {
             return Double.compare(((Number) a).doubleValue(), ((Number) b).doubleValue());
         }
         if (a instanceof Comparable && b instanceof Comparable) {
-            return ((Comparable) a).compareTo(b);
+            return ((Comparable<Object>) a).compareTo(b);
         }
         return 0;
     }

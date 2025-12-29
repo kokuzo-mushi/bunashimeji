@@ -79,4 +79,12 @@
         <Condition>mascot.isGrounded() &amp;&amp; mascot.getFloorWindow() != null &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="Throw" />
     </Behavior>
+    <Behavior Name="GreetRight" Frequency="5">
+        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &gt;= mascot.getX()</Condition>
+        <ActionReference Name="GreetSequenceRight" />
+    </Behavior>
+    <Behavior Name="GreetLeft" Frequency="5">
+        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &lt; mascot.getX()</Condition>
+        <ActionReference Name="GreetSequenceLeft" />
+    </Behavior>
 </Behaviors>

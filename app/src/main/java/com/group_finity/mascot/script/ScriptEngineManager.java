@@ -42,6 +42,7 @@ public class ScriptEngineManager {
         // ホストアクセスの設定 (アノテーション @HostAccess.Export があるもののみ許可)
         this.hostAccess = HostAccess.newBuilder(HostAccess.EXPLICIT)
                 .allowListAccess(true) // 配列やリストへのアクセスを許可
+                .allowMapAccess(true)  // Mapへのアクセスを許可 (JSオブジェクトのように扱えるようにする)
                 .build();
     }
 

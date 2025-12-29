@@ -3,7 +3,6 @@ package com.group_finity.mascot.action;
 import com.group_finity.mascot.Mascot;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class StayActionTest {
 

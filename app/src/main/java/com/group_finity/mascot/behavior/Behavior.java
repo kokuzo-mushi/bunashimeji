@@ -177,6 +177,10 @@ public class Behavior implements Trigger {
         Action action = instantiateAction(mascot);
         if (action != null) {
             mascot.setNextAction(action);
+            // デバッグログ: 挨拶イベントの発火を確認
+            if (name != null && name.startsWith("Greet")) {
+                System.out.println("[Behavior] Fired: " + name);
+            }
         }
     }
 

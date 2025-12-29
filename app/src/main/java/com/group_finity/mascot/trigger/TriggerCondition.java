@@ -3,19 +3,12 @@ package com.group_finity.mascot.trigger;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-import com.group_finity.mascot.trigger.expr.ExpressionEngine;
-import com.group_finity.mascot.trigger.expr.cache.CacheStatsTracker;
-import com.group_finity.mascot.trigger.expr.cache.EvaluationResult;
-import com.group_finity.mascot.trigger.expr.cache.ExprCacheKey;
 import com.group_finity.mascot.trigger.expr.cache.ExprCacheManager;
 import com.group_finity.mascot.trigger.event.EventType;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
@@ -24,7 +17,6 @@ import com.group_finity.mascot.trigger.expr.ast.LiteralExpression;
 import com.group_finity.mascot.trigger.expr.parser.ExpressionParser;
 import com.group_finity.mascot.trigger.util.VariableToEventTypeMapper;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
-import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
 import com.group_finity.mascot.trigger.expr.type.Mode;
 import com.group_finity.mascot.trigger.expr.type.TypeResolver;
 
@@ -41,13 +33,11 @@ public class TriggerCondition {
     private static final ExprCacheManager cacheManager = new ExprCacheManager();
 
     private final String expression;
-    private final ExpressionEngine engine;
     private EvaluationContext context; // Assumed to share reference
     private final Set<EventType> subscribedEventTypes;
 
     public TriggerCondition(String expression, Map<String, Object> variables) {
         this.expression = expression;
-        this.engine = new ExpressionEngine();
         if (variables == null) variables = new HashMap<>();
         // Assumes EvaluationContext has a reference-sharing constructor
         this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT, true);
@@ -155,7 +145,6 @@ public class TriggerCondition {
 
         // 4) Re-evaluate (clear access log only at this time)
         ctx.clearAccessLog();
-        long start = System.nanoTime();
         Object result;
         try {
             result = ast.evaluate(ctx);
@@ -164,7 +153,6 @@ public class TriggerCondition {
             e.printStackTrace();
             result = false;
         }
-        long end = System.nanoTime();
 
         /*
         // 5) Save dependency snapshot (put overwrites AST key)

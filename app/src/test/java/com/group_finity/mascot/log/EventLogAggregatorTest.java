@@ -34,18 +34,19 @@ public class EventLogAggregatorTest {
     void testBatchingAndOrder() throws Exception {
         var cfg = new EventLogConfig(32, 3, Duration.ofSeconds(5), DropPolicy.DROP_OLDEST);
         var sink = new InMemorySink();
-        var agg = new EventLogAggregator(cfg, sink);
-        agg.start();
+        try (var agg = new EventLogAggregator(cfg, sink)) {
+            agg.start();
 
-        // 7件送信 → batch=3,3,1 のはず
-        for (int i = 0; i < 7; i++) {
-            agg.offer(new EventLogRecord("src", "trg", true, 0L,
-                    EventLogRecord.Level.INFO, Map.of("i", i)));
+            // 7件送信 → batch=3,3,1 のはず
+            for (int i = 0; i < 7; i++) {
+                agg.offer(new EventLogRecord("src", "trg", true, 0L,
+                        EventLogRecord.Level.INFO, Map.of("i", i)));
+            }
+
+            // flush: batchSize=3で即時出力されるよう待機
+            Thread.sleep(200);
+            agg.stop(Duration.ofSeconds(1));
         }
-
-        // flush: batchSize=3で即時出力されるよう待機
-        Thread.sleep(200);
-        agg.stop(Duration.ofSeconds(1));
 
         // 出力件数確認
         long total = sink.batches.stream().mapToLong(List::size).sum();
@@ -66,17 +67,18 @@ public class EventLogAggregatorTest {
     void testDropOldestPolicy() throws Exception {
         var cfg = new EventLogConfig(2, 10, Duration.ofMillis(50), DropPolicy.DROP_OLDEST);
         var sink = new InMemorySink();
-        var agg = new EventLogAggregator(cfg, sink);
-        agg.start();
+        try (var agg = new EventLogAggregator(cfg, sink)) {
+            agg.start();
 
-        // 容量2のキューに5件送る（古い3件はドロップされる）
-        for (int i = 0; i < 5; i++) {
-            agg.offer(new EventLogRecord("src", "drop", true, 0L,
-                    EventLogRecord.Level.INFO, Map.of("i", i)));
+            // 容量2のキューに5件送る（古い3件はドロップされる）
+            for (int i = 0; i < 5; i++) {
+                agg.offer(new EventLogRecord("src", "drop", true, 0L,
+                        EventLogRecord.Level.INFO, Map.of("i", i)));
+            }
+
+            Thread.sleep(200);
+            agg.stop(Duration.ofSeconds(1));
         }
-
-        Thread.sleep(200);
-        agg.stop(Duration.ofSeconds(1));
 
         // 最後の2件だけが保持されているはず
         var remaining = sink.batches.stream().flatMap(List::stream)
@@ -90,16 +92,17 @@ public class EventLogAggregatorTest {
     void testGracefulShutdownFlushesRemaining() throws Exception {
         var cfg = new EventLogConfig(8, 100, Duration.ofSeconds(2), DropPolicy.DROP_OLDEST);
         var sink = new InMemorySink();
-        var agg = new EventLogAggregator(cfg, sink);
-        agg.start();
+        try (var agg = new EventLogAggregator(cfg, sink)) {
+            agg.start();
 
-        for (int i = 0; i < 5; i++) {
-            agg.offer(new EventLogRecord("src", "grace", true, 0L,
-                    EventLogRecord.Level.INFO, Map.of("i", i)));
+            for (int i = 0; i < 5; i++) {
+                agg.offer(new EventLogRecord("src", "grace", true, 0L,
+                        EventLogRecord.Level.INFO, Map.of("i", i)));
+            }
+
+            // 即時 stop → flushInterval より前に強制終了
+            agg.stop(Duration.ofSeconds(1));
         }
-
-        // 即時 stop → flushInterval より前に強制終了
-        agg.stop(Duration.ofSeconds(1));
 
         long total = sink.batches.stream().mapToLong(List::size).sum();
         assertEquals(5, total, "停止時に残件がすべてフラッシュされること");

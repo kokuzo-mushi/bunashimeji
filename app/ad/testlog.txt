@@ -1,11 +1,9 @@
-PS C:\bunashimeji\bunashimeji> ./gradlew jpackage 
-
-> Task :app:compileJava
-繝弱・繝・ C:\bunashimeji\bunashimeji\app\src\main\java\com\group_finity\mascot\Main.java縺ｯJava SE 21縺ｮ繝励Ξ繝薙Η繝ｼ讖溯・繧剃ｽｿ逕ｨ縺 励∪縺吶・
-         繝弱・繝・ 隧ｳ邏ｰ縺ｯ縲・Xlint:preview繧ｪ繝励す繝ｧ繝ｳ繧呈欠螳壹＠縺ｦ蜀阪さ繝ｳ繝代う繝ｫ縺励※縺上□縺輔＞縲・
-
-> Task :app:jre
-・ｽx・ｽ・ｽ:  --compress・ｽ・ｽ2・ｽ・ｽ・ｽ・ｽ・ｽﾍ非推擾ｿｽ・ｽﾅゑｿｽ・ｽ・ｽA・ｽ・ｽ・ｽ・ｽﾌ・ｿｽ・ｽ・ｽ・ｽ[・ｽX・ｽﾅ削除・ｽ・ｽ・ｽ・ｽ・ｽﾂ能・ｽ・ｽ・ｽ ・ｽ・ｽ・ｽ・ｽ・ｽﾜゑｿｽ
-
-BUILD SUCCESSFUL in 35s
-8 actionable tasks: 7 executed, 1 up-to-date
+        // // --- Project Panama Demo ---
+        // // 最初の1体だけ、実験的に半透明にする (NativeWindowUtilを使用)
+        // // if (mascotInstances.size() == 1 && mascotView instanceof java.awt.Window) {
+        // //     // ウィンドウが表示され、ネイティブハンドルが確定した後に実行
+        // //     SwingUtilities.invokeLater(() -> {
+        // //         applyTransparencyDemo((java.awt.Window) mascotView);
+        // //     });
+        // // }
+    }

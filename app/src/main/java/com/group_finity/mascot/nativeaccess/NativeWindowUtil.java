@@ -3,7 +3,6 @@ package com.group_finity.mascot.nativeaccess;
 import java.awt.Point;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import java.util.Optional;
 
 /**
  * Project Panama (Foreign Function & Memory API) を使用した
@@ -11,6 +10,7 @@ import java.util.Optional;
  * 
  * 主に DPI スケーリングの座標変換と、ウィンドウの透過処理に使用します。
  */
+@SuppressWarnings("preview")
 public class NativeWindowUtil {
 
     // --- Constants for Window Styles & Attributes ---
@@ -327,7 +327,7 @@ public class NativeWindowUtil {
     public static void setWindowPosPhysical(MemorySegment hwndSegment, int x, int y, int width, int height) {
         try {
             // HWND_TOP = 0 (Zオーダー変更なしフラグSWP_NOZORDERを指定するため第2引数は無視されるが0を渡す)
-            int result = (int) SetWindowPos.invokeExact(hwndSegment, MemorySegment.NULL, x, y, width, height, SWP_NOZORDER | SWP_NOACTIVATE);
+            SetWindowPos.invoke(hwndSegment, MemorySegment.NULL, x, y, width, height, SWP_NOZORDER | SWP_NOACTIVATE);
         } catch (Throwable t) {
             throw new RuntimeException("Failed to call SetWindowPos", t);
         }
@@ -396,7 +396,7 @@ public class NativeWindowUtil {
             pblend.set(ValueLayout.JAVA_BYTE, 3, AC_SRC_ALPHA);// AlphaFormat
 
             // 4. UpdateLayeredWindow 呼び出し
-            int result = (int) UpdateLayeredWindow.invokeExact(
+            UpdateLayeredWindow.invoke(
                 hwndSegment,
                 screenDC,
                 pptDst,
@@ -409,10 +409,10 @@ public class NativeWindowUtil {
             );
 
             // 5. クリーンアップ
-            MemorySegment prevBitmap = (MemorySegment) SelectObject.invokeExact(memDC, oldBitmap); // 元のビットマップに戻す
-            int r1 = (int) DeleteObject.invokeExact(hBitmap);
-            int r2 = (int) DeleteDC.invokeExact(memDC);
-            int r3 = (int) ReleaseDC.invokeExact(MemorySegment.NULL, screenDC);
+            SelectObject.invoke(memDC, oldBitmap); // 元のビットマップに戻す
+            DeleteObject.invoke(hBitmap);
+            DeleteDC.invoke(memDC);
+            ReleaseDC.invoke(MemorySegment.NULL, screenDC);
 
         } catch (Throwable t) {
             // 頻繁に呼ばれるため、スタックトレースは抑制するか、重大なエラーのみログ出力

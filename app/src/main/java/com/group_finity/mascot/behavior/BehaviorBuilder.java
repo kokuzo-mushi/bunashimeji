@@ -5,9 +5,8 @@ import com.group_finity.mascot.action.SequenceAction;
 import com.group_finity.mascot.config.xml.XmlBehavior;
 import com.group_finity.mascot.config.xml.XmlBehaviors;
 import com.group_finity.mascot.config.xml.XmlActionReference;
-import com.group_finity.mascot.trigger.Trigger;
+import com.group_finity.mascot.config.XmlSecurity;
 import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
 import java.nio.file.Path;
@@ -15,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
 
 /**
  * Builds a list of {@link Behavior}s from an XML configuration file.
@@ -43,7 +45,12 @@ public class BehaviorBuilder {
         try {
             JAXBContext context = JAXBContext.newInstance(XmlBehaviors.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            XmlBehaviors xmlBehaviors = (XmlBehaviors) unmarshaller.unmarshal(behaviorsPath.toFile());
+
+            // XXE対策: Secure DocumentBuilderFactoryを使用
+            DocumentBuilderFactory dbf = XmlSecurity.createSecureFactory();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(behaviorsPath.toFile());
+            XmlBehaviors xmlBehaviors = (XmlBehaviors) unmarshaller.unmarshal(doc);
 
             if (xmlBehaviors.getBehaviors() == null) {
                 return Collections.emptyList();
@@ -66,7 +73,7 @@ public class BehaviorBuilder {
             }
             return Collections.unmodifiableList(builtBehaviors);
 
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             System.err.println("Failed to parse behaviors.xml: " + behaviorsPath);
             e.printStackTrace();
             return Collections.emptyList();

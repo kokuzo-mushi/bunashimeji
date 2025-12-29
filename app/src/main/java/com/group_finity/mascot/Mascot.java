@@ -4,8 +4,6 @@ import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.animation.Animation;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import java.awt.Point;
-import java.util.Collections;
-import java.util.Map;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Context;
 
@@ -37,8 +35,6 @@ public class Mascot {
     private HWND targetWindow;
     private HWND leftWallWindow;
     private HWND rightWallWindow;
-
-    private Map<String, Action> actions = Collections.emptyMap();
 
     // GraalJS Context (Per-instance isolation)
     private Context jsContext;
@@ -256,10 +252,6 @@ public class Mascot {
     @HostAccess.Export
     public String getState() {
         return currentAction != null ? currentAction.toString() : null;
-    }
-
-    public void setActions(Map<String, Action> actions) {
-        this.actions = actions;
     }
 
     public void tick() {

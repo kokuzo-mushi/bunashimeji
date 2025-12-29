@@ -29,9 +29,6 @@ public class SettingsWindow extends JFrame {
 
     public SettingsWindow(
             List<Behavior> behaviors,
-            List<String> skins,
-            String currentSkin,
-            Consumer<String> onSkinChange,
             int initialGravity,
             Consumer<Integer> onGravityChange,
             double initialTimeScale,
@@ -51,19 +48,7 @@ public class SettingsWindow extends JFrame {
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
 
-        // 1. Skin Selection
-        JPanel skinPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        skinPanel.add(new JLabel("Skin:"));
-        JComboBox<String> skinBox = new JComboBox<>(skins.toArray(new String[0]));
-        skinBox.setSelectedItem(currentSkin);
-        skinBox.addActionListener(e -> {
-            String selected = (String) skinBox.getSelectedItem();
-            onSkinChange.accept(selected);
-        });
-        skinPanel.add(skinBox);
-        controlPanel.add(skinPanel);
-
-        // 2. Gravity Slider
+        // 1. Gravity Slider
         JPanel gravityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         gravityPanel.add(new JLabel("Gravity:"));
         JSlider gravitySlider = new JSlider(0, 5, initialGravity);
@@ -77,7 +62,7 @@ public class SettingsWindow extends JFrame {
         gravityPanel.add(gravitySlider);
         controlPanel.add(gravityPanel);
 
-        // 3. Speed Slider (Time Scale)
+        // 2. Speed Slider (Time Scale)
         JPanel speedPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         speedPanel.add(new JLabel("Speed:"));
         // 10% to 300% (Default 100%)
@@ -102,7 +87,7 @@ public class SettingsWindow extends JFrame {
         speedPanel.add(speedSlider);
         controlPanel.add(speedPanel);
 
-        // 4. Window Limit
+        // 3. Window Limit
         JPanel limitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         limitPanel.add(new JLabel("Limit:"));
         

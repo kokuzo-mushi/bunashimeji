@@ -1,6 +1,7 @@
 package com.group_finity.mascot.trigger.expr.eval;
 
 import com.group_finity.mascot.trigger.expr.type.Mode;
+import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ public class EvaluationContext {
 
     public EvaluationContext(Map<String, Object> variables) {
         // デフォルトでアクセスログ記録を有効化
-        this(variables, null, Mode.STRICT, true);
+        this(variables, new DefaultTypeCoercion(), Mode.STRICT, true);
     }
 
     public EvaluationContext(Map<String, Object> variables, TypeCoercion typeCoercion, Mode mode) {
@@ -25,7 +26,7 @@ public class EvaluationContext {
 
     public EvaluationContext(Map<String, Object> variables, TypeCoercion typeCoercion, Mode mode, boolean recordAccess) {
         this.variables = variables != null ? variables : new HashMap<>();
-        this.typeCoercion = typeCoercion;
+        this.typeCoercion = typeCoercion != null ? typeCoercion : new DefaultTypeCoercion();
         this.mode = mode != null ? mode : Mode.STRICT;
         this.recordAccess = recordAccess;
     }
@@ -55,6 +56,10 @@ public class EvaluationContext {
 
     public Mode getMode() {
         return mode;
+    }
+
+    public TypeCoercion getTypeCoercion() {
+        return typeCoercion;
     }
 
     public void clearAccessLog() {

@@ -13,7 +13,6 @@ import com.sun.jna.platform.win32.WinDef.RECT;
 
 import java.awt.Point;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;

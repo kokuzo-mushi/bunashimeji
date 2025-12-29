@@ -1,7 +1,6 @@
 package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.action.Action;
-import com.group_finity.mascot.Mascot;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;

@@ -185,4 +185,21 @@
             <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
         </Animation>
     </Action>
+    <Action Name="Bow" Type="Animate">
+        <Animation>
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+            <Pose Image="shime34.png" ImageAnchor="64,128" Duration="500" />
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="LookRight" Type="Look" VelocityX="1" />
+    <Action Name="LookLeft" Type="Look" VelocityX="-1" />
+    <Action Name="GreetSequenceRight" Type="Sequence">
+        <ActionReference Name="LookRight" />
+        <ActionReference Name="Bow" />
+    </Action>
+    <Action Name="GreetSequenceLeft" Type="Sequence">
+        <ActionReference Name="LookLeft" />
+        <ActionReference Name="Bow" />
+    </Action>
 </Actions>

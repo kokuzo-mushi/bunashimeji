@@ -25,12 +25,13 @@ import com.group_finity.mascot.action.GrabAction;
 import com.group_finity.mascot.action.ThrowAction;
 import com.group_finity.mascot.action.TeeterAction;
 import com.group_finity.mascot.action.PullUpAction;
+import com.group_finity.mascot.action.LookAction;
 import com.group_finity.mascot.config.xml.XmlPose;
 import com.group_finity.mascot.config.xml.XmlAction;
 import com.group_finity.mascot.config.xml.XmlActionReference;
 import com.group_finity.mascot.config.xml.XmlActions;
+import com.group_finity.mascot.config.XmlSecurity;
 import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
 import java.nio.file.Path;
@@ -39,6 +40,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
 
 /**
  * Builds a map of named {@link Action}s from an XML configuration file.
@@ -61,7 +65,12 @@ public class ActionBuilder {
         try {
             JAXBContext context = JAXBContext.newInstance(XmlActions.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            XmlActions xmlActions = (XmlActions) unmarshaller.unmarshal(actionsPath.toFile());
+
+            // XXE対策: Secure DocumentBuilderFactoryを使用
+            DocumentBuilderFactory dbf = XmlSecurity.createSecureFactory();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(actionsPath.toFile());
+            XmlActions xmlActions = (XmlActions) unmarshaller.unmarshal(doc);
 
             if (xmlActions.getActions() == null) {
                 return Collections.emptyMap();
@@ -90,7 +99,7 @@ public class ActionBuilder {
 
             return Collections.unmodifiableMap(builtActions);
 
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             System.err.println("Failed to parse actions.xml: " + actionsPath);
             e.printStackTrace();
             return Collections.emptyMap();
@@ -136,6 +145,11 @@ public class ActionBuilder {
             case "Turn":
                 // マスコットの向きを反転させるアクションを生成します。
                 return new TurnAction();
+            case "Look":
+                // マスコットの向きを指定します。VelocityX > 0 なら右、< 0 なら左とみなします。
+                int dir = xmlAction.getVelocityX() != null ? xmlAction.getVelocityX() : 0;
+                boolean lookRight = dir >= 0;
+                return new LookAction(lookRight);
             case "Fall":
                 // 落下アクションを生成します。
                 return new FallAction(xmlAction.getAnimation());

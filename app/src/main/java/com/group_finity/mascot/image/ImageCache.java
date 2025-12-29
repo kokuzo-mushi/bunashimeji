@@ -3,7 +3,6 @@ package com.group_finity.mascot.image;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;

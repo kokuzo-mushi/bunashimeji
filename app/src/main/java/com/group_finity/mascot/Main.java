@@ -22,9 +22,7 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import com.sun.jna.platform.win32.WinUser;
 import java.lang.foreign.MemorySegment;
-import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
@@ -32,14 +30,12 @@ import java.awt.PopupMenu;
 import java.awt.MenuItem;
 import java.awt.Image;
 import java.io.IOException;
-import java.awt.Toolkit;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
 import java.io.File;
 import javax.swing.SwingUtilities;
 
@@ -47,6 +43,7 @@ import javax.swing.SwingUtilities;
  * アプリケーションのメインエントリーポイント。
  * 設定を読み込み、マスコットを生成し、メインループを開始します。
  */
+@SuppressWarnings("preview")
 public class Main {
 
     // マスコット1体分の管理情報をまとめるクラス
@@ -99,13 +96,9 @@ public class Main {
     private ImageCache imageCache;
     private final List<ThrownWindowInfo> thrownWindows = new ArrayList<>();
     private Rectangle workArea;
-    private String currentSkin = "Default";
     private volatile int gravity = 1;
     private volatile double timeScale = 1.0;
     private volatile HWND limitWindow = null;
-
-    // WinUser.SPI_GETWORKAREA が解決できない場合があるため、定数を直接定義
-    private static final int SPI_GETWORKAREA = 0x0030;
 
     // JNAのUser32でSystemParametersInfoのシグネチャ不一致が起きる場合の回避用インターフェース
     public interface User32SPI extends com.sun.jna.win32.StdCallLibrary {
@@ -182,11 +175,8 @@ public class Main {
         setupSystemTray();
 
         // --- 3️⃣ マスコットの生成 ---
-        // 最初の一体を生成
-        createMascot();
-
-        // 開発用: 起動時に設定画面を自動で開く
-        openSettings();
+        // 起動時はまずキャラクター選択画面を表示する
+        openSkinSelection();
 
         // --- 4️⃣ メインループ ---
         System.out.println("[Main] Starting main loop... (Press Ctrl+C to exit)");
@@ -408,11 +398,31 @@ public class Main {
 
                 // 接地判定と座標補正
                 boolean wasGrounded = mascot.isGrounded();
-                boolean isNowGrounded = mascot.getY() >= effectiveFloorY;
+                boolean isNowGrounded = false;
+
+                // バウンド処理用の定数
+                double bounceFactor = 0.6;
+                int bounceThreshold = 10;
+
+                if (mascot.getY() >= effectiveFloorY) {
+                    // ドラッグ中でなく、かつ落下速度が閾値を超えている場合はバウンド
+                    if (!mascot.isBeingDragged() && mascot.getVelocityY() > bounceThreshold) {
+                        mascot.setY(effectiveFloorY);
+                        mascot.setVelocityY((int)(-mascot.getVelocityY() * bounceFactor));
+                        // 床摩擦
+                        mascot.setVelocityX((int)(mascot.getVelocityX() * 0.8));
+                        isNowGrounded = false; // バウンド中は接地ではない
+                    } else {
+                        isNowGrounded = true;
+                    }
+                }
 
                 // 吸着処理強化: 落下中かつ床の直前(5px以内)にいる場合、DPI誤差を考慮して接地とみなす
                 if (!isNowGrounded && mascot.getVelocityY() >= 0 && mascot.getY() >= effectiveFloorY - 5) {
-                    isNowGrounded = true;
+                    // バウンドしない程度の速度なら接地
+                    if (mascot.getVelocityY() <= bounceThreshold) {
+                        isNowGrounded = true;
+                    }
                 }
 
                 // ウィンドウが下に動いた場合、追従の遅れで一時的に浮いてしまうのを防ぐため、
@@ -429,6 +439,12 @@ public class Main {
 
                 if (isNowGrounded) {
                     mascot.setY(effectiveFloorY);
+                    mascot.setVelocityY(0);
+                    // 接地中は摩擦で減速させる（アクションがない場合のみ）
+                    if (mascot.getCurrentAction() == null) {
+                        mascot.setVelocityX((int)(mascot.getVelocityX() * 0.8));
+                        if (Math.abs(mascot.getVelocityX()) < 1) mascot.setVelocityX(0);
+                    }
                 }
 
                 // 接地していない、かつアクション中でない場合、重力を適用する
@@ -480,12 +496,30 @@ public class Main {
                 if (!mascot.isBeingDragged() && !mascot.isIgnoringWalls()) {
                     if (isHittingLeftWall) {
                         mascot.setX(envInfo.leftWallX + anchor.x);
+                        // バウンド処理
+                        if (mascot.getVelocityX() < -bounceThreshold) {
+                            mascot.setVelocityX((int)(-mascot.getVelocityX() * bounceFactor));
+                        } else {
+                            mascot.setVelocityX(0);
+                        }
                     }
                     if (isHittingRightWall) {
                         mascot.setX(envInfo.rightWallX - (mascotWidth - anchor.x));
+                        // バウンド処理
+                        if (mascot.getVelocityX() > bounceThreshold) {
+                            mascot.setVelocityX((int)(-mascot.getVelocityX() * bounceFactor));
+                        } else {
+                            mascot.setVelocityX(0);
+                        }
                     }
                     if (isHittingCeiling) {
                         mascot.setY(envInfo.ceilingY + anchor.y);
+                        // バウンド処理
+                        if (mascot.getVelocityY() < -bounceThreshold) {
+                            mascot.setVelocityY((int)(-mascot.getVelocityY() * bounceFactor));
+                        } else {
+                            mascot.setVelocityY(0);
+                        }
                     }
                 }
 
@@ -499,6 +533,25 @@ public class Main {
                 } else if (mascot.isHittingRightWall() && instance.currentRightWallRect != null) {
                     signedDistToWallTop = (mascot.getY() - anchor.y) - instance.currentRightWallRect.top;
                     distToWallTop = Math.abs(signedDistToWallTop);
+                }
+
+                // --- 相互作用判定 (Interaction) ---
+                Mascot nearest = getNearestMascot(mascot);
+                Map<String, Object> nearestMascotMap = new HashMap<>();
+                nearestMascotMap.put("distance", 999999.0); // 十分大きい値
+                nearestMascotMap.put("x", 0);
+                
+                if (nearest != null) {
+                    double dx = mascot.getX() - nearest.getX();
+                    double dy = mascot.getY() - nearest.getY();
+                    double dist = Math.sqrt(dx * dx + dy * dy);
+                    nearestMascotMap.put("distance", dist);
+                    nearestMascotMap.put("x", nearest.getX());
+
+                    // デバッグログ: 近づいたときに距離を表示 (1秒に1回程度)
+                    if (dist < 300 && tickCount % 60 == 0) {
+                        System.out.printf("[Main] Nearest distance: %.1f (Mascot@%d, Nearest@%d)%n", dist, mascot.getX(), nearest.getX());
+                    }
                 }
 
                 // 床の端までの距離を計算（Teeterアクション判定用）
@@ -523,6 +576,7 @@ public class Main {
                 context.getVariables().put("mascot.distToFloorLeft", distToFloorLeft);
                 context.getVariables().put("mascot.distToFloorRight", distToFloorRight);
                 context.getVariables().put("isOnEdge", isOnEdge);
+                context.getVariables().put("nearestMascot", nearestMascotMap);
 
                 // デバッグ用ログ: 端にいるときの状態を確認
                 if (isOnEdge) {
@@ -587,7 +641,7 @@ public class Main {
             PopupMenu popup = new PopupMenu();
 
             MenuItem createItem = new MenuItem("増やす");
-            createItem.addActionListener(e -> createMascot());
+            createItem.addActionListener(e -> openSkinSelection());
             
             MenuItem settingsItem = new MenuItem("設定");
             settingsItem.addActionListener(e -> openSettings());
@@ -627,7 +681,30 @@ public class Main {
     private void openSettings() {
         if (config == null || config.getBehaviors() == null) return;
 
-        // スキン一覧の取得 (imgフォルダ内のサブディレクトリを列挙)
+        SwingUtilities.invokeLater(() -> {
+            new SettingsWindow(
+                config.getBehaviors(),
+                this.gravity, this::setGravity,
+                this.timeScale, this::setTimeScale,
+                () -> setLimitToActiveWindowDelayed(3000), // 3秒後にアクティブなウィンドウに限定
+                () -> setLimitWindow(null)                 // 解除
+            ).setVisible(true);
+        });
+    }
+
+    private void openSkinSelection() {
+        List<String> skins = getSkins();
+        SwingUtilities.invokeLater(() -> {
+            new SkinSelectionWindow(skins, (selectedSkin) -> {
+                Path newPath = "Default".equals(selectedSkin) ? Path.of("img") : Path.of("img", selectedSkin);
+                imageCache.updateBaseDirectory(newPath);
+                System.out.println("[Main] Skin selected: " + selectedSkin);
+                createMascot();
+            }).setVisible(true);
+        });
+    }
+
+    private List<String> getSkins() {
         List<String> skins = new ArrayList<>();
         skins.add("Default"); // img直下
         File imgDir = new File("img");
@@ -641,24 +718,7 @@ public class Main {
                 }
             }
         }
-
-        SwingUtilities.invokeLater(() -> {
-            new SettingsWindow(
-                config.getBehaviors(),
-                skins,
-                currentSkin,
-                (newSkin) -> {
-                    currentSkin = newSkin;
-                    Path newPath = "Default".equals(newSkin) ? Path.of("img") : Path.of("img", newSkin);
-                    imageCache.updateBaseDirectory(newPath);
-                    System.out.println("[Main] Skin changed to: " + newSkin);
-                },
-                this.gravity, this::setGravity,
-                this.timeScale, this::setTimeScale,
-                () -> setLimitToActiveWindowDelayed(3000), // 3秒後にアクティブなウィンドウに限定
-                () -> setLimitWindow(null)                 // 解除
-            ).setVisible(true);
-        });
+        return skins;
     }
 
     private void gatherAllMascots() {
@@ -714,7 +774,6 @@ public class Main {
         long RESTORE_DELAY = 5000; // 5秒後に復帰
         long ANIMATION_DURATION = 2000; // 2.0秒かけて戻る
 
-        List<ThrownWindowInfo> toRestore = new ArrayList<>();
         List<ThrownWindowInfo> toRemove = new ArrayList<>();
 
         for (ThrownWindowInfo info : thrownWindows) {
@@ -841,6 +900,11 @@ public class Main {
         contextVariables.put("mascot.distToFloorLeft", 0);
         contextVariables.put("mascot.distToFloorRight", 0);
         contextVariables.put("isOnEdge", false);
+        // 相互作用判定用の初期値を設定
+        Map<String, Object> nearestMascotMap = new HashMap<>();
+        nearestMascotMap.put("distance", 999999.0);
+        nearestMascotMap.put("x", 0);
+        contextVariables.put("nearestMascot", nearestMascotMap);
 
         // GraalJS Context Init
         Context jsContext = ScriptEngineManager.getInstance().createMascotContext(contextVariables);
@@ -867,15 +931,6 @@ public class Main {
 
         mascotInstances.add(instance);
         System.out.println("[Main] Created a new mascot instance. Total: " + mascotInstances.size());
-
-        // // --- Project Panama Demo ---
-        // // 最初の1体だけ、実験的に半透明にする (NativeWindowUtilを使用)
-        // // if (mascotInstances.size() == 1 && mascotView instanceof java.awt.Window) {
-        // //     // ウィンドウが表示され、ネイティブハンドルが確定した後に実行
-        // //     SwingUtilities.invokeLater(() -> {
-        // //         applyTransparencyDemo((java.awt.Window) mascotView);
-        // //     });
-        // // }
     }
 
     /**
@@ -1129,6 +1184,23 @@ public class Main {
                             <Pose Image="shime2.png" ImageAnchor="64,128" Duration="50" />
                         </Animation>
                     </Action>
+                    <Action Name="Bow" Type="Animate">
+                        <Animation>
+                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+                            <Pose Image="shime34.png" ImageAnchor="64,128" Duration="500" />
+                            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="200" />
+                        </Animation>
+                    </Action>
+                    <Action Name="LookRight" Type="Look" VelocityX="1" />
+                    <Action Name="LookLeft" Type="Look" VelocityX="-1" />
+                    <Action Name="GreetSequenceRight" Type="Sequence">
+                        <ActionReference Name="LookRight" />
+                        <ActionReference Name="Bow" />
+                    </Action>
+                    <Action Name="GreetSequenceLeft" Type="Sequence">
+                        <ActionReference Name="LookLeft" />
+                        <ActionReference Name="Bow" />
+                    </Action>
                 </Actions>
                 """;
         Files.writeString(actionsPath, actionsContent);
@@ -1220,42 +1292,18 @@ public class Main {
                         <Condition>mascot.isGrounded() &amp;&amp; mascot.getFloorWindow() != null &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Throw" />
                     </Behavior>
+                    <Behavior Name="GreetRight" Frequency="5">
+                        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &gt;= mascot.getX()</Condition>
+                        <ActionReference Name="GreetSequenceRight" />
+                    </Behavior>
+                    <Behavior Name="GreetLeft" Frequency="5">
+                        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &lt; mascot.getX()</Condition>
+                        <ActionReference Name="GreetSequenceLeft" />
+                    </Behavior>
                 </Behaviors>
                 """;
         Files.writeString(behaviorsPath, behaviorsContent);
         System.out.println("[Main] Updated behaviors.xml");
-        }
-    }
-
-    /**
-     * Project Panama を使用してウィンドウを半透明にするデモメソッド。
-     * NativeWindowUtil を使用してネイティブAPIを直接呼び出します。
-     */
-    private void applyTransparencyDemo(java.awt.Window window) {
-        try {
-            // JNAを使用してウィンドウハンドルを取得 (Panamaにはまだ標準的な方法がないため)
-            Pointer hwndPointer = Native.getComponentPointer(window);
-            long hwndValue = Pointer.nativeValue(hwndPointer);
-            
-            // PanamaのMemorySegmentに変換
-            MemorySegment hwndSegment = MemorySegment.ofAddress(hwndValue);
-
-            System.out.println("[Main] Applying transparency via Project Panama...");
-
-            // 1. 現在の拡張スタイルを取得
-            long oldStyle = NativeWindowUtil.getWindowLongPtr(hwndSegment, NativeWindowUtil.GWL_EXSTYLE);
-
-            // 2. WS_EX_LAYERED を追加
-            long newStyle = oldStyle | NativeWindowUtil.WS_EX_LAYERED;
-            NativeWindowUtil.setWindowLongPtr(hwndSegment, NativeWindowUtil.GWL_EXSTYLE, newStyle);
-
-            // 3. アルファ値を設定 (128 = 約50%の透明度)
-            NativeWindowUtil.setLayeredWindowAttributes(hwndSegment, 0, (byte) 128, NativeWindowUtil.LWA_ALPHA);
-
-            System.out.println("[Main] Transparency applied (Alpha=128).");
-        } catch (Throwable e) {
-            System.err.println("[Main] Failed to apply transparency demo: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
