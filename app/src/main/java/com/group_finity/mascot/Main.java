@@ -212,6 +212,18 @@ public class Main {
                 // 2. マスコットのtick()を呼び出し、現在のアクションを実行させます。
                 mascot.tick();
 
+                // アクションが終了してnullになった場合、即座に次のアクションを決定して開始する
+                // これにより、アクションの切れ目で1フレームだけnull（無防備/描画なし）になるのを防ぐ
+                if (mascot.getCurrentAction() == null) {
+                    // ★デバッグ: アクション遷移の追跡
+                    if (mascot.getPreviousAction() != null) {
+                         System.out.printf("[Debug] Transition: Prev=%s -> Next (Evaluating)%n", mascot.getPreviousAction());
+                    }
+
+                    dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.SYSTEM_TICK, tickCount, this));
+                    mascot.tick();
+                }
+
                 // tick()実行により削除された場合は以降の処理（描画など）をスキップ
                 if (!mascotInstances.contains(instance)) continue;
 
@@ -249,11 +261,6 @@ public class Main {
 
                 // ★修正: MascotViewから現在の画像の正確なアンカーポイントを取得する
                 java.awt.Point anchor = mascotView.getAnchor();
-
-                // デバッグ: アンカー情報の確認
-                if (tickCount % 300 == 0) {
-                    System.out.printf("[Main] Mascot Anchor: (%d, %d) Size: %dx%d%n", anchor.x, anchor.y, mascotWidth, mascotHeight);
-                }
 
                 double scale = 1.0; // デフォルトスケール
                 boolean targetWindowMinimized = false;
@@ -365,23 +372,12 @@ public class Main {
                         envInfo.rightWallX = (int) (envInfo.rightWallX / scale);
                         if (envInfo.rightWallRect != null) scaleRect(envInfo.rightWallRect, scale);
                     }
-                    
-                    // デバッグ: ウィンドウに乗っている場合の座標確認
-                    if (envInfo.floorWindow != null && tickCount % 60 == 0) {
-                        System.out.printf("[Main] On Window Floor (Logical): Y=%d, Scale=%.2f%n", envInfo.floorY, scale);
-                    }
                 }
 
                 // ★★★ 修正: Environmentが返す床のY座標を、workAreaの底でクリップする ★★★
                 // これにより、ウィンドウが見つからない場合にfloorYが意図せず大きな値になり、
                 // タスクバーを貫通して落下し続ける問題を防止する。
                 int effectiveFloorY = Math.min(envInfo.floorY, workArea.y + workArea.height);
-
-                // ★デバッグ: マスコットが画面下部にいるときの座標情報を出力
-                if (mascot.getY() > workArea.height - 200 && tickCount % 60 == 0) {
-                    System.out.printf("[Debug] MascotY=%d, FloorY=%d, WorkAreaH=%d, Grounded=%b%n", 
-                        mascot.getY(), effectiveFloorY, workArea.height, mascot.isGrounded());
-                }
 
                 // 現在の床情報を保存（次フレームの追従用）
                 instance.currentFloorWindow = envInfo.floorWindow;
@@ -395,6 +391,13 @@ public class Main {
                 instance.currentRightWallRect = envInfo.rightWallRect;
                 mascot.setLeftWallWindow(envInfo.leftWallWindow);
                 mascot.setRightWallWindow(envInfo.rightWallWindow);
+                mascot.setCeilingWindow(envInfo.ceilingWindow);
+
+                // 環境情報の詳細（矩形）をMascotに渡す（論理座標）
+                mascot.setWorkArea(workArea);
+                mascot.setLeftWallRect(toRectangle(envInfo.leftWallRect));
+                mascot.setRightWallRect(toRectangle(envInfo.rightWallRect));
+                mascot.setCeilingRect(toRectangle(envInfo.ceilingRect));
 
                 // 接地判定と座標補正
                 boolean wasGrounded = mascot.isGrounded();
@@ -469,24 +472,32 @@ public class Main {
                 if (mascot.isHittingLeftWall() && envInfo.leftWallWindow != null && envInfo.leftWallWindow.equals(instance.currentLeftWallWindow)) {
                     leftWallTolerance = (leftWallMove.x < 0) ? -leftWallMove.x + 10 : 10;
                 }
-                boolean isHittingLeftWall = (mascot.getX() - anchor.x) <= envInfo.leftWallX + leftWallTolerance;
+                boolean isHittingLeftWall = (mascot.getX() - anchor.x) <= envInfo.leftWallX + leftWallTolerance + 4;
 
                 // 右壁吸着: ウィンドウが右(dx > 0)に動いて壁が離れる場合、許容範囲を広げる
                 int rightWallTolerance = 0;
                 if (mascot.isHittingRightWall() && envInfo.rightWallWindow != null && envInfo.rightWallWindow.equals(instance.currentRightWallWindow)) {
                     rightWallTolerance = (rightWallMove.x > 0) ? rightWallMove.x + 10 : 10;
                 }
-                boolean isHittingRightWall = (mascot.getX() + (mascotWidth - anchor.x)) >= envInfo.rightWallX - rightWallTolerance;
+                boolean isHittingRightWall = (mascot.getX() + (mascotWidth - anchor.x)) >= envInfo.rightWallX - rightWallTolerance - 4;
 
                 // 天井吸着: ウィンドウが上(dy < 0)に動いて天井が離れる場合、許容範囲を広げる
                 int ceilingTolerance = 0;
                 if (mascot.isHittingCeiling() && envInfo.ceilingWindow != null && envInfo.ceilingWindow.equals(instance.currentCeilingWindow)) {
                     ceilingTolerance = (ceilingMove.y < 0) ? -ceilingMove.y + 10 : 10;
                 }
-                // 足元が画面内にある場合のみ天井判定を行う（初期落下時に天井に張り付かないようにするため）
-                // さらに、生成直後（約3秒間 = 3000ms）は天井判定を無効にする
-                // ★修正: 生成直後の落下中に天井に張り付かないよう、猶予期間を10秒に延長
-                boolean isHittingCeiling = (System.currentTimeMillis() - instance.bornTime > 10000) && (mascot.getY() - anchor.y) <= envInfo.ceilingY + ceilingTolerance;
+                // 基本的な天井判定
+                boolean isHittingCeiling = (mascot.getY() - anchor.y) <= envInfo.ceilingY + ceilingTolerance;
+                // ★修正: 生成直後の落下中（VelocityY > 0）のみ、天井に張り付かないよう猶予期間を設ける
+                if (isHittingCeiling && mascot.getVelocityY() > 0 && (System.currentTimeMillis() - instance.bornTime <= 10000)) {
+                    isHittingCeiling = false;
+                }
+
+                // ★修正: 天井に張り付いているときは、絶対に接地判定（isGrounded）をfalseにする
+                // これにより、天井でWalkアクションなどが誤発動して画面外に描画されるのを防ぐ
+                if (isHittingCeiling) {
+                    mascot.setGrounded(false);
+                }
 
                 mascot.setHittingLeftWall(isHittingLeftWall);
                 mascot.setHittingRightWall(isHittingRightWall);
@@ -495,7 +506,12 @@ public class Main {
                 // ドラッグ中や壁無視フラグが立っていなければ、画面内に押し戻す（壁として機能させる）
                 if (!mascot.isBeingDragged() && !mascot.isIgnoringWalls()) {
                     if (isHittingLeftWall) {
-                        mascot.setX(envInfo.leftWallX + anchor.x);
+                        // 画面端とウィンドウ端で挙動を分ける
+                        if (envInfo.leftWallWindow == null) {
+                            mascot.setX(envInfo.leftWallX);
+                        } else {
+                            mascot.setX(envInfo.leftWallX + 56); // ウィンドウの場合は少し内側へ
+                        }
                         // バウンド処理
                         if (mascot.getVelocityX() < -bounceThreshold) {
                             mascot.setVelocityX((int)(-mascot.getVelocityX() * bounceFactor));
@@ -504,7 +520,11 @@ public class Main {
                         }
                     }
                     if (isHittingRightWall) {
-                        mascot.setX(envInfo.rightWallX - (mascotWidth - anchor.x));
+                        if (envInfo.rightWallWindow == null) {
+                            mascot.setX(envInfo.rightWallX);
+                        } else {
+                            mascot.setX(envInfo.rightWallX - 56); // ウィンドウの場合は少し内側へ
+                        }
                         // バウンド処理
                         if (mascot.getVelocityX() > bounceThreshold) {
                             mascot.setVelocityX((int)(-mascot.getVelocityX() * bounceFactor));
@@ -513,7 +533,10 @@ public class Main {
                         }
                     }
                     if (isHittingCeiling) {
-                        mascot.setY(envInfo.ceilingY + anchor.y);
+                        // 天井は現状(+10)で画面端が良好とのことなので、画面端は維持
+                        // ウィンドウ端も同様の補正を適用する（必要ならここも数値を分けられます）
+                        mascot.setY(envInfo.ceilingY + 10);
+                        
                         // バウンド処理
                         if (mascot.getVelocityY() < -bounceThreshold) {
                             mascot.setVelocityY((int)(-mascot.getVelocityY() * bounceFactor));
@@ -526,12 +549,19 @@ public class Main {
                 // 壁の上端までの距離を計算（PullUpアクション判定用）
                 int distToWallTop = Integer.MAX_VALUE;
                 int signedDistToWallTop = Integer.MAX_VALUE;
-                if (mascot.isHittingLeftWall() && instance.currentLeftWallRect != null) {
-                    // マスコットの頭上(Y - Anchor.y)と壁の上端の距離
-                    signedDistToWallTop = (mascot.getY() - anchor.y) - instance.currentLeftWallRect.top;
+                
+                if (mascot.isHittingLeftWall()) {
+                    // ウィンドウがない場合は画面端(workArea.y)を上端とする
+                    int wallTop = (instance.currentLeftWallWindow != null && instance.currentLeftWallRect != null)
+                        ? instance.currentLeftWallRect.top
+                        : workArea.y;
+                    signedDistToWallTop = (mascot.getY() - anchor.y) - wallTop;
                     distToWallTop = Math.abs(signedDistToWallTop);
-                } else if (mascot.isHittingRightWall() && instance.currentRightWallRect != null) {
-                    signedDistToWallTop = (mascot.getY() - anchor.y) - instance.currentRightWallRect.top;
+                } else if (mascot.isHittingRightWall()) {
+                    int wallTop = (instance.currentRightWallWindow != null && instance.currentRightWallRect != null)
+                        ? instance.currentRightWallRect.top
+                        : workArea.y;
+                    signedDistToWallTop = (mascot.getY() - anchor.y) - wallTop;
                     distToWallTop = Math.abs(signedDistToWallTop);
                 }
 
@@ -547,11 +577,6 @@ public class Main {
                     double dist = Math.sqrt(dx * dx + dy * dy);
                     nearestMascotMap.put("distance", dist);
                     nearestMascotMap.put("x", nearest.getX());
-
-                    // デバッグログ: 近づいたときに距離を表示 (1秒に1回程度)
-                    if (dist < 300 && tickCount % 60 == 0) {
-                        System.out.printf("[Main] Nearest distance: %.1f (Mascot@%d, Nearest@%d)%n", dist, mascot.getX(), nearest.getX());
-                    }
                 }
 
                 // 床の端までの距離を計算（Teeterアクション判定用）
@@ -568,6 +593,24 @@ public class Main {
                     }
                 }
 
+                // 天井の端判定 (CornerTurnDownアクション判定用)
+                boolean isOnCeilingEdge = false;
+                if (mascot.isHittingCeiling()) {
+                    int ceilingLeft = workArea.x;
+                    int ceilingRight = workArea.x + workArea.width;
+                    if (instance.currentCeilingRect != null) {
+                        ceilingLeft = instance.currentCeilingRect.left;
+                        ceilingRight = instance.currentCeilingRect.right;
+                    }
+                    
+                    int distToCeilingLeft = Math.abs(mascot.getX() - ceilingLeft);
+                    int distToCeilingRight = Math.abs(mascot.getX() - ceilingRight);
+                    
+                    if (distToCeilingLeft < 20 || distToCeilingRight < 20) {
+                        isOnCeilingEdge = true;
+                    }
+                }
+
                 // コンテキスト変数を更新します。
                 context.getVariables().put("time", tickCount);
                 context.getVariables().put("mouse", mouseMap);
@@ -576,22 +619,28 @@ public class Main {
                 context.getVariables().put("mascot.distToFloorLeft", distToFloorLeft);
                 context.getVariables().put("mascot.distToFloorRight", distToFloorRight);
                 context.getVariables().put("isOnEdge", isOnEdge);
+                context.getVariables().put("isOnCeilingEdge", isOnCeilingEdge);
                 context.getVariables().put("nearestMascot", nearestMascotMap);
-
-                // デバッグ用ログ: 端にいるときの状態を確認
-                if (isOnEdge) {
-                    System.out.printf("[Debug] isOnEdge=true. isGrounded=%b, Action=%s, DistL=%d, DistR=%d%n",
-                        mascot.isGrounded(),
-                        (mascot.getCurrentAction() != null ? mascot.getCurrentAction().getClass().getSimpleName() : "null"),
-                        distToFloorLeft,
-                        distToFloorRight
-                    );
-                }
 
                 // 4. 描画処理
                 if (targetWindowMinimized) {
                     if (mascotView.isVisible()) mascotView.setVisible(false);
                 } else {
+                    // ★デバッグログ: 状態監視
+                    String actionName = (mascot.getCurrentAction() != null) ? mascot.getCurrentAction().getClass().getSimpleName() : "null";
+                    System.out.printf("[Debug] Tick=%d, Action=%s, Pos=(%d,%d), Vel=(%d,%d), Grounded=%b%n",
+                        tickCount, actionName,
+                        mascot.getX(), mascot.getY(),
+                        mascot.getVelocityX(), mascot.getVelocityY(),
+                        mascot.isGrounded());
+
+                    // ★デバッグログ: 壁の上端付近での状態監視 (テスト用)
+                    // 壁に張り付いている場合は常に詳細を出力して、ログが出ない問題を解消
+                    if (mascot.isHittingLeftWall() || mascot.isHittingRightWall()) {
+                        System.out.printf("[Debug] WallTop Dist: %d, Action: %s, Ceil: %b, Y: %d, AnchorY: %d%n",
+                            signedDistToWallTop, actionName, mascot.isHittingCeiling(), mascot.getY(), anchor.y);
+                    }
+
                     if (!mascotView.isVisible()) {
                         mascotView.setVisible(true);
                     }
@@ -1023,6 +1072,11 @@ public class Main {
                             <Pose ImageAnchor="64,128" Duration="1000" />
                         </Animation>
                     </Action>
+                    <Action Name="LandLieDown" Type="LieDown" Duration="2000">
+                        <Animation>
+                            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="2000" />
+                        </Animation>
+                    </Action>
                     <Action Name="LieDown" Type="LieDown" Duration="4000">
                         <Animation>
                             <Pose ImageAnchor="64,128" Duration="4000" />
@@ -1062,8 +1116,8 @@ public class Main {
                     </Action>
                     <Action Name="Walk" Type="Walk" Speed="1">
                         <Animation>
-                            <Pose Duration="200" />
-                            <Pose Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,128" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="Chase" Type="Chase" Speed="4" Duration="5000">
@@ -1115,10 +1169,51 @@ public class Main {
                             <Pose ImageAnchor="64,128" Duration="2000" />
                         </Animation>
                     </Action>
+                    <Action Name="WallTopCling" Type="WallTopCling" Duration="2000">
+                        <Animation>
+                            <Pose Image="WallCling1.png" ImageAnchor="64,128" Duration="2000" />
+                        </Animation>
+                    </Action>
+                    <Action Name="WindowWallCling" Type="WallCling" Duration="2000">
+                        <Animation>
+                            <Pose Image="WallCling1.png" ImageAnchor="128,128" Duration="2000" />
+                        </Animation>
+                    </Action>
                     <Action Name="Climb" Type="Climb" Speed="1">
                         <Animation>
                             <Pose ImageAnchor="64,128" Duration="200" />
                             <Pose ImageAnchor="64,128" Duration="200" />
+                        </Animation>
+                    </Action>
+                    <Action Name="WindowClimb" Type="Climb" Speed="1">
+                        <Animation>
+                            <Pose Image="Climb1.png" ImageAnchor="128,128" Duration="200" />
+                            <Pose Image="Climb2.png" ImageAnchor="128,128" Duration="200" />
+                        </Animation>
+                    </Action>
+                    <Action Name="ClimbUpForCeiling" Type="ClimbCeiling" Speed="4" Duration="1000">
+                        <Animation>
+                            <Pose ImageAnchor="64,128" Duration="200" />
+                        </Animation>
+                    </Action>
+                    <Action Name="CeilingEnter" Type="CeilingEnter" Duration="500">
+                        <Animation>
+                            <Pose Image="Climb1.png" ImageAnchor="64,128" Duration="500" />
+                        </Animation>
+                    </Action>
+                    <Action Name="CornerTurn" Type="CornerTurn" Duration="800">
+                        <Animation>
+                            <Pose Image="ClimbUpForCeiling1.png" ImageAnchor="64,128" Duration="800" />
+                        </Animation>
+                    </Action>
+                    <Action Name="CornerTurnDown" Type="CornerTurnDown" Duration="800">
+                        <Animation>
+                            <Pose Image="ClimbUpForCeiling1.png" ImageAnchor="64,128" Duration="800" />
+                        </Animation>
+                    </Action>
+                    <Action Name="ClimbDown" Type="Climb" Speed="-2" Duration="2000">
+                        <Animation>
+                            <Pose Image="SlideDown1.png" ImageAnchor="64,128" Duration="2000" />
                         </Animation>
                     </Action>
                     <Action Name="Teeter" Type="Teeter" Duration="2000" FallProbability="0.2">
@@ -1131,24 +1226,35 @@ public class Main {
                     </Action>
                     <Action Name="PullUp" Type="PullUp" Duration="2000">
                         <Animation>
-                            <Pose ImageAnchor="64,128" Duration="500" />
-                            <Pose ImageAnchor="64,128" Duration="1500" />
+                            <Pose ImageAnchor="0,128" Duration="500" />
+                            <Pose ImageAnchor="0,128" Duration="1500" />
+                        </Animation>
+                    </Action>
+                    <Action Name="WindowPullUp" Type="PullUp" Duration="2000">
+                        <Animation>
+                            <Pose Image="PullUp1.png" ImageAnchor="64,128" Duration="500" />
+                            <Pose Image="PullUp2.png" ImageAnchor="64,128" Duration="1500" />
                         </Animation>
                     </Action>
                     <Action Name="CeilingCrawl" Type="CeilingCrawl" Speed="1" Duration="2000">
                         <Animation>
-                            <Pose ImageAnchor="64,128" Duration="200" />
-                            <Pose ImageAnchor="64,128" Duration="200" />
+                            <Pose ImageAnchor="64,45" Duration="200" />
+                            <Pose ImageAnchor="64,45" Duration="200" />
                         </Animation>
                     </Action>
                     <Action Name="CeilingStay" Type="Stay" Duration="5000">
                         <Animation>
-                            <Pose ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="64,45" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="CeilingRandomMove" Type="RandomChoice">
                         <ActionReference Name="CeilingCrawl" />
                         <ActionReference Name="CeilingStay" />
+                    </Action>
+                    <Action Name="SlideDownForTransition" Type="SlideDown" Speed="2">
+                        <Animation>
+                            <Pose ImageAnchor="64,128" Duration="1000" />
+                        </Animation>
                     </Action>
                     <Action Name="SlideDown" Type="SlideDown" Speed="2">
                         <Animation>
@@ -1157,19 +1263,58 @@ public class Main {
                     </Action>
                     <Action Name="WallJump" Type="WallJump" VelocityY="12" VelocityX="10">
                         <Animation>
-                            <Pose ImageAnchor="64,128" Duration="1000" />
+                            <Pose ImageAnchor="0,128" Duration="1000" />
                         </Animation>
                     </Action>
                     <Action Name="WallRandomMove" Type="RandomChoice">
                         <ActionReference Name="Climb" />
                     </Action>
+                    <Action Name="WindowWallRandomMove" Type="RandomChoice">
+                        <ActionReference Name="WindowClimb" />
+                    </Action>
                     <Action Name="WallComplexSequence" Type="Sequence">
                         <ActionReference Name="WallCling" />
                         <ActionReference Name="WallRandomMove" />
                     </Action>
+                    <Action Name="WindowWallComplexSequence" Type="Sequence">
+                        <ActionReference Name="WindowWallCling" />
+                        <ActionReference Name="WindowWallRandomMove" />
+                    </Action>
+                    <Action Name="WallToCeilingSequence" Type="Sequence">
+                        <ActionReference Name="ClimbUpForCeiling" />
+                        <ActionReference Name="CornerTurn" />
+                    </Action>
+                    <Action Name="CeilingToWallSequence" Type="Sequence">
+                        <ActionReference Name="CornerTurnDown" />
+                        <ActionReference Name="SlideDownForTransition" />
+                    </Action>
+                    <Action Name="CeilingEdgeRandomMove" Type="RandomChoice">
+                        <ActionReference Name="CeilingStay" />
+                        <ActionReference Name="CeilingStay" />
+                        <ActionReference Name="CeilingStay" />
+                        <ActionReference Name="CeilingCrawl" />
+                        <ActionReference Name="CeilingToWallSequence" />
+                    </Action>
+                    <Action Name="WallTopRandomMove" Type="RandomChoice">
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="WallTopCling" />
+                        <ActionReference Name="ClimbDown" />
+                        <ActionReference Name="ClimbDown" />
+                        <ActionReference Name="SlideDown" />
+                        <ActionReference Name="WallToCeilingSequence" />
+                    </Action>
                     <Action Name="FallSequence" Type="Sequence">
                         <ActionReference Name="Fall" />
-                        <ActionReference Name="LieDown" />
+                    </Action>
+                    <Action Name="LandSequence" Type="Sequence">
+                        <ActionReference Name="LandLieDown" />
                         <ActionReference Name="Land" />
                     </Action>
                     <Action Name="Turn" Type="Turn" />
@@ -1224,28 +1369,48 @@ public class Main {
                         <Condition>event.type == 'MOUSE_PRESSED'</Condition>
                         <ActionReference Name="Jump" />
                     </Behavior>
+                    <Behavior Name="DebugCornerTurn" Frequency="100">
+                        <Condition>event.type == 'MOUSE_PRESSED' &amp;&amp; (mascot.isHittingLeftWall() || mascot.isHittingRightWall())</Condition>
+                        <ActionReference Name="WallToCeilingSequence" />
+                    </Behavior>
                     <Behavior Name="Fall" Frequency="100">
                         <Condition>!mascot.isGrounded() &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
-                        <ActionReference Name="FallSequence" />
+                        <ActionReference Name="Fall" />
+                    </Behavior>
+                    <Behavior Name="Land" Frequency="2000">
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.isPreviousAction('FallAction') &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <ActionReference Name="LandSequence" />
                     </Behavior>
                     <Behavior Name="Teeter" Frequency="100">
                         <Condition>mascot.isGrounded() &amp;&amp; isOnEdge &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Teeter" />
                     </Behavior>
-                    <Behavior Name="PullUp" Frequency="200">
-                        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
-                        <ActionReference Name="PullUp" />
+                    <Behavior Name="WindowPullUp" Frequency="200">
+                        <Condition>((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() != null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() != null)) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <ActionReference Name="WindowPullUp" />
                     </Behavior>
-                    <Behavior Name="WallAction" Frequency="100">
-                        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; mascot.getCurrentAction() == null</Condition>
-                        <ActionReference Name="WallComplexSequence" />
+                    <Behavior Name="CeilingToWall" Frequency="100">
+                        <Condition>mascot.isHittingCeiling() &amp;&amp; isOnCeilingEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <ActionReference Name="CeilingEdgeRandomMove" />
                     </Behavior>
-                    <Behavior Name="CeilingAction" Frequency="100">
+                    <Behavior Name="CeilingAction" Frequency="1">
                         <Condition>mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="CeilingRandomMove" />
                     </Behavior>
+                    <Behavior Name="ScreenWallToCeiling" Frequency="100">
+                        <Condition>!mascot.isHittingCeiling() &amp;&amp; ((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() == null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() == null)) &amp;&amp; signedDistToWallTop &lt; 30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <ActionReference Name="WallTopRandomMove" />
+                    </Behavior>
+                    <Behavior Name="ScreenWallAction" Frequency="1">
+                        <Condition>((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() == null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() == null)) &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <ActionReference Name="WallComplexSequence" />
+                    </Behavior>
+                    <Behavior Name="WindowWallAction" Frequency="1">
+                        <Condition>((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() != null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() != null)) &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <ActionReference Name="WindowWallComplexSequence" />
+                    </Behavior>
                     <Behavior Name="TurnRandomly" Frequency="10">
-                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall()</Condition>
                         <ActionReference Name="Turn" />
                     </Behavior>
                     <Behavior Name="ChaseMouse" Frequency="30">
@@ -1269,11 +1434,11 @@ public class Main {
                         <ActionReference Name="SitSequence" />
                     </Behavior>
                     <Behavior Name="Breed" Frequency="2">
-                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="Breed" />
                     </Behavior>
                     <Behavior Name="BreedJump" Frequency="2">
-                        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
                         <ActionReference Name="BreedJump" />
                     </Behavior>
                     <Behavior Name="Dig" Frequency="1">
@@ -1297,11 +1462,11 @@ public class Main {
                         <ActionReference Name="Throw" />
                     </Behavior>
                     <Behavior Name="GreetRight" Frequency="5">
-                        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &gt;= mascot.getX()</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &gt;= mascot.getX()</Condition>
                         <ActionReference Name="GreetSequenceRight" />
                     </Behavior>
                     <Behavior Name="GreetLeft" Frequency="5">
-                        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &lt; mascot.getX()</Condition>
+                        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &lt; mascot.getX()</Condition>
                         <ActionReference Name="GreetSequenceLeft" />
                     </Behavior>
                 </Behaviors>
@@ -1320,5 +1485,13 @@ public class Main {
         rect.right = (int) (rect.right / scale);
         rect.top = (int) (rect.top / scale);
         rect.bottom = (int) (rect.bottom / scale);
+    }
+
+    /**
+     * RECT構造体をjava.awt.Rectangleに変換するヘルパー
+     */
+    private Rectangle toRectangle(RECT rect) {
+        if (rect == null) return null;
+        return new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
     }
 }

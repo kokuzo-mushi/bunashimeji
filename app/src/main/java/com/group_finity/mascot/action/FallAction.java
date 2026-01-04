@@ -21,10 +21,11 @@ public class FallAction implements Action {
             this.velocityX = mascot.getVelocityX();
             this.velocityY = mascot.getVelocityY();
             System.out.printf("[FallAction] Initialized with velocity: (%.2f, %d)%n", velocityX, velocityY);
-            // 慣性を引き継いだら、元の速度情報はリセットする（次回以降の誤適用を防ぐ）
-            mascot.setVelocityX(0);
-            mascot.setVelocityY(0);
             initialized = true;
+        } else {
+            // Main.javaでの物理演算（バウンド処理など）の結果を反映させるため同期する
+            this.velocityY = mascot.getVelocityY();
+            this.velocityX = mascot.getVelocityX();
         }
 
         // 壁に衝突したらアクションを終了する
@@ -36,19 +37,24 @@ public class FallAction implements Action {
 
         if (animation != null) {
             mascot.setAnimation(animation);
-            animation.tick(40);
+            animation.tick(16);
         }
 
         boolean isBouncing = false;
 
         // 接地判定とバウンド処理
-        // 接地しており、かつ落下中（速度が下向き）の場合にバウンドさせる
-        if (mascot.isGrounded() && velocityY > 0) {
-            // デバッグログ: 接地時の座標と速度を出力
-            System.out.printf("[FallAction] Grounded at Y=%d, VelocityY=%d, VelocityX=%.2f%n", 
-                mascot.getY(), velocityY, velocityX);
-
-            velocityY = (int) (-velocityY * 0.55); // Y軸反発係数 (0.55)
+        // Main.javaで接地と判定された場合、またはFallAction内で接地した場合
+        if (mascot.isGrounded()) {
+            // バウンド処理 (Main.javaの閾値より小さい速度で接地した場合など)
+            if (velocityY > 0) {
+                // デバッグログ: 接地時の座標と速度を出力
+                System.out.printf("[FallAction] Grounded at Y=%d, VelocityY=%d, VelocityX=%.2f%n", 
+                    mascot.getY(), velocityY, velocityX);
+                velocityY = (int) (-velocityY * 0.55); // Y軸反発係数 (0.55)
+            } else {
+                velocityY = 0;
+            }
+            
             velocityX *= 0.6; // 接地時のX軸摩擦 (強く減速させる)
 
             // バウンドが収束したか判定 (Y軸の反発が弱く、X軸の移動もほぼない場合)
@@ -80,6 +86,13 @@ public class FallAction implements Action {
                 velocityY += 2; // 重力加速度 (2px/frame)
             }
             mascot.setY(mascot.getY() + velocityY);
+            mascot.setVelocityY(velocityY); // Main.javaでの判定用に速度を更新
+            mascot.setVelocityX((int) velocityX); // X軸速度も更新
+        } else {
+            // 接地中はY座標を更新しない（Main.javaの補正に任せる）
+            // 速度は更新する（バウンド反発などを反映するため）
+            mascot.setVelocityY(velocityY);
+            mascot.setVelocityX((int) velocityX);
         }
     }
 
@@ -95,5 +108,10 @@ public class FallAction implements Action {
         finished = false;
         initialized = false;
         if (animation != null) animation.reset();
+    }
+
+    @Override
+    public String toString() {
+        return "FallAction";
     }
 }

@@ -1,69 +1,95 @@
-# Shimeji Neo Technical Context & Architectural Decisions
+# Current Development Context: Wall-Ceiling Transition & Refactoring
 
-Based on Deep Research results (Phases 1-4).
+**Focus:** Implementing smooth transitions between walls and ceilings using "Kinematic Corner Transition" logic, and modernizing the codebase structure.
 
-## 1. Core Technology Stack
-- **Runtime**: Java 21 (LTS) with Preview Features (`--enable-preview`).
-- **GC**: Generational ZGC (`-XX:+UseZGC -XX:+ZGenerational`) for low latency.
-- **Build System**: Gradle (Kotlin DSL).
-- **Native Interop**: Project Panama (Foreign Function & Memory API). JNA is legacy/fallback only.
-- **Scripting**: GraalJS (ECMAScript 2024 compliant).
-- **GUI**: `java.awt.Window` (Active Rendering). **DO NOT** use `JWindow`, `JFrame`, or JetBrains Compose.
+## 1. Implemented Feature: Smooth Wall-Ceiling Transition
 
-## 2. Phase 1: Native Integration & DPI Handling
-### DPI Awareness & Coordinate System
-- **Manifest**: Must declare `<dpiAware>true/PM</dpiAware>` and `<dpiAwareness>PerMonitorV2</dpiAwareness>` in the application manifest.
-- **Coordinate Conversion**:
-  - Win32 APIs return **Physical Pixels**.
-  - Java AWT uses **Logical Pixels**.
-  - **Solution**: Use `PhysicalToLogicalPointForPerMonitorDPI` (Win32 API) via Panama to convert coordinates accurately. Do not rely on AWT's internal scaling.
-- **Work Area Detection**:
-  - Use `GetMonitorInfo` for basic work area.
-  - Use `SHAppBarMessage` to detect auto-hide taskbars and precise edges.
-  - Logic must handle multi-monitor setups with different DPIs.
+Successfully implemented "Kinematic Corner Transition" logic to handle coordinate mismatches and physics conflicts during transitions.
 
-### Window Management
-- **Transparency**: Use `UpdateLayeredWindow` (Win32) with a pre-multiplied ARGB bitmap.
-  - Avoid `AWTUtilities` or `setBackground(new Color(0,0,0,0))` on `JWindow` as it conflicts with DWM on Windows 11.
-- **Native Access**:
-  - Migrate from JNA to **Project Panama** for performance (60 FPS window moves).
-  - Use `Arena.ofConfined()` for memory management in the rendering loop.
+### Components
+- **`CornerMath`**: Utility class for geometric arc calculation.
+- **`CornerTurnAction`**: Action class that disables physics (`ignoreWalls`) and moves the mascot along the calculated arc.
+- **`ClimbCeilingAction`**: Preparatory action to align the mascot to the wall top (Target Y=128).
 
-## 3. Phase 2: Logic & Scripting Architecture
-### Scripting Engine (GraalJS)
-- **Integration Pattern**: **Shared Engine / Separate Contexts**.
-  - Single `Engine` instance to share code cache/JIT optimizations.
-  - Separate `Context` per mascot instance for isolation.
-- **Sandboxing**:
-  - Use `HostAccess.EXPLICIT` to allowlist Java API access.
-  - Enforce resource limits (CPU time, memory) to prevent DoS from user scripts.
+### Maintenance & Impact Analysis (Critical for Future Adjustments)
 
-### AI Architecture
-- **Pattern**: **Event-Driven Hierarchical State Machine (HSM)**.
-- **Async Handling**: Use **JavaScript Generators (`function*`)** as Coroutines.
-  - Allows writing asynchronous logic (e.g., "Walk -> Wait -> Jump") in a synchronous style using `yield`.
-  - Java side implements a scheduler to resume generators frame-by-frame.
+If you change **Anchor Points** or **Ceiling/Wall Detection Logic**, you must update the following:
 
-## 4. Phase 3: Rendering & Performance
-### Rendering Pipeline
-- **Strategy**: **Active Rendering** via `BufferStrategy`.
-  - **Do NOT use**: Swing `paintComponent`, `RepaintManager`, or `Timer`.
-  - **Loop**: Custom `while` loop using `System.nanoTime()` on a dedicated thread.
-  - **Window**: Use `java.awt.Window` (not `JWindow`) with `setIgnoreRepaint(true)`.
-- **Hardware Acceleration**:
-  - Prefer Direct3D pipeline (`-Dsun.java2d.d3d=true`).
-  - Use `VolatileImage` for VRAM-cached sprites and composition.
-  - Implement **Texture Atlas** to reduce texture binding overhead.
+1.  **Ceiling Anchor Change (e.g., changing `CeilingCrawl` anchor from `64,45`)**:
+    -   Update `CornerTurnAction.java`: `ceilingAnchor = new Point(64, 45);` must match the new anchor.
+    -   Update `CornerMathTest.java`: Update expected Y values.
 
-### Memory Management
-- **Strategy**: Avoid object pooling for small objects (Point, Rect); rely on ZGC. Pool heavy resources (Buffers, Images).
+2.  **Wall Anchor Change (e.g., changing `Climb` anchor from `64,128`)**:
+    -   Update `CornerTurnAction.java`: `wallAnchor = new Point(64, 128);`
+    -   Update `ClimbCeilingAction.java`: `TARGET_Y = 128;` (Must match the wall anchor Y).
 
-## 5. Phase 4: Packaging & Distribution
-- **Tooling**: `jpackage` via **Badass Runtime Plugin** (`org.beryx.runtime`).
-- **Runtime Strategy**: **Hybrid Runtime**.
-  - Use `jlink` to create a minimal JRE (java.base, java.desktop, etc.).
-  - Place non-modular JARs (JNA, App) on the classpath.
-- **Installer**: MSI or EXE using **WiX Toolset v3.11**.
-  - **Note**: Java 21 `jpackage` is NOT compatible with WiX v4/v5.
-- **Launcher Flags**: Embed `--enable-preview` and `--enable-native-access=ALL-UNNAMED` into the launcher via `jpackage` options.
-- **Signing**: Use **SignPath.io** for open-source code signing to avoid SmartScreen warnings.
+3.  **Physics/Environment Logic**:
+    -   `Main.java`: Ceiling sticking logic (`mascot.setY(envInfo.ceilingY + 10)`) assumes the visual top aligns with the physical ceiling.
+    -   `CornerMath.java`: The logic assumes `wallAnchor.y` represents the "depth" from the wall surface.
+
+## 2. Refactoring Roadmap (Mid-to-Long Term)
+
+Based on `Java Desktop App Refactoring Plan.md`.
+
+### Phase 1: Foundation & Data Model
+-   **Build System**: Migrate to Gradle (Kotlin DSL).
+-   **Data Model**: Introduce `Records` for immutable data (Coordinates, Velocity).
+-   **Native**: Prepare FFM API wrapper structure.
+
+### Phase 2: Native Layer Replacement (Project Panama)
+-   **Facade**: Implement `WindowsUser32Service` using FFM.
+-   **Removal**: Remove JNA dependencies.
+
+### Phase 3: State Machine Reconstruction
+-   **Sealed Interfaces**: Define `MascotState`.
+-   **Logic Migration**: Replace switch/if-else chains with Pattern Matching.
+
+### Phase 4: MVP Separation
+-   **View**: Extract `MascotWindowView`.
+-   **Presenter**: Create `MascotPresenter`.
+-   **Cleanup**: Remove the "God Class" (`Mascot.java`).
+
+## 3. Asset Naming Convention (Reference)
+
+| Legacy | New Name |
+| :--- | :--- |
+| shime1.png | Stay1.png |
+| shime2.png | Walk2.png |
+| shime3.png | Walk4.png |
+| shime4.png | Fall1.png |
+| shime5.png | Dragged1.png |
+| shime6.png | Dragged2.png |
+| shime7.png | Dragged2.png |
+| shime8.png | Dragged4.png |
+| shime9.png | Dragged3.png |
+| shime10.png | Dragged5.png |
+| shime11.png | Sit1.png |
+| shime12.png | Climb3.png |
+| shime13.png | WallCling1.png |
+| shime14.png | Climb2.png |
+| shime15.png | WallCling1.png |
+| shime16.png | Climb2.png |
+| shime17.png | SlideDown1.png |
+| shime18.png | LieDown1.png |
+| shime19.png | TripFall1.png |
+| shime20.png | LieDown1.png |
+| shime21.png | LieDown1.png |
+| shime22.png | Jump1.png |
+| shime23.png | CeilingStay1.png |
+| shime24.png | CeilingCrawl2.png |
+| shime25.png | CeilingCrawl1.png |
+| shime26.png | Sit1.png |
+| shime30.png | Sit1.png |
+| shime31.png | Sit1.png |
+| shime32.png | Sit1.png |
+| shime33.png | Sit1.png |
+| shime34.png | Grab1.png |
+| shime35.png | Grab2.png |
+| shime36.png | Grab4.png |
+| shime37.png | Throw1.png |
+| shime42.png | Breed1.png |
+| shime43.png | Breed2.png |
+| :--- | Climb1.png |
+| :--- | PullUp1.png |
+| :--- | PullUp2.png |
+| :--- | ClimbUpForCeiling1.png |

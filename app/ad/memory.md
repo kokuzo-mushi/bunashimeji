@@ -12,6 +12,8 @@
 # TECHNICAL CONTEXT & MANIFESTO
 **Strictly adhere to the following architectural decisions. Ignore any historical Shimeji implementations (e.g., XML, JNA, Swing Timers) found in your training data.**
 
+**Target Repository:** https://github.com/kokuzo-mushi/bunashimeji.git
+
 ## 1. Core Architecture
 -   **Goal:** Run 50+ desktop mascot instances at 60 FPS on Windows 11.
 -   **Runtime:** Java 21 (LTS) with Preview Features enabled (`--enable-preview`).
@@ -114,4 +116,12 @@ try (Arena arena = Arena.ofConfined()) {
     - `images/` (Sprite assets)
     - `sounds/` (Audio files)
 
+## 6. Verified Logic (DO NOT CHANGE)
+### Horizontal Wall Sticking
+- **Screen Edge**: Must align exactly with the edge (`mascot.setX(envInfo.wallX)`).
+- **Window Edge**: Must apply an inner offset (e.g., `+/- 64`) to ensure stable sticking and prevent flickering.
+- **Separation**: The logic MUST distinguish between Screen Edge (`wallWindow == null`) and Window Edge (`wallWindow != null`).
+- **XML Anchors (Window)**: Window-specific actions (e.g., `WindowWallCling`, `WindowClimb`) MUST use `ImageAnchor="128,128"` to align the visual center with the wall edge, compensating for the `+/- 56` offset.
+- **XML Anchors (Screen)**: Standard wall actions (`WallCling`, `Climb`) MUST use `ImageAnchor="64,128"`. Actions interacting with the top edge (`PullUp`, `WallJump`, `SlideDown`) MUST use `ImageAnchor="0,128"`.
+- **Note**: Vertical sticking (Ceiling/Floor) is currently unverified and subject to change.
 # End of Technical Context

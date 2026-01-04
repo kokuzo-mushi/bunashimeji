@@ -7,28 +7,48 @@
         <Condition>event.type == 'MOUSE_PRESSED'</Condition>
         <ActionReference Name="Jump" />
     </Behavior>
+    <Behavior Name="DebugCornerTurn" Frequency="100">
+        <Condition>event.type == 'MOUSE_PRESSED' &amp;&amp; (mascot.isHittingLeftWall() || mascot.isHittingRightWall())</Condition>
+        <ActionReference Name="WallToCeilingSequence" />
+    </Behavior>
     <Behavior Name="Fall" Frequency="100">
         <Condition>!mascot.isGrounded() &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
-        <ActionReference Name="FallSequence" />
+        <ActionReference Name="Fall" />
     </Behavior>
-    <Behavior Name="Teeter" Frequency="5000">
-        <Condition>mascot.isGrounded() &amp;&amp; isOnEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
+    <Behavior Name="Land" Frequency="2000">
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.isPreviousAction('FallAction') &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="LandSequence" />
+    </Behavior>
+    <Behavior Name="Teeter" Frequency="100">
+        <Condition>mascot.isGrounded() &amp;&amp; isOnEdge &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="Teeter" />
     </Behavior>
-    <Behavior Name="PullUp" Frequency="200">
-        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
-        <ActionReference Name="PullUp" />
+    <Behavior Name="WindowPullUp" Frequency="200">
+        <Condition>((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() != null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() != null)) &amp;&amp; signedDistToWallTop &lt; -30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="WindowPullUp" />
     </Behavior>
-    <Behavior Name="WallAction" Frequency="100">
-        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; mascot.getCurrentAction() == null</Condition>
-        <ActionReference Name="WallComplexSequence" />
+    <Behavior Name="CeilingToWall" Frequency="100">
+        <Condition>mascot.isHittingCeiling() &amp;&amp; isOnCeilingEdge &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="CeilingEdgeRandomMove" />
     </Behavior>
-    <Behavior Name="CeilingAction" Frequency="100">
+    <Behavior Name="CeilingAction" Frequency="1">
         <Condition>mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="CeilingRandomMove" />
     </Behavior>
+    <Behavior Name="ScreenWallToCeiling" Frequency="100">
+        <Condition>!mascot.isHittingCeiling() &amp;&amp; ((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() == null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() == null)) &amp;&amp; signedDistToWallTop &lt; 30 &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="WallTopRandomMove" />
+    </Behavior>
+    <Behavior Name="ScreenWallAction" Frequency="1">
+        <Condition>((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() == null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() == null)) &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="WallComplexSequence" />
+    </Behavior>
+    <Behavior Name="WindowWallAction" Frequency="1">
+        <Condition>((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() != null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() != null)) &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <ActionReference Name="WindowWallComplexSequence" />
+    </Behavior>
     <Behavior Name="TurnRandomly" Frequency="10">
-        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall()</Condition>
         <ActionReference Name="Turn" />
     </Behavior>
     <Behavior Name="ChaseMouse" Frequency="30">
@@ -52,11 +72,11 @@
         <ActionReference Name="SitSequence" />
     </Behavior>
     <Behavior Name="Breed" Frequency="2">
-        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="Breed" />
     </Behavior>
     <Behavior Name="BreedJump" Frequency="2">
-        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="BreedJump" />
     </Behavior>
     <Behavior Name="Dig" Frequency="1">
@@ -80,11 +100,11 @@
         <ActionReference Name="Throw" />
     </Behavior>
     <Behavior Name="GreetRight" Frequency="5">
-        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &gt;= mascot.getX()</Condition>
+        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &gt;= mascot.getX()</Condition>
         <ActionReference Name="GreetSequenceRight" />
     </Behavior>
     <Behavior Name="GreetLeft" Frequency="5">
-        <Condition>mascot.isGrounded() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &lt; mascot.getX()</Condition>
+        <Condition>mascot.isGrounded() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; nearestMascot.distance &lt; 150 &amp;&amp; nearestMascot.x &lt; mascot.getX()</Condition>
         <ActionReference Name="GreetSequenceLeft" />
     </Behavior>
 </Behaviors>

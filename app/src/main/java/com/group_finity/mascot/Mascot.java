@@ -4,6 +4,7 @@ import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.animation.Animation;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import java.awt.Point;
+import java.awt.Rectangle;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Context;
 
@@ -16,10 +17,12 @@ public class Mascot {
     private int y;
     private int velocityX;
     private int velocityY;
+    private int previousVelocityY;
     private boolean lookRight;
     private Animation animation;
     private Action nextAction;
     private Action currentAction;
+    private Action previousAction;
 
     // State flags
     private boolean grounded;
@@ -31,10 +34,17 @@ public class Mascot {
     
     // ウィンドウ操作用
     private HWND floorWindow;
+    private HWND ceilingWindow;
     private HWND holdingWindow;
     private HWND targetWindow;
     private HWND leftWallWindow;
     private HWND rightWallWindow;
+
+    // 環境情報（論理座標）
+    private Rectangle workArea;
+    private Rectangle leftWallRect;
+    private Rectangle rightWallRect;
+    private Rectangle ceilingRect;
 
     // GraalJS Context (Per-instance isolation)
     private Context jsContext;
@@ -131,6 +141,16 @@ public class Mascot {
     }
 
     @HostAccess.Export
+    public HWND getCeilingWindow() {
+        return ceilingWindow;
+    }
+
+    @HostAccess.Export
+    public void setCeilingWindow(HWND ceilingWindow) {
+        this.ceilingWindow = ceilingWindow;
+    }
+
+    @HostAccess.Export
     public HWND getHoldingWindow() {
         return holdingWindow;
     }
@@ -168,6 +188,42 @@ public class Mascot {
     @HostAccess.Export
     public void setRightWallWindow(HWND rightWallWindow) {
         this.rightWallWindow = rightWallWindow;
+    }
+
+    @HostAccess.Export
+    public Rectangle getWorkArea() {
+        return workArea;
+    }
+
+    public void setWorkArea(Rectangle workArea) {
+        this.workArea = workArea;
+    }
+
+    @HostAccess.Export
+    public Rectangle getLeftWallRect() {
+        return leftWallRect;
+    }
+
+    public void setLeftWallRect(Rectangle leftWallRect) {
+        this.leftWallRect = leftWallRect;
+    }
+
+    @HostAccess.Export
+    public Rectangle getRightWallRect() {
+        return rightWallRect;
+    }
+
+    public void setRightWallRect(Rectangle rightWallRect) {
+        this.rightWallRect = rightWallRect;
+    }
+
+    @HostAccess.Export
+    public Rectangle getCeilingRect() {
+        return ceilingRect;
+    }
+
+    public void setCeilingRect(Rectangle ceilingRect) {
+        this.ceilingRect = ceilingRect;
     }
 
     @HostAccess.Export
@@ -211,6 +267,11 @@ public class Mascot {
     }
 
     @HostAccess.Export
+    public int getPreviousVelocityY() {
+        return previousVelocityY;
+    }
+
+    @HostAccess.Export
     public boolean isLookRight() {
         return lookRight;
     }
@@ -250,12 +311,30 @@ public class Mascot {
     }
 
     @HostAccess.Export
+    public Action getPreviousAction() {
+        return previousAction;
+    }
+
+    @HostAccess.Export
+    public boolean isPreviousAction(String name) {
+        if (previousAction == null) return false;
+        // クラス名またはtoString()の結果で判定する（安全策）
+        return previousAction.getClass().getSimpleName().equals(name) || previousAction.toString().equals(name);
+    }
+
+    @HostAccess.Export
     public String getState() {
         return currentAction != null ? currentAction.toString() : null;
     }
 
     public void tick() {
+        // 物理演算で速度が書き換わる前に、現在の速度を履歴として保存
+        this.previousVelocityY = this.velocityY;
+
         if (nextAction != null) {
+            if (currentAction != null) {
+                previousAction = currentAction;
+            }
             currentAction = nextAction;
             nextAction = null;
         }
@@ -263,6 +342,7 @@ public class Mascot {
         if (currentAction != null) {
             currentAction.execute(this);
             if (!currentAction.hasNext()) {
+                previousAction = currentAction;
                 currentAction = null;
             }
         }

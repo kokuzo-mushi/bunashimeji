@@ -2,9 +2,7 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.nativeaccess.Win32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.RECT;
+
 
 /**
  * アニメーションを再生しながら、水平方向に一定時間歩き続けるアクション。
@@ -64,22 +62,6 @@ public class WalkAction implements Action {
 
         int direction = mascot.isLookRight() ? 1 : -1;
         int nextX = mascot.getX() + speed * direction;
-
-        // 床の端チェック: 次の一歩で床から落ちるなら止まる
-        if (mascot.isGrounded()) {
-            HWND floor = mascot.getFloorWindow();
-            if (floor != null && Win32.INSTANCE.IsWindow(floor)) {
-                RECT rect = new RECT();
-                Win32.INSTANCE.GetWindowRect(floor, rect);
-                if (nextX <= rect.left || nextX >= rect.right) {
-                    // 端に到達。壁にぴったりくっつける。
-                    mascot.setX((direction > 0) ? rect.right : rect.left);
-                    
-                    this.timeRemaining = 0;
-                    return;
-                }
-            }
-        }
 
         mascot.setX(nextX);
 

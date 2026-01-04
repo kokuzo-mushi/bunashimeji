@@ -2,6 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.nativeaccess.Win32;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import java.awt.Rectangle;
 import java.util.Random;
 
 /**
@@ -30,8 +33,13 @@ public class CeilingCrawlAction implements Action {
 
         elapsedFrames++;
 
-        // 1. 壁にぶつかったら終了（WallActionへ移行させるため）
-        if (mascot.isHittingLeftWall() || mascot.isHittingRightWall()) {
+        // 1. 壁にぶつかったらアクションを終了し、CornerTurnDownへ移行させる
+        if ((mascot.isHittingRightWall() && mascot.isLookRight()) || (mascot.isHittingLeftWall() && !mascot.isLookRight())) {
+            // 向きは変えずに終了
+            // 壁に埋まるのを防ぎ、CornerTurnDownActionの回転半径を確保するため、壁から少し内側に戻す
+            int backStep = mascot.isLookRight() ? -5 : 5;
+            mascot.setX(mascot.getX() + backStep);
+
             finished = true;
             return;
         }
@@ -47,11 +55,39 @@ public class CeilingCrawlAction implements Action {
             }
         }
 
-        final int FRAME_DURATION_MS = 40;
+        final int FRAME_DURATION_MS = 16;
         mascot.setAnimation(animation);
         animation.tick(FRAME_DURATION_MS);
         int move = mascot.isLookRight() ? speed : -speed;
         mascot.setX(mascot.getX() + move);
+
+        // 3. 天井の端（コーナー）チェック
+        // 次の一歩で天井から外れる場合は停止して終了する
+        int nextX = mascot.getX() + (mascot.isLookRight() ? speed : -speed);
+        boolean reachEdge = false;
+
+        HWND ceilingWindow = mascot.getCeilingWindow();
+        if (ceilingWindow != null && Win32.INSTANCE.IsWindow(ceilingWindow)) {
+            // ウィンドウ天井の場合
+            Rectangle rect = mascot.getCeilingRect();
+            if (rect != null) {
+                // マスコットのX座標がウィンドウ範囲外に出そうなら停止
+                if (nextX < rect.x || nextX > rect.x + rect.width) reachEdge = true;
+            }
+        } else {
+            // 画面天井の場合 (WorkArea)
+            Rectangle workArea = mascot.getWorkArea();
+            if (workArea != null) {
+                if (nextX < workArea.x || nextX > workArea.x + workArea.width) {
+                    reachEdge = true;
+                }
+            }
+        }
+
+        if (reachEdge) {
+            finished = true;
+            return;
+        }
 
         // 時間経過で終了
         this.timeRemaining -= FRAME_DURATION_MS;

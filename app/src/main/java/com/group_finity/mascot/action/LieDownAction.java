@@ -25,7 +25,7 @@ public class LieDownAction implements Action {
     public void execute(Mascot mascot) {
         if (!hasNext()) return;
 
-        final int FRAME_DURATION_MS = 40;
+        final int FRAME_DURATION_MS = 16;
         mascot.setAnimation(animation);
         animation.tick(FRAME_DURATION_MS);
 

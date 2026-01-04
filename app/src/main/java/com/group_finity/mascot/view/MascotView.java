@@ -118,7 +118,7 @@ public class MascotView extends JWindow {
                 if (mascot.isLookRight()) {
                     this.currentImage = imageCache.getImage(pose.getImageName());
                 } else {
-                    this.currentImage = imageCache.getLeftImage(pose.getImageName());
+                    this.currentImage = imageCache.getRightImage(pose.getImageName());
                 }
             }
         }
@@ -202,7 +202,7 @@ public class MascotView extends JWindow {
         if (mascot.isLookRight()) {
             image = imageCache.getImage(pose.getImageName());
         } else {
-            image = imageCache.getLeftImage(pose.getImageName());
+            image = imageCache.getRightImage(pose.getImageName());
         }
 
         if (image == null) {

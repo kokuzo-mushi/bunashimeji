@@ -1,7 +1,12 @@
 package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.action.CeilingEnterAction;
+import com.group_finity.mascot.action.ClimbCeilingAction;
 import com.group_finity.mascot.action.AnimateAction;
+import com.group_finity.mascot.action.CornerTurnAction;
+import com.group_finity.mascot.action.CornerTurnDownAction;
+import com.group_finity.mascot.action.WallTopClingAction;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.animation.Pose;
 import com.group_finity.mascot.action.MoveAction;
@@ -245,7 +250,34 @@ public class ActionBuilder {
             case "Climb": {
                 Animation climbAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
                 int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
-                return new ClimbAction(climbAnim, speed);
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 0;
+                return new ClimbAction(climbAnim, speed, duration);
+            }
+            case "ClimbCeiling": {
+                Animation climbCeilingAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                int speed = (xmlAction.getSpeed() != null) ? xmlAction.getSpeed() : 2;
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 1000;
+                return new ClimbCeilingAction(climbCeilingAnim, speed, duration);
+            }
+            case "CeilingEnter": {
+                Animation ceilingEnterAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 500;
+                return new CeilingEnterAction(ceilingEnterAnim, duration);
+            }
+            case "CornerTurn": {
+                Animation cornerTurnAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 1000;
+                return new CornerTurnAction(cornerTurnAnim, duration);
+            }
+            case "CornerTurnDown": {
+                Animation cornerTurnDownAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 1000;
+                return new CornerTurnDownAction(cornerTurnDownAnim, duration);
+            }
+            case "WallTopCling": {
+                Animation wallTopClingAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());
+                int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 2000;
+                return new WallTopClingAction(wallTopClingAnim, duration);
             }
             case "CeilingCrawl": {
                 Animation ceilingCrawlAnim = createAnimationFromXml(xmlAction.getAnimation(), xmlAction.getName());

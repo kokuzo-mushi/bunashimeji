@@ -209,10 +209,22 @@ public class MascotWindow extends Window {
 
         int width = image.getWidth();
         int height = image.getHeight();
-        int anchorX = (pose.getImageAnchor() != null) ? pose.getImageAnchor().x : width / 2;
-        int anchorY = (pose.getImageAnchor() != null) ? pose.getImageAnchor().y : height;
+        
+        int anchorX;
+        int anchorY;
 
-        if (!mascot.isLookRight()) {
+        if (pose.getImageAnchor() != null) {
+            // XMLでアンカーが指定されていれば、それを使用
+            anchorX = pose.getImageAnchor().x;
+            anchorY = pose.getImageAnchor().y;
+        } else {
+            // XMLでアンカーが指定されていない場合のデフォルト値
+            anchorX = width / 2;
+            anchorY = height;
+        }
+
+        // 元画像が左向きのため、右を向くときにアンカーを反転させる
+        if (mascot.isLookRight()) {
             anchorX = width - anchorX;
         }
         if (anchorY == 0 && height > 0) {
@@ -228,9 +240,11 @@ public class MascotWindow extends Window {
         if (pose == null) return null;
 
         if (mascot.isLookRight()) {
-            return imageCache.getImage(pose.getImageName());
+            // 元画像が左向きのため、右を向くときは反転画像を取得
+            return imageCache.getRightImage(pose.getImageName());
         } else {
-            return imageCache.getLeftImage(pose.getImageName());
+            // 左を向くときはオリジナル画像（左向き）を取得
+            return imageCache.getImage(pose.getImageName());
         }
     }
 }

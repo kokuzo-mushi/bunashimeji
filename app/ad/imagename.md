@@ -51,3 +51,7 @@
 | shime44.png | (未使用) | 分裂 |
 | shime45.png | (未使用) | 分裂 |
 | shime46.png | (未使用) | 分裂 |
+| :--- | Climb1.png | 壁登り1 |
+| :--- | PullUp1.png | よじ登り1 |
+| :--- | PullUp2.png | よじ登り2 |
+| :--- | ClimbUpForCeiling1.png | 天井登り遷移 |

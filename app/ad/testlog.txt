@@ -1,9 +1,170 @@
-        // // --- Project Panama Demo ---
-        // // 最初の1体だけ、実験的に半透明にする (NativeWindowUtilを使用)
-        // // if (mascotInstances.size() == 1 && mascotView instanceof java.awt.Window) {
-        // //     // ウィンドウが表示され、ネイティブハンドルが確定した後に実行
-        // //     SwingUtilities.invokeLater(() -> {
-        // //         applyTransparencyDemo((java.awt.Window) mascotView);
-        // //     });
-        // // }
-    }
+[Debug] Tick=1522, Action=RandomChoiceAction, Pos=(75,10), Vel=(1,0), Grounded=false
+[Debug] Tick=1523, Action=RandomChoiceAction, Pos=(74,10), Vel=(1,0), Grounded=false
+[Debug] Tick=1524, Action=RandomChoiceAction, Pos=(73,10), Vel=(1,0), Grounded=false
+[Debug] Transition: Prev=com.group_finity.mascot.action.RandomChoiceAction@42b02722 -> Next (Evaluating)
+[Debug] Tick=1525, Action=RandomChoiceAction, Pos=(71,10), Vel=(1,0), Grounded=false
+[Debug] Tick=1526, Action=RandomChoiceAction, Pos=(70,10), Vel=(1,0), Grounded=false
+[Debug] Tick=1527, Action=RandomChoiceAction, Pos=(69,10), Vel=(1,0), Grounded=false
+[Debug] Tick=1528, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Transition: Prev=com.group_finity.mascot.action.RandomChoiceAction@42b02722 -> Next (Evaluating)
+[Debug] Tick=1529, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1530, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1531, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1532, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1533, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1534, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1535, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1536, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1537, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1538, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1539, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1540, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1541, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1542, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1543, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1544, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1545, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1546, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1547, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1548, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1549, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1550, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1551, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1552, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1553, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1554, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1555, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1556, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1557, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1558, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1559, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1560, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1561, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1562, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1563, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1564, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1565, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1566, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1567, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1568, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1569, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1570, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1571, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1572, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1573, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1574, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1575, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1576, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1577, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1578, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1579, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1580, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1581, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1582, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1583, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1584, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1585, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1586, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1587, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1588, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1589, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1590, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1591, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1592, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1593, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1594, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1595, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1596, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1597, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1598, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1599, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1600, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1601, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1602, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1603, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1604, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1605, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1606, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1607, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45
+[Debug] Tick=1608, Action=RandomChoiceAction, Pos=(0,10), Vel=(0,0), Grounded=false
+[Debug] WallTop Dist: -35, Action: RandomChoiceAction, Ceil: true, Y: 10, AnchorY: 45

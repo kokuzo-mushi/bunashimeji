@@ -17,16 +17,29 @@ public class ClimbAction implements Action {
     private int timeRemaining;
 
     public ClimbAction(Animation animation, int speed) {
+        this(animation, speed, 0);
+    }
+
+    public ClimbAction(Animation animation, int speed, int duration) {
         this.animation = animation;
         this.speed = speed;
-        this.timeRemaining = this.animation.getTotalDuration();
+        this.timeRemaining = duration > 0 ? duration : this.animation.getTotalDuration();
     }
 
     @Override
     public void execute(Mascot mascot) {
         if (!hasNext()) return;
 
+        // 壁の方向に向き直る
+        // 右壁の判定を優先する（両方Trueになるケース対策）
+        if (mascot.isHittingRightWall()) {
+            mascot.setLookRight(true);
+        } else if (mascot.isHittingLeftWall()) {
+            mascot.setLookRight(false);
+        }
+
         if (mascot.isHittingCeiling()) { // 天井に到達
+            // 座標はいじらず、そのまま終了して次のアクション（WallToCeilingSequence）に任せる
             timeRemaining = 0;
             return;
         }
@@ -54,7 +67,7 @@ public class ClimbAction implements Action {
             }
         }
 
-        final int FRAME_DURATION_MS = 40;
+        final int FRAME_DURATION_MS = 16;
         mascot.setAnimation(animation);
         animation.tick(FRAME_DURATION_MS);
         mascot.setY(mascot.getY() - speed);

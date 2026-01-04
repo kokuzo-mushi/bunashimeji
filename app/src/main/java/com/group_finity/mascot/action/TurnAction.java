@@ -8,8 +8,7 @@ public class TurnAction implements Action {
 
     @Override
     public void execute(Mascot mascot) {
-        // 検証のため一時的に無効化
-        // mascot.setLookRight(!mascot.isLookRight());
+        mascot.setLookRight(!mascot.isLookRight());
         executed = true;
     }
 
