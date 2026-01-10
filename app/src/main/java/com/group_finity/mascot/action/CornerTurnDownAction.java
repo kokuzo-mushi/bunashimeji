@@ -39,6 +39,10 @@ public class CornerTurnDownAction implements Action {
 
         // 物理演算（重力・壁吸着）を無効化
         mascot.setIgnoreWalls(true);
+        
+        // 【重要】アクション実行中、向きを強制的に維持する
+        // これにより、右壁に降りる際に左を向いて壁に埋まる現象を防ぐ
+        mascot.setLookRight(!isLeftWall);
 
         // アニメーション進行
         final int FRAME_DURATION_MS = 16;
@@ -75,8 +79,9 @@ public class CornerTurnDownAction implements Action {
             
             // 物理演算を有効化（壁吸着が機能するように）
             mascot.setIgnoreWalls(false);
-            // 壁に張り付いた状態にするためのフラグ操作はMain.javaの物理演算に任せるが、
-            // 向きは維持する
+            
+            // 終了時も向きを確定させておく
+            mascot.setLookRight(!isLeftWall);
         }
     }
 
@@ -118,7 +123,10 @@ public class CornerTurnDownAction implements Action {
         // 近い方の壁を選択し、そちらを向くように補正する
         isLeftWall = (distToLeft < distToRight);
         cornerX = isLeftWall ? leftEdge : rightEdge;
-        mascot.setLookRight(!isLeftWall); // 左壁なら左(false), 右壁なら右(true)を向く
+        
+        // 【重要】壁の位置に合わせて、マスコットの向きを強制的に補正する
+        // 左壁なら左(false), 右壁なら右(true)を向く
+        mascot.setLookRight(!isLeftWall);
 
         startCorner = new Point(cornerX, cornerY);
         

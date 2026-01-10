@@ -38,6 +38,10 @@ public class CornerTurnAction implements Action {
 
         // 物理演算（重力・壁吸着）を無効化
         mascot.setIgnoreWalls(true);
+        
+        // 【推奨】アクション実行中、壁の方向に向きを固定する
+        // 左壁(isLeftWall=true)なら左向き(LookRight=false)、右壁なら右向き
+        mascot.setLookRight(!isLeftWall);
 
         // アニメーション進行
         final int FRAME_DURATION_MS = 16;
@@ -70,12 +74,18 @@ public class CornerTurnAction implements Action {
             
             // 物理演算を有効化（天井吸着が機能するように）
             mascot.setIgnoreWalls(false);
+            
+            // 終了時も向きを確定させておく
+            mascot.setLookRight(!isLeftWall);
         }
     }
 
     private void initialize(Mascot mascot) {
         // 現在の壁の状態からコーナー位置を特定
         isLeftWall = mascot.isHittingLeftWall();
+        
+        // 壁の方向に向きを合わせる
+        mascot.setLookRight(!isLeftWall);
         
         // 壁のアンカー（現在のマスコットのアンカー設定を使用）
         // 通常は (64, 128)

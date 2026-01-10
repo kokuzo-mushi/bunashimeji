@@ -1,53 +1,36 @@
-# Current Development Context: Wall-Ceiling Transition & Refactoring
+# Current Development Context: Security Hardening & Refactoring Preparation
 
-**Focus:** Implementing smooth transitions between walls and ceilings using "Kinematic Corner Transition" logic, and modernizing the codebase structure.
+**Focus:** Implementing security measures (XXE/Zip Slip prevention) and preparing the codebase for Phase 5 modernization (GUI/Native replacement).
 
-## 1. Implemented Feature: Smooth Wall-Ceiling Transition
+## 1. Implemented Feature: Wall-Ceiling Transition (Completed)
 
 Successfully implemented "Kinematic Corner Transition" logic to handle coordinate mismatches and physics conflicts during transitions.
 
 ### Components
 - **`CornerMath`**: Utility class for geometric arc calculation.
-- **`CornerTurnAction`**: Action class that disables physics (`ignoreWalls`) and moves the mascot along the calculated arc.
-- **`ClimbCeilingAction`**: Preparatory action to align the mascot to the wall top (Target Y=128).
+- **`CornerTurnAction` / `CornerTurnDownAction`**: Actions that disable physics (`ignoreWalls`) and move the mascot along the calculated arc.
+- **`WallTopClingAction`**: Action for clinging to the top of the wall, ignoring physics to prevent jitter.
+- **`CeilingCrawlAction`**: Updated to handle wall collisions by stopping or turning, preventing infinite loops.
 
-### Maintenance & Impact Analysis (Critical for Future Adjustments)
+### Key Logic
+- **Hybrid Physics**: Physics (gravity/collision) is temporarily disabled during transition actions to allow geometric path following.
+- **Anchor Point Correction**: `CornerMath` calculates the visual anchor position to ensure the pivot point (e.g., hand) stays fixed on the corner.
 
-If you change **Anchor Points** or **Ceiling/Wall Detection Logic**, you must update the following:
+## 2. Refactoring Roadmap (Updated)
 
-1.  **Ceiling Anchor Change (e.g., changing `CeilingCrawl` anchor from `64,45`)**:
-    -   Update `CornerTurnAction.java`: `ceilingAnchor = new Point(64, 45);` must match the new anchor.
-    -   Update `CornerMathTest.java`: Update expected Y values.
+### Phase 4: Feature Enhancement & Optimization (Current)
+-   **Security Hardening**:
+    -   [ ] **XXE Prevention**: Secure XML parser configuration.
+    -   [ ] **Zip Slip Prevention**: Path validation during zip extraction.
+-   **Interactive Actions**:
+    -   [ ] **Pull Up**: Climbing up from the bottom of a window.
+    -   [ ] **Teeter**: Balancing on the edge.
+-   **Data Model Cleanup**: Introduce `Records` for immutable data.
 
-2.  **Wall Anchor Change (e.g., changing `Climb` anchor from `64,128`)**:
-    -   Update `CornerTurnAction.java`: `wallAnchor = new Point(64, 128);`
-    -   Update `ClimbCeilingAction.java`: `TARGET_Y = 128;` (Must match the wall anchor Y).
-
-3.  **Physics/Environment Logic**:
-    -   `Main.java`: Ceiling sticking logic (`mascot.setY(envInfo.ceilingY + 10)`) assumes the visual top aligns with the physical ceiling.
-    -   `CornerMath.java`: The logic assumes `wallAnchor.y` represents the "depth" from the wall surface.
-
-## 2. Refactoring Roadmap (Mid-to-Long Term)
-
-Based on `Java Desktop App Refactoring Plan.md`.
-
-### Phase 1: Foundation & Data Model
--   **Build System**: Migrate to Gradle (Kotlin DSL).
--   **Data Model**: Introduce `Records` for immutable data (Coordinates, Velocity).
--   **Native**: Prepare FFM API wrapper structure.
-
-### Phase 2: Native Layer Replacement (Project Panama)
--   **Facade**: Implement `WindowsUser32Service` using FFM.
--   **Removal**: Remove JNA dependencies.
-
-### Phase 3: State Machine Reconstruction
--   **Sealed Interfaces**: Define `MascotState`.
--   **Logic Migration**: Replace switch/if-else chains with Pattern Matching.
-
-### Phase 4: MVP Separation
--   **View**: Extract `MascotWindowView`.
--   **Presenter**: Create `MascotPresenter`.
--   **Cleanup**: Remove the "God Class" (`Mascot.java`).
+### Phase 5: Next-Gen Architecture (Future)
+-   **GUI Replacement**: Migrate from Swing/AWT to **JetBrains Compose Multiplatform**.
+-   **Native Layer Replacement**: Migrate from JNA to **Project Panama**.
+-   **Architecture**: Implement MVP (Model-View-Presenter) pattern.
 
 ## 3. Asset Naming Convention (Reference)
 

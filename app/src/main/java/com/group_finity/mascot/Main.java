@@ -61,6 +61,7 @@ public class Main {
         HWND currentRightWallWindow;
         RECT currentRightWallRect;
         long bornTime;
+        boolean wasDragged = false;
     }
 
     // 投げられたウィンドウの情報を保持するクラス
@@ -466,20 +467,24 @@ public class Main {
 
                 // 壁衝突判定と座標補正
                 // ★修正: アンカーポイントに基づいて左右の衝突境界を計算する
+                // ★修正: ドラッグ中およびドラッグ終了直後は吸着範囲(Catch Range)を広げる
+                // これにより、壁や天井の近くでリリースした際に確実に吸着させる
+                boolean isDragged = mascot.isBeingDragged();
+                int catchRange = (isDragged || instance.wasDragged) ? 64 : 0;
                 
                 // 左壁吸着: ウィンドウが左(dx < 0)に動いて壁が離れる場合、許容範囲を広げる
                 int leftWallTolerance = 0;
                 if (mascot.isHittingLeftWall() && envInfo.leftWallWindow != null && envInfo.leftWallWindow.equals(instance.currentLeftWallWindow)) {
                     leftWallTolerance = (leftWallMove.x < 0) ? -leftWallMove.x + 10 : 10;
                 }
-                boolean isHittingLeftWall = (mascot.getX() - anchor.x) <= envInfo.leftWallX + leftWallTolerance + 4;
+                boolean isHittingLeftWall = (mascot.getX() - anchor.x) <= envInfo.leftWallX + leftWallTolerance + 4 + catchRange;
 
                 // 右壁吸着: ウィンドウが右(dx > 0)に動いて壁が離れる場合、許容範囲を広げる
                 int rightWallTolerance = 0;
                 if (mascot.isHittingRightWall() && envInfo.rightWallWindow != null && envInfo.rightWallWindow.equals(instance.currentRightWallWindow)) {
                     rightWallTolerance = (rightWallMove.x > 0) ? rightWallMove.x + 10 : 10;
                 }
-                boolean isHittingRightWall = (mascot.getX() + (mascotWidth - anchor.x)) >= envInfo.rightWallX - rightWallTolerance - 4;
+                boolean isHittingRightWall = (mascot.getX() + (mascotWidth - anchor.x)) >= envInfo.rightWallX - rightWallTolerance - 4 - catchRange;
 
                 // 天井吸着: ウィンドウが上(dy < 0)に動いて天井が離れる場合、許容範囲を広げる
                 int ceilingTolerance = 0;
@@ -487,9 +492,10 @@ public class Main {
                     ceilingTolerance = (ceilingMove.y < 0) ? -ceilingMove.y + 10 : 10;
                 }
                 // 基本的な天井判定
-                boolean isHittingCeiling = (mascot.getY() - anchor.y) <= envInfo.ceilingY + ceilingTolerance;
+                boolean isHittingCeiling = (mascot.getY() - anchor.y) <= envInfo.ceilingY + ceilingTolerance + catchRange;
                 // ★修正: 生成直後の落下中（VelocityY > 0）のみ、天井に張り付かないよう猶予期間を設ける
-                if (isHittingCeiling && mascot.getVelocityY() > 0 && (System.currentTimeMillis() - instance.bornTime <= 10000)) {
+                // ただしドラッグ中は意図的な操作なので除外する
+                if (isHittingCeiling && mascot.getVelocityY() > 0 && (System.currentTimeMillis() - instance.bornTime <= 10000) && !isDragged) {
                     isHittingCeiling = false;
                 }
 
@@ -508,9 +514,15 @@ public class Main {
                     if (isHittingLeftWall) {
                         // 画面端とウィンドウ端で挙動を分ける
                         if (envInfo.leftWallWindow == null) {
-                            mascot.setX(envInfo.leftWallX);
+                            // 基本は壁位置に合わせる（差し戻し）
+                            // 特例: 天井に張り付いている時だけ、埋まらないようにアンカー分ずらす
+                            if (mascot.isHittingCeiling()) {
+                                mascot.setX(envInfo.leftWallX + anchor.x);
+                            } else {
+                                mascot.setX(envInfo.leftWallX);
+                            }
                         } else {
-                            mascot.setX(envInfo.leftWallX + 56); // ウィンドウの場合は少し内側へ
+                            mascot.setX(envInfo.leftWallX + anchor.x - 8); // ウィンドウの場合は少し内側へ
                         }
                         // バウンド処理
                         if (mascot.getVelocityX() < -bounceThreshold) {
@@ -520,10 +532,17 @@ public class Main {
                         }
                     }
                     if (isHittingRightWall) {
+                        int distToRight = mascotWidth - anchor.x;
                         if (envInfo.rightWallWindow == null) {
-                            mascot.setX(envInfo.rightWallX);
+                            // 基本は壁位置に合わせる（差し戻し）
+                            // 特例: 天井に張り付いている時だけ、埋まらないようにアンカー分ずらす
+                            if (mascot.isHittingCeiling()) {
+                                mascot.setX(envInfo.rightWallX - distToRight);
+                            } else {
+                                mascot.setX(envInfo.rightWallX);
+                            }
                         } else {
-                            mascot.setX(envInfo.rightWallX - 56); // ウィンドウの場合は少し内側へ
+                            mascot.setX(envInfo.rightWallX - distToRight + 8); // ウィンドウの場合は少し内側へ
                         }
                         // バウンド処理
                         if (mascot.getVelocityX() > bounceThreshold) {
@@ -606,7 +625,11 @@ public class Main {
                     int distToCeilingLeft = Math.abs(mascot.getX() - ceilingLeft);
                     int distToCeilingRight = Math.abs(mascot.getX() - ceilingRight);
                     
-                    if (distToCeilingLeft < 20 || distToCeilingRight < 20) {
+                    // 壁に接触している、または中心が端に近い場合（アンカー幅+余裕を考慮）
+                    // 壁衝突補正により中心は壁から anchor.x (約64px) 離れるため、閾値を広げる必要がある
+                    int edgeThreshold = anchor.x + 20;
+                    if (mascot.isHittingLeftWall() || mascot.isHittingRightWall() || 
+                        distToCeilingLeft < edgeThreshold || distToCeilingRight < edgeThreshold) {
                         isOnCeilingEdge = true;
                     }
                 }
@@ -646,6 +669,9 @@ public class Main {
                     }
                     mascotView.draw();
                 }
+
+                // ドラッグ状態を記録（次フレームの吸着判定用）
+                instance.wasDragged = isDragged;
             }
 
             tickCount++;

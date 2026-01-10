@@ -21,6 +21,7 @@ public class PullUpAction implements Action {
         int duration;
         int time;
         Animation animation;
+        boolean isLeft; // 壁の方向を記憶するフィールドを追加
 
         PullUpState(Animation animation, int duration) {
             this.animation = animation;
@@ -61,6 +62,7 @@ public class PullUpAction implements Action {
                 wallWindow = mascot.getRightWallWindow();
                 isLeft = false;
             }
+            s.isLeft = isLeft; // 判定結果を保存
 
             if (wallWindow != null && Win32.INSTANCE.IsWindow(wallWindow)) {
                 RECT rect = new RECT();
@@ -84,6 +86,10 @@ public class PullUpAction implements Action {
             }
             s.initialized = true;
         }
+
+        // 【重要】アクション実行中、向きを強制的に維持する
+        // 壁から離れていく動作を含むため、途中で向きが変わらないように固定する
+        mascot.setLookRight(!s.isLeft);
 
         // アニメーション進行
         if (s.animation != null) {

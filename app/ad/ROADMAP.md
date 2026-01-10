@@ -1,6 +1,6 @@
 # Shimeji Neo — 開発ロードマップ
 
-最終更新: 2025-12-29 (Asia/Tokyo)
+最終更新: 2026-01-04 (Asia/Tokyo)
 
 この文書は、Shimeji Neo プロジェクトの開発ロードマップとフェーズ管理について定義します。
 
@@ -18,6 +18,7 @@
     - **物理演算 (バウンド処理)**
     - **マスコット選択画面のプレビュー機能**
     - **マスコット間の相互作用 (挨拶機能)**
+    - **壁・天井の移動と遷移 (Wall-Ceiling Transition)**
  - **次のステップ**: セキュリティパッチの適用、インタラクティブなアクション (Pull Up, Teeter) の追加、設定GUIの拡張
 
 ---
@@ -74,6 +75,10 @@
   - [x] **多体連携アクション (基本)**:
     - マスコット同士が近づいた際の挨拶 (`Greet`) アクションの実装。
     - 相手の方向を向く (`LookAction`) 制御の実装。
+  - [x] **壁・天井の移動と遷移 (Wall-Ceiling Transition)**:
+    - **Kinematic Corner Transition**: 物理演算を一時的に無効化し、幾何学的な軌道計算 (`CornerMath`) で壁と天井を滑らかに移動するロジックの実装。
+    - **Ceiling Actions**: 天井移動 (`CeilingCrawl`)、天井待機 (`CeilingStay`)、天井からの降下 (`CornerTurnDown`) の実装。
+    - **Wall Top Actions**: 壁の頂上でのランダム挙動 (`WallTopRandomMove`) としがみつき (`WallTopCling`) の実装。
   - [ ] **インタラクティブアクションの追加**:
     - **Pull Up**: マスコットがウィンドウの下からよじ登ってくるアクション。
     - **Teeter**: ウィンドウの端でバランスをとるアクション。

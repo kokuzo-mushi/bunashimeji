@@ -1,6 +1,6 @@
 # Shimeji Neo — 全体アーキテクチャ
 
-最終更新: 2025-12-26 (Asia/Tokyo)
+最終更新: 2026-01-04 (Asia/Tokyo)
 
 この文書は、Shimeji Neo プロジェクトの全体アーキテクチャを定義します。
 
@@ -24,6 +24,11 @@
      - アニメーション再生、移動ロジック、状態変更を含む。
    - **Behavior**: `Trigger` と `Action` を結びつけるルール。
 
+4) **Physics & Motion サブシステム**:
+   - **Kinematic Corner Transition**: 壁と天井の境界など、物理演算だけでは不安定になる箇所を幾何学的な軌道計算 (`CornerMath`) で補間する。
+   - **Hybrid Physics**: 通常時は重力と当たり判定に従うが、遷移アクション中は物理演算を一時的に無効化 (`ignoreWalls`) し、計算された軌道に従う。
+   - **Environment Sensing**: `Environment` クラスにより、ウィンドウ位置やデスクトップ領域を論理座標系で正規化して提供する。
+
 ## 2. 近代化戦略 (Modernization Strategy)
 
 技術監査に基づき、以下の技術スタックへの移行を推進する。
@@ -35,7 +40,8 @@
 
 2) **ネイティブ連携 (Native Interface)**:
    - **Current**: JNA (Java Native Access)
-   - **Target**: **Project Panama (Foreign Function & Memory API)**
+   - **Current Status**: **Hybrid (JNA + Project Panama)**。パフォーマンスクリティカルなウィンドウ移動には Panama を採用済み。
+   - **Target**: **Project Panama** への完全移行。
    - **目的**: 型安全性・メモリ安全性の確保、JIT最適化による呼び出しオーバーヘッドの削減。
 
 3) **並行処理 (Concurrency)**:

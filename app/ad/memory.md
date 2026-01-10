@@ -124,4 +124,24 @@ try (Arena arena = Arena.ofConfined()) {
 - **XML Anchors (Window)**: Window-specific actions (e.g., `WindowWallCling`, `WindowClimb`) MUST use `ImageAnchor="128,128"` to align the visual center with the wall edge, compensating for the `+/- 56` offset.
 - **XML Anchors (Screen)**: Standard wall actions (`WallCling`, `Climb`) MUST use `ImageAnchor="64,128"`. Actions interacting with the top edge (`PullUp`, `WallJump`, `SlideDown`) MUST use `ImageAnchor="0,128"`.
 - **Note**: Vertical sticking (Ceiling/Floor) is currently unverified and subject to change.
+
+### Wall-Ceiling Transition
+-   **Kinematic State**: During corner transitions (`CornerTurn`, `CornerTurnDown`, `WallTopCling`), physics (gravity/collision) MUST be disabled (`ignoreWalls = true`).
+-   **Geometric Path**: Movement MUST be calculated using `CornerMath` to ensure the pivot point (hand/foot) remains fixed to the corner.
+    -   **CornerTurn (Wall -> Ceiling)**: Uses fixed radius based on wall anchor height.
+    -   **CornerTurnDown (Ceiling -> Wall)**: Uses **dynamic radius** (`xRadius`) calculated from the mascot's distance to the corner at the start of the action.
+-   **Wall Detection**: For `CornerTurnDown`, the target wall (Left vs Right) MUST be determined by **distance to the nearest edge**, NOT by the mascot's facing direction (`LookRight`), to prevent teleportation artifacts.
+
+## 7. Refactoring Guidelines (Phase 5 Preparation)
+**Strictly follow these rules to ensure future compatibility with JetBrains Compose and Project Panama.**
+
+1.  **GUI Independence**:
+    -   ❌ DO NOT introduce new dependencies on `java.awt.*` or `javax.swing.*` in Logic/Model classes (`Action`, `Behavior`, `Mascot`).
+    -   ✅ USE primitive types or custom `Record` classes for coordinates and dimensions.
+2.  **Native Abstraction**:
+    -   ❌ DO NOT call `User32`, `GDI32`, or JNA libraries directly in `Action` or `Behavior` classes.
+    -   ✅ USE a Facade/Interface (e.g., `NativePlatform`) to encapsulate native operations.
+3.  **State Management**:
+    -   ❌ DO NOT manually trigger `repaint()` from Logic classes.
+    -   ✅ USE Observer pattern or State pattern to notify View of changes.
 # End of Technical Context
