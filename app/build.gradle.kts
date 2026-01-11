@@ -103,6 +103,13 @@ tasks.test {
     }
 }
 
+// ✅ JARファイルのマニフェストにMain-Classを明示的に設定する
+tasks.named<Jar>("jar") {
+    manifest {
+        attributes["Main-Class"] = "com.group_finity.mascot.ui.ShimejiAppKt"
+    }
+}
+
 // ✅ 古いAPIに依存していてコンパイルエラーになるテストを一時的に除外する
 sourceSets {
     test {

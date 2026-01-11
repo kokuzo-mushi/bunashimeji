@@ -27,7 +27,7 @@ import javax.imageio.ImageIO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-fun main() = application {
+fun main(args: Array<String>) = application {
     // 1. Initialize Global Resources (Once)
     val config = remember { Configuration(Path.of("conf/actions.xml"), Path.of("conf/behaviors.xml")) }
     // Separate ImageCache for each skin path
