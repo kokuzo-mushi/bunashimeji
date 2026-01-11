@@ -1,141 +1,115 @@
 package com.group_finity.mascot.trigger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-
-import com.group_finity.mascot.event.EventTask;
-import com.group_finity.mascot.event.EventWorkerPool;
+import com.group_finity.mascot.Mascot;
+import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.behavior.Behavior;
+import com.group_finity.mascot.trigger.event.EventEnvelope;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
- * EventDispatcher (D-4d 修正版)
- * - Trigger評価結果をEventQueueに直接enqueue
- * - 既存のEventLogコンストラクタに適合
+ * Dispatches events to triggers and fires the first one whose conditions are met.
+ * This class is central to the event-driven architecture of Shimeji Neo.
+ * It holds a list of registered triggers and evaluates them when an event occurs.
  */
 public class EventDispatcher {
 
-    private final List<Trigger> triggers = new ArrayList<>();
     private final EvaluationContext context;
-    private final EventQueue eventQueue;
-    private final EventWorkerPool pool;
+    private final Mascot mascot;
+    private final List<Trigger> triggers = new CopyOnWriteArrayList<>();
 
-    /** 標準コンストラクタ（プールサイズ2） */
-    public EventDispatcher(EvaluationContext context, EventQueue queue) {
-        this(context, queue, 2);
-    }
-
-    /** プールサイズ指定版 */
-    public EventDispatcher(EvaluationContext context, EventQueue queue, int poolSize) {
+    public EventDispatcher(EvaluationContext context, Mascot mascot) {
         this.context = context;
-        this.eventQueue = queue;
-        this.pool = new EventWorkerPool(poolSize);
+        this.mascot = mascot;
     }
 
-    /** 外部キュー利用（テスト用） */
-    public EventDispatcher(BlockingQueue<EventTask> externalQueue) {
-        this.context = null;
-        this.eventQueue = null;
-        this.pool = new EventWorkerPool(externalQueue, 1);
-    }
-
-    /** Runnableを直接ディスパッチ */
-    public void dispatch(Runnable action, EventTask.Priority priority) {
-        if (action == null) return;
-        EventTask task = new EventTask(action, priority);
-        pool.submit(task);
-        System.out.printf("[EventDispatcher] Direct dispatch: %d (priority=%s)%n", task.getId(), task.getPriority());
-    }
-
-    /** Trigger登録 */
     public void registerTrigger(Trigger trigger) {
-        if (trigger != null) triggers.add(trigger);
+        this.triggers.add(trigger);
     }
 
-    /** pollAndDispatch: 成功トリガーを非同期で実行 + EventLogへ出力 */
-    public void pollAndDispatch() {
-        if (context == null || eventQueue == null) {
-            System.err.println("[EventDispatcher] pollAndDispatch skipped (context or eventQueue is null)");
+    /**
+     * Evaluates registered triggers in response to an event.
+     * <p>
+     * This method iterates through the list of triggers. For each trigger, it checks if its
+     * conditions are met by calling {@link Trigger#evaluate(EvaluationContext)}.
+     * <p>
+     * The first trigger that evaluates to {@code true} is considered "fired".
+     * If the fired trigger is a {@link Behavior}, its associated {@link Action} is
+     * retrieved and passed to the {@link Mascot} to be executed. The evaluation then stops.
+     * <p>
+     * Currently, this method evaluates all triggers for any event. Future optimizations
+     * could filter triggers based on the event type to improve performance.
+     *
+     * @param event The event that triggered the evaluation (currently unused, for future filtering).
+     */
+    public void evaluateTriggers(EventEnvelope<?> event) {
+        if (mascot == null) {
+            // Cannot execute actions without a mascot.
             return;
         }
 
-        for (Trigger trigger : triggers) {
-            long start = System.nanoTime();
-            boolean success = false;
-            
-            try {
-                success = trigger.check(context);
-            } catch (Exception e) {
-                System.err.println("[EventDispatcher] Trigger check error: " + e.getMessage());
-                e.printStackTrace();
-            }
-            
-            long elapsed = System.nanoTime() - start;
+        List<Behavior> candidates = new ArrayList<>();
 
-            // ★ 修正: 既存のEventLogコンストラクタを使用
-            Map<String, Object> snapshot = context.getVariablesSnapshot();
-            EventLog log = new EventLog(
-                trigger.toString(),
-                snapshot,
-                success,
-                elapsed
-            );
-            
-            // EventQueueに直接enqueue（同期的）
-            eventQueue.enqueue(log);
+        // イベント変数をコンテキストに注入して、条件式から参照できるようにする
+        this.context.setValue("event", event);
 
-            if (success) {
-                // Snapshotを固定化してWorkerへ
-                final EvaluationContext snapshotCtx = context.snapshotImmutable();
-                EventTask task = new EventTask(() -> {
-                    try {
-                        trigger.execute(snapshotCtx);
-                    } catch (Exception e) {
-                        System.err.println("[EventDispatcher] Task execution error: " + e.getMessage());
-                        e.printStackTrace();
-                        
-                        // 実行エラーも記録
-                        EventLog errorLog = new EventLog(
-                            trigger.toString() + " (execution)",
-                            Map.of("error", e.getMessage()),
-                            false,
-                            0L
-                        );
-                        eventQueue.enqueue(errorLog);
+        try {
+            for (final Trigger trigger : triggers) {
+                if (trigger.evaluate(event, this.context)) {
+                    if (trigger instanceof Behavior) {
+                        Behavior b = (Behavior) trigger;
+                        candidates.add(b);
                     }
-                }, EventTask.Priority.MEDIUM);
-
-                pool.submit(task);
-                System.out.printf("[EventDispatcher] Trigger fired and submitted: %s%n", trigger);
-            } else {
-                System.out.printf("[EventDispatcher] Trigger skipped: %s%n", trigger);
+                }
             }
+        } finally {
+            // 評価終了後にイベント変数を削除
+            this.context.removeVariable("event");
+        }
+
+        if (candidates.isEmpty()) {
+            return;
+        }
+
+        // 候補の中からFrequencyに基づいて抽選を行う
+        Behavior selectedBehavior = selectBehavior(candidates);
+        
+        if (selectedBehavior != null) {
+            Action action = selectedBehavior.getAction();
+
+            // 現在実行中のアクションと同じインスタンスであれば、リセット・再設定を行わない
+            // これにより、毎フレーム条件を満たすアクション（Fallなど）がリセットされずに継続実行され、加速などが有効になる
+            if (this.mascot.getCurrentAction() == action) {
+                return;
+            }
+
+            action.reset(); // アクションを再利用する前に必ず初期化する
+            this.mascot.setNextAction(action);
         }
     }
 
-    public int getRegisteredCount() { 
-        return triggers.size(); 
-    }
-    
-    public void clear() { 
-        triggers.clear(); 
-    }
+    private Behavior selectBehavior(List<Behavior> candidates) {
+        int totalFrequency = candidates.stream().mapToInt(Behavior::getFrequency).sum();
+        if (totalFrequency == 0) return candidates.get(0);
 
-    public void shutdownWorkers() {
-        if (eventQueue != null) {
-            EventLog shutdownLog = new EventLog(
-                "EventWorkerPool.Shutdown",
-                Map.of("workers", pool.getPoolSize()),
-                true,
-                0L
-            );
-            eventQueue.enqueue(shutdownLog);
+        int random = new Random().nextInt(totalFrequency);
+        int current = 0;
+        for (Behavior behavior : candidates) {
+            current += behavior.getFrequency();
+            if (random < current) return behavior;
         }
-        pool.shutdown();
+        return candidates.get(candidates.size() - 1);
     }
 
-    public void awaitWorkers(long timeoutMillis) {
-        pool.awaitTermination(timeoutMillis, java.util.concurrent.TimeUnit.MILLISECONDS);
+    public void clear() {
+        triggers.clear();
+    }
+
+    public int getRegisteredCount() {
+        return triggers.size();
     }
 }

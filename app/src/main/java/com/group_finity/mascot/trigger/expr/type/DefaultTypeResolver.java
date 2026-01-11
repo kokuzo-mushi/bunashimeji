@@ -1,122 +1,122 @@
 package com.group_finity.mascot.trigger.expr.type;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-/**
- * Default implementation: rules as discussed earlier.
- */
-public final class DefaultTypeResolver implements TypeResolver {
-
-    private final ConcurrentMap<Key, CoercionPlan> cache = new ConcurrentHashMap<>();
+public class DefaultTypeResolver implements TypeResolver {
 
     @Override
-    public CoercionPlan resolve(String operator, Class<?> leftType, Class<?> rightType, Mode mode) {
-        Key key = new Key(operator, leftType, rightType, mode);
-        return cache.computeIfAbsent(key, k -> computePlan(operator, leftType, rightType, mode));
+    public Object applyUnaryOp(String operator, Object value) {
+        return switch (operator) {
+            case "!" -> !TypeResolver.toBoolean(value);
+            case "-" -> {
+                Number num = TypeResolver.toNumber(value);
+                if (num == null)
+                    yield null;
+                yield new BigDecimal(num.toString()).negate();
+            }
+            case "+" -> TypeResolver.toNumber(value); // No-op, just ensures it's a number
+            default -> throw new IllegalArgumentException("Unknown unary operator: " + operator);
+        };
     }
 
-    private CoercionPlan computePlan(String op, Class<?> lType, Class<?> rType, Mode mode) {
-        TypeKind l = kindOf(lType);
-        TypeKind r = kindOf(rType);
-
-        if (isUnary(op)) {
-            if ("!".equals(op)) {
-                return new CoercionPlan(Boolean.class, Boolean.class, Boolean.class);
-            }
+    @Override
+    public Object applyBinaryOp(String operator, Object left, Object right) {
+        // 1. 論理演算子
+        if (operator.equals("&&")) {
+            return TypeResolver.toBoolean(left) && TypeResolver.toBoolean(right);
+        }
+        if (operator.equals("||")) {
+            return TypeResolver.toBoolean(left) || TypeResolver.toBoolean(right);
         }
 
-        if (isArithmetic(op)) {
-            if (l == TypeKind.NUMBER && r == TypeKind.NUMBER) {
-                return new CoercionPlan(Double.class, Double.class, Double.class);
+        // 2. 算術演算子 (数値変換を優先)
+        if (isArithmetic(operator)) {
+            Number leftNum = TypeResolver.toNumber(left);
+            Number rightNum = TypeResolver.toNumber(right);
+
+            // 両方のオペランドが数値に変換できる場合
+            if (leftNum != null && rightNum != null) {
+                BigDecimal leftBd = new BigDecimal(leftNum.toString());
+                BigDecimal rightBd = new BigDecimal(rightNum.toString());
+
+                return switch (operator) {
+                    case "+" -> leftBd.add(rightBd);
+                    case "-" -> leftBd.subtract(rightBd);
+                    case "*" -> leftBd.multiply(rightBd);
+                    case "/" -> {
+                        if (rightBd.compareTo(BigDecimal.ZERO) == 0)
+                            yield null; // Division by zero
+                        yield leftBd.divide(rightBd, 10, RoundingMode.HALF_UP);
+                    }
+                    case "%" -> {
+                        if (rightBd.compareTo(BigDecimal.ZERO) == 0)
+                            yield null; // Division by zero
+                        yield leftBd.remainder(rightBd);
+                    }
+                    // isArithmeticでチェック済みのためdefaultは不要だが念のため
+                    default -> throw new IllegalStateException("Unknown arithmetic operator: " + operator);
+                };
             }
-            if ("+".equals(op) && (l == TypeKind.STRING || r == TypeKind.STRING)) {
-                return new CoercionPlan(String.class, String.class, String.class);
+
+            // + 演算子の場合、数値に変換できなかったら文字列結合にフォールバック
+            if (operator.equals("+")) {
+                return String.valueOf(left) + String.valueOf(right);
             }
-            if (mode != Mode.STRICT && (canBeNumber(lType) && canBeNumber(rType))) {
-                return new CoercionPlan(Double.class, Double.class, Double.class);
-            }
-            throw new IllegalArgumentException("Operator " + op + " not applicable to " + l + " and " + r);
+
+            // 他の算術演算子で数値に変換できなかった場合はエラー（nullを返す）
+            return null;
         }
 
-        if (isComparison(op)) {
-            if (l == TypeKind.NUMBER && r == TypeKind.NUMBER) {
-                return new CoercionPlan(Double.class, Double.class, Boolean.class);
-            }
-            if (mode != Mode.STRICT && (canBeNumber(lType) && canBeNumber(rType))) {
-                return new CoercionPlan(Double.class, Double.class, Boolean.class);
-            }
-            throw new IllegalArgumentException("Comparison requires numeric operands");
+        // 3. 比較演算子
+        if (isComparison(operator)) {
+            int cmp = compare(left, right);
+            return switch (operator) {
+                case "==", "===" -> cmp == 0;
+                case "!=", "!==" -> cmp != 0;
+                case "<" -> cmp < 0;
+                case "<=" -> cmp <= 0;
+                case ">" -> cmp > 0;
+                case ">=" -> cmp >= 0;
+                default -> false; // Should not happen
+            };
         }
 
-        if ("==".equals(op) || "!=".equals(op)) {
-            if (Objects.equals(lType, rType)) {
-                return new CoercionPlan(Object.class, Object.class, Boolean.class);
-            }
-            if (bothAreNumbers(lType, rType)) {
-                return new CoercionPlan(Double.class, Double.class, Boolean.class);
-            }
-            if (mode != Mode.STRICT) {
-                return new CoercionPlan(String.class, String.class, Boolean.class);
-            }
-            return new CoercionPlan(Object.class, Object.class, Boolean.class);
+        throw new IllegalArgumentException("Unknown binary operator: " + operator);
+    }
+
+    private boolean isComparison(String operator) {
+        return switch (operator) {
+            case "==", "===", "!=", "!==", "<", "<=", ">", ">=" -> true;
+            default -> false;
+        };
+    }
+
+    private boolean isArithmetic(String operator) {
+        return switch (operator) {
+            case "+", "-", "*", "/", "%" -> true;
+            default -> false;
+        };
+    }
+
+    private int compare(Object left, Object right) {
+        if (Objects.equals(left, right)) {
+            return 0;
+        }
+        if (left == null)
+            return -1;
+        if (right == null)
+            return 1;
+
+        // Numeric comparison
+        if (left instanceof Number && right instanceof Number) {
+            BigDecimal leftBd = new BigDecimal(left.toString());
+            BigDecimal rightBd = new BigDecimal(right.toString());
+            return leftBd.compareTo(rightBd);
         }
 
-        if (isLogical(op)) {
-            return new CoercionPlan(Boolean.class, Boolean.class, Boolean.class);
-        }
-
-        throw new IllegalArgumentException("Unknown operator: " + op);
-    }
-
-    private boolean isArithmetic(String op) {
-        return "+".equals(op) || "-".equals(op) || "*".equals(op) || "/".equals(op) || "%".equals(op);
-    }
-
-    private boolean isComparison(String op) {
-        return "<".equals(op) || ">".equals(op) || "<=".equals(op) || ">=".equals(op);
-    }
-
-    private boolean isLogical(String op) {
-        return "&&".equals(op) || "||".equals(op);
-    }
-
-    private boolean isUnary(String op) {
-        return "!".equals(op);
-    }
-
-    private boolean bothAreNumbers(Class<?> a, Class<?> b) {
-        return (a != null && Number.class.isAssignableFrom(a)) && (b != null && Number.class.isAssignableFrom(b));
-    }
-
-    private boolean canBeNumber(Class<?> cls) {
-        if (cls == null) return true;
-        if (Number.class.isAssignableFrom(cls)) return true;
-        if (cls == String.class) return true;
-        if (cls == Boolean.class || cls == boolean.class) return true;
-        return false;
-    }
-
-    private TypeKind kindOf(Class<?> cls) {
-        if (cls == null) return TypeKind.NULL;
-        if (Number.class.isAssignableFrom(cls) || (cls.isPrimitive() && cls != boolean.class && cls != char.class)) return TypeKind.NUMBER;
-        if (Boolean.class == cls || boolean.class == cls) return TypeKind.BOOLEAN;
-        if (String.class == cls) return TypeKind.STRING;
-        return TypeKind.OBJECT;
-    }
-
-    private static final class Key {
-        private final String op;
-        private final Class<?> l;
-        private final Class<?> r;
-        private final Mode m;
-        Key(String op, Class<?> l, Class<?> r, Mode m) { this.op = op; this.l = l; this.r = r; this.m = m; }
-        @Override public int hashCode() { return (op.hashCode()*31 + (l != null ? l.hashCode():0))*31 + (r != null ? r.hashCode():0); }
-        @Override public boolean equals(Object o) {
-            if (!(o instanceof Key)) return false;
-            Key k = (Key)o;
-            return op.equals(k.op) && java.util.Objects.equals(l,k.l) && java.util.Objects.equals(r,k.r) && m == k.m;
-        }
+        // Fallback to string comparison
+        return String.valueOf(left).compareTo(String.valueOf(right));
     }
 }

@@ -12,3 +12,4 @@ plugins {
 
 rootProject.name = "buna-shimeji"
 include("app")
+// include("mascot") - module directory missing

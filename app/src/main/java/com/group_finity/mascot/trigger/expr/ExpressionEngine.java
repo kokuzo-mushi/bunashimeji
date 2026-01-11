@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
-import com.group_finity.mascot.trigger.expr.node.ExpressionNode;
+import com.group_finity.mascot.trigger.expr.ast.Expression;
 import com.group_finity.mascot.trigger.expr.parser.ExpressionParser;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
 import com.group_finity.mascot.trigger.expr.type.DefaultTypeResolver;
@@ -18,7 +18,7 @@ public final class ExpressionEngine {
     private TypeCoercion typeCoercion;
     private Mode mode;
 
-    private final Map<String, ExpressionNode> cache = new ConcurrentHashMap<>();
+    private final Map<String, Expression> cache = new ConcurrentHashMap<>();
 
     public ExpressionEngine() {
         // デフォルト構成（明示的に指定されなければDefault）
@@ -45,12 +45,12 @@ public final class ExpressionEngine {
     public Object evaluate(String expression, EvaluationContext context) {
         if (expression == null || expression.isEmpty()) return Boolean.FALSE;
         try {
-            ExpressionNode node = cache.computeIfAbsent(expression, expr -> {
+            Expression node = cache.computeIfAbsent(expression, expr -> {
                 ExpressionParser parser = new ExpressionParser(expr);
                 return parser.parse();
             });
             if (node == null) return Boolean.FALSE;
-            return node.evaluate(context, typeResolver, typeCoercion);
+            return node.evaluate(context);
         } catch (Exception e) {
             System.err.println("[ExpressionEngine] evaluate error for \"" + expression + "\": " + e.getMessage());
             return Boolean.FALSE;
@@ -58,5 +58,5 @@ public final class ExpressionEngine {
     }
 
     public void clearCache() { cache.clear(); }
-    public ExpressionNode getCachedNode(String expression) { return cache.get(expression); }
+    public Expression getCachedNode(String expression) { return cache.get(expression); }
 }

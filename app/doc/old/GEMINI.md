@@ -1,0 +1,309 @@
+# Shimeji Neo — 全体設計図・進捗フロー・課題・留意点（Gemini共有用）
+
+最終更新: 2025-12-26 (Asia/Tokyo)
+
+この文書は、ChatGPT 側で記憶している「Shimeji Neo」設計・開発の前提と、2025年10月前半までの統合サマリ（D-5 完了時点）をベースに、**Gemini に渡して再開発を進めるための引き継ぎ用**に整理したものです。
+
+---
+
+## 1. プロジェクト概要
+
+- 名称: **Shimeji Neo**
+- 目的: 既存の Shimeji 系デスクトップマスコットを、  
+  **モジュール分割 + AST駆動の式評価 + イベント駆動アーキテクチャ**で再設計する。
+- 重点:
+  - 責務の明確化と拡張性
+  - ルール/条件式の高速評価（キャッシュ）
+  - EventQueue / Dispatcher / Trigger の一貫した連携
+  - 将来的な Java 25・GraalVM 等の拡張余地
+- リポジトリ: https://github.com/kokuzo-mushi/bunashimeji.git
+
+---
+
+## 2. 開発環境（固定前提）
+
+- OS: Windows 11
+- IDE: vscode
+- Build: Gradle 9.x 系想定
+- JDK: 21（Java 25 対応を見据えて設計・検討）
+
+---
+
+## 3. 基準ディレクトリ構造（構造基準版 v1）
+
+```
+app/
+ ├─ src/
+ │   ├─ main/
+ │   │   ├─ java/
+ │   │   │   ├─ com/group_finity/mascot/
+ │   │   │   │   ├─ Main.java
+ │   │   │   │   ├─ ShimejiApp.java
+ │   │   │   │   └─ trigger/
+ │   │   │   │       ├─ Trigger.java
+ │   │   │   │       ├─ TriggerCondition.java
+ │   │   │   │       └─ expr/
+ │   │   │   │           ├─ ExpressionEngine.java
+ │   │   │   │           ├─ ExprEvaluator.java
+ │   │   │   │           ├─ ExprTrigger.java
+ │   │   │   │           ├─ eval/EvaluationContext.java
+ │   │   │   │           ├─ node/
+ │   │   │   │           │   ├─ BinaryExpressionNode.java
+ │   │   │   │           │   ├─ ExpressionNode.java
+ │   │   │   │           │   ├─ LiteralNode.java
+ │   │   │   │           │   ├─ UnaryExpressionNode.java
+ │   │   │   │           │   └─ VariableNode.java
+ │   │   │   │           ├─ parser/ExpressionParser.java
+ │   │   │   │           └─ type/
+ │   │   │   │               ├─ CoercionException.java
+ │   │   │   │               ├─ CoercionPlan.java
+ │   │   │   │               ├─ DefaultTypeCoercion.java
+ │   │   │   │               ├─ DefaultTypeResolver.java
+ │   │   │   │               ├─ Mode.java
+ │   │   │   │               ├─ TypeCoercion.java
+ │   │   │   │               ├─ TypeKind.java
+ │   │   │   │               └─ TypeResolver.java
+ │   │   │   └─ org/example/App.java
+ │   │   └─ resources/
+ │   │       ├─ behavior/
+ │   │       ├─ config/
+ │   │       ├─ images/
+ │   │       └─ sounds/
+ │   └─ test/
+ │       ├─ java/
+ │       │   ├─ com/group_finity/mascot/trigger/expr/
+ │       │   │   ├─ ExprTriggerAdvancedTest.java
+ │       │   │   └─ ExprTriggerTest.java
+ │       │   ├─ com/group_finity/mascot/trigger/expr/type/DefaultTypeCoercionTest.java
+ │       │   └─ org/example/AppTest.java
+ │       └─ resources/
+ └─ tree.txt
+```
+
+---
+
+## 4. 全体アーキテクチャ
+
+詳細は ARCHITECTURE.md を参照。
+
+---
+
+## 5. 開発ロードマップ
+
+詳細は ROADMAP.md を参照。（技術監査に基づき Phase 4 のタスク追加と Phase 5 の新設を行いました）
+
+---
+
+## 6. D-5 フェーズ（評価キャッシュ）統合結果
+
+### 6.1 目的
+- ExprCache を導入し、TriggerCondition の式評価をキャッシュ化  
+  - 同一条件式の再評価の高速化  
+  - 依存変数追跡による正しいキャッシュ無効化
+
+### 6.2 問題と原因（当時の DeepResearch 要点）
+
+1) **Step 2 失敗（常にキャッシュ一致扱いの揺れ）**  
+- `ctx.clearAccessLog()` を  
+  キャッシュチェック前に実行して依存スナップショットが空化
+
+2) **Step 3 失敗（変数更新を追跡できない）**  
+- EvaluationContext が外部 `vars` をコピー保持しており  
+  変数更新が Context に反映されない
+
+3) **Step 5 性能逆転（キャッシュなのに遅い）**  
+- 毎回キャッシュミス → 比較オーバーヘッドが上乗せ
+
+### 6.3 修正方針（D-5 完了版で合意された内容）
+
+- `TriggerCondition.evaluate()` 内で  
+  **clearAccessLog() は再評価時のみに呼ぶ**
+- キャッシュHIT判定は  
+  **Mode(STRICT/LOOSE) に応じて currentDeps を生成**
+- `EvaluationContext` は  
+  **vars をコピーせず参照共有**へ
+- これにより Step 2〜5 の  
+  **キャッシュ一致 / 依存追跡 / 性能傾向が安定**
+
+---
+
+## 7. Phase 1「基盤の安定化と回復」完了サマリ
+
+Phase 1 は以下のタスクの達成をもって完了しました。
+
+-   **`EventDispatcher` の再設計**: 非同期キューモデルを廃止し、`evaluateTriggers` メソッドによる同期的な評価モデルを実装。責務をトリガー評価とアクション設定に集中させました。
+-   **テストカバレッジの回復**: `Mockito` を導入し、`EventDispatcherTest` をはじめとする単体テストを新しい設計に合わせて修正・有効化しました。
+-   **式評価エンジンの中核実装**: `DefaultTypeResolver` に単項・二項演算の具体的なロジックを実装し、`DefaultTypeResolverTest` によってその動作の正しさを保証しました。
+
+これにより、プロジェクトのコアとなるイベント処理と式評価の基盤が安定し、次のフェーズに進む準備が整いました。
+
+---
+
+## 8. 現在のタスクリスト（Phase 2 進行中）
+
+**Phase 2: 設定の動的読み込み**
+
+-   **目的**: `actions.xml` と `behaviors.xml` をパースし、`Action` と `Behavior` のオブジェクトを動的に生成する仕組みを構築する。これにより、マスコットの動作を外部ファイルで定義できるようになります。
+-   **タスクリスト**:
+    1.  **XMLパーサーの導入**: JAXB (Java Architecture for XML Binding) を `build.gradle.kts` に追加し、XMLをJavaオブジェクトにマッピングする準備を整えます。
+    2.  **JAXBモデルクラスの作成**: `actions.xml` と `behaviors.xml` の構造に対応するJavaクラス（例: `XmlAction`, `XmlBehavior`）を作成します。
+    3.  **`Configuration` クラスの実装**: `Configuration` クラスのコンストラクタで、JAXBを使ってXMLファイルを読み込み、`Action` と `Behavior` のリストを生成するロジックを実装します。
+    4.  **`Action` と `Behavior` のインスタンス化**: パースして得られた `XmlAction` や `XmlBehavior` から、実際の `Action` インターフェースや `Behavior` クラスのインスタンスを生成するロジックを構築します。
+
+**Phase 4 (先行着手): セキュリティ強化**
+- **目的**: 技術監査で指摘された脆弱性（XXE, Zip Slip）を早期に解消する。
+- **タスク**:
+  - `SECURITY_IMPLEMENTATION_GUIDE.md` に基づく XMLパーサー設定の修正と ZIP展開ロジックの検証追加。
+
+---
+
+## 9. これからの開発の留意点（Gemini で作業する際の指針）
+
+### 8.1 変更戦略
+- **最小修正 → テスト通過 → 次の最小修正**の順  
+- 1コミットで  
+  - 「責務変更」  
+  - 「仕様追加」  
+  - 「性能改善」  
+  を混ぜない
+
+### 8.2 テスト駆動の優先度
+- ExprTrigger / DefaultTypeCoercion / ExprCacheIntegrationTest を  
+  **破壊しないことが最優先**
+- 性能系検証は  
+  - まず正しさの担保  
+  - 次にメトリクス改善  
+  の順で実施
+
+### 8.3 STRICT/LOOSE の二重系統管理
+- 同じ式でも  
+  - 型変換許容度  
+  - 依存変数の取り扱い  
+  が異なる可能性
+- キャッシュキー設計や deps 比較は  
+  **Mode を必ず含む前提**で統一
+
+### 8.4 将来拡張（GraalVM/JS 等）への余白
+- ExpressionEngine を  
+  - AST evaluator  
+  - 代替スクリプトエンジン（将来）  
+  の差し替えポイントとして維持
+- 依存追跡の共通IFを  
+  「評価エンジン横断」で用意できるか検討
+
+---
+
+## 10. Gemini 用 “引き継ぎショートプロンプト”
+
+以下をそのまま Gemini に貼り付けて使える形にしています。
+
+```
+あなたは上級Javaアーキテクト兼コードレビュアーです。
+対象は Java + Gradle 環境で再設計中のデスクトップマスコット
+「Shimeji Neo」です。
+
+前提:
+- Windows 11
+- Eclipse (Pleiades 日本語版)
+- JDK 21
+- 将来的に Java 25 / GraalVM 等の拡張も視野
+- リポジトリ: https://github.com/kokuzo-mushi/bunashimeji.git
+
+目的:
+上記の開発ロードマップ（Phase 1〜4）に従い、Shimeji Neo の開発を推進する。
+当面は Phase 1「基盤の安定化と回復」の完了を目指す。
+並行して Phase 4「セキュリティ強化」の実装を行う。
+当面は Phase 2「設定の動的読み込み」の完了を目指す。
+
+重要制約:
+- 既存APIの破壊を最小化
+- 署名変更・フィールド削除・コンストラクタ追加は慎重
+- 変更の影響範囲と呼び出し元整合を必ず説明
+
+依頼:
+- 現在のタスクリスト（セクション8）を達成するための具体的な実装方針とコードを提案する。
+- 必要なら疑似コード/パッチ単位で案を示す
+```
+
+---
+
+## 10. 現状サマリー（超短縮）
+
+- Shimeji Neo は **イベント駆動 + AST式評価** を中核に再設計を進めている。
+- **技術監査**により、セキュリティ強化（XXE/Zip Slip対策）と将来的なGUI刷新（Compose）がロードマップに追加された。
+- 開発は4つのフェーズに分割され、現在は **Phase 1: 基盤の安定化と回復** に着手している。
+- 当面の目標は、`EventDispatcher` の評価ロジックを実装し、`Mockito` を使ってテストカバレッジを回復させることである。
+- 改修は引き続き **API破壊最小・小刻み変更・テスト最優先**で進める。
+
+---
+
+以上。
+
+---
+
+## 11. 完了済みコンテキスト (Phase 1-4 Deep Research Result)
+
+以下は、2025年12月までに完了した技術調査およびアーキテクチャ決定事項のログです。
+
+### 1. Core Technology Stack
+- **Runtime**: Java 21 (LTS) with Preview Features (`--enable-preview`).
+- **GC**: Generational ZGC (`-XX:+UseZGC -XX:+ZGenerational`) for low latency.
+- **Build System**: Gradle (Kotlin DSL).
+- **Native Interop**: Project Panama (Foreign Function & Memory API). JNA is legacy/fallback only.
+- **Scripting**: GraalJS (ECMAScript 2024 compliant).
+- **GUI**: `java.awt.Window` (Active Rendering). **DO NOT** use `JWindow`, `JFrame`, or JetBrains Compose.
+
+### 2. Phase 1: Native Integration & DPI Handling
+#### DPI Awareness & Coordinate System
+- **Manifest**: Must declare `<dpiAware>true/PM</dpiAware>` and `<dpiAwareness>PerMonitorV2</dpiAwareness>` in the application manifest.
+- **Coordinate Conversion**:
+  - Win32 APIs return **Physical Pixels**.
+  - Java AWT uses **Logical Pixels**.
+  - **Solution**: Use `PhysicalToLogicalPointForPerMonitorDPI` (Win32 API) via Panama to convert coordinates accurately. Do not rely on AWT's internal scaling.
+- **Work Area Detection**:
+  - Use `GetMonitorInfo` for basic work area.
+  - Use `SHAppBarMessage` to detect auto-hide taskbars and precise edges.
+  - Logic must handle multi-monitor setups with different DPIs.
+
+#### Window Management
+- **Transparency**: Use `UpdateLayeredWindow` (Win32) with a pre-multiplied ARGB bitmap.
+  - Avoid `AWTUtilities` or `setBackground(new Color(0,0,0,0))` on `JWindow` as it conflicts with DWM on Windows 11.
+- **Native Access**:
+  - Migrate from JNA to **Project Panama** for performance (60 FPS window moves).
+  - Use `Arena.ofConfined()` for memory management in the rendering loop.
+
+### 3. Phase 2: Logic & Scripting Architecture
+#### Scripting Engine (GraalJS)
+- **Integration Pattern**: **Shared Engine / Separate Contexts**.
+  - Single `Engine` instance to share code cache/JIT optimizations.
+  - Separate `Context` per mascot instance for isolation.
+- **Sandboxing**:
+  - Use `HostAccess.EXPLICIT` to allowlist Java API access.
+  - Enforce resource limits (CPU time, memory) to prevent DoS from user scripts.
+
+#### AI Architecture
+- **Pattern**: **Event-Driven Hierarchical State Machine (HSM)**.
+- **Async Handling**: Use **JavaScript Generators (`function*`)** as Coroutines.
+  - Allows writing asynchronous logic (e.g., "Walk -> Wait -> Jump") in a synchronous style using `yield`.
+  - Java side implements a scheduler to resume generators frame-by-frame.
+
+### 4. Phase 3: Rendering & Performance
+#### Rendering Pipeline
+- **Strategy**: **Active Rendering** via `BufferStrategy`.
+  - **Do NOT use**: Swing `paintComponent`, `RepaintManager`, or `Timer`.
+  - **Loop**: Custom `while` loop using `System.nanoTime()` on a dedicated thread.
+  - **Window**: Use `java.awt.Window` (not `JWindow`) with `setIgnoreRepaint(true)`.
+- **Hardware Acceleration**:
+  - Prefer Direct3D pipeline (`-Dsun.java2d.d3d=true`).
+  - Use `VolatileImage` for VRAM-cached sprites and composition.
+  - Implement **Texture Atlas** to reduce texture binding overhead.
+
+#### Memory Management
+- **Strategy**: Avoid object pooling for small objects (Point, Rect); rely on ZGC. Pool heavy resources (Buffers, Images).
+
+### 5. Phase 4: Packaging & Distribution
+- **Tooling**: `jpackage` via **Badass Runtime Plugin** (`org.beryx.runtime`).
+- **Runtime Strategy**: **Hybrid Runtime**.
+- **Installer**: MSI or EXE using **WiX Toolset v3.11**.
+- **Launcher Flags**: Embed `--enable-preview` and `--enable-native-access=ALL-UNNAMED` into the launcher via `jpackage` options.
+- **Signing**: Use **SignPath.io** for open-source code signing to avoid SmartScreen warnings.

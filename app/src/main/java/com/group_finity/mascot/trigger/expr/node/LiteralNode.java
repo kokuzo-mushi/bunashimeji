@@ -1,12 +1,11 @@
 package com.group_finity.mascot.trigger.expr.node;
 
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
+import com.group_finity.mascot.trigger.expr.type.TypeCoercion;
+import com.group_finity.mascot.trigger.expr.type.TypeResolver;
+import com.group_finity.mascot.trigger.expr.visitor.AstVisitor;
 
-/**
- * LiteralNode
- * リテラル値（数値・文字列・真偽値）を表すASTノード。
- */
-public class LiteralNode implements ExpressionNode {
+public class LiteralNode extends ExpressionNode {
 
     private final Object value;
 
@@ -15,16 +14,12 @@ public class LiteralNode implements ExpressionNode {
     }
 
     @Override
-    public Object evaluate(EvaluationContext context) {
+    public Object evaluate(EvaluationContext context, TypeResolver resolver, TypeCoercion coercion) {
         return value;
     }
 
     @Override
-    public String toString() {
-        return String.valueOf(value);
-    }
-
-    public Object getValue() {
-        return value;
+    public void accept(AstVisitor visitor) {
+        visitor.visit(this);
     }
 }

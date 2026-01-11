@@ -1,0 +1,305 @@
+<Actions>
+    <Action Name="Stay" Type="Stay" Duration="1000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="Sit" Type="Stay" Duration="8000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="8000" />
+        </Animation>
+    </Action>
+    <Action Name="AfterSit" Type="RandomChoice">
+        <ActionReference Name="Stay" />
+        <ActionReference Name="Stay" />
+        <ActionReference Name="Stay" />
+        <ActionReference Name="LieDown" />
+    </Action>
+    <Action Name="SitSequence" Type="Sequence">
+        <ActionReference Name="Sit" />
+        <ActionReference Name="AfterSit" />
+    </Action>
+    <Action Name="Land" Type="Animate">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="LandLieDown" Type="LieDown" Duration="2000">
+        <Animation>
+            <Pose Image="shime11.png" ImageAnchor="64,128" Duration="2000" />
+        </Animation>
+    </Action>
+    <Action Name="LieDown" Type="LieDown" Duration="4000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="4000" />
+        </Animation>
+    </Action>
+    <Action Name="Breed" Type="Breed" Duration="4000">
+        <Point X="0" Y="-100" />
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="BreedJump" Type="Breed" Duration="4000" VelocityX="10" VelocityY="-25">
+        <Point X="0" Y="-100" />
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="3600" />
+        </Animation>
+    </Action>
+    <Action Name="Dig" Type="Dig" Duration="2000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="Gather" Type="Gather" Speed="1" Duration="4000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="Fall" Type="Fall">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="100" />
+        </Animation>
+    </Action>
+    <Action Name="Walk" Type="Walk" Speed="1">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="Chase" Type="Chase" Speed="4" Duration="5000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="50" />
+            <Pose ImageAnchor="64,128" Duration="50" />
+        </Animation>
+    </Action>
+    <Action Name="Dragged" Type="Dragged">
+        <Animation>
+            <!-- 順序: 左速, 左遅, 静止, 右遅, 右速 -->
+            <!-- 左・速 (例: 走る/飛ぶポーズ) -->
+            <Pose ImageAnchor="64,128" Duration="100" />
+            <!-- 左・遅 (例: 歩く/揺れるポーズ) -->
+            <Pose ImageAnchor="64,128" Duration="100" />
+            <!-- 静止 (例: つままれポーズ) -->
+            <Pose ImageAnchor="64,128" Duration="100" />
+            <!-- 右・遅 -->
+            <Pose ImageAnchor="64,128" Duration="100" />
+            <!-- 右・速 -->
+            <Pose ImageAnchor="64,128" Duration="100" />
+        </Animation>
+    </Action>
+    <Action Name="Jump" Type="Jump" VelocityY="12" VelocityX="3">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="JumpLeft" Type="Jump" VelocityY="12" VelocityX="-3">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="RandomJumpAction" Type="RandomChoice">
+        <ActionReference Name="Jump" />
+        <ActionReference Name="JumpLeft" />
+    </Action>
+    <Action Name="TripFall" Type="Animate">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="500" />
+        </Animation>
+    </Action>
+    <Action Name="TripSequence" Type="Sequence">
+        <ActionReference Name="TripFall" />
+        <ActionReference Name="Sit" />
+    </Action>
+    <Action Name="WallCling" Type="WallCling" Duration="2000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="2000" />
+        </Animation>
+    </Action>
+    <Action Name="WallTopCling" Type="WallTopCling" Duration="2000">
+        <Animation>
+            <Pose Image="WallCling1.png" ImageAnchor="64,128" Duration="2000" />
+        </Animation>
+    </Action>
+    <Action Name="WindowWallCling" Type="WallCling" Duration="2000">
+        <Animation>
+            <Pose Image="WallCling1.png" ImageAnchor="128,128" Duration="2000" />
+        </Animation>
+    </Action>
+    <Action Name="Climb" Type="Climb" Speed="1">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="WindowClimb" Type="Climb" Speed="1">
+        <Animation>
+            <Pose Image="Climb1.png" ImageAnchor="128,128" Duration="200" />
+            <Pose Image="Climb2.png" ImageAnchor="128,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="ClimbUpForCeiling" Type="ClimbCeiling" Speed="4" Duration="1000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="CeilingEnter" Type="CeilingEnter" Duration="500">
+        <Animation>
+            <Pose Image="Climb1.png" ImageAnchor="64,128" Duration="500" />
+        </Animation>
+    </Action>
+    <Action Name="CornerTurn" Type="CornerTurn" Duration="800">
+        <Animation>
+            <Pose Image="ClimbUpForCeiling1.png" ImageAnchor="64,128" Duration="800" />
+        </Animation>
+    </Action>
+    <Action Name="CornerTurnDown" Type="CornerTurnDown" Duration="800">
+        <Animation>
+            <Pose Image="ClimbUpForCeiling1.png" ImageAnchor="64,128" Duration="800" />
+        </Animation>
+    </Action>
+    <Action Name="ClimbDown" Type="Climb" Speed="-2" Duration="2000">
+        <Animation>
+            <Pose Image="SlideDown1.png" ImageAnchor="64,128" Duration="2000" />
+        </Animation>
+    </Action>
+    <Action Name="Teeter" Type="Teeter" Duration="2000" FallProbability="0.2">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="150" />
+            <Pose ImageAnchor="64,128" Duration="150" />
+            <Pose ImageAnchor="64,128" Duration="150" />
+            <Pose ImageAnchor="64,128" Duration="150" />
+        </Animation>
+    </Action>
+    <Action Name="PullUp" Type="PullUp" Duration="2000">
+        <Animation>
+            <Pose ImageAnchor="0,128" Duration="500" />
+            <Pose ImageAnchor="0,128" Duration="1500" />
+        </Animation>
+    </Action>
+    <Action Name="WindowPullUp" Type="PullUp" Duration="2000">
+        <Animation>
+            <Pose Image="PullUp1.png" ImageAnchor="64,128" Duration="500" />
+            <Pose Image="PullUp2.png" ImageAnchor="64,128" Duration="1500" />
+        </Animation>
+    </Action>
+    <Action Name="CeilingCrawl" Type="CeilingCrawl" Speed="1" Duration="2000">
+        <Animation>
+            <Pose ImageAnchor="64,45" Duration="200" />
+            <Pose ImageAnchor="64,45" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="CeilingStay" Type="Stay" Duration="5000">
+        <Animation>
+            <Pose ImageAnchor="64,45" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="CeilingRandomMove" Type="RandomChoice">
+        <ActionReference Name="CeilingCrawl" />
+        <ActionReference Name="CeilingStay" />
+    </Action>
+    <Action Name="SlideDownForTransition" Type="SlideDown" Speed="2">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="SlideDown" Type="SlideDown" Speed="2">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="400" />
+        </Animation>
+    </Action>
+    <Action Name="WallJump" Type="WallJump" VelocityY="12" VelocityX="10">
+        <Animation>
+            <Pose ImageAnchor="0,128" Duration="1000" />
+        </Animation>
+    </Action>
+    <Action Name="WallRandomMove" Type="RandomChoice">
+        <ActionReference Name="Climb" />
+    </Action>
+    <Action Name="WindowWallRandomMove" Type="RandomChoice">
+        <ActionReference Name="WindowClimb" />
+    </Action>
+    <Action Name="WallComplexSequence" Type="Sequence">
+        <ActionReference Name="WallCling" />
+        <ActionReference Name="WallRandomMove" />
+    </Action>
+    <Action Name="WindowWallComplexSequence" Type="Sequence">
+        <ActionReference Name="WindowWallCling" />
+        <ActionReference Name="WindowWallRandomMove" />
+    </Action>
+    <Action Name="WallToCeilingSequence" Type="Sequence">
+        <ActionReference Name="ClimbUpForCeiling" />
+        <ActionReference Name="CornerTurn" />
+    </Action>
+    <Action Name="CeilingToWallSequence" Type="Sequence">
+        <ActionReference Name="CornerTurnDown" />
+        <ActionReference Name="SlideDownForTransition" />
+    </Action>
+    <Action Name="CeilingEdgeRandomMove" Type="RandomChoice">
+        <ActionReference Name="CeilingStay" />
+        <ActionReference Name="CeilingStay" />
+        <ActionReference Name="CeilingStay" />
+        <ActionReference Name="CeilingCrawl" />
+        <ActionReference Name="CeilingToWallSequence" />
+    </Action>
+    <Action Name="WallTopRandomMove" Type="RandomChoice">
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="WallTopCling" />
+        <ActionReference Name="ClimbDown" />
+        <ActionReference Name="ClimbDown" />
+        <ActionReference Name="SlideDown" />
+        <ActionReference Name="WallToCeilingSequence" />
+    </Action>
+    <Action Name="FallSequence" Type="Sequence">
+        <ActionReference Name="Fall" />
+    </Action>
+    <Action Name="LandSequence" Type="Sequence">
+        <ActionReference Name="LandLieDown" />
+        <ActionReference Name="Land" />
+    </Action>
+    <Action Name="Turn" Type="Turn" />
+    <Action Name="Grab" Type="Grab" Duration="5000">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="Throw" Type="Throw">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="50" />
+            <Pose ImageAnchor="64,128" Duration="50" />
+        </Animation>
+        <ActionReference Name="Bow" />
+    </Action>
+    <Action Name="Bow" Type="Animate">
+        <Animation>
+            <Pose ImageAnchor="64,128" Duration="200" />
+            <Pose ImageAnchor="64,128" Duration="500" />
+            <Pose ImageAnchor="64,128" Duration="200" />
+        </Animation>
+    </Action>
+    <Action Name="LookRight" Type="Look" VelocityX="1" />
+    <Action Name="LookLeft" Type="Look" VelocityX="-1" />
+    <Action Name="GreetSequenceRight" Type="Sequence">
+        <ActionReference Name="LookRight" />
+        <ActionReference Name="Bow" />
+    </Action>
+    <Action Name="GreetSequenceLeft" Type="Sequence">
+        <ActionReference Name="LookLeft" />
+        <ActionReference Name="Bow" />
+    </Action>
+</Actions>

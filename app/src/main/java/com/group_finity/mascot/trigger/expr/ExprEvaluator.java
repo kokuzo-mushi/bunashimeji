@@ -38,7 +38,6 @@ public class ExprEvaluator {
     // Reflection resolved handles (may be null if not found)
     private final Class<?> parserClass;
     private final Class<?> expressionNodeClass;
-    private final Class<?> typeResolverClass;
     private final Object defaultTypeResolverInstance;
 
     private final Method staticParseStringResolver; // e.g. static parse(String, TypeResolver)
@@ -146,7 +145,6 @@ public class ExprEvaluator {
 
         parserClass = pc;
         expressionNodeClass = enc;
-        typeResolverClass = trc;
         defaultTypeResolverInstance = drInstance;
 
         staticParseStringResolver = staticParse;
@@ -167,7 +165,7 @@ public class ExprEvaluator {
         try {
             ExpressionNode node = cache.computeIfAbsent(expression, expr -> createNode(expr));
             if (node == null) return Boolean.FALSE;
-            return node.evaluate(context);
+            return node.evaluate(context, null, null); // TypeResolver と TypeCoercion は ExpressionEngine が持つべきだが、ここではリフレクションの都合上nullを渡す
         } catch (Exception e) {
             System.err.println("[ExprEvaluator] evaluate error for \"" + expression + "\": " + e.getMessage());
             return Boolean.FALSE;
@@ -315,7 +313,6 @@ public class ExprEvaluator {
     private Object tryMakeTokenStream(String expression, Class<?> expectedClass) {
         if (expectedClass == null) return null;
         try {
-            String name = expectedClass.getName().toLowerCase();
             // if expected type is String, just return the string
             if (expectedClass == String.class) return expression;
             // try to find a static factory like TokenStreams.from(String) or TokenStream.of(String)

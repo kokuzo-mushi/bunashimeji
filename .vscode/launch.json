@@ -1,0 +1,59 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ScriptingTest",
+            "request": "launch",
+            "mainClass": "com.group_finity.mascot.script.ScriptingTest",
+            "projectName": "app"
+        },
+        {
+            "type": "java",
+            "name": "PanamaPoC",
+            "request": "launch",
+            "mainClass": "com.group_finity.mascot.nativeaccess.PanamaPoC",
+            "projectName": "app",
+            "vmArgs": "--enable-preview --enable-native-access=ALL-UNNAMED"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.group_finity.mascot.Main",
+            "projectName": "app",
+            "vmArgs": "--enable-preview --enable-native-access=ALL-UNNAMED"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "ShimejiApp",
+            "request": "launch",
+            "mainClass": "com.group_finity.mascot.ShimejiApp",
+            "projectName": "app",
+            "vmArgs": "--enable-preview --enable-native-access=ALL-UNNAMED"
+        },
+        {
+            "type": "java",
+            "name": "WindowTrackingTest",
+            "request": "launch",
+            "mainClass": "com.group_finity.mascot.WindowTrackingTest",
+            "projectName": "app"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "org.example.App",
+            "projectName": "app"
+        }
+    ]
+}

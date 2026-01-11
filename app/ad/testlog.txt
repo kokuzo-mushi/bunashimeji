@@ -1,0 +1,15 @@
+PS C:\bunashimeji\bunashimeji> ./gradlew run
+
+> Task :app:compileKotlin
+w: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/ui/ShimejiApp.kt:30:10 Parameter 'args' is never used
+
+> Task :app:run
+[Debug] Transition: Prev=FallAction -> Next (Evaluating)
+[Debug] Transition: Prev=com.group_finity.mascot.action.SequenceAction@1ea774b0 -> Next (Evaluating)
+[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@1b6d243 -> Next (Evaluating)
+[Debug] Transition: Prev=com.group_finity.mascot.action.StayAction@3e1b0d1d -> Next (Evaluating)
+[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@1b6d243 -> Next (Evaluating)
+
+BUILD SUCCESSFUL in 14s
+6 actionable tasks: 3 executed, 3 up-to-date
+

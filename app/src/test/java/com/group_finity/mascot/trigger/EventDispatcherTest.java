@@ -1,100 +1,152 @@
 package com.group_finity.mascot.trigger;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.group_finity.mascot.Mascot;
+import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.behavior.Behavior;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
-import com.group_finity.mascot.trigger.expr.type.DefaultTypeCoercion;
-import com.group_finity.mascot.trigger.expr.type.Mode;
 
+@ExtendWith(MockitoExtension.class)
 public class EventDispatcherTest {
 
     private Map<String, Object> vars;
     private EvaluationContext ctx;
     private EventDispatcher dispatcher;
 
+    @Mock
+    private Mascot mascot;
+
     @BeforeEach
     void setUp() {
         vars = new HashMap<>();
-        vars.put("time", 0);
-        vars.put("state", "idle");
-        ctx = new EvaluationContext(vars, new DefaultTypeCoercion(), Mode.STRICT);
-
-        // ✅ EventQueueを渡す形に修正
-        EventQueue queue = new EventQueue();
-        dispatcher = new EventDispatcher(ctx, queue);
+        ctx = new EvaluationContext(vars);
+        dispatcher = new EventDispatcher(ctx, mascot);
     }
 
 
     @Test
-    void testTriggerFiresWhenConditionTrue() {
-        TriggerCondition cond = new TriggerCondition("time > 1000", vars);
-        TriggerCondition cond2 = new TriggerCondition("state === \"active\"", vars);
-        CompositeTrigger trigger = new CompositeTrigger(List.of(cond, cond2), CompositeTrigger.Mode.ALL);
+    void testTriggerFiresAndSetsAction() {
+        // Arrange
+        Behavior mockBehavior = mock(Behavior.class);
+        Action mockAction = mock(Action.class);
+        when(mockBehavior.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
+        when(mockBehavior.getAction()).thenReturn(mockAction);
+        when(mockBehavior.getName()).thenReturn("MockBehavior");
 
-        dispatcher.registerTrigger(trigger);
+        dispatcher.registerTrigger(mockBehavior);
 
-        // 条件を満たさない → 発火しない
-        dispatcher.pollAndDispatch();
-        assertEquals(1, dispatcher.getRegisteredCount());
+        // Act
+        dispatcher.evaluateTriggers(null); // The event parameter is not used yet
 
-        // 条件を満たす → 発火する（ログ出力確認用）
-        vars.put("time", 1500);
-        vars.put("state", "active");
-        dispatcher.pollAndDispatch();
+        // Assert
+        verify(mascot).setNextAction(mockAction); // Verify that the mascot's action was set
     }
 
     @Test
-    void testAnyModeFiresWithPartialMatch() {
-        TriggerCondition cond1 = new TriggerCondition("time > 1000", vars);
-        TriggerCondition cond2 = new TriggerCondition("state === \"active\"", vars);
-        CompositeTrigger trigger = new CompositeTrigger(List.of(cond1, cond2), CompositeTrigger.Mode.ANY);
+    void testTriggerDoesNotFireWhenConditionFalse() {
+        // Arrange
+        Behavior mockBehavior = mock(Behavior.class);
+        when(mockBehavior.evaluate(any(), any(EvaluationContext.class))).thenReturn(false);
+        when(mockBehavior.getName()).thenReturn("MockBehavior");
+        dispatcher.registerTrigger(mockBehavior);
 
-        dispatcher.registerTrigger(trigger);
+        // Act
+        dispatcher.evaluateTriggers(null);
 
-        vars.put("time", 2000);
-        vars.put("state", "idle");
-
-        assertDoesNotThrow(() -> dispatcher.pollAndDispatch());
+        // Assert
+        verify(mascot, never()).setNextAction(any(Action.class)); // Verify action was NOT set
     }
 
     @Test
     void testDispatcherHandlesMultipleTriggers() {
-        TriggerCondition c1 = new TriggerCondition("time > 1000", vars);
-        TriggerCondition c2 = new TriggerCondition("state === \"falling\"", vars);
-        CompositeTrigger t1 = new CompositeTrigger(List.of(c1, c2), CompositeTrigger.Mode.ALL);
-        CompositeTrigger t2 = new CompositeTrigger(List.of(c1), CompositeTrigger.Mode.ANY);
+        // Arrange
+        Behavior behavior1 = mock(Behavior.class);
+        Behavior behavior2 = mock(Behavior.class);
+        Action action2 = mock(Action.class);
 
-        dispatcher.registerTrigger(t1);
-        dispatcher.registerTrigger(t2);
+        when(behavior1.evaluate(any(), any(EvaluationContext.class))).thenReturn(false);
+        when(behavior2.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
+        when(behavior2.getAction()).thenReturn(action2);
+        when(behavior1.getName()).thenReturn("Behavior1");
+        when(behavior2.getName()).thenReturn("Behavior2");
 
-        vars.put("time", 2000);
-        vars.put("state", "falling");
-
+        dispatcher.registerTrigger(behavior1);
+        dispatcher.registerTrigger(behavior2);
         assertEquals(2, dispatcher.getRegisteredCount());
-        assertDoesNotThrow(() -> dispatcher.pollAndDispatch());
+
+        // Act
+        dispatcher.evaluateTriggers(null);
+
+        // Assert
+        verify(mascot).setNextAction(action2);
+    }
+
+    @Test
+    void testDispatcherStopsAtFirstMatchingTrigger() {
+        // Arrange
+        Behavior behavior1 = mock(Behavior.class);
+        Action action1 = mock(Action.class);
+        Behavior behavior2 = mock(Behavior.class);
+
+        // Both triggers will evaluate to true
+        when(behavior1.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
+        when(behavior1.getAction()).thenReturn(action1);
+        when(behavior1.getName()).thenReturn("Behavior1");
+        when(behavior2.getName()).thenReturn("Behavior2");
+
+        dispatcher.registerTrigger(behavior1);
+        dispatcher.registerTrigger(behavior2);
+
+        // Act
+        dispatcher.evaluateTriggers(null);
+
+        // Assert
+        verify(mascot).setNextAction(action1); // Verify the first action was set
+        verify(behavior2, never()).evaluate(any(), any(EvaluationContext.class)); // Verify the second trigger was not evaluated
     }
 
     @Test
     void testNoTriggersRegistered() {
+        // Arrange
         assertEquals(0, dispatcher.getRegisteredCount());
-        dispatcher.pollAndDispatch(); // Should not throw
+
+        // Act
+        dispatcher.evaluateTriggers(null);
+
+        // Assert
+        verify(mascot, never()).setNextAction(any(Action.class));
     }
 
     @Test
     void testClearRemovesAllTriggers() {
-        TriggerCondition cond = new TriggerCondition("time > 1000", vars);
-        CompositeTrigger trigger = new CompositeTrigger(List.of(cond), CompositeTrigger.Mode.ANY);
-        dispatcher.registerTrigger(trigger);
+        // Arrange
+        Behavior mockBehavior = mock(Behavior.class);
+        when(mockBehavior.getName()).thenReturn("MockBehavior");
+        dispatcher.registerTrigger(mockBehavior);
         assertEquals(1, dispatcher.getRegisteredCount());
 
+        // Act
         dispatcher.clear();
+
+        // Assert
         assertEquals(0, dispatcher.getRegisteredCount());
+
+        // Act again to ensure no action is set
+        dispatcher.evaluateTriggers(null);
+        verify(mascot, never()).setNextAction(any(Action.class));
     }
 }

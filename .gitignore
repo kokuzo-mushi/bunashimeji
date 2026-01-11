@@ -16,18 +16,6 @@
 /app/.gradle/
 gradle-app.setting
 gradle.properties
-!gradle-wrapper.jar
-
-# Eclipse files
-/.settings/
-/.classpath
-/.project
-/app/.classpath
-/app/.project
-
-# IntelliJ IDEA (もし使ぁE��吁E
-/.idea/
-*.iml
 
 # Logs / Temporary files
 *.log
