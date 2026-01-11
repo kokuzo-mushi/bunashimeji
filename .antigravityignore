@@ -1,0 +1,34 @@
+# ===============================
+# AntiGravity Context Ignore File
+# ===============================
+
+# Import standard gitignore patterns
+.gitignore
+
+# --- Project Specific Exclusions ---
+
+# Images & Assets
+# AI does not need to read thousands of image files to write code.
+/img/*
+!/img/imagecache/
+*.png
+*.ico
+*.gif
+
+# Documentation that might confuse the AI
+# (Keep 'ad/' as it contains active architecture docs)
+/doc/old/
+
+# Large Data / Configs
+# If you have large XMLs that are not code, ignore them.
+# /conf/logging.properties
+
+# Build & IDE specific (Redundant if in .gitignore, but safe to add)
+.gradle/
+build/
+out/
+.idea/
+.vscode/
+
+# Lock files
+*.lock

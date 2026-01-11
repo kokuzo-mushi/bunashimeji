@@ -24,6 +24,7 @@ public class SequenceAction implements Action {
 
     /**
      * BehaviorBuilderが使用するためのコンストラクタ。
+     * 
      * @param sequence 実行するアクションのリスト
      */
     public SequenceAction(List<Action> sequence) {
@@ -45,12 +46,12 @@ public class SequenceAction implements Action {
         while (hasNext()) {
             Action currentAction = sequence.get(currentIndex);
             currentAction.execute(mascot);
-    
+
             // 現在のアクションがまだ継続中の場合、このフレームでの処理は終了
             if (currentAction.hasNext()) {
                 break;
             }
-    
+
             // 現在のアクションが終了したので、次のアクションのインデックスに進む
             currentIndex++;
 
@@ -61,6 +62,7 @@ public class SequenceAction implements Action {
                 if (loopCount == -1 || currentLoop < loopCount) {
                     // シーケンスをリセットして再開
                     resetSequence();
+                } else {
                 }
             }
         }

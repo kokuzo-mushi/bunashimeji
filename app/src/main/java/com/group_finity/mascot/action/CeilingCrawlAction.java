@@ -2,9 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.nativeaccess.Win32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import java.awt.Rectangle;
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
+import com.group_finity.mascot.type.NeoRect;
+import java.lang.foreign.MemorySegment;
 import java.util.Random;
 
 /**
@@ -29,12 +29,14 @@ public class CeilingCrawlAction implements Action {
 
     @Override
     public void execute(Mascot mascot) {
-        if (finished) return;
+        if (finished)
+            return;
 
         elapsedFrames++;
 
         // 1. 壁にぶつかったらアクションを終了し、CornerTurnDownへ移行させる
-        if ((mascot.isHittingRightWall() && mascot.isLookRight()) || (mascot.isHittingLeftWall() && !mascot.isLookRight())) {
+        if ((mascot.isHittingRightWall() && mascot.isLookRight())
+                || (mascot.isHittingLeftWall() && !mascot.isLookRight())) {
             // 向きは変えずに終了
             // 壁に埋まるのを防ぎ、CornerTurnDownActionの回転半径を確保するため、壁から少し内側に戻す
             int backStep = mascot.isLookRight() ? -5 : 5;
@@ -66,19 +68,20 @@ public class CeilingCrawlAction implements Action {
         int nextX = mascot.getX() + (mascot.isLookRight() ? speed : -speed);
         boolean reachEdge = false;
 
-        HWND ceilingWindow = mascot.getCeilingWindow();
-        if (ceilingWindow != null && Win32.INSTANCE.IsWindow(ceilingWindow)) {
+        MemorySegment ceilingWindow = mascot.getCeilingWindow();
+        if (ceilingWindow != null && NativeWindowUtil.isWindow(ceilingWindow)) {
             // ウィンドウ天井の場合
-            Rectangle rect = mascot.getCeilingRect();
+            NeoRect rect = mascot.getCeilingRect();
             if (rect != null) {
                 // マスコットのX座標がウィンドウ範囲外に出そうなら停止
-                if (nextX < rect.x || nextX > rect.x + rect.width) reachEdge = true;
+                if (nextX < rect.left() || nextX > rect.left() + rect.width())
+                    reachEdge = true;
             }
         } else {
             // 画面天井の場合 (WorkArea)
-            Rectangle workArea = mascot.getWorkArea();
+            NeoRect workArea = mascot.getWorkArea();
             if (workArea != null) {
-                if (nextX < workArea.x || nextX > workArea.x + workArea.width) {
+                if (nextX < workArea.left() || nextX > workArea.left() + workArea.width()) {
                     reachEdge = true;
                 }
             }
@@ -97,7 +100,9 @@ public class CeilingCrawlAction implements Action {
     }
 
     @Override
-    public boolean hasNext() { return !finished; }
+    public boolean hasNext() {
+        return !finished;
+    }
 
     @Override
     public void reset() {

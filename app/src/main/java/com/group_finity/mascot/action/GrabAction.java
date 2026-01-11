@@ -2,11 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.nativeaccess.Win32;
-import com.sun.jna.platform.win32.User32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.RECT;
-
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
+import com.group_finity.mascot.type.NeoRect;
+import java.lang.foreign.MemorySegment;
 import java.util.Random;
 
 /**
@@ -49,10 +47,9 @@ public class GrabAction implements Action {
 
         // 床の端にいる場合はアクションを終了する（Teeter等のため）
         if (mascot.getFloorWindow() != null) {
-            RECT rect = new RECT();
-            Win32.INSTANCE.GetWindowRect(mascot.getFloorWindow(), rect);
+            NeoRect rect = NativeWindowUtil.getWindowRect(mascot.getFloorWindow());
             // Main.javaのisOnEdge判定(40px)と合わせる
-            if (Math.abs(mascot.getX() - rect.left) < 40 || Math.abs(mascot.getX() - rect.right) < 40) {
+            if (Math.abs(mascot.getX() - rect.left()) < 40 || Math.abs(mascot.getX() - rect.right()) < 40) {
                 mascot.setHoldingWindow(null);
                 this.isHolding = false;
                 return;
@@ -67,45 +64,43 @@ public class GrabAction implements Action {
 
         // 初回実行時にターゲットを確定し、オフセットを計算
         if (!initialized) {
-            HWND targetWindow = mascot.getFloorWindow();
+            MemorySegment targetWindow = mascot.getFloorWindow();
             System.out.println("[GrabAction] Attempting to grab. FloorWindow: " + targetWindow);
-            
+
             // 足元に有効なウィンドウがあれば掴む
-            if (targetWindow != null && !Win32.INSTANCE.IsIconic(targetWindow)) {
+            if (targetWindow != null && !NativeWindowUtil.isIconic(targetWindow)) {
                 mascot.setHoldingWindow(targetWindow);
-                
-                RECT rect = new RECT();
-                Win32.INSTANCE.GetWindowRect(targetWindow, rect);
-                
-                this.width = rect.right - rect.left;
-                this.height = rect.bottom - rect.top;
-                
+
+                NeoRect rect = NativeWindowUtil.getWindowRect(targetWindow);
+
+                this.width = rect.width();
+                this.height = rect.height();
+
                 // マスコットの中心座標とウィンドウ左上の差分（オフセット）を記録
-                this.offsetX = rect.left - mascot.getX();
-                this.offsetY = rect.top - mascot.getY();
+                this.offsetX = rect.left() - mascot.getX();
+                this.offsetY = rect.top() - mascot.getY();
             }
             initialized = true;
         }
 
         // 掴んでいるウィンドウがある場合、マスコットの位置に合わせて移動させる
-        HWND holding = mascot.getHoldingWindow();
-        if (holding != null && User32.INSTANCE.IsWindow(holding)) {
-            
+        MemorySegment holding = mascot.getHoldingWindow();
+        if (holding != null && NativeWindowUtil.isWindow(holding)) {
+
             // --- 方向転換と移動ロジック ---
             if (timeToChangeDirection <= 0) {
                 // 標準: 2秒〜5秒の間隔で方向転換を検討
                 timeToChangeDirection = 2000 + random.nextInt(3000);
-                // 50%の確率で向きを反転
+                // 50%の確率で向きを反転 (今回は無効化コメントアウトそのまま)
                 if (random.nextBoolean()) {
-                    // 検証のため一時的に無効化
                     // mascot.setLookRight(!mascot.isLookRight());
                 }
             }
             timeToChangeDirection -= 40;
 
             // 壁にぶつかっていたら強制的に向きを変える
-            if ((mascot.isHittingLeftWall() && !mascot.isLookRight()) || 
-                (mascot.isHittingRightWall() && mascot.isLookRight())) {
+            if ((mascot.isHittingLeftWall() && !mascot.isLookRight()) ||
+                    (mascot.isHittingRightWall() && mascot.isLookRight())) {
                 mascot.setLookRight(!mascot.isLookRight());
             }
 
@@ -116,31 +111,27 @@ public class GrabAction implements Action {
 
             int targetX = mascot.getX() + offsetX;
             int targetY = mascot.getY() + offsetY;
-            
+
             // ウィンドウを移動 (bRepaint: true)
-            User32.INSTANCE.MoveWindow(holding, targetX, targetY, width, height, true);
+            NativeWindowUtil.moveWindow(holding, targetX, targetY, width, height, true);
 
             // 実際に移動したウィンドウの位置を取得して、マスコットがはみ出していたら引き戻す
-            // (ウィンドウが画面端で止まった場合などに、マスコットだけが進んで落下するのを防ぐ)
-            RECT actualRect = new RECT();
-            Win32.INSTANCE.GetWindowRect(holding, actualRect);
+            NeoRect actualRect = NativeWindowUtil.getWindowRect(holding);
 
             // マスコットのX座標をウィンドウの範囲内（マージン考慮）にクランプする
-            int margin = 2; // 端から2px内側まで（WalkActionの停止位置 5px より小さくする）
-            int windowWidth = actualRect.right - actualRect.left;
-            int minX = actualRect.left + Math.min(margin, windowWidth / 2);
-            int maxX = actualRect.right - Math.min(margin, windowWidth / 2);
-            
+            int margin = 2; // 端から2px内側まで
+            int windowWidth = actualRect.width();
+            int minX = actualRect.left() + Math.min(margin, windowWidth / 2);
+            int maxX = actualRect.right() - Math.min(margin, windowWidth / 2);
+
             int clampedX = Math.max(minX, Math.min(mascot.getX(), maxX));
-            
-            // Y座標も同期ズレを防ぐために補正（ウィンドウ上端との相対位置を維持）
-            int correctedY = actualRect.top - offsetY;
+
+            // Y座標も同期ズレを防ぐために補正
+            int correctedY = actualRect.top() - offsetY;
 
             if (mascot.getX() != clampedX || mascot.getY() != correctedY) {
                 // X座標が補正された＝ウィンドウの端に到達したとみなして向きを反転
                 if (mascot.getX() != clampedX) {
-                    // ウィンドウが端に到達して動けなくなった場合、アクションを終了する
-                    // これにより、Teeter（バランス）等の次のアクションへ遷移できる
                     mascot.setHoldingWindow(null);
                     this.isHolding = false;
                     mascot.setX(clampedX);
@@ -151,7 +142,7 @@ public class GrabAction implements Action {
                 mascot.setY(correctedY);
             }
         } else {
-            // ウィンドウが無効になった（閉じられた等）場合は掴むのをやめる
+            // ウィンドウが無効になった場合は掴むのをやめる
             mascot.setHoldingWindow(null);
         }
 

@@ -12,7 +12,8 @@ public class DefaultTypeResolver implements TypeResolver {
             case "!" -> !TypeResolver.toBoolean(value);
             case "-" -> {
                 Number num = TypeResolver.toNumber(value);
-                if (num == null) yield null;
+                if (num == null)
+                    yield null;
                 yield new BigDecimal(num.toString()).negate();
             }
             case "+" -> TypeResolver.toNumber(value); // No-op, just ensures it's a number
@@ -45,11 +46,13 @@ public class DefaultTypeResolver implements TypeResolver {
                     case "-" -> leftBd.subtract(rightBd);
                     case "*" -> leftBd.multiply(rightBd);
                     case "/" -> {
-                        if (rightBd.compareTo(BigDecimal.ZERO) == 0) yield null; // Division by zero
+                        if (rightBd.compareTo(BigDecimal.ZERO) == 0)
+                            yield null; // Division by zero
                         yield leftBd.divide(rightBd, 10, RoundingMode.HALF_UP);
                     }
                     case "%" -> {
-                        if (rightBd.compareTo(BigDecimal.ZERO) == 0) yield null; // Division by zero
+                        if (rightBd.compareTo(BigDecimal.ZERO) == 0)
+                            yield null; // Division by zero
                         yield leftBd.remainder(rightBd);
                     }
                     // isArithmeticでチェック済みのためdefaultは不要だが念のため
@@ -101,8 +104,10 @@ public class DefaultTypeResolver implements TypeResolver {
         if (Objects.equals(left, right)) {
             return 0;
         }
-        if (left == null) return -1;
-        if (right == null) return 1;
+        if (left == null)
+            return -1;
+        if (right == null)
+            return 1;
 
         // Numeric comparison
         if (left instanceof Number && right instanceof Number) {

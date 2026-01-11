@@ -1,0 +1,29 @@
+> Task :app:compileJava
+> Task :app:processResources UP-TO-DATE
+> Task :app:classes
+
+> Task :app:compileTestJava FAILED
+C:\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\action\LieDownActionTest.java:62: エラー: シンボルを見つけられません
+        assertTrue(action.getTimeRemaining() < 1500, "Time remaining should decrease");
+                         ^
+  シンボル:   メソッド getTimeRemaining()
+  場所: タイプLieDownActionの変数 action
+C:\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\action\StayActionTest.java:32: エラー: シンボルを見つけられません
+        action.next();
+              ^
+  シンボル:   メソッド next()
+  場所: タイプStayActionの変数 action
+エラー2個
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileTestJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 1s
+3 actionable tasks: 2 executed, 1 up-to-date

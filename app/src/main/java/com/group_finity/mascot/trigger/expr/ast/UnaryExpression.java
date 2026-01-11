@@ -23,9 +23,13 @@ public class UnaryExpression implements Expression {
                 Boolean b = coercer.coerceTo(val, Boolean.class, mode);
                 return !Boolean.TRUE.equals(b);
             case "-":
-                Double d = coercer.coerceTo(val, Double.class, mode);
-                return -(d != null ? d : 0.0);
-            default: throw new RuntimeException("Unknown unary operator: " + operator);
+                Double d2 = coercer.coerceTo(val, Double.class, mode);
+                return -(d2 != null ? d2 : 0.0);
+            case "+":
+                Double d3 = coercer.coerceTo(val, Double.class, mode);
+                return d3 != null ? d3 : 0.0;
+            default:
+                throw new RuntimeException("Unknown unary operator: " + operator);
         }
     }
 

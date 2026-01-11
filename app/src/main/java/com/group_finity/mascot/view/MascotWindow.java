@@ -26,11 +26,11 @@ import java.lang.foreign.MemorySegment;
  * OSの再描画イベントに依存せず、メインループから draw() を呼び出すことで描画します。
  */
 @SuppressWarnings("preview")
-public class MascotWindow extends Window {
+public class MascotWindow extends Window implements MascotView {
 
     private final Mascot mascot;
     private final ImageCache imageCache;
-    
+
     // Back Buffer (裏画面)
     private BufferedImage backBuffer;
     private int[] bufferData;
@@ -57,7 +57,7 @@ public class MascotWindow extends Window {
         setAlwaysOnTop(true);
         setFocusable(false);
         // タスクバーに表示しないための設定などは別途必要だが、まずは表示優先
-        
+
         // 1x1のサイズで初期化（後で画像サイズに合わせて拡張）
         setSize(1, 1);
         setVisible(true);
@@ -70,7 +70,8 @@ public class MascotWindow extends Window {
 
             // WS_EX_LAYERED スタイルを適用
             long oldStyle = NativeWindowUtil.getWindowLongPtr(hwndSegment, NativeWindowUtil.GWL_EXSTYLE);
-            NativeWindowUtil.setWindowLongPtr(hwndSegment, NativeWindowUtil.GWL_EXSTYLE, oldStyle | NativeWindowUtil.WS_EX_LAYERED);
+            NativeWindowUtil.setWindowLongPtr(hwndSegment, NativeWindowUtil.GWL_EXSTYLE,
+                    oldStyle | NativeWindowUtil.WS_EX_LAYERED);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +122,7 @@ public class MascotWindow extends Window {
                     // MascotWindowはMainループで描画されるため、ここではMascotの座標だけ更新すればよい
                     // Mainループ内の setWindowPosPhysical でウィンドウ位置が同期される
                     Point mascotPosition = new Point(newLoc.x - dragStartOffset.x, newLoc.y - dragStartOffset.y);
-                    mascot.setAnchor(mascotPosition);
+                    mascot.setAnchor(new com.group_finity.mascot.type.NeoPoint(mascotPosition.x, mascotPosition.y));
                 }
             }
         });
@@ -131,12 +132,14 @@ public class MascotWindow extends Window {
      * マスコットを描画します。メインループから毎フレーム呼び出してください。
      */
     public void draw() {
-        if (hwndSegment == null) return;
+        if (hwndSegment == null)
+            return;
 
         // 1. 現在のポーズと画像を取得
         BufferedImage image = getCurrentImage();
 
-        if (image == null) return;
+        if (image == null)
+            return;
 
         int width = image.getWidth();
         int height = image.getHeight();
@@ -155,7 +158,7 @@ public class MascotWindow extends Window {
         // g.setComposite(AlphaComposite.Src);
         // g.drawImage(image, 0, 0, null);
         // g.dispose();
-        
+
         // 高速化: Graphics2Dを使わず、ピクセルデータを直接コピーする
         // (元画像も TYPE_INT_ARGB_PRE であることが望ましい)
         if (image.getType() == BufferedImage.TYPE_INT_ARGB || image.getType() == BufferedImage.TYPE_INT_ARGB_PRE) {
@@ -187,29 +190,33 @@ public class MascotWindow extends Window {
 
     public int getMascotWidth() {
         // 簡易実装: 現在のバックバッファサイズまたはキャッシュから取得
-        if (backBuffer != null) return backBuffer.getWidth();
+        if (backBuffer != null)
+            return backBuffer.getWidth();
         BufferedImage img = getCurrentImage();
         return (img != null) ? img.getWidth() : 128; // デフォルトサイズを返す
     }
 
     public int getMascotHeight() {
-        if (backBuffer != null) return backBuffer.getHeight();
+        if (backBuffer != null)
+            return backBuffer.getHeight();
         BufferedImage img = getCurrentImage();
         return (img != null) ? img.getHeight() : 128; // デフォルトサイズを返す
     }
 
     public Point getAnchor() {
         BufferedImage image = getCurrentImage();
-        if (image == null) return new Point(0, 0);
+        if (image == null)
+            return new Point(0, 0);
 
         Animation animation = mascot.getAnimation();
         Pose pose = (animation != null) ? animation.getPose() : null;
         // getCurrentImageがnullでないならposeもnullではないはずだが念のため
-        if (pose == null) return new Point(0, 0);
+        if (pose == null)
+            return new Point(0, 0);
 
         int width = image.getWidth();
         int height = image.getHeight();
-        
+
         int anchorX;
         int anchorY;
 
@@ -237,7 +244,8 @@ public class MascotWindow extends Window {
     private BufferedImage getCurrentImage() {
         Animation animation = mascot.getAnimation();
         Pose pose = (animation != null) ? animation.getPose() : null;
-        if (pose == null) return null;
+        if (pose == null)
+            return null;
 
         if (mascot.isLookRight()) {
             // 元画像が左向きのため、右を向くときは反転画像を取得

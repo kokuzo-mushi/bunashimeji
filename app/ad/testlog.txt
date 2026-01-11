@@ -1,304 +1,47 @@
-PS C:\bunashimeji\bunashimeji>  c:; cd 'c:\bunashimeji\bunashimeji'; & 'C:\Program Files\Eclipse Adoptium\jdk-21.0.9.10-hotspot\bin\java.exe' '@C:\Users\81803\AppData\Local\Temp\cp_6s0kg25w2unjrw93wkx7rcbis.argfile' 'com.group_finity.mascot.Main' 
-=== Shimeji Neo Start (Deep Debug Mode) ===
-[Main] Current working directory: C:\bunashimeji\bunashimeji
-[Main] Updated actions.xml
-[Main] Updated behaviors.xml
-[Main] Initial work area (Java API): java.awt.Rectangle[x=0,y=0,width=1920,height=1032]
-[ImageCache] Image not found: shime1.png (Fallback to Stay1.png)
-[Main] System tray icon added.
-[Main] Starting main loop... (Press Ctrl+C to exit)
-[Main] Skin selected: White
-[Main] Created a new mascot instance. Total: 1
-[FallAction] Initialized with velocity: (0.00, 0)
-[Debug] Tick=197, Action=FallAction, Pos=(968,-254), Vel=(0,2), Grounded=false
-[Debug] Tick=198, Action=FallAction, Pos=(968,-250), Vel=(0,4), Grounded=false
-[Debug] Tick=199, Action=FallAction, Pos=(968,-244), Vel=(0,6), Grounded=false
-[Debug] Tick=200, Action=FallAction, Pos=(968,-236), Vel=(0,8), Grounded=false
-[Debug] Tick=201, Action=FallAction, Pos=(968,-226), Vel=(0,10), Grounded=false
-[Debug] Tick=202, Action=FallAction, Pos=(968,-214), Vel=(0,12), Grounded=false
-[Debug] Tick=203, Action=FallAction, Pos=(968,-200), Vel=(0,14), Grounded=false
-[Debug] Tick=204, Action=FallAction, Pos=(968,-184), Vel=(0,16), Grounded=false
-[Debug] Tick=205, Action=FallAction, Pos=(968,-166), Vel=(0,18), Grounded=false
-[Debug] Tick=206, Action=FallAction, Pos=(968,-146), Vel=(0,20), Grounded=false
-[Debug] Tick=207, Action=FallAction, Pos=(968,-126), Vel=(0,20), Grounded=false
-[Debug] Tick=208, Action=FallAction, Pos=(968,-106), Vel=(0,20), Grounded=false
-[Debug] Tick=209, Action=FallAction, Pos=(968,-86), Vel=(0,20), Grounded=false
-[Debug] Tick=210, Action=FallAction, Pos=(968,-66), Vel=(0,20), Grounded=false
-[Debug] Tick=211, Action=FallAction, Pos=(968,-46), Vel=(0,20), Grounded=false
-[Debug] Tick=212, Action=FallAction, Pos=(968,-26), Vel=(0,20), Grounded=false
-[Debug] Tick=213, Action=FallAction, Pos=(968,-6), Vel=(0,20), Grounded=false
-[Debug] Tick=214, Action=FallAction, Pos=(968,14), Vel=(0,20), Grounded=false
-[Debug] Tick=215, Action=FallAction, Pos=(968,34), Vel=(0,20), Grounded=false
-[Debug] Tick=216, Action=FallAction, Pos=(968,54), Vel=(0,20), Grounded=false
-[Debug] Tick=217, Action=FallAction, Pos=(968,74), Vel=(0,20), Grounded=false
-[Debug] Tick=218, Action=FallAction, Pos=(968,94), Vel=(0,20), Grounded=false
-[Debug] Tick=219, Action=FallAction, Pos=(968,114), Vel=(0,20), Grounded=false
-[Debug] Tick=220, Action=FallAction, Pos=(968,134), Vel=(0,20), Grounded=false
-[Debug] Tick=221, Action=FallAction, Pos=(968,154), Vel=(0,20), Grounded=false
-[Debug] Tick=222, Action=FallAction, Pos=(968,174), Vel=(0,20), Grounded=false
-[Debug] Tick=223, Action=FallAction, Pos=(968,194), Vel=(0,20), Grounded=false
-[Debug] Tick=224, Action=FallAction, Pos=(968,214), Vel=(0,20), Grounded=false
-[Debug] Tick=225, Action=FallAction, Pos=(968,234), Vel=(0,20), Grounded=false
-[Debug] Tick=226, Action=FallAction, Pos=(968,254), Vel=(0,20), Grounded=false
-[Debug] Tick=227, Action=FallAction, Pos=(968,274), Vel=(0,20), Grounded=false
-[Debug] Tick=228, Action=FallAction, Pos=(968,294), Vel=(0,20), Grounded=false
-[Debug] Tick=229, Action=FallAction, Pos=(968,314), Vel=(0,20), Grounded=false
-[Debug] Tick=230, Action=FallAction, Pos=(968,334), Vel=(0,20), Grounded=false
-[Debug] Tick=231, Action=FallAction, Pos=(968,354), Vel=(0,20), Grounded=false
-[Debug] Tick=232, Action=FallAction, Pos=(968,374), Vel=(0,20), Grounded=false
-[Debug] Tick=233, Action=FallAction, Pos=(968,394), Vel=(0,20), Grounded=false
-[Debug] Tick=234, Action=FallAction, Pos=(968,414), Vel=(0,20), Grounded=false
-[Debug] Tick=235, Action=FallAction, Pos=(968,434), Vel=(0,20), Grounded=false
-[Debug] Tick=236, Action=FallAction, Pos=(968,454), Vel=(0,20), Grounded=false
-[Debug] Tick=237, Action=FallAction, Pos=(968,474), Vel=(0,20), Grounded=false
-[Debug] Tick=238, Action=FallAction, Pos=(968,494), Vel=(0,20), Grounded=false
-[Debug] Tick=239, Action=FallAction, Pos=(968,514), Vel=(0,20), Grounded=false
-[Debug] Tick=240, Action=FallAction, Pos=(968,534), Vel=(0,20), Grounded=false
-[Debug] Tick=241, Action=FallAction, Pos=(968,554), Vel=(0,20), Grounded=false
-[Debug] Tick=242, Action=FallAction, Pos=(968,574), Vel=(0,20), Grounded=false
-[Debug] Tick=243, Action=FallAction, Pos=(968,594), Vel=(0,20), Grounded=false
-[Debug] Tick=244, Action=FallAction, Pos=(968,614), Vel=(0,20), Grounded=false
-[Debug] Tick=245, Action=FallAction, Pos=(968,634), Vel=(0,20), Grounded=false
-[Debug] Tick=246, Action=FallAction, Pos=(968,654), Vel=(0,20), Grounded=false
-[Debug] Tick=247, Action=FallAction, Pos=(968,674), Vel=(0,20), Grounded=false
-[Debug] Tick=248, Action=FallAction, Pos=(968,694), Vel=(0,20), Grounded=false
-[Debug] Tick=249, Action=FallAction, Pos=(968,714), Vel=(0,20), Grounded=false
-[Debug] Tick=250, Action=FallAction, Pos=(968,734), Vel=(0,20), Grounded=false
-[Debug] Tick=251, Action=FallAction, Pos=(968,754), Vel=(0,20), Grounded=false
-[Debug] Tick=252, Action=FallAction, Pos=(968,774), Vel=(0,20), Grounded=false
-[Debug] Tick=253, Action=FallAction, Pos=(968,794), Vel=(0,20), Grounded=false
-[Debug] Tick=254, Action=FallAction, Pos=(968,814), Vel=(0,20), Grounded=false
-[Debug] Tick=255, Action=FallAction, Pos=(968,834), Vel=(0,20), Grounded=false
-[Debug] Tick=256, Action=FallAction, Pos=(968,854), Vel=(0,20), Grounded=false
-[Debug] Tick=257, Action=FallAction, Pos=(968,874), Vel=(0,20), Grounded=false
-[Debug] Tick=258, Action=FallAction, Pos=(968,894), Vel=(0,20), Grounded=false
-[Debug] Tick=259, Action=FallAction, Pos=(968,914), Vel=(0,20), Grounded=false
-[Debug] Tick=260, Action=FallAction, Pos=(968,934), Vel=(0,20), Grounded=false
-[Debug] Tick=261, Action=FallAction, Pos=(968,954), Vel=(0,20), Grounded=false
-[Debug] Tick=262, Action=FallAction, Pos=(968,974), Vel=(0,20), Grounded=false
-[Debug] Tick=263, Action=FallAction, Pos=(968,994), Vel=(0,20), Grounded=false
-[Debug] Tick=264, Action=FallAction, Pos=(968,1014), Vel=(0,20), Grounded=false
-[Debug] Tick=265, Action=FallAction, Pos=(968,1032), Vel=(0,-12), Grounded=false
-[Debug] Tick=266, Action=FallAction, Pos=(968,1022), Vel=(0,-10), Grounded=false
-[Debug] Tick=267, Action=FallAction, Pos=(968,1014), Vel=(0,-8), Grounded=false
-[Debug] Tick=268, Action=FallAction, Pos=(968,1008), Vel=(0,-6), Grounded=false
-[Debug] Tick=269, Action=FallAction, Pos=(968,1004), Vel=(0,-4), Grounded=false
-[Debug] Tick=270, Action=FallAction, Pos=(968,1002), Vel=(0,-2), Grounded=false
-[Debug] Tick=271, Action=FallAction, Pos=(968,1002), Vel=(0,0), Grounded=false
-[Debug] Tick=272, Action=FallAction, Pos=(968,1004), Vel=(0,2), Grounded=false
-[Debug] Tick=273, Action=FallAction, Pos=(968,1008), Vel=(0,4), Grounded=false
-[Debug] Tick=274, Action=FallAction, Pos=(968,1014), Vel=(0,6), Grounded=false
-[Debug] Tick=275, Action=FallAction, Pos=(968,1022), Vel=(0,8), Grounded=false
-[Debug] Tick=276, Action=FallAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Transition: Prev=FallAction -> Next (Evaluating)
-[Debug] Tick=277, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=278, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=279, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=280, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=281, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=282, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=283, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=284, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=285, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=286, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=287, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=288, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=289, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=290, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=291, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=292, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=293, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=294, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=295, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=296, Action=SequenceAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=297, Action=DraggedAction, Pos=(968,1032), Vel=(0,0), Grounded=true
-[Debug] Tick=298, Action=DraggedAction, Pos=(968,1031), Vel=(0,-1), Grounded=false
-[Debug] Tick=299, Action=DraggedAction, Pos=(968,1028), Vel=(0,-3), Grounded=false
-[Debug] Tick=300, Action=DraggedAction, Pos=(968,1021), Vel=(0,-7), Grounded=false
-[Debug] Tick=301, Action=DraggedAction, Pos=(968,1011), Vel=(0,-7), Grounded=false
-[Debug] Tick=302, Action=DraggedAction, Pos=(968,974), Vel=(0,-20), Grounded=false
-[Debug] Tick=303, Action=DraggedAction, Pos=(968,939), Vel=(0,-23), Grounded=false
-[Debug] Tick=304, Action=DraggedAction, Pos=(970,876), Vel=(2,-41), Grounded=false
-[Debug] Tick=305, Action=DraggedAction, Pos=(970,803), Vel=(0,-38), Grounded=false
-[Debug] Tick=306, Action=DraggedAction, Pos=(970,714), Vel=(0,-51), Grounded=false
-[Debug] Tick=307, Action=DraggedAction, Pos=(970,611), Vel=(0,-51), Grounded=false
-[Debug] Tick=308, Action=DraggedAction, Pos=(969,513), Vel=(0,-46), Grounded=false
-[Debug] Tick=309, Action=DraggedAction, Pos=(967,426), Vel=(-2,-30), Grounded=false
-[Debug] Tick=310, Action=DraggedAction, Pos=(967,360), Vel=(0,-22), Grounded=false
-[Debug] Tick=311, Action=DraggedAction, Pos=(967,324), Vel=(0,-15), Grounded=false
-[Debug] Tick=312, Action=DraggedAction, Pos=(967,290), Vel=(0,-12), Grounded=false
-[Debug] Tick=313, Action=DraggedAction, Pos=(967,267), Vel=(0,-9), Grounded=false
-[Debug] Tick=314, Action=DraggedAction, Pos=(969,252), Vel=(1,-7), Grounded=false
-[Debug] Tick=315, Action=DraggedAction, Pos=(972,238), Vel=(1,-4), Grounded=false
-[Debug] Tick=316, Action=DraggedAction, Pos=(974,229), Vel=(1,-5), Grounded=false
-[Debug] Tick=317, Action=DraggedAction, Pos=(977,219), Vel=(1,-5), Grounded=false
-[Debug] Tick=318, Action=DraggedAction, Pos=(982,200), Vel=(2,-5), Grounded=false
-[Debug] Tick=319, Action=DraggedAction, Pos=(984,188), Vel=(1,-7), Grounded=false
-[Debug] Tick=320, Action=DraggedAction, Pos=(987,178), Vel=(1,-4), Grounded=false
-[Debug] Tick=321, Action=DraggedAction, Pos=(990,167), Vel=(1,-5), Grounded=false
-[Debug] Tick=322, Action=DraggedAction, Pos=(990,167), Vel=(0,0), Grounded=false
-[Debug] Tick=323, Action=DraggedAction, Pos=(995,145), Vel=(1,-5), Grounded=false
-[Debug] Tick=324, Action=DraggedAction, Pos=(997,128), Vel=(1,-8), Grounded=false
-[Debug] Tick=325, Action=DraggedAction, Pos=(1000,114), Vel=(2,-9), Grounded=false
-[Debug] Tick=326, Action=DraggedAction, Pos=(1001,104), Vel=(1,-4), Grounded=false
-[Debug] Tick=327, Action=DraggedAction, Pos=(1003,93), Vel=(1,-5), Grounded=false
-[Debug] Tick=328, Action=DraggedAction, Pos=(1003,88), Vel=(0,-3), Grounded=false
-[Debug] Tick=329, Action=DraggedAction, Pos=(1003,79), Vel=(0,-2), Grounded=false
-[Debug] Tick=330, Action=DraggedAction, Pos=(1003,75), Vel=(0,-2), Grounded=false
-[Debug] Tick=331, Action=DraggedAction, Pos=(1003,72), Vel=(0,-2), Grounded=false
-[Debug] Tick=332, Action=DraggedAction, Pos=(1003,71), Vel=(0,-1), Grounded=false
-[Debug] Tick=333, Action=DraggedAction, Pos=(1003,69), Vel=(0,-1), Grounded=false
-[Debug] Tick=334, Action=DraggedAction, Pos=(1003,69), Vel=(0,0), Grounded=false
-[Debug] Tick=335, Action=DraggedAction, Pos=(1003,68), Vel=(0,-1), Grounded=false
-[Debug] Tick=336, Action=DraggedAction, Pos=(1003,68), Vel=(0,0), Grounded=false
-[Debug] Tick=337, Action=DraggedAction, Pos=(1003,68), Vel=(0,0), Grounded=false
-[Debug] Tick=338, Action=DraggedAction, Pos=(1003,68), Vel=(0,0), Grounded=false
-[Debug] Tick=339, Action=DraggedAction, Pos=(1003,68), Vel=(0,0), Grounded=false
-[Debug] Transition: Prev=com.group_finity.mascot.action.DraggedAction@12359a82 -> Next (Evaluating)
-[Debug] Tick=340, Action=RandomChoiceAction, Pos=(1002,68), Vel=(0,0), Grounded=false
-[Debug] Tick=341, Action=RandomChoiceAction, Pos=(1001,68), Vel=(0,0), Grounded=false
-[Debug] Tick=342, Action=RandomChoiceAction, Pos=(1000,68), Vel=(0,0), Grounded=false
-[Debug] Tick=343, Action=RandomChoiceAction, Pos=(999,68), Vel=(0,0), Grounded=false
-[Debug] Tick=344, Action=RandomChoiceAction, Pos=(998,68), Vel=(0,0), Grounded=false
-[Debug] Tick=345, Action=RandomChoiceAction, Pos=(997,68), Vel=(0,0), Grounded=false
-[Debug] Tick=346, Action=RandomChoiceAction, Pos=(996,68), Vel=(0,0), Grounded=false
-[Debug] Tick=347, Action=RandomChoiceAction, Pos=(995,68), Vel=(0,0), Grounded=false
-[Debug] Tick=348, Action=RandomChoiceAction, Pos=(994,68), Vel=(0,0), Grounded=false
-[Debug] Tick=349, Action=RandomChoiceAction, Pos=(993,68), Vel=(0,0), Grounded=false
-[Debug] Tick=350, Action=RandomChoiceAction, Pos=(992,68), Vel=(0,0), Grounded=false
-[Debug] Tick=351, Action=RandomChoiceAction, Pos=(991,68), Vel=(0,0), Grounded=false
-[Debug] Tick=352, Action=RandomChoiceAction, Pos=(990,68), Vel=(0,0), Grounded=false
-[Debug] Tick=353, Action=RandomChoiceAction, Pos=(989,68), Vel=(0,0), Grounded=false
-[Debug] Tick=354, Action=RandomChoiceAction, Pos=(988,68), Vel=(0,0), Grounded=false
-[Debug] Tick=355, Action=RandomChoiceAction, Pos=(987,68), Vel=(0,0), Grounded=false
-[Debug] Tick=356, Action=RandomChoiceAction, Pos=(986,68), Vel=(0,0), Grounded=false
-[Debug] Tick=357, Action=RandomChoiceAction, Pos=(985,68), Vel=(0,0), Grounded=false
-[Debug] Tick=358, Action=RandomChoiceAction, Pos=(984,68), Vel=(0,0), Grounded=false
-[Debug] Tick=359, Action=RandomChoiceAction, Pos=(983,68), Vel=(0,0), Grounded=false
-[Debug] Tick=360, Action=RandomChoiceAction, Pos=(982,68), Vel=(0,0), Grounded=false
-[Debug] Tick=361, Action=RandomChoiceAction, Pos=(981,68), Vel=(0,0), Grounded=false
-[Debug] Tick=362, Action=RandomChoiceAction, Pos=(980,68), Vel=(0,0), Grounded=false
-[Debug] Tick=363, Action=RandomChoiceAction, Pos=(979,68), Vel=(0,0), Grounded=false
-[Debug] Tick=364, Action=RandomChoiceAction, Pos=(978,68), Vel=(0,0), Grounded=false
-[Debug] Tick=365, Action=RandomChoiceAction, Pos=(977,68), Vel=(0,0), Grounded=false
-[Debug] Tick=366, Action=RandomChoiceAction, Pos=(976,68), Vel=(0,0), Grounded=false
-[Debug] Tick=367, Action=RandomChoiceAction, Pos=(975,68), Vel=(0,0), Grounded=false
-[Debug] Tick=368, Action=RandomChoiceAction, Pos=(974,68), Vel=(0,0), Grounded=false
-[Debug] Tick=369, Action=RandomChoiceAction, Pos=(973,68), Vel=(0,0), Grounded=false
-[Debug] Tick=370, Action=RandomChoiceAction, Pos=(972,68), Vel=(0,0), Grounded=false
-[Debug] Tick=371, Action=RandomChoiceAction, Pos=(971,68), Vel=(0,0), Grounded=false
-[Debug] Tick=372, Action=RandomChoiceAction, Pos=(970,68), Vel=(0,0), Grounded=false
-[Debug] Tick=373, Action=RandomChoiceAction, Pos=(969,68), Vel=(0,0), Grounded=false
-[Debug] Tick=374, Action=RandomChoiceAction, Pos=(968,68), Vel=(0,0), Grounded=false
-[Debug] Tick=375, Action=RandomChoiceAction, Pos=(967,68), Vel=(0,0), Grounded=false
-[Debug] Tick=376, Action=RandomChoiceAction, Pos=(966,68), Vel=(0,0), Grounded=false
-[Debug] Tick=377, Action=RandomChoiceAction, Pos=(965,68), Vel=(0,0), Grounded=false
-[Debug] Tick=378, Action=RandomChoiceAction, Pos=(964,68), Vel=(0,0), Grounded=false
-[Debug] Tick=379, Action=RandomChoiceAction, Pos=(963,68), Vel=(0,0), Grounded=false
-[Debug] Tick=380, Action=RandomChoiceAction, Pos=(962,68), Vel=(0,0), Grounded=false
-[Debug] Tick=381, Action=RandomChoiceAction, Pos=(961,68), Vel=(0,0), Grounded=false
-[Debug] Tick=382, Action=RandomChoiceAction, Pos=(960,68), Vel=(0,0), Grounded=false
-[Debug] Tick=383, Action=RandomChoiceAction, Pos=(959,68), Vel=(0,0), Grounded=false
-[Debug] Tick=384, Action=RandomChoiceAction, Pos=(958,68), Vel=(0,0), Grounded=false
-[Debug] Tick=385, Action=RandomChoiceAction, Pos=(957,68), Vel=(0,0), Grounded=false
-[Debug] Tick=386, Action=RandomChoiceAction, Pos=(956,68), Vel=(0,0), Grounded=false
-[Debug] Tick=387, Action=RandomChoiceAction, Pos=(955,68), Vel=(0,0), Grounded=false
-[Debug] Tick=388, Action=RandomChoiceAction, Pos=(954,68), Vel=(0,0), Grounded=false
-[Debug] Tick=389, Action=RandomChoiceAction, Pos=(953,68), Vel=(0,0), Grounded=false
-[Debug] Tick=390, Action=RandomChoiceAction, Pos=(952,68), Vel=(0,0), Grounded=false
-[Debug] Tick=391, Action=RandomChoiceAction, Pos=(951,68), Vel=(0,0), Grounded=false
-[Debug] Tick=392, Action=RandomChoiceAction, Pos=(950,68), Vel=(0,0), Grounded=false
-[Debug] Tick=393, Action=RandomChoiceAction, Pos=(949,68), Vel=(0,0), Grounded=false
-[Debug] Tick=394, Action=RandomChoiceAction, Pos=(948,68), Vel=(0,0), Grounded=false
-[Debug] Tick=395, Action=RandomChoiceAction, Pos=(947,68), Vel=(0,0), Grounded=false
-[Debug] Tick=396, Action=DraggedAction, Pos=(947,69), Vel=(0,1), Grounded=false
-[Debug] Tick=397, Action=DraggedAction, Pos=(947,69), Vel=(0,0), Grounded=false
-[Debug] Tick=398, Action=DraggedAction, Pos=(947,69), Vel=(0,0), Grounded=false
-[Debug] Tick=399, Action=DraggedAction, Pos=(947,69), Vel=(0,0), Grounded=false
-[Debug] Tick=400, Action=DraggedAction, Pos=(949,74), Vel=(2,3), Grounded=false
-[Debug] Tick=401, Action=DraggedAction, Pos=(952,78), Vel=(2,2), Grounded=false
-[Debug] Tick=402, Action=DraggedAction, Pos=(955,83), Vel=(1,3), Grounded=false
-[Debug] Tick=403, Action=DraggedAction, Pos=(957,85), Vel=(0,1), Grounded=false
-[Debug] Tick=404, Action=DraggedAction, Pos=(958,85), Vel=(1,0), Grounded=false
-[Debug] Tick=405, Action=DraggedAction, Pos=(959,84), Vel=(1,-1), Grounded=false
-[Debug] Tick=406, Action=DraggedAction, Pos=(967,73), Vel=(6,-8), Grounded=false
-[Debug] Tick=407, Action=DraggedAction, Pos=(980,49), Vel=(5,-11), Grounded=false
-[Debug] Tick=408, Action=DraggedAction, Pos=(986,29), Vel=(0,0), Grounded=false
-[Debug] Tick=409, Action=DraggedAction, Pos=(987,17), Vel=(0,0), Grounded=false
-[Debug] Tick=410, Action=DraggedAction, Pos=(988,1), Vel=(0,0), Grounded=false
-[Debug] Tick=411, Action=DraggedAction, Pos=(988,1), Vel=(0,0), Grounded=false
-[Debug] Tick=412, Action=DraggedAction, Pos=(988,1), Vel=(0,0), Grounded=false
-[Debug] Tick=413, Action=DraggedAction, Pos=(988,2), Vel=(0,0), Grounded=false
-[Debug] Tick=414, Action=DraggedAction, Pos=(988,1), Vel=(0,0), Grounded=false
-[Debug] Tick=415, Action=DraggedAction, Pos=(988,-1), Vel=(0,-1), Grounded=false
-[Debug] Tick=416, Action=DraggedAction, Pos=(988,-3), Vel=(0,-2), Grounded=false
-[Debug] Tick=417, Action=DraggedAction, Pos=(988,-4), Vel=(0,-1), Grounded=false
-[Debug] Tick=418, Action=DraggedAction, Pos=(988,-5), Vel=(0,-1), Grounded=false
-[Debug] Tick=419, Action=DraggedAction, Pos=(988,-5), Vel=(0,0), Grounded=false
-[Debug] Tick=420, Action=DraggedAction, Pos=(988,-5), Vel=(0,0), Grounded=false
-[Debug] Tick=421, Action=DraggedAction, Pos=(988,-5), Vel=(0,0), Grounded=false
-[Debug] Tick=422, Action=DraggedAction, Pos=(988,-5), Vel=(0,0), Grounded=false
-[Debug] Tick=423, Action=DraggedAction, Pos=(988,-5), Vel=(0,0), Grounded=false
-[Debug] Tick=424, Action=DraggedAction, Pos=(988,-5), Vel=(0,0), Grounded=false
-[Debug] Tick=425, Action=DraggedAction, Pos=(988,-5), Vel=(0,0), Grounded=false
-[Debug] Transition: Prev=com.group_finity.mascot.action.DraggedAction@12359a82 -> Next (Evaluating)
-[Debug] Tick=426, Action=RandomChoiceAction, Pos=(987,10), Vel=(0,0), Grounded=false
-[Debug] Tick=427, Action=RandomChoiceAction, Pos=(986,10), Vel=(0,0), Grounded=false
-[Debug] Tick=428, Action=RandomChoiceAction, Pos=(985,10), Vel=(0,0), Grounded=false
-[Debug] Tick=429, Action=RandomChoiceAction, Pos=(984,10), Vel=(0,0), Grounded=false
-[Debug] Tick=430, Action=RandomChoiceAction, Pos=(983,10), Vel=(0,0), Grounded=false
-[Debug] Tick=431, Action=RandomChoiceAction, Pos=(982,10), Vel=(0,0), Grounded=false
-[Debug] Tick=432, Action=RandomChoiceAction, Pos=(981,10), Vel=(0,0), Grounded=false
-[Debug] Tick=433, Action=RandomChoiceAction, Pos=(980,10), Vel=(0,0), Grounded=false
-[Debug] Tick=434, Action=RandomChoiceAction, Pos=(979,10), Vel=(0,0), Grounded=false
-[Debug] Tick=435, Action=RandomChoiceAction, Pos=(978,10), Vel=(0,0), Grounded=false
-[Debug] Tick=436, Action=RandomChoiceAction, Pos=(977,10), Vel=(0,0), Grounded=false
-[Debug] Tick=437, Action=RandomChoiceAction, Pos=(976,10), Vel=(0,0), Grounded=false
-[Debug] Tick=438, Action=RandomChoiceAction, Pos=(975,10), Vel=(0,0), Grounded=false
-[Debug] Tick=439, Action=RandomChoiceAction, Pos=(974,10), Vel=(0,0), Grounded=false
-[Debug] Tick=440, Action=RandomChoiceAction, Pos=(973,10), Vel=(0,0), Grounded=false
-[Debug] Tick=441, Action=RandomChoiceAction, Pos=(972,10), Vel=(0,0), Grounded=false
-[Debug] Tick=442, Action=RandomChoiceAction, Pos=(971,10), Vel=(0,0), Grounded=false
-[Debug] Tick=443, Action=RandomChoiceAction, Pos=(970,10), Vel=(0,0), Grounded=false
-[Debug] Tick=444, Action=RandomChoiceAction, Pos=(969,10), Vel=(0,0), Grounded=false
-[Debug] Tick=445, Action=RandomChoiceAction, Pos=(968,10), Vel=(0,0), Grounded=false
-[Debug] Tick=446, Action=RandomChoiceAction, Pos=(967,10), Vel=(0,0), Grounded=false
-[Debug] Tick=447, Action=RandomChoiceAction, Pos=(966,10), Vel=(0,0), Grounded=false
-[Debug] Tick=448, Action=RandomChoiceAction, Pos=(965,10), Vel=(0,0), Grounded=false
-[Debug] Tick=449, Action=RandomChoiceAction, Pos=(964,10), Vel=(0,0), Grounded=false
-[Debug] Tick=450, Action=RandomChoiceAction, Pos=(963,10), Vel=(0,0), Grounded=false
-[Debug] Tick=451, Action=RandomChoiceAction, Pos=(962,10), Vel=(0,0), Grounded=false
-[Debug] Tick=452, Action=RandomChoiceAction, Pos=(961,10), Vel=(0,0), Grounded=false
-[Debug] Tick=453, Action=RandomChoiceAction, Pos=(960,10), Vel=(0,0), Grounded=false
-[Debug] Tick=454, Action=RandomChoiceAction, Pos=(959,10), Vel=(0,0), Grounded=false
-[Debug] Tick=455, Action=RandomChoiceAction, Pos=(958,10), Vel=(0,0), Grounded=false
-[Debug] Tick=456, Action=RandomChoiceAction, Pos=(957,10), Vel=(0,0), Grounded=false
-[Debug] Tick=457, Action=RandomChoiceAction, Pos=(956,10), Vel=(0,0), Grounded=false
-[Debug] Tick=458, Action=RandomChoiceAction, Pos=(955,10), Vel=(0,0), Grounded=false
-[Debug] Tick=459, Action=RandomChoiceAction, Pos=(954,10), Vel=(0,0), Grounded=false
-[Debug] Tick=460, Action=RandomChoiceAction, Pos=(953,10), Vel=(0,0), Grounded=false
-[Debug] Tick=461, Action=RandomChoiceAction, Pos=(952,10), Vel=(0,0), Grounded=false
-[Debug] Tick=462, Action=RandomChoiceAction, Pos=(951,10), Vel=(0,0), Grounded=false
-[Debug] Tick=463, Action=RandomChoiceAction, Pos=(950,10), Vel=(0,0), Grounded=false
-[Debug] Tick=464, Action=RandomChoiceAction, Pos=(949,10), Vel=(0,0), Grounded=false
-[Debug] Tick=465, Action=RandomChoiceAction, Pos=(948,10), Vel=(0,0), Grounded=false
-[Debug] Tick=466, Action=RandomChoiceAction, Pos=(947,10), Vel=(0,0), Grounded=false
-[Debug] Tick=467, Action=RandomChoiceAction, Pos=(946,10), Vel=(0,0), Grounded=false
-[Debug] Tick=468, Action=RandomChoiceAction, Pos=(945,10), Vel=(0,0), Grounded=false
-[Debug] Tick=469, Action=RandomChoiceAction, Pos=(944,10), Vel=(0,0), Grounded=false
-[Debug] Tick=470, Action=RandomChoiceAction, Pos=(943,10), Vel=(0,0), Grounded=false
-[Debug] Tick=471, Action=RandomChoiceAction, Pos=(942,10), Vel=(0,0), Grounded=false
-[Debug] Tick=472, Action=RandomChoiceAction, Pos=(941,10), Vel=(0,0), Grounded=false
-[Debug] Tick=473, Action=RandomChoiceAction, Pos=(940,10), Vel=(0,0), Grounded=false
-[Debug] Tick=474, Action=RandomChoiceAction, Pos=(939,10), Vel=(0,0), Grounded=false
-[Debug] Tick=475, Action=RandomChoiceAction, Pos=(938,10), Vel=(0,0), Grounded=false
-[Debug] Tick=476, Action=RandomChoiceAction, Pos=(937,10), Vel=(0,0), Grounded=false
-[Debug] Tick=477, Action=RandomChoiceAction, Pos=(936,10), Vel=(0,0), Grounded=false
-[Debug] Tick=478, Action=RandomChoiceAction, Pos=(935,10), Vel=(0,0), Grounded=false
-[Debug] Tick=479, Action=RandomChoiceAction, Pos=(934,10), Vel=(0,0), Grounded=false
-[Debug] Tick=480, Action=RandomChoiceAction, Pos=(933,10), Vel=(0,0), Grounded=false
-[Debug] Tick=481, Action=RandomChoiceAction, Pos=(932,10), Vel=(0,0), Grounded=false
-[Debug] Tick=482, Action=RandomChoiceAction, Pos=(931,10), Vel=(0,0), Grounded=false
-[Debug] Tick=483, Action=RandomChoiceAction, Pos=(930,10), Vel=(0,0), Grounded=false
-[Debug] Tick=484, Action=RandomChoiceAction, Pos=(929,10), Vel=(0,0), Grounded=false
-[Debug] Tick=485, Action=RandomChoiceAction, Pos=(928,10), Vel=(0,0), Grounded=false
+PS C:\bunashimeji\bunashimeji> ./gradlew runPoC
+
+> Task :app:compileKotlin FAILED
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/java/com/group_finity/mascot/poc/ComposeLauncher.kt:5:36 Unresolved reference: CursorDropdownMenu
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/java/com/group_finity/mascot/poc/ComposeLauncher.kt:16:42 Unresolved reference: PointerMatcher
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/java/com/group_finity/mascot/poc/ComposeLauncher.kt:298:21 Unresolved reference: CursorDropdownMenu
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/java/com/group_finity/mascot/poc/ComposeLauncher.kt:302:25 @Composable invocations can only happen from the context of a @Composable function
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/java/com/group_finity/mascot/poc/ComposeLauncher.kt:308:25 @Composable invocations can only happen from the context of a @Composable function
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/java/com/group_finity/mascot/poc/ComposeLauncher.kt:320:44 Unresolved reference: PointerMatcher
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction      
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2s
+4 actionable tasks: 2 executed, 2 up-to-date
+PS C:\bunashimeji\bunashimeji> ./gradlew runPoC
+
+> Task :app:compileKotlin FAILED
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/java/com/group_finity/mascot/poc/ComposeLauncher.kt:321:40 Unresolved reference. None of the following candidates is applicable because of receiver type mismatch:
+public val CoroutineContext.isActive: Boolean defined in kotlinx.coroutines
+public val CoroutineScope.isActive: Boolean defined in kotlinx.coroutines
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2s
+4 actionable tasks: 2 executed, 2 up-to-date

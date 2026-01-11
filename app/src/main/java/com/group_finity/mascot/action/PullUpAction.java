@@ -2,10 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.nativeaccess.Win32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.RECT;
-
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
+import com.group_finity.mascot.type.NeoRect;
+import java.lang.foreign.MemorySegment;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -48,12 +47,12 @@ public class PullUpAction implements Action {
             s.startX = mascot.getX();
             s.startY = mascot.getY();
             s.time = 0;
-            
+
             // 壁判定を無視して移動できるようにする
             mascot.setIgnoreWalls(true);
 
             // 壁の情報を取得
-            HWND wallWindow = null;
+            MemorySegment wallWindow = null;
             boolean isLeft = false;
             if (mascot.isHittingLeftWall()) {
                 wallWindow = mascot.getLeftWallWindow();
@@ -64,19 +63,18 @@ public class PullUpAction implements Action {
             }
             s.isLeft = isLeft; // 判定結果を保存
 
-            if (wallWindow != null && Win32.INSTANCE.IsWindow(wallWindow)) {
-                RECT rect = new RECT();
-                Win32.INSTANCE.GetWindowRect(wallWindow, rect);
-                
+            if (wallWindow != null && NativeWindowUtil.isWindow(wallWindow)) {
+                NeoRect rect = NativeWindowUtil.getWindowRect(wallWindow);
+
                 // 目標地点: 壁の上端(Y) と 壁の内側(X)
-                s.targetY = rect.top;
+                s.targetY = rect.top();
                 // 少し内側に入り込む
-                int width = rect.right - rect.left;
+                int width = rect.width();
                 int offset = Math.min(40, width / 2);
-                
+
                 // isLeft(左壁ヒット)=ウィンドウ右側面にいる -> rect.right側へ着地
-                s.targetX = isLeft ? rect.right - offset : rect.left + offset;
-                
+                s.targetX = isLeft ? rect.right() - offset : rect.left() + offset;
+
                 // マスコットの向きを壁に向ける
                 mascot.setLookRight(!isLeft);
             } else {
@@ -106,7 +104,7 @@ public class PullUpAction implements Action {
         // 軌道の調整: Y軸（上昇）を先行させ、後半でX軸（乗り込み）を行う
         // Y: EaseInOutCubic (最初はゆっくり力を込め、中盤で加速し、最後はゆっくり着地することで重量感を出す)
         double easeY = progress < 0.5 ? 4 * Math.pow(progress, 3) : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-        
+
         // X: EaseInQuad (徐々に加速して乗り込む)
         double easeX = Math.pow(progress, 2);
 
@@ -118,8 +116,6 @@ public class PullUpAction implements Action {
 
         if (progress >= 1.0) {
             // 完了時に接地状態にする
-            // Main.javaの接地判定(getY() >= floorY)を確実にパスさせるため、
-            // ターゲット位置より1px深く設定する（直後のフレームでMainにより補正される）
             mascot.setX(s.targetX);
             mascot.setY(s.targetY + 1);
             mascot.setGrounded(true);

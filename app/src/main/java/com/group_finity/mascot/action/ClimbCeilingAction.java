@@ -13,7 +13,7 @@ public class ClimbCeilingAction implements Action {
     private final int speed;
     private final int duration;
     private int timeRemaining;
-    private static final int TARGET_Y = ActionConstants.WALL_ANCHOR.y; // 壁の上端で頭が接する位置（足元基準）
+    private static final int TARGET_Y = ActionConstants.WALL_ANCHOR.y(); // 壁の上端で頭が接する位置（足元基準）
 
     public ClimbCeilingAction(Animation animation, int speed, int duration) {
         this.animation = animation;
@@ -24,7 +24,8 @@ public class ClimbCeilingAction implements Action {
 
     @Override
     public void execute(Mascot mascot) {
-        if (!hasNext()) return;
+        if (!hasNext())
+            return;
 
         // Main.javaによる天井吸着（Y=10への強制移動）を防ぐため、壁判定を無視する
         mascot.setIgnoreWalls(true);
@@ -46,7 +47,7 @@ public class ClimbCeilingAction implements Action {
         // 物理演算を切っているので、現在地に関わらず強制的に近づける
         if (mascot.getY() != TARGET_Y) {
             int diff = TARGET_Y - mascot.getY();
-            int move = (Math.abs(diff) > speed) ? (int)Math.signum(diff) * speed : diff;
+            int move = (Math.abs(diff) > speed) ? (int) Math.signum(diff) * speed : diff;
             mascot.setY(mascot.getY() + move);
         }
 
@@ -62,11 +63,14 @@ public class ClimbCeilingAction implements Action {
     }
 
     @Override
-    public boolean hasNext() { return timeRemaining > 0; }
+    public boolean hasNext() {
+        return timeRemaining > 0;
+    }
 
     @Override
     public void reset() {
         this.timeRemaining = this.duration;
-        if (animation != null) animation.reset();
+        if (animation != null)
+            animation.reset();
     }
 }

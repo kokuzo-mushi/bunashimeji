@@ -2,9 +2,9 @@ package com.group_finity.mascot;
 
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.animation.Animation;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import java.awt.Point;
-import java.awt.Rectangle;
+import com.group_finity.mascot.type.NeoPoint;
+import com.group_finity.mascot.type.NeoRect;
+import java.lang.foreign.MemorySegment;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Context;
 
@@ -31,27 +31,29 @@ public class Mascot {
     private boolean hittingCeiling;
     private boolean beingDragged;
     private boolean ignoreWalls;
-    
-    // ウィンドウ操作用
-    private HWND floorWindow;
-    private HWND ceilingWindow;
-    private HWND holdingWindow;
-    private HWND targetWindow;
-    private HWND leftWallWindow;
-    private HWND rightWallWindow;
 
-    // 環境情報（論理座標）
-    private Rectangle workArea;
-    private Rectangle leftWallRect;
-    private Rectangle rightWallRect;
-    private Rectangle ceilingRect;
+    // Window handles (Panama)
+    private MemorySegment floorWindow;
+    private MemorySegment ceilingWindow;
+    private MemorySegment holdingWindow;
+    private MemorySegment targetWindow;
+    private MemorySegment leftWallWindow;
+    private MemorySegment rightWallWindow;
+
+    // Environment info (Logical coordinates)
+    private NeoRect workArea;
+    private NeoRect leftWallRect;
+    private NeoRect rightWallRect;
+    private NeoRect ceilingRect;
 
     // GraalJS Context (Per-instance isolation)
     private Context jsContext;
 
     /**
-     * Checks if the mascot is currently on the ground (e.g. taskbar or window edge).
+     * Checks if the mascot is currently on the ground (e.g. taskbar or window
+     * edge).
      * Alias for isGrounded() to support different naming conventions.
+     * 
      * @return true if on ground, false otherwise.
      */
     @HostAccess.Export
@@ -131,98 +133,98 @@ public class Mascot {
     }
 
     @HostAccess.Export
-    public HWND getFloorWindow() {
+    public MemorySegment getFloorWindow() {
         return floorWindow;
     }
 
     @HostAccess.Export
-    public void setFloorWindow(HWND floorWindow) {
+    public void setFloorWindow(MemorySegment floorWindow) {
         this.floorWindow = floorWindow;
     }
 
     @HostAccess.Export
-    public HWND getCeilingWindow() {
+    public MemorySegment getCeilingWindow() {
         return ceilingWindow;
     }
 
     @HostAccess.Export
-    public void setCeilingWindow(HWND ceilingWindow) {
+    public void setCeilingWindow(MemorySegment ceilingWindow) {
         this.ceilingWindow = ceilingWindow;
     }
 
     @HostAccess.Export
-    public HWND getHoldingWindow() {
+    public MemorySegment getHoldingWindow() {
         return holdingWindow;
     }
 
     @HostAccess.Export
-    public void setHoldingWindow(HWND holdingWindow) {
+    public void setHoldingWindow(MemorySegment holdingWindow) {
         this.holdingWindow = holdingWindow;
     }
 
     @HostAccess.Export
-    public HWND getTargetWindow() {
+    public MemorySegment getTargetWindow() {
         return targetWindow;
     }
 
     @HostAccess.Export
-    public void setTargetWindow(HWND targetWindow) {
+    public void setTargetWindow(MemorySegment targetWindow) {
         this.targetWindow = targetWindow;
     }
 
     @HostAccess.Export
-    public HWND getLeftWallWindow() {
+    public MemorySegment getLeftWallWindow() {
         return leftWallWindow;
     }
 
     @HostAccess.Export
-    public void setLeftWallWindow(HWND leftWallWindow) {
+    public void setLeftWallWindow(MemorySegment leftWallWindow) {
         this.leftWallWindow = leftWallWindow;
     }
 
     @HostAccess.Export
-    public HWND getRightWallWindow() {
+    public MemorySegment getRightWallWindow() {
         return rightWallWindow;
     }
 
     @HostAccess.Export
-    public void setRightWallWindow(HWND rightWallWindow) {
+    public void setRightWallWindow(MemorySegment rightWallWindow) {
         this.rightWallWindow = rightWallWindow;
     }
 
     @HostAccess.Export
-    public Rectangle getWorkArea() {
+    public NeoRect getWorkArea() {
         return workArea;
     }
 
-    public void setWorkArea(Rectangle workArea) {
+    public void setWorkArea(NeoRect workArea) {
         this.workArea = workArea;
     }
 
     @HostAccess.Export
-    public Rectangle getLeftWallRect() {
+    public NeoRect getLeftWallRect() {
         return leftWallRect;
     }
 
-    public void setLeftWallRect(Rectangle leftWallRect) {
+    public void setLeftWallRect(NeoRect leftWallRect) {
         this.leftWallRect = leftWallRect;
     }
 
     @HostAccess.Export
-    public Rectangle getRightWallRect() {
+    public NeoRect getRightWallRect() {
         return rightWallRect;
     }
 
-    public void setRightWallRect(Rectangle rightWallRect) {
+    public void setRightWallRect(NeoRect rightWallRect) {
         this.rightWallRect = rightWallRect;
     }
 
     @HostAccess.Export
-    public Rectangle getCeilingRect() {
+    public NeoRect getCeilingRect() {
         return ceilingRect;
     }
 
-    public void setCeilingRect(Rectangle ceilingRect) {
+    public void setCeilingRect(NeoRect ceilingRect) {
         this.ceilingRect = ceilingRect;
     }
 
@@ -282,28 +284,33 @@ public class Mascot {
     }
 
     @HostAccess.Export
-    public Point getAnchor() {
-        return new Point(x, y);
+    public NeoPoint getAnchor() {
+        return new NeoPoint(x, y);
     }
 
     @HostAccess.Export
-    public void setAnchor(Point p) {
-        this.x = p.x;
-        this.y = p.y;
+    public void setAnchor(NeoPoint p) {
+        this.x = p.x();
+        this.y = p.y();
     }
 
-    public void setAnimation(Animation animation) { this.animation = animation; }
-    
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
+
     public Animation getAnimation() {
         return animation;
     }
 
     @HostAccess.Export
-    public void setNextAction(Action action) { this.nextAction = action; }
+    public void setNextAction(Action action) {
+        this.nextAction = action;
+    }
 
-    // Added to resolve "setAction undefined" error
     @HostAccess.Export
-    public void setAction(Action action) { this.nextAction = action; }
+    public void setAction(Action action) {
+        this.nextAction = action;
+    }
 
     @HostAccess.Export
     public Action getCurrentAction() {
@@ -317,8 +324,8 @@ public class Mascot {
 
     @HostAccess.Export
     public boolean isPreviousAction(String name) {
-        if (previousAction == null) return false;
-        // クラス名またはtoString()の結果で判定する（安全策）
+        if (previousAction == null)
+            return false;
         return previousAction.getClass().getSimpleName().equals(name) || previousAction.toString().equals(name);
     }
 
@@ -328,7 +335,6 @@ public class Mascot {
     }
 
     public void tick() {
-        // 物理演算で速度が書き換わる前に、現在の速度を履歴として保存
         this.previousVelocityY = this.velocityY;
 
         if (nextAction != null) {
@@ -338,7 +344,7 @@ public class Mascot {
             currentAction = nextAction;
             nextAction = null;
         }
-        
+
         if (currentAction != null) {
             currentAction.execute(this);
             if (!currentAction.hasNext()) {

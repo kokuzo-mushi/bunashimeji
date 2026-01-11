@@ -1,82 +1,66 @@
-# Shimeji Neo — 全体アーキテクチャ
+# Shimeji Neo — Architecture Design Document
 
-最終更新: 2026-01-04 (Asia/Tokyo)
+**Status**: Draft / Active
+**Last Updated**: 2026-01-10
 
-この文書は、Shimeji Neo プロジェクトの全体アーキテクチャを定義します。
+## 1. Architectural Overview
+
+Shimeji Neo (Bunashimeji) は、**イベント駆動型 (Event-Driven)** かつ **エージェント指向 (Agent-Oriented)** のデスクトップマスコットアプリケーションです。
+従来のShimejiの「XML定義による柔軟性」を維持しつつ、Java 21の最新機能を用いてパフォーマンスと保守性を根本から刷新しています。
+
+### Design Philosophy
+1.  **Performance First**: 50体以上のマスコットを60FPSで動作させるため、GC負荷の低い設計（ZGC, Primitive Records）と高効率なネイティブ連携（Panama）を徹底する。
+2.  **Modern Java**: Java 21 (LTS) の機能を前提とし、レガシーなJava 6/8時代のイディオム（無名内部クラスの多用、可変なJavaBeans）を排除する。
+3.  **Safety**: メモリ安全性（FFM API）と外部入力の安全性（Secure XML/Zip processing）を確保する。
 
 ---
 
-## 1. コアレイヤ
+## 2. Core Subsystems
 
-1) **Mascot（マスコット）**:
-   - マスコット自身の状態（座標、実行中のアクション、環境変数）を保持する中心オブジェクト。
-   - `EvaluationContext` の実体を提供する。
+### 2.1. The Mascot Entity
+マスコットは単なる画像ではなく、以下の要素を持つ自律的なエージェントとしてモデル化されています。
 
-2) **Event サブシステム**:
-   - `Event` (システムティック、状態変化など) が発生。
-   - `EventDispatcher` がイベントを受け取り、関連する `Trigger` を評価する。
-   - `EventWorkerPool` が非同期処理を担う。
+*   **State (Model)**: 座標 (`Point`), 速度 (`Vector`), 現在のアクション (`Action`), 内部変数 (`Variables`).
+*   **Appearance (View)**: 現在のポーズ (`Image`), ウィンドウ位置 (`Window`).
+*   **Brain (Controller)**: 次の行動を決定するロジック (`Behavior`, `Script`).
 
-3) **Behavior サブシステム**:
-   - **Trigger**: 「いつ」行動を起こすかの条件 (`mascot.x > 100`)。
-     - `TriggerCondition` がASTベースの式評価とキャッシュを担う。
-   - **Action**: 「何を」するかという具体的な行動単位（歩く、ジャンプするなど）。
-     - アニメーション再生、移動ロジック、状態変更を含む。
-   - **Behavior**: `Trigger` と `Action` を結びつけるルール。
+### 2.2. Event & Trigger System
+マスコットの行動決定は、毎フレーム評価されるイベントシステムによって駆動されます。
 
-4) **Physics & Motion サブシステム**:
-   - **Kinematic Corner Transition**: 壁と天井の境界など、物理演算だけでは不安定になる箇所を幾何学的な軌道計算 (`CornerMath`) で補間する。
-   - **Hybrid Physics**: 通常時は重力と当たり判定に従うが、遷移アクション中は物理演算を一時的に無効化 (`ignoreWalls`) し、計算された軌道に従う。
-   - **Environment Sensing**: `Environment` クラスにより、ウィンドウ位置やデスクトップ領域を論理座標系で正規化して提供する。
+*   **EventDispatcher**: システムティックやユーザー入力（マウスホバー、クリック）を監視。
+*   **Trigger**: 「マウスが重なった」「壁にぶつかった」などの条件を評価。
+*   **Behavior**: トリガーが発火した際に実行すべき `Action` を選択。
 
-## 2. 近代化戦略 (Modernization Strategy)
+### 2.3. Action & Physics Engine
+物理演算とアニメーションを統合したシステムです。
 
-技術監査に基づき、以下の技術スタックへの移行を推進する。
+*   **Active Rendering Loop**: `BufferStrategy` を用いた独自のレンダリングループで、OSの再描画イベントに依存せず60FPSを維持します。
+*   **Hybrid Physics**:
+    *   **Dynamic Mode**: 重力、摩擦、壁判定を行う通常の物理演算。
+    *   **Kinematic Mode**: 壁・天井の遷移時 (`CornerTurn`) など、物理演算を一時的に無効化し、幾何学的な軌道計算 (`CornerMath`) に従って移動するモード。
 
-1) **GUIレイヤ (View)**:
-   - **Current**: Swing / AWT (Java 2D)
-   - **Target**: **JetBrains Compose Multiplatform** (Skia)
-   - **目的**: 高DPI対応、宣言的UIによる状態管理の簡素化、レンダリングパフォーマンスの向上。
+### 2.4. Native Interface (Project Panama)
+OSネイティブ機能へのアクセスは、JNAではなく **Foreign Function & Memory (FFM) API** を使用します。
 
-2) **ネイティブ連携 (Native Interface)**:
-   - **Current**: JNA (Java Native Access)
-   - **Current Status**: **Hybrid (JNA + Project Panama)**。パフォーマンスクリティカルなウィンドウ移動には Panama を採用済み。
-   - **Target**: **Project Panama** への完全移行。
-   - **目的**: 型安全性・メモリ安全性の確保、JIT最適化による呼び出しオーバーヘッドの削減。
+*   **Window Management**: `User32.dll` (Windows) などのAPIを直接呼び出し、ウィンドウ移動 (`SetWindowPos`) や透明化 (`UpdateLayeredWindow`) を高速に行います。
+*   **Environment Sensing**: マウスカーソル位置、アクティブウィンドウの矩形、タスクバーの位置などをリアルタイムに取得します。
 
-3) **並行処理 (Concurrency)**:
-   - **Current**: Platform Threads
-   - **Target**: **Virtual Threads (Project Loom)**
-   - **目的**: マスコット個体数増加時のリソース消費抑制とスループット向上。
+---
 
-## 4. セキュリティ設計 (Security Architecture)
-
-外部リソース（マスコットデータ、設定ファイル）を取り扱う際のセキュリティ基準を定義する。
-
-1) **XML処理 (XXE対策)**:
-   - 全てのXMLパーサー (`DocumentBuilder`, `SAXParser`) において、DTD宣言と外部エンティティ参照を明示的に無効化する。
-   - これにより、悪意あるXMLによるローカルファイル漏洩やDoS攻撃を防止する。
-
-2) **アーカイブ展開 (Zip Slip対策)**:
-   - マスコットデータのZIP展開時、エントリのパスを検証し、展開先ディレクトリ外への書き込み（パストラバーサル）をブロックする。
-   - 実装詳細は `SECURITY_IMPLEMENTATION_GUIDE.md` を参照のこと。
-
-## 3. データフロー
+## 3. Data Flow
 
 ```mermaid
 graph TD
-    subgraph Event Subsystem
-        A[Event] --> B{EventDispatcher};
+    Input[User Input / Timer] --> Dispatcher[EventDispatcher]
+    Dispatcher -->|Evaluate| Trigger[Trigger Conditions]
+    Trigger -->|Select| Behavior[Behavior System]
+    Behavior -->|Execute| Action[Action (Walk, Fall, etc.)]
+    
+    subgraph Physics Loop
+        Action -->|Update Pos| Physics[Physics Engine]
+        Physics -->|Check Collision| Environment[Environment Sensing]
+        Physics -->|Apply| MascotState[Mascot State]
     end
-
-    subgraph Behavior Subsystem
-        C(Trigger) -- evaluates --> D(Action);
-        B -- fires --> C;
-    end
-
-    subgraph Mascot Core
-        E[Mascot] -- executes --> D;
-        D -- updates --> E;
-        E -- emits --> A;
-    end
+    
+    MascotState -->|Render| Window[AWT Window / Panama]
 ```

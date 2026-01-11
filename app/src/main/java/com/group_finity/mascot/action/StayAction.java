@@ -23,10 +23,11 @@ public class StayAction implements Action {
 
     @Override
     public void execute(Mascot mascot) {
-        if (!hasNext()) return;
+        if (!hasNext())
+            return;
 
         final int FRAME_DURATION_MS = 16;
-        
+
         if (animation != null) {
             mascot.setAnimation(animation);
             animation.tick(FRAME_DURATION_MS);
@@ -52,7 +53,9 @@ public class StayAction implements Action {
     }
 
     @Override
-    public boolean hasNext() { return timeRemaining > 0; }
+    public boolean hasNext() {
+        return timeRemaining > 0;
+    }
 
     @Override
     public void reset() {

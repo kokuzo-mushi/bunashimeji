@@ -28,8 +28,12 @@ class StayActionTest {
         Mascot mascot = new Mascot();
 
         // Act
-        action.execute(mascot); // タイマー開始
-        Thread.sleep(duration + 50); // 確実に時間が経過するまで待機
+        // Act
+        // Simulate frames instead of sleeping, as StayAction uses frame-based timing
+        // (tick)
+        for (int i = 0; i < 5; i++) {
+            action.execute(mascot);
+        }
 
         // Assert
         assertFalse(action.hasNext(), "指定時間経過後は false を返すべき");

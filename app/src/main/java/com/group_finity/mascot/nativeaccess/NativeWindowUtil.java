@@ -3,6 +3,8 @@ package com.group_finity.mascot.nativeaccess;
 import java.awt.Point;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 
 /**
  * Project Panama (Foreign Function & Memory API) を使用した
@@ -31,35 +33,30 @@ public class NativeWindowUtil {
 
     // --- Struct Layouts ---
     public static final StructLayout POINT_LAYOUT = MemoryLayout.structLayout(
-        ValueLayout.JAVA_INT.withName("x"),
-        ValueLayout.JAVA_INT.withName("y")
-    );
-    
+            ValueLayout.JAVA_INT.withName("x"),
+            ValueLayout.JAVA_INT.withName("y"));
+
     public static final StructLayout RECT_LAYOUT = MemoryLayout.structLayout(
-        ValueLayout.JAVA_INT.withName("left"),
-        ValueLayout.JAVA_INT.withName("top"),
-        ValueLayout.JAVA_INT.withName("right"),
-        ValueLayout.JAVA_INT.withName("bottom")
-    );
+            ValueLayout.JAVA_INT.withName("left"),
+            ValueLayout.JAVA_INT.withName("top"),
+            ValueLayout.JAVA_INT.withName("right"),
+            ValueLayout.JAVA_INT.withName("bottom"));
 
     public static final StructLayout MONITORINFO_LAYOUT = MemoryLayout.structLayout(
-        ValueLayout.JAVA_INT.withName("cbSize"),
-        RECT_LAYOUT.withName("rcMonitor"),
-        RECT_LAYOUT.withName("rcWork"),
-        ValueLayout.JAVA_INT.withName("dwFlags")
-    );
+            ValueLayout.JAVA_INT.withName("cbSize"),
+            RECT_LAYOUT.withName("rcMonitor"),
+            RECT_LAYOUT.withName("rcWork"),
+            ValueLayout.JAVA_INT.withName("dwFlags"));
 
     public static final StructLayout SIZE_LAYOUT = MemoryLayout.structLayout(
-        ValueLayout.JAVA_INT.withName("cx"),
-        ValueLayout.JAVA_INT.withName("cy")
-    );
+            ValueLayout.JAVA_INT.withName("cx"),
+            ValueLayout.JAVA_INT.withName("cy"));
 
     public static final StructLayout BLENDFUNCTION_LAYOUT = MemoryLayout.structLayout(
-        ValueLayout.JAVA_BYTE.withName("BlendOp"),
-        ValueLayout.JAVA_BYTE.withName("BlendFlags"),
-        ValueLayout.JAVA_BYTE.withName("SourceConstantAlpha"),
-        ValueLayout.JAVA_BYTE.withName("AlphaFormat")
-    );
+            ValueLayout.JAVA_BYTE.withName("BlendOp"),
+            ValueLayout.JAVA_BYTE.withName("BlendFlags"),
+            ValueLayout.JAVA_BYTE.withName("SourceConstantAlpha"),
+            ValueLayout.JAVA_BYTE.withName("AlphaFormat"));
 
     // --- Method Handles ---
     private static final MethodHandle PhysicalToLogicalPointForPerMonitorDPI;
@@ -83,47 +80,57 @@ public class NativeWindowUtil {
         // 1. PhysicalToLogicalPointForPerMonitorDPI
         // BOOL PhysicalToLogicalPointForPerMonitorDPI(HWND hWnd, LPPOINT lpPoint);
         PhysicalToLogicalPointForPerMonitorDPI = findFunction("PhysicalToLogicalPointForPerMonitorDPI",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
 
-        // 2. GetWindowLongPtrW (Fallback to GetWindowLongW for 32-bit compatibility if needed, but we target 64-bit)
+        // 2. GetWindowLongPtrW (Fallback to GetWindowLongW for 32-bit compatibility if
+        // needed, but we target 64-bit)
         // LONG_PTR GetWindowLongPtrW(HWND hWnd, int nIndex);
         MethodHandle getWindowLong = findFunctionOptional("GetWindowLongPtrW",
-            FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
+                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
         if (getWindowLong == null) {
             getWindowLong = findFunction("GetWindowLongW",
-                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT)); // Note: Returns 32-bit int extended to long
+                    FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT)); // Note:
+                                                                                                              // Returns
+                                                                                                              // 32-bit
+                                                                                                              // int
+                                                                                                              // extended
+                                                                                                              // to long
         }
         GetWindowLongPtrW = getWindowLong;
 
         // 3. SetWindowLongPtrW (Fallback to SetWindowLongW)
         // LONG_PTR SetWindowLongPtrW(HWND hWnd, int nIndex, LONG_PTR dwNewLong);
         MethodHandle setWindowLong = findFunctionOptional("SetWindowLongPtrW",
-            FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG));
+                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT,
+                        ValueLayout.JAVA_LONG));
         if (setWindowLong == null) {
             setWindowLong = findFunction("SetWindowLongW",
-                FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG));
+                    FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT,
+                            ValueLayout.JAVA_LONG));
         }
         SetWindowLongPtrW = setWindowLong;
 
         // 4. SetLayeredWindowAttributes
-        // BOOL SetLayeredWindowAttributes(HWND hwnd, COLORREF crKey, BYTE bAlpha, DWORD dwFlags);
+        // BOOL SetLayeredWindowAttributes(HWND hwnd, COLORREF crKey, BYTE bAlpha, DWORD
+        // dwFlags);
         SetLayeredWindowAttributes = findFunction("SetLayeredWindowAttributes",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_BYTE, ValueLayout.JAVA_INT));
-            
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_INT,
+                        ValueLayout.JAVA_BYTE, ValueLayout.JAVA_INT));
+
         // 5. MonitorFromWindow
         // HMONITOR MonitorFromWindow(HWND hwnd, DWORD dwFlags);
         MonitorFromWindow = findFunction("MonitorFromWindow",
-            FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
 
         // 6. GetMonitorInfoW
         // BOOL GetMonitorInfoW(HMONITOR hMonitor, LPMONITORINFO lpmi);
         GetMonitorInfoW = findFunction("GetMonitorInfoW",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
 
         // 7. GetDpiForWindow (Windows 10 1607+)
         // UINT GetDpiForWindow(HWND hwnd);
         MethodHandle getDpi = findFunctionOptional("GetDpiForWindow",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
         if (getDpi == null) {
             // Fallback for older Windows if needed, though we target Win10+
             System.err.println("[NativeWindowUtil] GetDpiForWindow not found.");
@@ -131,43 +138,52 @@ public class NativeWindowUtil {
         GetDpiForWindow = getDpi;
 
         // 8. SetWindowPos
-        // BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags);
+        // BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int
+        // cy, UINT uFlags);
         SetWindowPos = findFunction("SetWindowPos",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS,
+                        ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT,
+                        ValueLayout.JAVA_INT));
 
         // 9. UpdateLayeredWindow
-        // BOOL UpdateLayeredWindow(HWND hWnd, HDC hdcDst, POINT *pptDst, SIZE *psize, HDC hdcSrc, POINT *pptSrc, COLORREF crKey, BLENDFUNCTION *pblend, DWORD dwFlags);
+        // BOOL UpdateLayeredWindow(HWND hWnd, HDC hdcDst, POINT *pptDst, SIZE *psize,
+        // HDC hdcSrc, POINT *pptSrc, COLORREF crKey, BLENDFUNCTION *pblend, DWORD
+        // dwFlags);
         UpdateLayeredWindow = findFunction("UpdateLayeredWindow",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS,
+                        ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS,
+                        ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
 
         // --- GDI32 Functions ---
         // HDC CreateCompatibleDC(HDC hdc);
         CreateCompatibleDC = findFunctionGdi("CreateCompatibleDC",
-            FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS));
 
-        // HBITMAP CreateBitmap(int nWidth, int nHeight, UINT nPlanes, UINT nBitCount, const void *lpBits);
+        // HBITMAP CreateBitmap(int nWidth, int nHeight, UINT nPlanes, UINT nBitCount,
+        // const void *lpBits);
         CreateBitmap = findFunctionGdi("CreateBitmap",
-            FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT,
+                        ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
 
         // HGDIOBJ SelectObject(HDC hdc, HGDIOBJ h);
         SelectObject = findFunctionGdi("SelectObject",
-            FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
 
         // BOOL DeleteObject(HGDIOBJ ho);
         DeleteObject = findFunctionGdi("DeleteObject",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
 
         // BOOL DeleteDC(HDC hdc);
         DeleteDC = findFunctionGdi("DeleteDC",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
 
         // HDC GetDC(HWND hWnd);
         GetDC = findFunction("GetDC",
-            FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS));
 
         // int ReleaseDC(HWND hWnd, HDC hDC);
         ReleaseDC = findFunction("ReleaseDC",
-            FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
     }
 
     /**
@@ -175,9 +191,8 @@ public class NativeWindowUtil {
      */
     private static MethodHandle findFunction(String name, FunctionDescriptor descriptor) {
         return LINKER.downcallHandle(
-            USER32.find(name).orElseThrow(() -> new UnsatisfiedLinkError("Symbol not found: " + name)),
-            descriptor
-        );
+                USER32.find(name).orElseThrow(() -> new UnsatisfiedLinkError("Symbol not found: " + name)),
+                descriptor);
     }
 
     /**
@@ -185,9 +200,8 @@ public class NativeWindowUtil {
      */
     private static MethodHandle findFunctionGdi(String name, FunctionDescriptor descriptor) {
         return LINKER.downcallHandle(
-            GDI32.find(name).orElseThrow(() -> new UnsatisfiedLinkError("Symbol not found in GDI32: " + name)),
-            descriptor
-        );
+                GDI32.find(name).orElseThrow(() -> new UnsatisfiedLinkError("Symbol not found in GDI32: " + name)),
+                descriptor);
     }
 
     /**
@@ -195,16 +209,16 @@ public class NativeWindowUtil {
      */
     private static MethodHandle findFunctionOptional(String name, FunctionDescriptor descriptor) {
         return USER32.find(name)
-            .map(symbol -> LINKER.downcallHandle(symbol, descriptor))
-            .orElse(null);
+                .map(symbol -> LINKER.downcallHandle(symbol, descriptor))
+                .orElse(null);
     }
 
     /**
      * 物理座標を論理座標に変換します (Per-Monitor DPI 対応)。
      * 
      * @param hwndSegment ウィンドウハンドル (HWND)
-     * @param x 物理 X 座標
-     * @param y 物理 Y 座標
+     * @param x           物理 X 座標
+     * @param y           物理 Y 座標
      * @return 論理座標 (Point)。変換に失敗した場合は入力座標をそのまま返します。
      */
     public static Point convertPhysicalToLogical(MemorySegment hwndSegment, int x, int y) {
@@ -276,7 +290,8 @@ public class NativeWindowUtil {
     public static java.awt.Rectangle getWorkAreaForWindow(MemorySegment hwndSegment) {
         try (Arena arena = Arena.ofConfined()) {
             // 1. MonitorFromWindow でモニタハンドルを取得
-            MemorySegment hMonitor = (MemorySegment) MonitorFromWindow.invokeExact(hwndSegment, MONITOR_DEFAULTTONEAREST);
+            MemorySegment hMonitor = (MemorySegment) MonitorFromWindow.invokeExact(hwndSegment,
+                    MONITOR_DEFAULTTONEAREST);
 
             // 2. MONITORINFO 構造体を準備
             MemorySegment monitorInfo = arena.allocate(MONITORINFO_LAYOUT);
@@ -291,7 +306,7 @@ public class NativeWindowUtil {
 
             // 4. rcWork (物理座標) を取得
             // rcWork は offset 20 (cbSize:4 + rcMonitor:16)
-            long rcWorkOffset = 4 + 16; 
+            long rcWorkOffset = 4 + 16;
             int left = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset);
             int top = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 4);
             int right = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 8);
@@ -309,11 +324,13 @@ public class NativeWindowUtil {
 
     /**
      * ウィンドウのDPIを取得します。
+     * 
      * @param hwndSegment ウィンドウハンドル
      * @return DPI値 (取得できない場合はデフォルトの96を返す)
      */
     public static int getDpiForWindow(MemorySegment hwndSegment) {
-        if (GetDpiForWindow == null) return 96;
+        if (GetDpiForWindow == null)
+            return 96;
         try {
             return (int) GetDpiForWindow.invokeExact(hwndSegment);
         } catch (Throwable t) {
@@ -339,15 +356,17 @@ public class NativeWindowUtil {
      */
     public static java.awt.Rectangle getPhysicalWorkArea(MemorySegment hwndSegment) {
         try (Arena arena = Arena.ofConfined()) {
-            MemorySegment hMonitor = (MemorySegment) MonitorFromWindow.invokeExact(hwndSegment, MONITOR_DEFAULTTONEAREST);
+            MemorySegment hMonitor = (MemorySegment) MonitorFromWindow.invokeExact(hwndSegment,
+                    MONITOR_DEFAULTTONEAREST);
 
             MemorySegment monitorInfo = arena.allocate(MONITORINFO_LAYOUT);
             monitorInfo.set(ValueLayout.JAVA_INT, 0, (int) MONITORINFO_LAYOUT.byteSize());
 
             int result = (int) GetMonitorInfoW.invokeExact(hMonitor, monitorInfo);
-            if (result == 0) return null;
+            if (result == 0)
+                return null;
 
-            long rcWorkOffset = 4 + 16; 
+            long rcWorkOffset = 4 + 16;
             int left = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset);
             int top = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 4);
             int right = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 8);
@@ -363,9 +382,9 @@ public class NativeWindowUtil {
      * UpdateLayeredWindow を使用して、透過画像を含むウィンドウを描画します。
      * 
      * @param hwndSegment ウィンドウハンドル
-     * @param pBits 画像データ (ARGB) へのポインタ
-     * @param width 画像幅
-     * @param height 画像高さ
+     * @param pBits       画像データ (ARGB) へのポインタ
+     * @param width       画像幅
+     * @param height      画像高さ
      */
     public static void updateLayeredWindow(MemorySegment hwndSegment, MemorySegment pBits, int width, int height) {
         try (Arena arena = Arena.ofConfined()) {
@@ -380,7 +399,7 @@ public class NativeWindowUtil {
 
             // 3. 構造体の準備
             MemorySegment pptDst = MemorySegment.NULL; // 位置は変更しない
-            
+
             MemorySegment psize = arena.allocate(SIZE_LAYOUT);
             psize.set(ValueLayout.JAVA_INT, 0, width);
             psize.set(ValueLayout.JAVA_INT, 4, height);
@@ -391,22 +410,22 @@ public class NativeWindowUtil {
 
             MemorySegment pblend = arena.allocate(BLENDFUNCTION_LAYOUT);
             pblend.set(ValueLayout.JAVA_BYTE, 0, AC_SRC_OVER); // BlendOp
-            pblend.set(ValueLayout.JAVA_BYTE, 1, (byte) 0);    // BlendFlags
-            pblend.set(ValueLayout.JAVA_BYTE, 2, (byte) 255);  // SourceConstantAlpha (255 = per-pixel alpha uses image alpha)
+            pblend.set(ValueLayout.JAVA_BYTE, 1, (byte) 0); // BlendFlags
+            pblend.set(ValueLayout.JAVA_BYTE, 2, (byte) 255); // SourceConstantAlpha (255 = per-pixel alpha uses image
+                                                              // alpha)
             pblend.set(ValueLayout.JAVA_BYTE, 3, AC_SRC_ALPHA);// AlphaFormat
 
             // 4. UpdateLayeredWindow 呼び出し
             UpdateLayeredWindow.invoke(
-                hwndSegment,
-                screenDC,
-                pptDst,
-                psize,
-                memDC,
-                pptSrc,
-                0,      // crKey (not used with ULW_ALPHA)
-                pblend,
-                ULW_ALPHA
-            );
+                    hwndSegment,
+                    screenDC,
+                    pptDst,
+                    psize,
+                    memDC,
+                    pptSrc,
+                    0, // crKey (not used with ULW_ALPHA)
+                    pblend,
+                    ULW_ALPHA);
 
             // 5. クリーンアップ
             SelectObject.invoke(memDC, oldBitmap); // 元のビットマップに戻す
@@ -416,8 +435,219 @@ public class NativeWindowUtil {
 
         } catch (Throwable t) {
             // 頻繁に呼ばれるため、スタックトレースは抑制するか、重大なエラーのみログ出力
-            // t.printStackTrace(); 
+            // t.printStackTrace();
             System.err.println("ULW Failed: " + t.getMessage());
+        }
+    }
+
+    // --- Added for Phase 5 Migration ---
+
+    private static final MethodHandle GetWindowRect;
+    private static final MethodHandle GetWindowTextW;
+    private static final MethodHandle GetForegroundWindow;
+    private static final MethodHandle IsWindow;
+    private static final MethodHandle IsIconic;
+
+    // --- MethodHandles for Environment Sensing ---
+    private static final MethodHandle IsWindowVisible;
+    private static final MethodHandle IsZoomed;
+    private static final MethodHandle GetWindowThreadProcessId;
+    private static final MethodHandle EnumWindows;
+
+    static {
+        // BOOL GetWindowRect(HWND hWnd, LPRECT lpRect);
+        GetWindowRect = findFunction("GetWindowRect",
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+
+        // int GetWindowTextW(HWND hWnd, LPWSTR lpString, int nMaxCount);
+        GetWindowTextW = findFunction("GetWindowTextW",
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS,
+                        ValueLayout.JAVA_INT));
+
+        // HWND GetForegroundWindow();
+        GetForegroundWindow = findFunction("GetForegroundWindow",
+                FunctionDescriptor.of(ValueLayout.ADDRESS));
+
+        // BOOL IsWindow(HWND hWnd);
+        IsWindow = findFunction("IsWindow",
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
+
+        // BOOL IsIconic(HWND hWnd);
+        IsIconic = findFunction("IsIconic",
+                FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
+    }
+
+    static {
+        try {
+            IsWindowVisible = LINKER.downcallHandle(
+                    USER32.find("IsWindowVisible").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS));
+            IsZoomed = LINKER.downcallHandle(
+                    USER32.find("IsZoomed").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS));
+            GetWindowThreadProcessId = LINKER.downcallHandle(
+                    USER32.find("GetWindowThreadProcessId").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
+
+            // EnumWindows: BOOL EnumWindows(WNDENUMPROC lpEnumFunc, LPARAM lParam)
+            EnumWindows = LINKER.downcallHandle(
+                    USER32.find("EnumWindows").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG));
+
+        } catch (Throwable t) {
+            throw new ExceptionInInitializerError(t);
+        }
+    }
+
+    public static boolean isWindowVisible(MemorySegment hwnd) {
+        try {
+            return (boolean) IsWindowVisible.invokeExact(hwnd);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    public static boolean isZoomed(MemorySegment hwnd) {
+        try {
+            return (boolean) IsZoomed.invokeExact(hwnd);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    public static int getWindowThreadProcessId(MemorySegment hwnd) {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment pidPtr = arena.allocate(ValueLayout.JAVA_INT);
+            int threadId = (int) GetWindowThreadProcessId.invokeExact(hwnd, pidPtr);
+            return pidPtr.get(ValueLayout.JAVA_INT, 0);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    @FunctionalInterface
+    public interface EnumWindowsProc {
+        boolean callback(MemorySegment hwnd, long lParam);
+    }
+
+    public static void enumWindows(EnumWindowsProc proc, long lParam) {
+        try (Arena arena = Arena.ofConfined()) {
+            // Callback descriptor: BOOL callback(HWND, LPARAM)
+            FunctionDescriptor callbackDesc = FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS,
+                    ValueLayout.JAVA_LONG);
+
+            MethodHandle handle = MethodHandles.lookup().findVirtual(EnumWindowsProc.class, "callback",
+                    MethodType.methodType(boolean.class, MemorySegment.class, long.class));
+            handle = handle.bindTo(proc);
+
+            MemorySegment stub = LINKER.upcallStub(handle, callbackDesc, arena);
+            int result = (int) EnumWindows.invokeExact(stub, lParam);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    // --- Window Control ---
+    private static final MethodHandle ShowWindow;
+    private static final MethodHandle MoveWindow;
+
+    public static final int SW_RESTORE = 9;
+
+    static {
+        try {
+            ShowWindow = LINKER.downcallHandle(
+                    USER32.find("ShowWindow").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
+            MoveWindow = LINKER.downcallHandle(
+                    USER32.find("MoveWindow").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS, ValueLayout.JAVA_INT,
+                            ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT,
+                            ValueLayout.JAVA_BOOLEAN));
+        } catch (Throwable t) {
+            throw new ExceptionInInitializerError(t);
+        }
+    }
+
+    public static boolean showWindow(MemorySegment hwnd, int nCmdShow) {
+        try {
+            return (boolean) ShowWindow.invokeExact(hwnd, nCmdShow);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    public static boolean moveWindow(MemorySegment hwnd, int x, int y, int width, int height, boolean repaint) {
+        try {
+            return (boolean) MoveWindow.invokeExact(hwnd, x, y, width, height, repaint);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    public static com.group_finity.mascot.type.NeoRect getWindowRect(MemorySegment hwnd) {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment rect = arena.allocate(RECT_LAYOUT);
+            int result = (int) GetWindowRect.invokeExact(hwnd, rect);
+            if (result == 0)
+                return null;
+
+            int left = rect.get(ValueLayout.JAVA_INT, 0);
+            int top = rect.get(ValueLayout.JAVA_INT, 4);
+            int right = rect.get(ValueLayout.JAVA_INT, 8);
+            int bottom = rect.get(ValueLayout.JAVA_INT, 12);
+
+            return new com.group_finity.mascot.type.NeoRect(left, top, right - left, bottom - top);
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to GetWindowRect", t);
+        }
+    }
+
+    public static String getWindowText(MemorySegment hwnd) {
+        try (Arena arena = Arena.ofConfined()) {
+            // Allocate for 512 wide characters (LPWSTR)
+            MemorySegment buffer = arena.allocateArray(ValueLayout.JAVA_CHAR, 512);
+            int length = (int) GetWindowTextW.invokeExact(hwnd, buffer, 512);
+            if (length == 0)
+                return "";
+
+            // Read into char array
+            char[] chars = new char[length];
+            MemorySegment.copy(buffer, ValueLayout.JAVA_CHAR, 0, chars, 0, length);
+            return new String(chars);
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to GetWindowText", t);
+        }
+    }
+
+    // versions,
+    // but on Windows WCHAR is UTF-16LE. We need to be careful.
+    // However, Java 22+ has generic getString(charset). If we are strictly Java 21,
+    // we might need to copy bytes to a standard char array.)
+    // Let's refine getWindowText for safety in Java 21 preview.
+
+    public static MemorySegment getForegroundWindow() {
+        try {
+            return (MemorySegment) GetForegroundWindow.invokeExact();
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to GetForegroundWindow", t);
+        }
+    }
+
+    public static boolean isWindow(MemorySegment hwnd) {
+        try {
+            int result = (int) IsWindow.invokeExact(hwnd);
+            return result != 0;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    public static boolean isIconic(MemorySegment hwnd) {
+        try {
+            int result = (int) IsIconic.invokeExact(hwnd);
+            return result != 0;
+        } catch (Throwable t) {
+            return false;
         }
     }
 }

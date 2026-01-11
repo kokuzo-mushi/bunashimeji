@@ -23,9 +23,11 @@ import com.group_finity.mascot.trigger.expr.type.TypeResolver;
 /**
  * D-5 Modified version:
  * - Get using AST+Mode key only (dependencies not included in key)
- * - HIT judgment is done by comparing dependencies in EvaluationResult with "current dependency values"
+ * - HIT judgment is done by comparing dependencies in EvaluationResult with
+ * "current dependency values"
  * - Call clearAccessLog() only when re-evaluating
- * - EvaluationContext shares reference to external variable map (responsibility of constructor caller)
+ * - EvaluationContext shares reference to external variable map (responsibility
+ * of constructor caller)
  */
 public class TriggerCondition {
 
@@ -38,7 +40,8 @@ public class TriggerCondition {
 
     public TriggerCondition(String expression, Map<String, Object> variables) {
         this.expression = expression;
-        if (variables == null) variables = new HashMap<>();
+        if (variables == null)
+            variables = new HashMap<>();
         // Assumes EvaluationContext has a reference-sharing constructor
         this.context = new EvaluationContext(variables, new DefaultTypeCoercion(), Mode.STRICT, true);
 
@@ -61,8 +64,10 @@ public class TriggerCondition {
     private static Set<EventType> analyzeDependencies(Expression ast, String expressionForLogging) {
         Set<EventType> events = EnumSet.noneOf(EventType.class);
 
-        // Fallback: If AST analysis yielded no events (and it's not a trivial constant),
-        // use Regex to find potential variables. This handles cases where AST parsing might fail or differ (e.g. GraalVM).
+        // Fallback: If AST analysis yielded no events (and it's not a trivial
+        // constant),
+        // use Regex to find potential variables. This handles cases where AST parsing
+        // might fail or differ (e.g. GraalVM).
         if (events.isEmpty()) {
             Set<String> regexVars = extractVariablesWithRegex(expressionForLogging);
             if (!regexVars.isEmpty()) {
@@ -75,7 +80,8 @@ public class TriggerCondition {
 
     private static Set<String> extractVariablesWithRegex(String expression) {
         Set<String> vars = new HashSet<>();
-        // Simple regex to find identifiers that might be variables (e.g., mascot.state, time)
+        // Simple regex to find identifiers that might be variables (e.g., mascot.state,
+        // time)
         Pattern p = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_.]*");
         Matcher m = p.matcher(expression);
         while (m.find()) {
@@ -84,13 +90,19 @@ public class TriggerCondition {
         return vars;
     }
 
-    public EvaluationContext getContext() { return context; }
+    public EvaluationContext getContext() {
+        return context;
+    }
+
     public void setVariable(String name, Object value) {
         if (context != null && context.getVariables() != null) {
             context.getVariables().put(name, value);
         }
     }
-    public String getExpression() { return expression; }
+
+    public String getExpression() {
+        return expression;
+    }
 
     public Set<EventType> getSubscribedEventTypes() {
         return subscribedEventTypes;
@@ -105,7 +117,8 @@ public class TriggerCondition {
             this.context = new EvaluationContext(new HashMap<>(), new DefaultTypeCoercion(), Mode.STRICT, true);
         }
         EvaluationContext ctx = (externalCtx != null) ? externalCtx : this.context;
-        if (ctx == null) return false;
+        if (ctx == null)
+            return false;
 
         // 1) Build AST (fallback to false literal on failure)
         Expression ast = AST_CACHE.computeIfAbsent(expression, key -> {
@@ -121,10 +134,11 @@ public class TriggerCondition {
 
         // FIXME: Mascotオブジェクトのようなミュータブルな変数の内部状態変化を検知できないため、
         // 一時的にキャッシュを無効化して常に再評価するように修正
-        /*
         // 2) Get with AST+Mode key (dependencies not included in key)
-        ExprCacheKey astKey = ExprCacheKey.ofAst(ast, ctx.getMode());
-        Optional<EvaluationResult> cached = cacheManager.get(astKey);
+        com.group_finity.mascot.trigger.expr.cache.ExprCacheKey astKey = com.group_finity.mascot.trigger.expr.cache.ExprCacheKey
+                .ofAst(ast, ctx.getMode());
+        java.util.Optional<com.group_finity.mascot.trigger.expr.cache.EvaluationResult> cached = cacheManager
+                .get(astKey);
 
         // 3) HIT judgment by dependency comparison (clearAccessLog is not called here)
         if (cached.isPresent()) {
@@ -136,15 +150,15 @@ public class TriggerCondition {
                 currentDeps.put(key, ctx.getVariable(key));
             }
             if (!cached.get().isOutdated(currentDeps)) {
-                CacheStatsTracker.INSTANCE.recordHit(expression);
+                com.group_finity.mascot.trigger.expr.cache.CacheStatsTracker.INSTANCE.recordHit(expression);
                 return TypeResolver.toBoolean(cached.get().getValue());
             }
         }
-        CacheStatsTracker.INSTANCE.recordMiss(expression);
-        */
+        com.group_finity.mascot.trigger.expr.cache.CacheStatsTracker.INSTANCE.recordMiss(expression);
 
         // 4) Re-evaluate (clear access log only at this time)
         ctx.clearAccessLog();
+        long start = System.nanoTime(); // Start timing
         Object result;
         try {
             result = ast.evaluate(ctx);
@@ -153,20 +167,22 @@ public class TriggerCondition {
             e.printStackTrace();
             result = false;
         }
+        long end = System.nanoTime(); // End timing
 
-        /*
         // 5) Save dependency snapshot (put overwrites AST key)
         Map<String, Object> deps = ctx.snapshotDependencies();
-        EvaluationResult evalResult = new EvaluationResult(result, deps, end, end - start, ctx.getMode());
+        com.group_finity.mascot.trigger.expr.cache.EvaluationResult evalResult = new com.group_finity.mascot.trigger.expr.cache.EvaluationResult(
+                result, deps, end, end - start, ctx.getMode());
         cacheManager.put(astKey, evalResult);
-        */
 
         return TypeResolver.toBoolean(result);
     }
 
     @Override
-    public String toString() { return "TriggerCondition[" + expression + "]"; }
-    
+    public String toString() {
+        return "TriggerCondition[" + expression + "]";
+    }
+
     public static void clearGlobalCache() {
         cacheManager.clear();
         AST_CACHE.clear();

@@ -23,6 +23,9 @@ class WalkActionTest {
 
         mockAnimation = mock(Animation.class);
         when(mockAnimation.getTotalDuration()).thenReturn(600); // 300 + 300
+
+        // WalkAction requires mascot to be grounded to execute
+        when(mockMascot.isGrounded()).thenReturn(true);
     }
 
     @ParameterizedTest
@@ -62,7 +65,7 @@ class WalkActionTest {
         for (int i = 0; i < requiredFrames && walkAction.hasNext(); i++) {
             walkAction.execute(mockMascot);
         }
-        
+
         assertFalse(walkAction.hasNext(), "Action should finish after duration");
     }
 }

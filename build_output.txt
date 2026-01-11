@@ -1,0 +1,21 @@
+
+> Task :app:compileJava FAILED
+C:\bunashimeji\bunashimeji\app\src\main\java\com\group_finity\mascot\action\ClimbCeilingAction.java:16: エラー: yはNeoPointでprivateアクセスされます
+    private static final int TARGET_Y = ActionConstants.WALL_ANCHOR.y; // 壁の上端で頭が接する位置（足元基準）
+                                                                   ^
+ノート: 一部の入力ファイルはJava SE 21のプレビュー機能を使用します。
+ノート: 詳細は、-Xlint:previewオプションを指定して再コンパイルしてください。
+エラー1個
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 1s
+1 actionable task: 1 executed

@@ -24,13 +24,15 @@ public class BinaryExpression implements Expression {
         // 短絡評価 (Short-circuit evaluation)
         if (operator.equals("and") || operator.equals("&&")) {
             Boolean l = coercer.coerceTo(leftVal, Boolean.class, mode);
-            if (!Boolean.TRUE.equals(l)) return false;
+            if (!Boolean.TRUE.equals(l))
+                return false;
             Boolean r = coercer.coerceTo(right.evaluate(context), Boolean.class, mode);
             return Boolean.TRUE.equals(r);
         }
         if (operator.equals("or") || operator.equals("||")) {
             Boolean l = coercer.coerceTo(leftVal, Boolean.class, mode);
-            if (Boolean.TRUE.equals(l)) return true;
+            if (Boolean.TRUE.equals(l))
+                return true;
             Boolean r = coercer.coerceTo(right.evaluate(context), Boolean.class, mode);
             return Boolean.TRUE.equals(r);
         }
@@ -38,24 +40,45 @@ public class BinaryExpression implements Expression {
         Object rightVal = right.evaluate(context);
 
         switch (operator) {
-            case "==": return equals(leftVal, rightVal);
-            case "!=": return !equals(leftVal, rightVal);
-            case "===": return strictEquals(leftVal, rightVal);
-            case "!==": return !strictEquals(leftVal, rightVal);
-            case "<":  return compare(leftVal, rightVal) < 0;
-            case "<=": return compare(leftVal, rightVal) <= 0;
-            case ">":  return compare(leftVal, rightVal) > 0;
-            case ">=": return compare(leftVal, rightVal) >= 0;
+            case "==":
+                return equals(leftVal, rightVal);
+            case "!=":
+                return !equals(leftVal, rightVal);
+            case "===":
+                return strictEquals(leftVal, rightVal);
+            case "!==":
+                return !strictEquals(leftVal, rightVal);
+            case "<":
+                return compare(leftVal, rightVal) < 0;
+            case "<=":
+                return compare(leftVal, rightVal) <= 0;
+            case ">":
+                return compare(leftVal, rightVal) > 0;
+            case ">=":
+                return compare(leftVal, rightVal) >= 0;
             case "+":
-                if (leftVal instanceof String || rightVal instanceof String) {
-                    return String.valueOf(leftVal) + String.valueOf(rightVal);
+                Number lNum = com.group_finity.mascot.trigger.expr.type.TypeResolver.toNumber(leftVal);
+                Number rNum = com.group_finity.mascot.trigger.expr.type.TypeResolver.toNumber(rightVal);
+                if (lNum != null && rNum != null) {
+                    java.math.BigDecimal lBd = new java.math.BigDecimal(lNum.toString());
+                    java.math.BigDecimal rBd = new java.math.BigDecimal(rNum.toString());
+                    return lBd.add(rBd); // Return BigDecimal (Number)
                 }
-                return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) + toDouble(coercer.coerceTo(rightVal, Double.class, mode));
-            case "-":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) - toDouble(coercer.coerceTo(rightVal, Double.class, mode));
-            case "*":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) * toDouble(coercer.coerceTo(rightVal, Double.class, mode));
-            case "/":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) / toDouble(coercer.coerceTo(rightVal, Double.class, mode));
-            case "%":  return toDouble(coercer.coerceTo(leftVal, Double.class, mode)) % toDouble(coercer.coerceTo(rightVal, Double.class, mode));
-            default: throw new RuntimeException("Unknown operator: " + operator);
+                return String.valueOf(leftVal) + String.valueOf(rightVal);
+            case "-":
+                return toDouble(coercer.coerceTo(leftVal, Double.class, mode))
+                        - toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            case "*":
+                return toDouble(coercer.coerceTo(leftVal, Double.class, mode))
+                        * toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            case "/":
+                return toDouble(coercer.coerceTo(leftVal, Double.class, mode))
+                        / toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            case "%":
+                return toDouble(coercer.coerceTo(leftVal, Double.class, mode))
+                        % toDouble(coercer.coerceTo(rightVal, Double.class, mode));
+            default:
+                throw new RuntimeException("Unknown operator: " + operator);
         }
     }
 
@@ -64,8 +87,10 @@ public class BinaryExpression implements Expression {
     }
 
     private boolean equals(Object a, Object b) {
-        if (a == b) return true;
-        if (a == null || b == null) return false;
+        if (a == b)
+            return true;
+        if (a == null || b == null)
+            return false;
         // 数値同士の比較ならdoubleとして比較
         if (a instanceof Number && b instanceof Number) {
             return ((Number) a).doubleValue() == ((Number) b).doubleValue();
@@ -81,8 +106,13 @@ public class BinaryExpression implements Expression {
     }
 
     private boolean strictEquals(Object a, Object b) {
-        if (a == b) return true;
-        if (a == null || b == null) return false;
+        if (a == b)
+            return true;
+        if (a == null || b == null)
+            return false;
+        if (a instanceof Number && b instanceof Number) {
+            return ((Number) a).doubleValue() == ((Number) b).doubleValue();
+        }
         return a.equals(b);
     }
 
@@ -91,12 +121,10 @@ public class BinaryExpression implements Expression {
         if (a instanceof Number && b instanceof Number) {
             return Double.compare(((Number) a).doubleValue(), ((Number) b).doubleValue());
         }
-        if (a instanceof Comparable && b instanceof Comparable) {
-            return ((Comparable<Object>) a).compareTo(b);
-        }
-        return 0;
+        // Fallback to String comparison
+        return String.valueOf(a).compareTo(String.valueOf(b));
     }
-    
+
     @Override
     public String toString() {
         return "(" + left + " " + operator + " " + right + ")";

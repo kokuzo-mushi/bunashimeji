@@ -2,9 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.nativeaccess.Win32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.RECT;
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
+import com.group_finity.mascot.type.NeoRect;
+import java.lang.foreign.MemorySegment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
@@ -28,7 +28,8 @@ public class ChaseAction implements Action {
 
     @Override
     public void execute(Mascot mascot) {
-        if (!hasNext()) return;
+        if (!hasNext())
+            return;
 
         // 接地していない場合はアクションを終了する（落下させるため）
         if (!mascot.isGrounded()) {
@@ -50,7 +51,7 @@ public class ChaseAction implements Action {
 
             // 壁にぶつかっていて、かつその方向に進もうとしている場合は終了
             if ((mascot.isHittingLeftWall() && !mascot.isLookRight()) ||
-                (mascot.isHittingRightWall() && mascot.isLookRight())) {
+                    (mascot.isHittingRightWall() && mascot.isLookRight())) {
                 timeRemaining = 0;
                 return;
             }
@@ -60,14 +61,13 @@ public class ChaseAction implements Action {
 
             // 床の端チェック: 次の一歩で床から落ちるなら止まる
             if (mascot.isGrounded()) {
-                HWND floor = mascot.getFloorWindow();
-                if (floor != null && Win32.INSTANCE.IsWindow(floor)) {
-                    RECT rect = new RECT();
-                    Win32.INSTANCE.GetWindowRect(floor, rect);
-                    if (nextX <= rect.left || nextX >= rect.right) {
+                MemorySegment floor = mascot.getFloorWindow();
+                if (floor != null && NativeWindowUtil.isWindow(floor)) {
+                    NeoRect rect = NativeWindowUtil.getWindowRect(floor);
+                    if (nextX <= rect.left() || nextX >= rect.right()) {
                         // 端ギリギリまで移動して止まる
                         int direction = (nextX - mascot.getX() > 0) ? 1 : -1;
-                        int edgeX = (direction > 0) ? rect.right - 5 : rect.left + 5;
+                        int edgeX = (direction > 0) ? rect.right() - 5 : rect.left() + 5;
                         mascot.setX(edgeX);
 
                         timeRemaining = 0;

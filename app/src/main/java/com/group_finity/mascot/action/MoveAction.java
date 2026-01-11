@@ -10,18 +10,18 @@ import java.awt.Point;
  */
 public class MoveAction implements Action {
 
-    private final Point target;
+    private final com.group_finity.mascot.type.NeoPoint target;
     private final int duration;
 
     // アクション開始時の座標
-    private Point startPoint;
+    private com.group_finity.mascot.type.NeoPoint startPoint;
     // アクションの内部的な経過時間
     private int timeElapsed;
     // アクションが完了したかどうかを示すフラグ
     private boolean isFinished;
 
     public MoveAction(XmlPoint target, int duration) {
-        this.target = new Point(target.getX(), target.getY());
+        this.target = new com.group_finity.mascot.type.NeoPoint(target.getX(), target.getY());
         this.duration = Math.max(0, duration); // 負のdurationを防ぐ
         this.timeElapsed = 0;
         this.isFinished = false;
@@ -52,9 +52,9 @@ public class MoveAction implements Action {
         // 進捗率を計算 (0.0 ~ 1.0)
         double progress = Math.min((double) this.timeElapsed / this.duration, 1.0);
 
-        int newX = (int) (startPoint.x + (target.x - startPoint.x) * progress);
-        int newY = (int) (startPoint.y + (target.y - startPoint.y) * progress);
-        mascot.setAnchor(new Point(newX, newY));
+        int newX = (int) (startPoint.x() + (target.x() - startPoint.x()) * progress);
+        int newY = (int) (startPoint.y() + (target.y() - startPoint.y()) * progress);
+        mascot.setAnchor(new com.group_finity.mascot.type.NeoPoint(newX, newY));
 
         if (progress >= 1.0) {
             this.isFinished = true;

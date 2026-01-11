@@ -1,0 +1,517 @@
+> Task :app:compileJava
+> Task :app:processResources UP-TO-DATE
+> Task :app:classes
+> Task :app:compileTestJava
+> Task :app:processTestResources UP-TO-DATE
+> Task :app:testClasses
+
+> Task :app:test
+
+ConfigurationTest > load_shouldParseXmlAndCreateBehaviors(Path) STANDARD_OUT
+    DEBUG: Setting LoopCount to 2 for MySequence
+
+ConfigurationTest > load_shouldParseXmlAndCreateBehaviors(Path) STANDARD_ERROR
+    [To redirect Truffle log output to a file use one of the following options:
+    * '--log.file=<path>' if the option is passed using a guest language launcher.
+    * '-Dpolyglot.log.file=<path>' if the option is passed using the host Java launcher.
+    * Configure logging using the polyglot embedding API.]
+    [engine] WARNING: The polyglot engine uses a fallback runtime that does not support runtime compilation to native code.
+    Execution without runtime compilation will negatively impact the guest application performance.
+    The following cause was found: JVMCI is not enabled for this JVM. Enable JVMCI using -XX:+EnableJVMCI.
+    For more information see: https://www.graalvm.org/latest/reference-manual/embed-languages/#runtime-optimization-support.
+    To disable this warning use the '--engine.WarnInterpreterOnly=false' option or the '-Dpolyglot.engine.WarnInterpreterOnly=false' system property.
+    [To redirect Truffle log output to a file use one of the following options:
+    * '--log.file=<path>' if the option is passed using a guest language launcher.
+    * '-Dpolyglot.log.file=<path>' if the option is passed using the host Java launcher.
+    * Configure logging using the polyglot embedding API.]
+    [engine] WARNING: The polyglot engine uses a fallback runtime that does not support runtime compilation to native code.
+    Execution without runtime compilation will negatively impact the guest application performance.
+    The following cause was found: JVMCI is not enabled for this JVM. Enable JVMCI using -XX:+EnableJVMCI.
+    For more information see: https://www.graalvm.org/latest/reference-manual/embed-languages/#runtime-optimization-support.
+    To disable this warning use the '--engine.WarnInterpreterOnly=false' option or the '-Dpolyglot.engine.WarnInterpreterOnly=false' system property.
+
+ConfigurationTest > load_shouldParseXmlAndCreateBehaviors(Path) STANDARD_OUT
+    DEBUG: Sequence Reset. LoopCount=2, CurrentLoop=1
+    DEBUG: Sequence Finished. LoopCount=2, CurrentLoop=2
+
+ConfigurationTest > load_shouldParseXmlAndCreateBehaviors(Path) FAILED
+    org.opentest4j.AssertionFailedError: ループ設定があるため、1周目終了後も継続しているべき ==> expected: <true> but was: <false>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+        at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+        at app//org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+        at app//com.group_finity.mascot.behavior.ConfigurationTest.load_shouldParseXmlAndCreateBehaviors(ConfigurationTest.java:177)
+
+EventLogAggregatorTest > testBatchingAndOrder() FAILED
+    org.opentest4j.AssertionFailedError: バッチサイズが期待通り ==> expected: <[3, 3, 1]> but was: <[1, 3, 3]>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+        at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+        at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1156)
+        at app//com.group_finity.mascot.log.EventLogAggregatorTest.testBatchingAndOrder(EventLogAggregatorTest.java:57)
+
+EventLogAggregatorTest > testGracefulShutdownFlushesRemaining() PASSED
+
+EventLogAggregatorTest > testDropOldestPolicy() PASSED
+
+ExprTriggerAdvancedTest > testNestedParentheses() PASSED
+
+ExprTriggerAdvancedTest > testUnaryOperations() STANDARD_OUT
+    DEBUG +5===5: false
+
+ExprTriggerAdvancedTest > testUnaryOperations() FAILED
+    org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+        at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+        at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:31)
+        at app//org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:183)
+        at app//com.group_finity.mascot.trigger.expr.ExprTriggerAdvancedTest.testUnaryOperations(ExprTriggerAdvancedTest.java:79)
+
+ExprTriggerAdvancedTest > testStringEqualityAndInequality() PASSED
+
+ExprTriggerAdvancedTest > testArithmeticAndComparison() PASSED
+
+ExprTriggerAdvancedTest > testBooleanLogic() PASSED
+
+ExprTriggerAdvancedTest > testVariablesAndCoercion() PASSED
+
+ExprTriggerAdvancedTest > testComplexMixedExpression() PASSED
+
+ExpressionEngineTypeTest > nullCoercion() PASSED
+
+ExpressionEngineTypeTest > booleanCoercion() PASSED
+
+ExpressionEngineTypeTest > stringToNumberCoercion() FAILED
+    java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Number (java.lang.String and java.lang.Number are in module java.base of loader 'bootstrap')
+        at com.group_finity.mascot.trigger.expr.ExpressionEngineTypeTest.stringToNumberCoercion(ExpressionEngineTypeTest.java:32)
+
+ExpressionEngineTypeTest > mixedComparison() STANDARD_ERROR
+    [ExpressionEngine] evaluate error for ""10.5" < 11": class java.lang.Integer cannot be cast to class java.lang.String (java.lang.Integer and java.lang.String are in module java.base of loader 'bootstrap')
+
+ExpressionEngineTypeTest > mixedComparison() FAILED
+    org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+        at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+        at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:177)
+        at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1145)
+        at app//com.group_finity.mascot.trigger.expr.ExpressionEngineTypeTest.mixedComparison(ExpressionEngineTypeTest.java:38)
+
+ExpressionEngineTypeTest > stringConcatenation() PASSED
+
+ExprCacheIntegrationTest > Step 1: Correctly evaluated without cache FAILED
+    org.opentest4j.AssertionFailedError: Expression 'x + 1 === 2' should be true ==> expected: <true> but was: <false>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+        at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+        at app//org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+        at app//com.group_finity.mascot.trigger.expr.cache.ExprCacheIntegrationTest.testInitialEvaluation(ExprCacheIntegrationTest.java:53)
+
+ExprCacheIntegrationTest > Step 2: Cache hit under same conditions FAILED
+    org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+        at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+        at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:31)
+        at app//org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:183)
+        at app//com.group_finity.mascot.trigger.expr.cache.ExprCacheIntegrationTest.testCacheHit(ExprCacheIntegrationTest.java:68)
+
+ExprCacheIntegrationTest > Step 3: Cache miss when dependent variable changes FAILED
+    org.opentest4j.AssertionFailedError: expected: <1> but was: <0>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+        at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:166)
+        at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:161)
+        at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:632)
+        at app//com.group_finity.mascot.trigger.expr.cache.ExprCacheIntegrationTest.testCacheMissOnVariableChange(ExprCacheIntegrationTest.java:81)
+
+ExprCacheIntegrationTest > Step 4: Verify difference between STRICT and LOOSE modes FAILED
+    org.opentest4j.AssertionFailedError: At least 2 misses should occur ==> expected: <true> but was: <false>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+        at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+        at app//org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+        at app//com.group_finity.mascot.trigger.expr.cache.ExprCacheIntegrationTest.testStrictVsLoose(ExprCacheIntegrationTest.java:114)
+
+AnimateActionTest > hasNext_shouldReturnFalse_afterAnimationDuration() STANDARD_ERROR
+    WARNING: A Java agent has been loaded dynamically (C:\Users\81803\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.15\b4cc9d88d5de562bf75b3a54ab436ad01b3f72d\byte-buddy-agent-1.14.15.jar)
+    WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+    WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+    WARNING: Dynamic loading of agents will be disallowed by default in a future release
+
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+
+> Task :app:test
+
+AnimateActionTest > hasNext_shouldReturnFalse_afterAnimationDuration() PASSED
+
+AnimateActionTest > execute_shouldSetAnimationOnMascot() PASSED
+
+ClimbActionTest > testFaceLeftWall() PASSED
+
+ClimbActionTest > testFaceRightWall() PASSED
+
+DraggedActionTest > execute_shouldFinish_whenDragEnds() PASSED
+
+DraggedActionTest > execute_shouldContinue_whenBeingDragged() PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=0) -> 1 frames later -> Pos(0, 2) STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=0) -> 1 frames later -> Pos(0, 2) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=0) -> 2 frames later -> Pos(0, 6) STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=0) -> 2 frames later -> Pos(0, 6) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=0) -> 3 frames later -> Pos(0, 12) STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=0) -> 3 frames later -> Pos(0, 12) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=10, VY=0) -> 1 frames later -> Pos(10, 2) STANDARD_OUT
+    [FallAction] Initialized with velocity: (10.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=10, VY=0) -> 1 frames later -> Pos(10, 2) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=10, VY=0) -> 2 frames later -> Pos(19, 6) STANDARD_OUT
+    [FallAction] Initialized with velocity: (10.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=10, VY=0) -> 2 frames later -> Pos(19, 6) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=10, VY=0) -> 5 frames later -> Pos(40, 30) STANDARD_OUT
+    [FallAction] Initialized with velocity: (10.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=10, VY=0) -> 5 frames later -> Pos(40, 30) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=-10, VY=0) -> 1 frames later -> Pos(-10, 2) STANDARD_OUT
+    [FallAction] Initialized with velocity: (-10.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=-10, VY=0) -> 1 frames later -> Pos(-10, 2) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=-10, VY=0) -> 2 frames later -> Pos(-19, 6) STANDARD_OUT
+    [FallAction] Initialized with velocity: (-10.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=-10, VY=0) -> 2 frames later -> Pos(-19, 6) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=-10) -> 1 frames later -> Pos(0, -8) STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, -10)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=-10) -> 1 frames later -> Pos(0, -8) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=-10) -> 5 frames later -> Pos(0, -20) STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, -10)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=-10) -> 5 frames later -> Pos(0, -20) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=25, VY=0) -> 1 frames later -> Pos(25, 2) STANDARD_OUT
+    [FallAction] Initialized with velocity: (25.00, 0)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=25, VY=0) -> 1 frames later -> Pos(25, 2) PASSED
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=25) -> 1 frames later -> Pos(0, 25) STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, 25)
+
+FallActionTest > testTrajectorySimulation(int, int, int, int, int) > Init(VX=0, VY=25) -> 1 frames later -> Pos(0, 25) PASSED
+
+FallActionTest > execute_shouldFinish_whenOnGround() STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, 0)
+
+FallActionTest > execute_shouldFinish_whenOnGround() PASSED
+
+FallActionTest > execute_shouldIncreaseY_whenInAir() STANDARD_OUT
+    [FallAction] Initialized with velocity: (0.00, 0)
+
+FallActionTest > execute_shouldIncreaseY_whenInAir() PASSED
+
+FallActionTest > execute_shouldDecelerateVelocityX() STANDARD_OUT
+    [FallAction] Initialized with velocity: (10.00, 0)
+
+FallActionTest > execute_shouldDecelerateVelocityX() PASSED
+
+FallActionTest > execute_shouldInheritVelocity_andResetMascotVelocity() STANDARD_OUT
+    [FallAction] Initialized with velocity: (50.00, 10)
+
+FallActionTest > execute_shouldInheritVelocity_andResetMascotVelocity() PASSED
+
+JumpActionTest > execute_shouldFinish_whenLanding() PASSED
+
+JumpActionTest > execute_shouldMoveUpInitially() PASSED
+
+JumpActionTest > execute_shouldApplyGravity() PASSED
+
+LieDownActionTest > reset_shouldRandomizeDuration() PASSED
+
+LieDownActionTest > execute_shouldSetAnimation() PASSED
+
+LieDownActionTest > duration_shouldBeWithinRange() PASSED
+
+LieDownActionTest > hasNext_shouldDecreaseOverTime() PASSED
+
+MoveActionTest > execute_shouldMoveToTargetImmediately_whenDurationIsZero() PASSED
+
+MoveActionTest > hasNext_shouldReturnFalse_afterDuration() PASSED
+
+MoveActionTest > execute_shouldMoveIncrementally_whenDurationIsPositive() PASSED
+
+SequenceActionTest > execute_shouldSwitchToActionImmediately_whenPreviousActionFinishesInstantly() PASSED
+
+SequenceActionTest > execute_shouldExecuteActionsInOrder() STANDARD_OUT
+    DEBUG: Sequence Finished. LoopCount=1, CurrentLoop=1
+
+SequenceActionTest > execute_shouldExecuteActionsInOrder() PASSED
+
+SequenceActionTest > hasNext_shouldReturnFalse_forEmptySequence() PASSED
+
+StayActionTest > hasNext_shouldReturnTrue_withinDuration() PASSED
+
+StayActionTest > hasNext_shouldReturnFalse_afterDuration() PASSED
+
+TurnActionTest > execute_shouldToggleLookRight(boolean) > [1] true PASSED
+
+TurnActionTest > execute_shouldToggleLookRight(boolean) > [2] false PASSED
+
+TurnActionTest > hasNext_shouldReturnFalse_afterExecution() PASSED
+
+WalkActionTest > hasNext_shouldReturnFalse_afterAnimationDuration() PASSED
+
+WalkActionTest > execute_shouldMoveMascotInCorrectDirection(boolean, int, int, int) > [1] true, 100, 2, 102 PASSED
+
+WalkActionTest > execute_shouldMoveMascotInCorrectDirection(boolean, int, int, int) > [2] false, 100, 2, 98 PASSED
+
+WallClingActionTest > execute_shouldLookRight_whenHittingRightWall() PASSED
+
+WallClingActionTest > execute_shouldStopVelocity() PASSED
+
+WallClingActionTest > execute_shouldLookLeft_whenHittingLeftWall() PASSED
+
+AnimationTest > getPose_shouldReturnFirstPose_whenTotalDurationIsZero() PASSED
+
+AnimationTest > getPose_shouldLoop_whenTimeExceedsTotalDuration() PASSED
+
+AnimationTest > getPose_shouldReturnNull_whenPosesIsEmpty() PASSED
+
+AnimationTest > getPose_shouldReturnCorrectPose_afterTicking() PASSED
+
+AnimationTest > getPose_shouldReturnFirstPose_whenTimeIsZero() PASSED
+
+AnimationTest > constructor_shouldCalculateTotalDurationCorrectly() PASSED
+
+BehaviorTest > evaluate_shouldHandleFunctionCallWithArguments() PASSED
+
+BehaviorTest > evaluate_shouldReturnFalse_whenConditionIsNotMet() PASSED
+
+BehaviorTest > evaluate_shouldReturnTrue_whenConditionIsMet() PASSED
+
+BehaviorTest > getAction_shouldReturnConfiguredAction() PASSED
+
+BehaviorTest > evaluate_shouldHandleNoArgumentFunctionCall() PASSED
+
+ConfigurationTest > load_ShouldSucceed_WhenXmlIsValid() PASSED
+
+ConfigurationTest > load_ShouldThrowException_WhenXmlContainsDoctypeDeclaration() PASSED
+
+EventSystemTest > testEventVariableInjection() PASSED
+
+EventSystemTest > testEventDispatchingTriggersAction() PASSED
+
+EventWorkerPoolTest > testParallelExecutionAndShutdown() STANDARD_OUT
+    === Shimeji Neo - EventWorkerPool Parallel Test ===
+    [EventWorkerPool] Started with 3 workers.
+    [Worker-1] Task-A [LOW] executed
+    [Worker-2] Task-B [HIGH] executed
+    [Worker-3] Task-C [MEDIUM] executed
+    [Worker-1] Task-D [HIGH] executed
+    [Worker-2] Task-E [LOW] executed
+    [Worker-3] Task-F [MEDIUM] executed
+    [EventWorkerPool] Shutdown requested.
+    [Worker-2] Worker terminated safely.
+    [Worker-1] Worker terminated safely.
+    [Worker-3] Worker terminated safely.
+    [EventWorkerPool] All workers terminated safely.
+    === EventWorkerPool Test Completed ===
+
+EventWorkerPoolTest > testParallelExecutionAndShutdown() PASSED
+
+ImageCacheTest > getImage_shouldReturnDummyImage_whenFileDoesNotExist(Path) STANDARD_OUT
+    [ImageCache] Image not found: missing_texture.png (Fallback to Stay1.png)
+
+ImageCacheTest > getImage_shouldReturnDummyImage_whenFileDoesNotExist(Path) PASSED
+
+CornerMathTest > testCalculateAnchorPosition_LeftWall_End() PASSED
+
+CornerMathTest > testCalculateAnchorPosition_RightWall_End() PASSED
+
+CornerMathTest > testCalculateAnchorPosition_LeftWall_Start() PASSED
+
+GeneratorBehaviorTest > testGeneratorBehaviorExecution() PASSED
+
+TriggerConditionStaticAnalysisTest > Test various single dependency expressions > [1] tick > 0, SYSTEM_TICK PASSED
+
+TriggerConditionStaticAnalysisTest > Test various single dependency expressions > [2] ie.isForeground, ENVIRONMENT_CHANGED PASSED
+
+TriggerConditionStaticAnalysisTest > Expressions dependent on window.* variables should subscribe to ENVIRONMENT_CHANGED PASSED
+
+TriggerConditionStaticAnalysisTest > Expressions dependent on multiple types of variables should subscribe to all corresponding events PASSED
+
+TriggerConditionStaticAnalysisTest > Expressions dependent on mascot.* variables should subscribe to MASCOT_STATE_CHANGED PASSED
+
+TriggerConditionStaticAnalysisTest > Expressions dependent on time/tick variables should subscribe to SYSTEM_TICK PASSED
+
+TriggerConditionStaticAnalysisTest > Constant expressions containing no variables should not subscribe to any events PASSED
+
+ExprTriggerTest > testSimpleFalseCondition() PASSED
+
+ExprTriggerTest > testStringCondition() PASSED
+
+ExprTriggerTest > testSimpleTrueCondition() PASSED
+
+ExprTriggerTest > testParentheses() PASSED
+
+ExpressionEngineReflectionTest > testInvalidExpressionThrowsOrReturnsFalse() STANDARD_ERROR
+    [ExpressionEngine] evaluate error for "1 + * 2": Unexpected token: *
+
+ExpressionEngineReflectionTest > testInvalidExpressionThrowsOrReturnsFalse() PASSED
+
+ExpressionEngineReflectionTest > testSimpleArithmeticAndVariables() PASSED
+
+ExpressionEngineReflectionTest > testBooleanExpression() PASSED
+
+ExpressionEngineTest > testParenthesesPrecedence() PASSED
+
+ExpressionEngineTest > testBooleanComparison() PASSED
+
+ExpressionEngineTest > testSimpleArithmetic() PASSED
+
+ExpressionEngineTest > testInvalidExpressionReturnsFalse() STANDARD_ERROR
+    [ExpressionEngine] evaluate error for "1 + * 2": Unexpected token: *
+
+ExpressionEngineTest > testInvalidExpressionReturnsFalse() PASSED
+
+ExpressionEngineTest > testUnaryOperators() PASSED
+
+ExpressionEngineTest > testVariableLookup() PASSED
+
+ExpressionEngineTest > testEquality() PASSED
+
+DefaultTypeCoercionTest > testCoerceToDoubleFromString() PASSED
+
+DefaultTypeCoercionTest > testCoerceToBooleanFromStringAndNumber() PASSED
+
+DefaultTypeCoercionTest > testCoerceToDoubleFromFloat() PASSED
+
+DefaultTypeCoercionTest > testAlreadyCorrectTypeIsReturned() PASSED
+
+DefaultTypeCoercionTest > testCoerceToIntegerFromDouble() PASSED
+
+DefaultTypeCoercionTest > testCannotCoerceThrows() PASSED
+
+DefaultTypeCoercionTest > testNullInputReturnsNullForWrapperInStrict() PASSED
+
+DefaultTypeCoercionTest > testCoerceToIntegerFromString() PASSED
+
+DefaultTypeCoercionTest > testCoerceToString() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testRemainderByZero() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testGreaterThanOrEqual(int, int, boolean) > [1] 10, 5, true PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testGreaterThanOrEqual(int, int, boolean) > [2] 5, 10, false PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testGreaterThanOrEqual(int, int, boolean) > [3] 10, 10, true PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testBooleanAddition() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testUnknownBinaryOperator() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testLogicalOr() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testMultiplication() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testAddition() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > Equality with null values PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testGreaterThan(int, int, boolean) > [1] 10, 5, true PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testGreaterThan(int, int, boolean) > [2] 5, 10, false PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testGreaterThan(int, int, boolean) > [3] 10, 10, false PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testStringConcatenation() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testDivisionByZero() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testDivision() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testEquality(Object, Object, boolean) > [1] 10, 10, true PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testEquality(Object, Object, boolean) > [2] 10, 5, false PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testEquality(Object, Object, boolean) > [3] hello, hello, true PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testEquality(Object, Object, boolean) > [4] hello, world, false PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testEquality(Object, Object, boolean) > [5] true, true, true PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testLogicalAnd() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testRemainder() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testSubtraction() PASSED
+
+DefaultTypeResolverTest > Binary Operator Tests > testArithmeticWithNonNumericStringReturnsNull() PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > Logical Not with null input PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testUnknownUnaryOperator() PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testLogicalNot(Object, boolean) > [1] true, false PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testLogicalNot(Object, boolean) > [2] false, true PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testLogicalNot(Object, boolean) > [3] 1, false PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testLogicalNot(Object, boolean) > [4] 0, true PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testLogicalNot(Object, boolean) > [5] text, false PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testLogicalNot(Object, boolean) > [6] 0, true PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testLogicalNot(Object, boolean) > [7] , true PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testNegation(String, String) > [1] 5, -5 PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testNegation(String, String) > [2] 0, 0 PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testNegation(String, String) > [3] -10, 10 PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testNegation(String, String) > [4] 3.14, -3.14 PASSED
+
+DefaultTypeResolverTest > Unary Operator Tests > testUnaryPlus() PASSED
+
+156 tests completed, 9 failed
+
+> Task :app:test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:test'.
+> There were failing tests. See the report at: file:///C:/bunashimeji/bunashimeji/app/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 11s
+5 actionable tasks: 3 executed, 2 up-to-date

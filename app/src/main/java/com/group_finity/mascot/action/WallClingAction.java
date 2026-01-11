@@ -2,9 +2,9 @@ package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.nativeaccess.Win32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.RECT;
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
+import com.group_finity.mascot.type.NeoRect;
+import java.lang.foreign.MemorySegment;
 
 /**
  * 壁にしがみつくアクション。
@@ -40,20 +40,18 @@ public class WallClingAction implements Action {
             } else if (!hitLeft && !hitRight) {
                 // フラグが立っていない場合のフォールバック: 近くの壁を探して向きを決める
                 // (アクション遷移の隙間でフラグが落ちているケースへの対策)
-                HWND leftWall = mascot.getLeftWallWindow();
-                HWND rightWall = mascot.getRightWallWindow();
+                MemorySegment leftWall = mascot.getLeftWallWindow();
+                MemorySegment rightWall = mascot.getRightWallWindow();
                 int distLeft = Integer.MAX_VALUE;
                 int distRight = Integer.MAX_VALUE;
 
-                if (leftWall != null && Win32.INSTANCE.IsWindow(leftWall)) {
-                    RECT rect = new RECT();
-                    Win32.INSTANCE.GetWindowRect(leftWall, rect);
-                    distLeft = Math.abs(mascot.getX() - rect.right); // 左壁の右端とマスコット
+                if (leftWall != null && NativeWindowUtil.isWindow(leftWall)) {
+                    NeoRect rect = NativeWindowUtil.getWindowRect(leftWall);
+                    distLeft = Math.abs(mascot.getX() - rect.right()); // 左壁の右端とマスコット
                 }
-                if (rightWall != null && Win32.INSTANCE.IsWindow(rightWall)) {
-                    RECT rect = new RECT();
-                    Win32.INSTANCE.GetWindowRect(rightWall, rect);
-                    distRight = Math.abs(mascot.getX() - rect.left); // 右壁の左端とマスコット
+                if (rightWall != null && NativeWindowUtil.isWindow(rightWall)) {
+                    NeoRect rect = NativeWindowUtil.getWindowRect(rightWall);
+                    distRight = Math.abs(mascot.getX() - rect.left()); // 右壁の左端とマスコット
                 }
 
                 if (distLeft < distRight && distLeft < 50) {
@@ -65,7 +63,8 @@ public class WallClingAction implements Action {
             initialized = true;
         }
 
-        if (!hasNext()) return;
+        if (!hasNext())
+            return;
 
         final int FRAME_DURATION_MS = 40;
         mascot.setAnimation(animation);

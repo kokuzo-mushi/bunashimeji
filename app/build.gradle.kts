@@ -5,6 +5,8 @@ plugins {
     id ("application")
     // Phase 4: Packaging (jpackage wrapper)
     id ("org.beryx.runtime") version "1.13.1"
+    kotlin("jvm") version "1.9.22"
+    id("org.jetbrains.compose") version "1.6.0"
 }
 
 application {
@@ -20,6 +22,8 @@ java {
 
 repositories {
     mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    google()
 }
 
 dependencies {
@@ -27,6 +31,10 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation("org.graalvm.js:js:25.0.0")
     implementation("org.graalvm.polyglot:polyglot:25.0.0")
+
+    // --- Compose Multiplatform ---
+    implementation(compose.desktop.currentOs)
+    implementation(compose.material)
 
     // --- JAXB (for XML Parsing) ---
     // Java 9+では標準ライブラリから外れたため、明示的に追加する必要がある
@@ -66,6 +74,9 @@ tasks.withType<JavaExec>().configureEach {
         "-XX:+UseZGC",
         "-XX:+ZGenerational"
     )
+
+    // 実行時のカレントディレクトリをプロジェクトルート(confやimgがある場所)に設定
+    workingDir = rootProject.projectDir
 }
 
 // ✅ JUnit Platform を使うよう指定（重要）
@@ -161,4 +172,27 @@ runtime {
         // --win-menu: スタートメニューに追加
         installerOptions = listOf("--win-per-user-install", "--win-dir-chooser", "--win-menu", "--win-shortcut")
     }
+}
+
+tasks.register<JavaExec>("runPoC") {
+    group = "application"
+    description = "Runs the Compose PoC launcher"
+    mainClass.set("com.group_finity.mascot.poc.ComposeLauncherKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    // Set working directory to project root so we can find "img/shime1.png"
+    workingDir = project.rootProject.projectDir
+    jvmArgs(
+        "--enable-preview",
+        "--enable-native-access=ALL-UNNAMED",
+        "-Dsun.java2d.dpiaware=true",
+        "-Dsun.java2d.d3d=true",
+        "-Dsun.java2d.noddraw=false",
+        "-XX:+UseZGC",
+        "-XX:+ZGenerational",
+        "-Dfile.encoding=UTF-8",
+        // Allow reflection access to Sun AWT internals for HWND retrieval
+        "--add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED",
+        // Fix for EXCEPTION_ACCESS_VIOLATION in Direct3D: Use Software Rendering for PoC
+        "-Dskiko.renderApi=SOFTWARE"
+    )
 }

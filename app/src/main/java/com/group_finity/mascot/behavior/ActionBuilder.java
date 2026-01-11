@@ -56,9 +56,11 @@ import org.w3c.dom.Document;
  * Builds a map of named {@link Action}s from an XML configuration file.
  * <p>
  * It would parse an XML file like {@code actions.xml}, instantiating action
- * classes by reflection and configuring them with parameters defined in the file.
+ * classes by reflection and configuring them with parameters defined in the
+ * file.
  * <p>
  * Example XML:
+ * 
  * <pre>{@code
  * <actions>
  *   <action name="Walk" class="com.group_finity.mascot.action.WalkAction">
@@ -195,7 +197,8 @@ public class ActionBuilder {
                     if (imageName == null || imageName.isEmpty()) {
                         imageName = xmlAction.getName() + index + ".png";
                     }
-                    poseAnims.add(new Animation(List.of(new Pose(imageName, xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))));
+                    poseAnims.add(new Animation(
+                            List.of(new Pose(imageName, xmlPose.getDuration(), xmlPose.getImageAnchorPoint()))));
                     index++;
                 }
                 return new DraggedAction(poseAnims);
@@ -335,7 +338,8 @@ public class ActionBuilder {
                     return null;
                 }
                 int duration = (xmlAction.getDuration() != null) ? xmlAction.getDuration() : 4000;
-                double fallProbability = (xmlAction.getFallProbability() != null) ? xmlAction.getFallProbability() : 0.2;
+                double fallProbability = (xmlAction.getFallProbability() != null) ? xmlAction.getFallProbability()
+                        : 0.2;
                 return new TeeterAction(teeterAnim, duration, fallProbability);
             }
             case "PullUp": {
@@ -356,27 +360,31 @@ public class ActionBuilder {
     /**
      * SequenceActionが参照するアクションを解決して設定します。
      */
-    private void resolveSequenceAction(SequenceAction sequenceAction, XmlAction xmlAction, Map<String, Action> builtActions) {
+    private void resolveSequenceAction(SequenceAction sequenceAction, XmlAction xmlAction,
+            Map<String, Action> builtActions) {
         List<Action> sequence = new ArrayList<>();
         for (XmlActionReference ref : xmlAction.getActionReferences()) {
             Action referencedAction = builtActions.get(ref.getName());
             if (referencedAction != null) {
                 sequence.add(referencedAction);
             } else {
-                System.err.println("ActionReference not found: " + ref.getName() + " in Sequence " + xmlAction.getName());
+                System.err
+                        .println("ActionReference not found: " + ref.getName() + " in Sequence " + xmlAction.getName());
             }
         }
         sequenceAction.setSequence(sequence);
     }
 
-    private void resolveRandomChoiceAction(RandomChoiceAction randomAction, XmlAction xmlAction, Map<String, Action> builtActions) {
+    private void resolveRandomChoiceAction(RandomChoiceAction randomAction, XmlAction xmlAction,
+            Map<String, Action> builtActions) {
         List<Action> candidates = new ArrayList<>();
         for (XmlActionReference ref : xmlAction.getActionReferences()) {
             Action referencedAction = builtActions.get(ref.getName());
             if (referencedAction != null) {
                 candidates.add(referencedAction);
             } else {
-                System.err.println("ActionReference not found: " + ref.getName() + " in RandomChoice " + xmlAction.getName());
+                System.err.println(
+                        "ActionReference not found: " + ref.getName() + " in RandomChoice " + xmlAction.getName());
             }
         }
         randomAction.setCandidates(candidates);
@@ -387,7 +395,7 @@ public class ActionBuilder {
         if (xmlAction.getActionReferences() != null && !xmlAction.getActionReferences().isEmpty()) {
             String refName = xmlAction.getActionReferences().get(0).getName();
             Action referencedAction = builtActions.get(refName);
-            
+
             if (referencedAction != null) {
                 if (referencedAction instanceof StayAction) {
                     throwAction.setCelebrationAnimation(((StayAction) referencedAction).getAnimation());

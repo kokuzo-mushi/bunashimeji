@@ -94,9 +94,9 @@ public class ExpressionParser {
         return left;
     }
 
-    // Unary -> ('!'|'-') Unary | Primary
+    // Unary -> ('!'|'-'|'+') Unary | Primary
     private Expression parseUnary() {
-        if (match("!") || match("-")) {
+        if (match("!") || match("-") || match("+")) {
             String op = previous().getText();
             Expression right = parseUnary();
             return new UnaryExpression(op, right);
@@ -107,14 +107,26 @@ public class ExpressionParser {
     // Primary -> Literal | Identifier | '(' Expression ')'
     private Expression parsePrimary() {
         if (match(TokenType.NUMBER)) {
-            return new LiteralExpression(Double.parseDouble(previous().getText()));
+            String text = previous().getText();
+            if (text.contains(".") || text.contains("e") || text.contains("E")) {
+                return new LiteralExpression(Double.parseDouble(text));
+            } else {
+                try {
+                    return new LiteralExpression(Integer.parseInt(text));
+                } catch (NumberFormatException e) {
+                    return new LiteralExpression(Long.parseLong(text));
+                }
+            }
         }
         if (match(TokenType.STRING)) {
             return new LiteralExpression(previous().getText());
         }
-        if (match("true")) return new LiteralExpression(true);
-        if (match("false")) return new LiteralExpression(false);
-        if (match("null")) return new LiteralExpression(null);
+        if (match("true"))
+            return new LiteralExpression(true);
+        if (match("false"))
+            return new LiteralExpression(false);
+        if (match("null"))
+            return new LiteralExpression(null);
 
         if (match(TokenType.IDENTIFIER)) {
             Expression expr = new VariableExpression(previous().getText());

@@ -32,8 +32,17 @@ public class Behavior implements Trigger {
     private int frequency;
     private String condition; // Legacy JEXL condition
     private boolean hidden;
+    private boolean enabled = true; // New field for Settings UI
     private String actionName; // Legacy Action Reference
     private Action action; // XML defined action prototype
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     // GraalJS Support
     private Source scriptSource;
@@ -56,23 +65,53 @@ public class Behavior implements Trigger {
     }
 
     // --- Getters & Setters for XML Binding ---
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public int getFrequency() { return frequency; }
-    public void setFrequency(int frequency) { this.frequency = frequency; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getCondition() { return condition; }
-    public void setCondition(String condition) { this.condition = condition; }
+    public int getFrequency() {
+        return frequency;
+    }
 
-    public boolean isHidden() { return hidden; }
-    public void setHidden(boolean hidden) { this.hidden = hidden; }
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
 
-    public String getActionName() { return actionName; }
-    public void setActionName(String actionName) { this.actionName = actionName; }
+    public String getCondition() {
+        return condition;
+    }
 
-    public Action getAction() { return action; }
-    public void setAction(Action action) { this.action = action; }
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public String getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
 
     // --- Scripting Support ---
 
@@ -99,7 +138,7 @@ public class Behavior implements Trigger {
             try {
                 // スクリプトを評価 (キャッシュされているので高速)
                 Value exports = context.eval(scriptSource);
-                
+
                 // スクリプトが関数そのものを返している場合 ( module.exports = function*()... )
                 if (exports.canExecute()) {
                     Value generator = exports.execute(mascot);
@@ -137,11 +176,15 @@ public class Behavior implements Trigger {
     }
 
     private boolean check(EventEnvelope<?> event, EvaluationContext context) {
+        if (!enabled) {
+            return false;
+        }
         if (condition == null || condition.isEmpty()) {
             return true;
         }
         Mascot mascot = (Mascot) context.getVariables().get("mascot");
-        if (mascot == null) return false;
+        if (mascot == null)
+            return false;
 
         try {
             // GraalJS Context を使用して条件式を評価
@@ -205,7 +248,8 @@ public class Behavior implements Trigger {
 
         @Override
         public void execute(Mascot mascot) {
-            if (finished || iterator == null) return;
+            if (finished || iterator == null)
+                return;
 
             try {
                 // next() を呼び出す
