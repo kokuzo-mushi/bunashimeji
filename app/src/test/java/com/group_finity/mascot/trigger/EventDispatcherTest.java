@@ -45,6 +45,7 @@ public class EventDispatcherTest {
         Action mockAction = mock(Action.class);
         when(mockBehavior.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
         when(mockBehavior.getAction()).thenReturn(mockAction);
+        when(mockBehavior.getName()).thenReturn("MockBehavior");
 
         dispatcher.registerTrigger(mockBehavior);
 
@@ -60,6 +61,7 @@ public class EventDispatcherTest {
         // Arrange
         Behavior mockBehavior = mock(Behavior.class);
         when(mockBehavior.evaluate(any(), any(EvaluationContext.class))).thenReturn(false);
+        when(mockBehavior.getName()).thenReturn("MockBehavior");
         dispatcher.registerTrigger(mockBehavior);
 
         // Act
@@ -79,6 +81,8 @@ public class EventDispatcherTest {
         when(behavior1.evaluate(any(), any(EvaluationContext.class))).thenReturn(false);
         when(behavior2.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
         when(behavior2.getAction()).thenReturn(action2);
+        when(behavior1.getName()).thenReturn("Behavior1");
+        when(behavior2.getName()).thenReturn("Behavior2");
 
         dispatcher.registerTrigger(behavior1);
         dispatcher.registerTrigger(behavior2);
@@ -101,6 +105,8 @@ public class EventDispatcherTest {
         // Both triggers will evaluate to true
         when(behavior1.evaluate(any(), any(EvaluationContext.class))).thenReturn(true);
         when(behavior1.getAction()).thenReturn(action1);
+        when(behavior1.getName()).thenReturn("Behavior1");
+        when(behavior2.getName()).thenReturn("Behavior2");
 
         dispatcher.registerTrigger(behavior1);
         dispatcher.registerTrigger(behavior2);
@@ -129,6 +135,7 @@ public class EventDispatcherTest {
     void testClearRemovesAllTriggers() {
         // Arrange
         Behavior mockBehavior = mock(Behavior.class);
+        when(mockBehavior.getName()).thenReturn("MockBehavior");
         dispatcher.registerTrigger(mockBehavior);
         assertEquals(1, dispatcher.getRegisteredCount());
 

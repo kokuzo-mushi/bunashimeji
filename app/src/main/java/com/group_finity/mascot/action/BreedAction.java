@@ -1,8 +1,8 @@
 package com.group_finity.mascot.action;
 
-import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.platform.Platform;
 
 /**
  * マスコットが分裂して増えるアクション。
@@ -40,8 +40,8 @@ public class BreedAction implements Action {
 
         // アクション終了時に分裂
         if (this.timeRemaining <= 0 && !born) {
-            Main main = Main.getInstance();
-            if (main != null) {
+            Platform platform = Platform.getInstance();
+            if (platform != null) {
                 // 指定されたオフセット位置と初速で新しいマスコットを生成
                 // 左右の向きに合わせてX方向のオフセットと速度を反転させる
                 int direction = mascot.isLookRight() ? 1 : -1;
@@ -50,7 +50,7 @@ public class BreedAction implements Action {
                 int vx = bornVelocityX * direction;
                 int vy = bornVelocityY; // Y速度（上方向）は向きに関係なくそのまま
                 
-                main.createMascot(x, y, vx, vy);
+                platform.createMascot(x, y, vx, vy);
             }
             born = true;
         }

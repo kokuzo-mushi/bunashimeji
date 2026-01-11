@@ -1,4 +1,4 @@
-package com.group_finity.mascot.poc
+package com.group_finity.mascot.ui
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.window.application
@@ -9,6 +9,7 @@ import com.group_finity.mascot.manager.MascotContext
 import com.group_finity.mascot.manager.MascotManager
 import com.group_finity.mascot.script.ScriptEngineManager
 import com.group_finity.mascot.trigger.EventDispatcher
+import com.group_finity.mascot.platform.Platform
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext
 import com.group_finity.mascot.type.NeoPoint
 import com.group_finity.mascot.type.NeoRect
@@ -18,74 +19,13 @@ import java.awt.Point
 import java.awt.image.BufferedImage
 import java.nio.file.Path
 import java.util.HashMap
-
-// --- Adapter for MascotView ---
-class ComposeMascotAdapter(
-    private val mascot: Mascot,
-    private val imageCache: ImageCache
-) : MascotView {
-    
-    private var _visible = true
-
-    override fun setVisible(b: Boolean) {
-        _visible = b
-    }
-
-    override fun isVisible(): Boolean {
-        return _visible
-    }
-
-    override fun draw() {
-        // Compose handles drawing based on state.
-    }
-
-    override fun getMascotWidth(): Int {
-        return getCurrentImage()?.width ?: 128
-    }
-
-    override fun getMascotHeight(): Int {
-        return getCurrentImage()?.height ?: 128
-    }
-
-    override fun getAnchor(): Point {
-        val image = getCurrentImage() ?: return Point(0, 0)
-        val animation = mascot.animation
-        val pose = animation?.pose ?: return Point(0, 0)
-        
-        val width = image.width
-        val height = image.height
-        
-        var anchorX: Int
-        var anchorY: Int
-        
-        if (pose.imageAnchor != null) {
-            anchorX = pose.imageAnchor.x
-            anchorY = pose.imageAnchor.y
-        } else {
-            anchorX = width / 2
-            anchorY = height
-        }
-        
-        if (mascot.isLookRight) {
-            anchorX = width - anchorX
-        }
-        if (anchorY == 0 && height > 0) {
-            anchorY = height
-        }
-        
-        return Point(anchorX, anchorY)
-    }
-
-    fun getCurrentImage(): BufferedImage? {
-        val animation = mascot.animation
-        val pose = animation?.pose ?: return null
-        return if (mascot.isLookRight) {
-            imageCache.getRightImage(pose.imageName)
-        } else {
-            imageCache.getImage(pose.imageName)
-        }
-    }
-}
+import androidx.compose.ui.window.Tray
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.toComposeImageBitmap
+import java.io.File
+import javax.imageio.ImageIO
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 fun main() = application {
     // 1. Initialize Global Resources (Once)
@@ -143,7 +83,7 @@ fun main() = application {
             
             // Get or create ImageCache for this skin
             val cache = imageCaches.getOrPut(skinPath) { ImageCache(skinPath) }
-            val adapter = ComposeMascotAdapter(mascot, cache)
+            val adapter = MascotViewImpl(mascot, cache)
             
             for (behavior in config.behaviors) {
                 dispatcher.registerTrigger(behavior)
@@ -164,6 +104,41 @@ fun main() = application {
 
     // 3. State: List of Mascots
     val mascotList = remember { mutableStateListOf<MascotContext>() }
+
+    // Initialize Platform for Actions (Breed, Dig, Gather)
+    DisposableEffect(Unit) {
+        val platform = object : Platform {
+            override fun createMascot(x: Int, y: Int, vx: Int, vy: Int) {
+                // Randomly select a skin for the new mascot
+                val imgDir = File("img")
+                val skins = imgDir.listFiles()?.filter { it.isDirectory } ?: emptyList()
+                val skinPath = if (skins.isNotEmpty()) skins.random().toPath() else Path.of("img/Default")
+
+                val newMascotCtx = createMascot(skinPath)
+                if (newMascotCtx != null) {
+                    newMascotCtx.mascot.anchor = NeoPoint(x, y)
+                    newMascotCtx.mascot.velocityX = vx
+                    newMascotCtx.mascot.velocityY = vy
+                    mascotList.add(newMascotCtx)
+                }
+            }
+
+            override fun removeMascot(mascot: Mascot) {
+                val target = mascotList.find { it.mascot == mascot }
+                if (target != null) {
+                    mascotList.remove(target)
+                }
+            }
+
+            override fun getNearestMascot(mascot: Mascot): Mascot? {
+                return mascotManager.getNearestMascot(mascot, mascotList)
+            }
+        }
+        Platform.setInstance(platform)
+        onDispose {
+            Platform.setInstance(null)
+        }
+    }
 
     // If no mascots and skin selector is closed, maybe exit? Or Keep open.
     // For PoC, let's just keep app running.
@@ -207,7 +182,90 @@ fun main() = application {
         )
     }
 
-    // 6. Render Windows for each Mascot
+    // 6. Restoration Manager Tick Loop
+    LaunchedEffect(Unit) {
+        while (isActive) {
+            com.group_finity.mascot.manager.WindowRestorationManager.getInstance().tick()
+            delay(16) // Update at ~60FPS for smooth restoration animation
+        }
+    }
+
+    // 7. System Tray
+    val trayIcon = remember {
+        try {
+            // Try to find an icon
+            var iconFile = File("img/White/shime1.png")
+            if (!iconFile.exists()) iconFile = File("img/White/icon.png")
+            // Fallback scan
+            if (!iconFile.exists()) {
+                 val imgDir = File("img")
+                 if (imgDir.exists()) {
+                     imgDir.listFiles()?.firstOrNull { it.isDirectory }?.let { dir ->
+                         val f = File(dir, "shime1.png")
+                         if (f.exists()) iconFile = f
+                     }
+                 }
+            }
+            if (iconFile.exists()) {
+                val bufferedImage = ImageIO.read(iconFile)
+                bufferedImage.toComposeImageBitmap()
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    if (trayIcon != null) {
+        Tray(
+            icon = BitmapPainter(trayIcon),
+            menu = {
+                Item("増やす (Random)", onClick = {
+                    val imgDir = java.io.File("img")
+                    if (imgDir.exists()) {
+                        val skins = imgDir.listFiles()?.filter { it.isDirectory }
+                        if (!skins.isNullOrEmpty()) {
+                            val randomSkin = skins.random()
+                            val newMascot = createMascot(randomSkin.toPath())
+                            if (newMascot != null) {
+                                if (mascotList.isNotEmpty()) {
+                                    val last = mascotList.last()
+                                    newMascot.mascot.anchor = NeoPoint(
+                                         last.mascot.anchor.x() - 50,
+                                         last.mascot.anchor.y() - 50
+                                    )
+                                }
+                                mascotList.add(newMascot)
+                            }
+                        }
+                    }
+                })
+                Item("あつまれ！", onClick = {
+                    val mousePos = java.awt.MouseInfo.getPointerInfo().location
+                    mascotList.forEach { ctx ->
+                        ctx.mascot.anchor = NeoPoint(mousePos.x, mousePos.y)
+                        ctx.mascot.isGrounded = false
+                    }
+                })
+                Item("一匹にする", onClick = {
+                    if (mascotList.size > 1) {
+                        val survivor = mascotList.first()
+                        mascotList.clear()
+                        mascotList.add(survivor)
+                    }
+                })
+                Item("ウィンドウを戻す", onClick = {
+                    com.group_finity.mascot.manager.WindowRestorationManager.getInstance().restoreAllWindows()
+                })
+                Item("設定", onClick = { showSettings = true })
+                Item("ばいばい", onClick = { exitApplication() })
+            }
+        )
+    }
+
+    // 8. Render Windows for each Mascot
     for (mascotContext in mascotList) {
         key(mascotContext) { // Compose Key
             MascotWindow(
@@ -217,6 +275,7 @@ fun main() = application {
                 allMascotsProvider = { mascotList.toList() }, // Pass current list snapshot
                 gravity = gravity,
                 timeScale = timeScale,
+                icon = trayIcon,
                 onNewMascot = {
                      // Clicking "Add" shows selector
                      showSkinSelector = true

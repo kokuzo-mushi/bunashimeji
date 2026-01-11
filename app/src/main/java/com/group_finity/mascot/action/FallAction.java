@@ -20,7 +20,6 @@ public class FallAction implements Action {
         if (!initialized) {
             this.velocityX = mascot.getVelocityX();
             this.velocityY = mascot.getVelocityY();
-            System.out.printf("[FallAction] Initialized with velocity: (%.2f, %d)%n", velocityX, velocityY);
             initialized = true;
         } else {
             // Main.javaでの物理演算（バウンド処理など）の結果を反映させるため同期する
@@ -47,9 +46,6 @@ public class FallAction implements Action {
         if (mascot.isGrounded()) {
             // バウンド処理 (Main.javaの閾値より小さい速度で接地した場合など)
             if (velocityY > 0) {
-                // デバッグログ: 接地時の座標と速度を出力
-                System.out.printf("[FallAction] Grounded at Y=%d, VelocityY=%d, VelocityX=%.2f%n", 
-                    mascot.getY(), velocityY, velocityX);
                 velocityY = (int) (-velocityY * 0.55); // Y軸反発係数 (0.55)
             } else {
                 velocityY = 0;

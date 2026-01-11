@@ -20,7 +20,6 @@ public class EventQueue {
     public void enqueue(EventLog log) {
         if (log != null) {
             queue.offer(log);
-            System.out.println("[EventQueue] Enqueued: " + log);
         }
     }
 
@@ -28,7 +27,6 @@ public class EventQueue {
     public void offer(EventTask task) {
         if (task != null) {
             queue.offer(task);
-            System.out.println("[EventQueue] Offered EventTask: " + task);
         }
     }
 

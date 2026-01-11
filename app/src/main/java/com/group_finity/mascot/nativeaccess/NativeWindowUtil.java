@@ -481,10 +481,10 @@ public class NativeWindowUtil {
         try {
             IsWindowVisible = LINKER.downcallHandle(
                     USER32.find("IsWindowVisible").orElseThrow(),
-                    FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS));
+                    FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
             IsZoomed = LINKER.downcallHandle(
                     USER32.find("IsZoomed").orElseThrow(),
-                    FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS));
+                    FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
             GetWindowThreadProcessId = LINKER.downcallHandle(
                     USER32.find("GetWindowThreadProcessId").orElseThrow(),
                     FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
@@ -501,7 +501,7 @@ public class NativeWindowUtil {
 
     public static boolean isWindowVisible(MemorySegment hwnd) {
         try {
-            return (boolean) IsWindowVisible.invokeExact(hwnd);
+            return (int) IsWindowVisible.invokeExact(hwnd) != 0;
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -509,7 +509,7 @@ public class NativeWindowUtil {
 
     public static boolean isZoomed(MemorySegment hwnd) {
         try {
-            return (boolean) IsZoomed.invokeExact(hwnd);
+            return (int) IsZoomed.invokeExact(hwnd) != 0;
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -533,18 +533,29 @@ public class NativeWindowUtil {
     public static void enumWindows(EnumWindowsProc proc, long lParam) {
         try (Arena arena = Arena.ofConfined()) {
             // Callback descriptor: BOOL callback(HWND, LPARAM)
-            FunctionDescriptor callbackDesc = FunctionDescriptor.of(ValueLayout.JAVA_BOOLEAN, ValueLayout.ADDRESS,
+            // Windows BOOL is 4 bytes (int), not 1 byte (boolean).
+            FunctionDescriptor callbackDesc = FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS,
                     ValueLayout.JAVA_LONG);
 
             MethodHandle handle = MethodHandles.lookup().findVirtual(EnumWindowsProc.class, "callback",
                     MethodType.methodType(boolean.class, MemorySegment.class, long.class));
             handle = handle.bindTo(proc);
+            
+            // Fix: Adapt boolean return to int for the native upcall (BOOL is int)
+            // upcallStub requires exact type match between Java handle and FunctionDescriptor
+            MethodHandle boolToInt = MethodHandles.lookup().findStatic(NativeWindowUtil.class, "booleanToInt",
+                    MethodType.methodType(int.class, boolean.class));
+            handle = MethodHandles.filterReturnValue(handle, boolToInt);
 
             MemorySegment stub = LINKER.upcallStub(handle, callbackDesc, arena);
             int result = (int) EnumWindows.invokeExact(stub, lParam);
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
+    }
+
+    private static int booleanToInt(boolean b) {
+        return b ? 1 : 0;
     }
 
     // --- Window Control ---

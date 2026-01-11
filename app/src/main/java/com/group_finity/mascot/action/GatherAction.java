@@ -1,8 +1,8 @@
 package com.group_finity.mascot.action;
 
-import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.platform.Platform;
 
 /**
  * 他のマスコットの近くに集まるアクション。
@@ -27,7 +27,11 @@ public class GatherAction implements Action {
         if (!hasNext()) return;
 
         // 最も近いマスコットを探す
-        Mascot target = Main.getInstance().getNearestMascot(mascot);
+        Platform platform = Platform.getInstance();
+        Mascot target = null;
+        if (platform != null) {
+            target = platform.getNearestMascot(mascot);
+        }
 
         // ターゲットがいない、または既に十分近い場合は終了
         if (target == null || Math.abs(target.getX() - mascot.getX()) < targetDistance) {

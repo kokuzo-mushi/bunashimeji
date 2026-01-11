@@ -38,7 +38,6 @@ public class ImageCache {
 
             if (Files.exists(rightFile)) {
                 try {
-                    System.out.println("[ImageCache] Loading explicit right image: " + rightName);
                     BufferedImage img = ImageIO.read(rightFile.toFile());
                     cache.put(key, img);
                     return img;
@@ -65,8 +64,6 @@ public class ImageCache {
                 BufferedImage img = ImageIO.read(file.toFile());
                 cache.put(name, img);
             } else {
-                System.out.println("[ImageCache] Image not found: " + name + " (Fallback to Stay1.png)");
-                
                 // フォールバック: 画像がない場合は Stay1.png (デフォルト立ち絵) で代用する
                 // これにより、赤いダミー画像による点滅を防ぐ
                 Path defaultFile = baseDir.resolve("Stay1.png");

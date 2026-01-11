@@ -30,7 +30,6 @@ public class EventWorkerPool {
         startWorkers();
         EventLog.record("EventWorkerPool", "Startup", true, 0L,
                 EventLogRecord.Level.INFO, Map.of("workers", poolSize));
-        System.out.printf("[EventWorkerPool] Started with %d workers.%n", poolSize);
     }
 
     /** 外部キュー利用（テスト・互換用） */
@@ -41,7 +40,6 @@ public class EventWorkerPool {
         startWorkers();
         EventLog.record("EventWorkerPool", "Startup", true, 0L,
                 EventLogRecord.Level.INFO, Map.of("workers", poolSize, "mode", "external"));
-        System.out.printf("[EventWorkerPool] Started with %d workers (external queue).%n", poolSize);
     }
 
     private void startWorkers() {
@@ -66,7 +64,6 @@ public class EventWorkerPool {
         }
         EventLog.record("EventWorkerPool", "Shutdown", true, 0L,
                 EventLogRecord.Level.INFO, Map.of("workers", poolSize));
-        System.out.println("[EventWorkerPool] Shutdown requested.");
     }
 
     /** 停止待機 */
@@ -78,7 +75,6 @@ public class EventWorkerPool {
         if (ok) {
             EventLog.record("EventWorkerPool", "Termination", true, 0L,
                     EventLogRecord.Level.INFO, Map.of("workers", poolSize));
-            System.out.println("[EventWorkerPool] All workers terminated safely.");
         }
         return ok;
     }

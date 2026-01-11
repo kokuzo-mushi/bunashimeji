@@ -35,6 +35,7 @@ public class EventSystemTest {
         // 条件に合致するように設定
         when(mockBehavior.evaluate(any(), any())).thenReturn(true);
         when(mockBehavior.getAction()).thenReturn(mockAction);
+        when(mockBehavior.getName()).thenReturn("MockBehavior");
 
         dispatcher.registerTrigger(mockBehavior);
 
@@ -58,6 +59,7 @@ public class EventSystemTest {
 
         // 検証用トリガー (Behaviorのふりをする)
         Behavior spyBehavior = mock(Behavior.class);
+        when(spyBehavior.getName()).thenReturn("SpyBehavior");
         
         // evaluateメソッド内でコンテキストを検査する
         when(spyBehavior.evaluate(any(), any())).thenAnswer(invocation -> {

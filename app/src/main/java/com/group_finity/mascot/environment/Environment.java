@@ -289,4 +289,86 @@ public class Environment {
         // Compare native addresses
         return w1.address() == w2.address();
     }
+
+    /**
+     * 投げる対象として適切な「到達可能な」ウィンドウを探します。
+     * - 最小化/不可視を除外
+     * - 巨大なウィンドウ（背景等）を除外
+     * - 自分自身や足元のウィンドウを除外
+     *
+     * @param mascotX マスコットの中心X
+     * @param mascotY マスコットのY
+     * @param range   探索範囲
+     * @return ターゲットウィンドウのハンドル
+     */
+    public MemorySegment findReachableTargetWindow(int mascotX, int mascotY, int range) {
+        final long currentPid = ProcessHandle.current().pid();
+        final MemorySegment[] target = { null };
+        final double[] minDistanceSq = { Double.MAX_VALUE };
+        final double rangeSq = (double) range * range;
+
+        // 画面サイズ取得 (簡易的)
+        Rectangle screenRect = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        int screenWidth = screenRect.width;
+        int screenHeight = screenRect.height;
+
+        NativeWindowUtil.enumWindows((hWnd, lParam) -> {
+            if (!NativeWindowUtil.isWindowVisible(hWnd) || NativeWindowUtil.isIconic(hWnd)) {
+                return true;
+            }
+            if (NativeWindowUtil.isZoomed(hWnd)) {
+                return true;
+            }
+
+            String title = NativeWindowUtil.getWindowText(hWnd).trim();
+            if (title.isEmpty())
+                return true;
+            if (title.equals("Default IME") || title.equals("MSCTFIME UI") || title.equals("Program Manager")
+                    || title.equals("Task Manager")) {
+                return true;
+            }
+
+            int pid = NativeWindowUtil.getWindowThreadProcessId(hWnd);
+            if (pid == currentPid)
+                return true;
+
+            NeoRect rect = NativeWindowUtil.getWindowRect(hWnd);
+            if (rect.width() <= 0 || rect.height() <= 0)
+                return true;
+
+            // 巨大ウィンドウ除外 (画面サイズの90%以上は除外)
+            if (rect.width() >= screenWidth * 0.9 && rect.height() >= screenHeight * 0.9) {
+                return true;
+            }
+
+            // 距離計算
+            // マスコットの座標がウィンドウの内部にある、または近い
+            // X軸距離
+            int dx = 0;
+            if (mascotX < rect.left())
+                dx = rect.left() - mascotX;
+            else if (mascotX > rect.right())
+                dx = mascotX - rect.right();
+
+            // Y軸距離 (マスコットは上にいるウィンドウもターゲットにできる)
+            // ただし、ThrowActionのためには「掴める位置」にあることが望ましい
+            // ここでは単純な最短距離を使う
+            int dy = 0;
+            if (mascotY < rect.top())
+                dy = rect.top() - mascotY;
+            else if (mascotY > rect.bottom())
+                dy = mascotY - rect.bottom();
+
+            double distSq = dx * dx + dy * dy;
+
+            if (distSq <= rangeSq && distSq < minDistanceSq[0]) {
+                minDistanceSq[0] = distSq;
+                target[0] = hWnd;
+            }
+
+            return true;
+        }, 0);
+
+        return target[0];
+    }
 }

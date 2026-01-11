@@ -1,4 +1,4 @@
-package com.group_finity.mascot.poc
+package com.group_finity.mascot.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

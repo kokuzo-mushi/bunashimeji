@@ -15,8 +15,6 @@ public class EventWorkerPoolTest {
 
     @Test
     public void testParallelExecutionAndShutdown() throws Exception {
-        System.out.println("=== Shimeji Neo - EventWorkerPool Parallel Test ===");
-
         EventWorkerPool pool = new EventWorkerPool(3);
 
         // タスク登録（優先度混在）
@@ -31,11 +29,8 @@ public class EventWorkerPoolTest {
         Thread.sleep(1000);
         pool.shutdown();
         pool.awaitTermination(2, TimeUnit.SECONDS);
-
-        System.out.println("=== EventWorkerPool Test Completed ===");
     }
 
     private static void log(String msg) {
-        System.out.printf("[%s] %s%n", Thread.currentThread().getName(), msg);
     }
 }

@@ -1,8 +1,8 @@
 package com.group_finity.mascot.action;
 
-import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.platform.Platform;
 
 /**
  * 地面を掘って消えるアクション。
@@ -30,7 +30,10 @@ public class DigAction implements Action {
         this.timeRemaining -= FRAME_DURATION_MS;
 
         if (this.timeRemaining <= 0) {
-            Main.getInstance().removeMascot(mascot);
+            Platform platform = Platform.getInstance();
+            if (platform != null) {
+                platform.removeMascot(mascot);
+            }
         }
     }
 

@@ -96,7 +96,7 @@
         <ActionReference Name="Grab" />
     </Behavior>
     <Behavior Name="Throw" Frequency="2">
-        <Condition>mascot.isGrounded() &amp;&amp; mascot.getFloorWindow() != null &amp;&amp; mascot.getCurrentAction() == null</Condition>
+        <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="Throw" />
     </Behavior>
     <Behavior Name="GreetRight" Frequency="5">

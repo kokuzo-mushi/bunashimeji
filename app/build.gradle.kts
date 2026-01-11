@@ -10,7 +10,7 @@ plugins {
 }
 
 application {
-    mainClass.set("com.group_finity.mascot.Main")
+    mainClass.set("com.group_finity.mascot.ui.ShimejiAppKt")
     applicationName = "ShimejiNeo"
 }
 
@@ -31,6 +31,9 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation("org.graalvm.js:js:25.0.0")
     implementation("org.graalvm.polyglot:polyglot:25.0.0")
+
+    // ✅ MascotContextなどが含まれるモジュールへの依存関係を追加
+    // implementation(project(":mascot")) - removed, module merged into app
 
     // --- Compose Multiplatform ---
     implementation(compose.desktop.currentOs)
@@ -84,6 +87,8 @@ tasks.test {
     useJUnitPlatform()
     // テスト実行時のシステムプロパティでエンコーディングをUTF-8に強制
     systemProperty("file.encoding", "UTF-8")
+    // GraalVM Polyglotの警告（インタプリタモード）を抑制
+    systemProperty("polyglot.engine.WarnInterpreterOnly", "false")
     // ✅ Java 21のプレビュー機能をテスト時にも有効化（重要）
     jvmArgs("--enable-preview", "--enable-native-access=ALL-UNNAMED")
 
@@ -174,25 +179,4 @@ runtime {
     }
 }
 
-tasks.register<JavaExec>("runPoC") {
-    group = "application"
-    description = "Runs the Compose PoC launcher"
-    mainClass.set("com.group_finity.mascot.poc.ComposeLauncherKt")
-    classpath = sourceSets["main"].runtimeClasspath
-    // Set working directory to project root so we can find "img/shime1.png"
-    workingDir = project.rootProject.projectDir
-    jvmArgs(
-        "--enable-preview",
-        "--enable-native-access=ALL-UNNAMED",
-        "-Dsun.java2d.dpiaware=true",
-        "-Dsun.java2d.d3d=true",
-        "-Dsun.java2d.noddraw=false",
-        "-XX:+UseZGC",
-        "-XX:+ZGenerational",
-        "-Dfile.encoding=UTF-8",
-        // Allow reflection access to Sun AWT internals for HWND retrieval
-        "--add-opens=java.desktop/sun.awt.windows=ALL-UNNAMED",
-        // Fix for EXCEPTION_ACCESS_VIOLATION in Direct3D: Use Software Rendering for PoC
-        "-Dskiko.renderApi=SOFTWARE"
-    )
-}
+// runPoC task removed

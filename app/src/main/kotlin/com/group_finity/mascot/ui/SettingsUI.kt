@@ -1,4 +1,4 @@
-package com.group_finity.mascot.poc
+package com.group_finity.mascot.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

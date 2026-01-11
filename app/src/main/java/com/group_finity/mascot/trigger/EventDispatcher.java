@@ -61,7 +61,8 @@ public class EventDispatcher {
             for (final Trigger trigger : triggers) {
                 if (trigger.evaluate(event, this.context)) {
                     if (trigger instanceof Behavior) {
-                        candidates.add((Behavior) trigger);
+                        Behavior b = (Behavior) trigger;
+                        candidates.add(b);
                     }
                 }
             }
@@ -76,6 +77,7 @@ public class EventDispatcher {
 
         // 候補の中からFrequencyに基づいて抽選を行う
         Behavior selectedBehavior = selectBehavior(candidates);
+        
         if (selectedBehavior != null) {
             Action action = selectedBehavior.getAction();
 

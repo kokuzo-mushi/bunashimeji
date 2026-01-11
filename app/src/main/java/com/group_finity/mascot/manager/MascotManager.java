@@ -43,14 +43,16 @@ public class MascotManager {
         MascotView mascotView = instance.getView();
 
         // 1. イベントをディスパッチ
-        // Main.getInstance() への依存を排除するため、EventEnvelopeのソースは一旦 null または instance にする
-        // 既存実装では Main インスタンスを渡していたが、Trigger 側で厳密に Main 型を要求しない限りは問題ないはず。
-        // 安全のため、ここでは null を渡すか、あるいは MascotManager をソースにする検討が必要。
-        // 一旦 null で進め、問題があれば修正する。
         dispatcher.evaluateTriggers(new EventEnvelope<>(EventType.SYSTEM_TICK, tickCount, null));
 
         // 2. マスコットのtick()
-        mascot.tick();
+        try {
+            mascot.tick();
+        } catch (Exception e) {
+            // リファクタリング中のアクション(GatherAction等)がNPEを出しても停止させない
+            System.err.println("[MascotManager] Action failed: " + mascot.getCurrentAction() + " - " + e.getMessage());
+            mascot.setNextAction(null); // 強制的にアクションを終了して次へ
+        }
 
         // アクションが終了してnullになった場合即座に次を決定
         if (mascot.getCurrentAction() == null) {
