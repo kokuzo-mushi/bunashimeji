@@ -36,4 +36,11 @@ object ScriptEngineManager {
                 .mimeType("application/javascript")
                 .build()
     }
+
+    /** 文字列コンテンツからスクリプトをコンパイルする。 */
+    fun loadScript(content: String, name: String): org.graalvm.polyglot.Source {
+        return org.graalvm.polyglot.Source.newBuilder("js", content, name)
+                .mimeType("application/javascript")
+                .build()
+    }
 }

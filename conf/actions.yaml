@@ -1,0 +1,461 @@
+actions:
+- name: "Stay"
+  type: "Stay"
+  params:
+    Duration: 1000
+    Animation:
+    - Duration: 1000
+      ImageAnchor: "64,128"
+- name: "Sit"
+  type: "Stay"
+  params:
+    Duration: 8000
+    Animation:
+    - Duration: 8000
+      ImageAnchor: "64,128"
+- name: "AfterSit"
+  type: "RandomChoice"
+  params:
+    ActionReferences:
+    - "Stay"
+    - "Stay"
+    - "Stay"
+    - "LieDown"
+- name: "SitSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "Sit"
+    - "AfterSit"
+- name: "Land"
+  type: "Animate"
+  params:
+    Animation:
+    - Duration: 1000
+      ImageAnchor: "64,128"
+- name: "LandLieDown"
+  type: "LieDown"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 2000
+      Image: "shime11.png"
+      ImageAnchor: "64,128"
+- name: "LieDown"
+  type: "LieDown"
+  params:
+    Duration: 4000
+    Animation:
+    - Duration: 4000
+      ImageAnchor: "64,128"
+- name: "Breed"
+  type: "Breed"
+  params:
+    Duration: 4000
+    Point:
+      X: 0
+      "Y": -100
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "BreedJump"
+  type: "Breed"
+  params:
+    Duration: 4000
+    VelocityX: 10
+    VelocityY: -25
+    Point:
+      X: 0
+      "Y": -100
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 3600
+      ImageAnchor: "64,128"
+- name: "Dig"
+  type: "Dig"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "Gather"
+  type: "Gather"
+  params:
+    Duration: 4000
+    Speed: 1
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "Fall"
+  type: "Fall"
+  params:
+    Animation:
+    - Duration: 100
+      ImageAnchor: "64,128"
+- name: "Walk"
+  type: "Walk"
+  params:
+    Speed: 1
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "Chase"
+  type: "Chase"
+  params:
+    Duration: 5000
+    Speed: 4
+    Animation:
+    - Duration: 50
+      ImageAnchor: "64,128"
+    - Duration: 50
+      ImageAnchor: "64,128"
+- name: "Dragged"
+  type: "Dragged"
+  params:
+    Animation:
+    - Duration: 100
+      ImageAnchor: "64,128"
+    - Duration: 100
+      ImageAnchor: "64,128"
+    - Duration: 100
+      ImageAnchor: "64,128"
+    - Duration: 100
+      ImageAnchor: "64,128"
+    - Duration: 100
+      ImageAnchor: "64,128"
+- name: "Jump"
+  type: "Jump"
+  params:
+    VelocityX: 3
+    VelocityY: 12
+    Animation:
+    - Duration: 1000
+      ImageAnchor: "64,128"
+- name: "JumpLeft"
+  type: "Jump"
+  params:
+    VelocityX: -3
+    VelocityY: 12
+    Animation:
+    - Duration: 1000
+      ImageAnchor: "64,128"
+- name: "RandomJumpAction"
+  type: "RandomChoice"
+  params:
+    ActionReferences:
+    - "Jump"
+    - "JumpLeft"
+- name: "TripFall"
+  type: "Animate"
+  params:
+    Animation:
+    - Duration: 500
+      ImageAnchor: "64,128"
+- name: "TripSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "TripFall"
+    - "Sit"
+- name: "WallCling"
+  type: "WallCling"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 2000
+      ImageAnchor: "64,128"
+- name: "WallTopCling"
+  type: "WallTopCling"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 2000
+      Image: "WallCling1.png"
+      ImageAnchor: "64,128"
+- name: "WindowWallCling"
+  type: "WallCling"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 2000
+      Image: "WallCling1.png"
+      ImageAnchor: "128,128"
+- name: "Climb"
+  type: "Climb"
+  params:
+    Speed: 1
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "WindowClimb"
+  type: "Climb"
+  params:
+    Speed: 1
+    Animation:
+    - Duration: 200
+      Image: "Climb1.png"
+      ImageAnchor: "128,128"
+    - Duration: 200
+      Image: "Climb2.png"
+      ImageAnchor: "128,128"
+- name: "ClimbUpForCeiling"
+  type: "ClimbCeiling"
+  params:
+    Duration: 1000
+    Speed: 4
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "CeilingEnter"
+  type: "CeilingEnter"
+  params:
+    Duration: 500
+    Animation:
+    - Duration: 500
+      Image: "Climb1.png"
+      ImageAnchor: "64,128"
+- name: "CornerTurn"
+  type: "CornerTurn"
+  params:
+    Duration: 800
+    Animation:
+    - Duration: 800
+      Image: "ClimbUpForCeiling1.png"
+      ImageAnchor: "64,128"
+- name: "CornerTurnDown"
+  type: "CornerTurnDown"
+  params:
+    Duration: 800
+    Animation:
+    - Duration: 800
+      Image: "ClimbUpForCeiling1.png"
+      ImageAnchor: "64,128"
+- name: "ClimbDown"
+  type: "Climb"
+  params:
+    Duration: 2000
+    Speed: -2
+    Animation:
+    - Duration: 2000
+      Image: "SlideDown1.png"
+      ImageAnchor: "64,128"
+- name: "Teeter"
+  type: "Teeter"
+  params:
+    Duration: 2000
+    FallProbability: 0.2
+    Animation:
+    - Duration: 150
+      ImageAnchor: "64,128"
+    - Duration: 150
+      ImageAnchor: "64,128"
+    - Duration: 150
+      ImageAnchor: "64,128"
+    - Duration: 150
+      ImageAnchor: "64,128"
+- name: "PullUp"
+  type: "PullUp"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 500
+      ImageAnchor: "0,128"
+    - Duration: 1500
+      ImageAnchor: "0,128"
+- name: "WindowPullUp"
+  type: "PullUp"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 500
+      Image: "PullUp1.png"
+      ImageAnchor: "64,128"
+    - Duration: 1500
+      Image: "PullUp2.png"
+      ImageAnchor: "64,128"
+- name: "CeilingCrawl"
+  type: "CeilingCrawl"
+  params:
+    Duration: 2000
+    Speed: 1
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,45"
+    - Duration: 200
+      ImageAnchor: "64,45"
+- name: "CeilingStay"
+  type: "Stay"
+  params:
+    Duration: 5000
+    Animation:
+    - Duration: 1000
+      ImageAnchor: "64,45"
+- name: "CeilingRandomMove"
+  type: "RandomChoice"
+  params:
+    ActionReferences:
+    - "CeilingCrawl"
+    - "CeilingStay"
+- name: "SlideDownForTransition"
+  type: "SlideDown"
+  params:
+    Speed: 2
+    Animation:
+    - Duration: 1000
+      ImageAnchor: "64,128"
+- name: "SlideDown"
+  type: "SlideDown"
+  params:
+    Speed: 2
+    Animation:
+    - Duration: 400
+      ImageAnchor: "64,128"
+- name: "WallJump"
+  type: "WallJump"
+  params:
+    VelocityX: 10
+    VelocityY: 12
+    Animation:
+    - Duration: 1000
+      ImageAnchor: "0,128"
+- name: "WallRandomMove"
+  type: "RandomChoice"
+  params:
+    ActionReferences:
+    - "Climb"
+- name: "WindowWallRandomMove"
+  type: "RandomChoice"
+  params:
+    ActionReferences:
+    - "WindowClimb"
+- name: "WallComplexSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "WallCling"
+    - "WallRandomMove"
+- name: "WindowWallComplexSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "WindowWallCling"
+    - "WindowWallRandomMove"
+- name: "WallToCeilingSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "ClimbUpForCeiling"
+    - "CornerTurn"
+- name: "CeilingToWallSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "CornerTurnDown"
+    - "SlideDownForTransition"
+- name: "CeilingEdgeRandomMove"
+  type: "RandomChoice"
+  params:
+    ActionReferences:
+    - "CeilingStay"
+    - "CeilingStay"
+    - "CeilingStay"
+    - "CeilingCrawl"
+    - "CeilingToWallSequence"
+- name: "WallTopRandomMove"
+  type: "RandomChoice"
+  params:
+    ActionReferences:
+    - "WallTopCling"
+    - "WallTopCling"
+    - "WallTopCling"
+    - "WallTopCling"
+    - "WallTopCling"
+    - "WallTopCling"
+    - "WallTopCling"
+    - "WallTopCling"
+    - "WallTopCling"
+    - "ClimbDown"
+    - "ClimbDown"
+    - "SlideDown"
+    - "WallToCeilingSequence"
+- name: "FallSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "Fall"
+- name: "LandSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "LandLieDown"
+    - "Land"
+- name: "Turn"
+  type: "Turn"
+  params: {}
+- name: "Grab"
+  type: "Grab"
+  params:
+    Duration: 5000
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "Throw"
+  type: "Throw"
+  params:
+    Animation:
+    - Duration: 50
+      ImageAnchor: "64,128"
+    - Duration: 50
+      ImageAnchor: "64,128"
+    ActionReferences:
+    - "Bow"
+- name: "Bow"
+  type: "Animate"
+  params:
+    Animation:
+    - Duration: 200
+      ImageAnchor: "64,128"
+    - Duration: 500
+      ImageAnchor: "64,128"
+    - Duration: 200
+      ImageAnchor: "64,128"
+- name: "LookRight"
+  type: "Look"
+  params:
+    VelocityX: 1
+- name: "LookLeft"
+  type: "Look"
+  params:
+    VelocityX: -1
+- name: "GreetSequenceRight"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "LookRight"
+    - "Bow"
+- name: "GreetSequenceLeft"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - "LookLeft"
+    - "Bow"
+behaviors: []

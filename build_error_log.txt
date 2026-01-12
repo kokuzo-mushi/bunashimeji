@@ -1,0 +1,27 @@
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateComposeResClass UP-TO-DATE
+> Task :app:compileKotlin UP-TO-DATE
+
+> Task :app:compileJava FAILED
+C:\bunashimeji\bunashimeji\app\src\main\java\com\group_finity\mascot\behavior\Behavior.java:132: 繧ｨ繝ｩ繝ｼ: 繝｡繧ｽ繝・ラ getScript()縺ｯ縺吶〒縺ｫ繧ｯ繝ｩ繧ｹ Behavior縺ｧ螳夂ｾｩ縺輔ｌ縺ｦ縺・∪縺・    public String getScript() {
+                  ^
+C:\bunashimeji\bunashimeji\app\src\main\java\com\group_finity\mascot\behavior\Behavior.java:136: 繧ｨ繝ｩ繝ｼ: 繝｡繧ｽ繝・ラ setScript(String)縺ｯ縺吶〒縺ｫ繧ｯ繝ｩ繧ｹ Behavior縺ｧ螳夂ｾｩ縺輔ｌ縺ｦ縺・∪縺・    public void setScript(String script) {
+                ^
+C:\bunashimeji\bunashimeji\app\src\main\java\com\group_finity\mascot\behavior\Behavior.java:76: 繧ｨ繝ｩ繝ｼ: 荳埼←蜷医↑蝙・ Path繧担tring縺ｫ螟画鋤縺ｧ縺阪∪縺帙ｓ:
+                loadScript(Path.of(script));
+                                  ^
+繝弱・繝・ 荳驛ｨ縺ｮ繝｡繝・そ繝ｼ繧ｸ縺ｯ邁｡逡･蛹悶＆繧後※縺・∪縺吶・Xdiags:verbose縺ｧ蜀阪さ繝ｳ繝代う繝ｫ縺励※螳悟・縺ｪ蜃ｺ蜉帙ｒ蜿門ｾ励＠縺ｦ縺上□縺輔＞
+繧ｨ繝ｩ繝ｼ3蛟・
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 1s
+4 actionable tasks: 2 executed, 2 up-to-date

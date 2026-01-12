@@ -30,14 +30,17 @@ class BehaviorBuilder(private val actions: Map<String, Action>) {
             val builtBehaviors = ArrayList<Behavior>()
             for (xmlBehavior in xmlBehaviors.behaviors) {
                 val action = createActionForBehavior(xmlBehavior)
+                val script = xmlBehavior.script
 
-                if (action != null) {
+                if (action != null || !script.isNullOrEmpty()) {
                     val name = xmlBehavior.name ?: "Behavior"
                     val hidden = xmlBehavior.isHidden
                     val frequency = xmlBehavior.frequency ?: 1
-                    builtBehaviors.add(
-                            Behavior(name, action, xmlBehavior.condition, hidden, frequency)
-                    )
+                    val behavior = Behavior(name, action, xmlBehavior.condition, hidden, frequency)
+                    if (!script.isNullOrEmpty()) {
+                        behavior.script = script
+                    }
+                    builtBehaviors.add(behavior)
                 } else {
                     System.err.println(
                             "No valid action found for condition: " + xmlBehavior.condition

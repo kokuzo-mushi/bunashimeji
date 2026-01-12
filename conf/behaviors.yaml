@@ -1,0 +1,181 @@
+actions: []
+behaviors:
+- name: "Dragged"
+  frequency: 100
+  conditions:
+  - "mascot.isBeingDragged()"
+  actions:
+  - "Dragged"
+- name: "JumpOnClick"
+  frequency: 100
+  conditions:
+  - "event.type == 'MOUSE_PRESSED'"
+  actions:
+  - "Jump"
+- name: "DebugCornerTurn"
+  frequency: 100
+  conditions:
+  - "event.type == 'MOUSE_PRESSED' && (mascot.isHittingLeftWall() || mascot.isHittingRightWall())"
+  actions:
+  - "WallToCeilingSequence"
+- name: "Fall"
+  frequency: 100
+  conditions:
+  - "!mascot.isGrounded() && !mascot.isHittingLeftWall() && !mascot.isHittingRightWall()\
+    \ && !mascot.isHittingCeiling() && mascot.getCurrentAction() == null"
+  actions:
+  - "Fall"
+- name: "Land"
+  frequency: 2000
+  conditions:
+  - "mascot.isGrounded() && mascot.isPreviousAction('FallAction') && mascot.getCurrentAction()\
+    \ == null"
+  actions:
+  - "LandSequence"
+- name: "Teeter"
+  frequency: 100
+  conditions:
+  - "mascot.isGrounded() && isOnEdge && !mascot.isHittingLeftWall() && !mascot.isHittingRightWall()\
+    \ && mascot.getCurrentAction() == null"
+  actions:
+  - "Teeter"
+- name: "WindowPullUp"
+  frequency: 200
+  conditions:
+  - "((mascot.isHittingLeftWall() && mascot.getLeftWallWindow() != null) || (mascot.isHittingRightWall()\
+    \ && mascot.getRightWallWindow() != null)) && signedDistToWallTop < -30 && mascot.getCurrentAction()\
+    \ == null"
+  actions:
+  - "WindowPullUp"
+- name: "CeilingToWall"
+  frequency: 100
+  conditions:
+  - "mascot.isHittingCeiling() && isOnCeilingEdge && mascot.getCurrentAction() ==\
+    \ null"
+  actions:
+  - "CeilingEdgeRandomMove"
+- name: "CeilingAction"
+  frequency: 1
+  conditions:
+  - "mascot.isHittingCeiling() && mascot.getCurrentAction() == null"
+  actions:
+  - "CeilingRandomMove"
+- name: "ScreenWallToCeiling"
+  frequency: 100
+  conditions:
+  - "!mascot.isHittingCeiling() && ((mascot.isHittingLeftWall() && mascot.getLeftWallWindow()\
+    \ == null) || (mascot.isHittingRightWall() && mascot.getRightWallWindow() == null))\
+    \ && signedDistToWallTop < 30 && mascot.getCurrentAction() == null"
+  actions:
+  - "WallTopRandomMove"
+- name: "ScreenWallAction"
+  frequency: 1
+  conditions:
+  - "((mascot.isHittingLeftWall() && mascot.getLeftWallWindow() == null) || (mascot.isHittingRightWall()\
+    \ && mascot.getRightWallWindow() == null)) && mascot.getCurrentAction() == null"
+  actions:
+  - "WallComplexSequence"
+- name: "WindowWallAction"
+  frequency: 1
+  conditions:
+  - "((mascot.isHittingLeftWall() && mascot.getLeftWallWindow() != null) || (mascot.isHittingRightWall()\
+    \ && mascot.getRightWallWindow() != null)) && mascot.getCurrentAction() == null"
+  actions:
+  - "WindowWallComplexSequence"
+- name: "TurnRandomly"
+  frequency: 10
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null && !mascot.isHittingLeftWall()\
+    \ && !mascot.isHittingRightWall()"
+  actions:
+  - "Turn"
+- name: "ChaseMouse"
+  frequency: 30
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null && ((mascot.getX() -\
+    \ mouse.x > 150) || (mouse.x - mascot.getX() > 150))"
+  actions:
+  - "Chase"
+- name: "Walk"
+  frequency: 100
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "Walk"
+- name: "Trip"
+  frequency: 10
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "TripSequence"
+- name: "RandomJump"
+  frequency: 10
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "RandomJumpAction"
+- name: "Sit"
+  frequency: 50
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "SitSequence"
+- name: "Breed"
+  frequency: 2
+  conditions:
+  - "mascot.isGrounded() && !mascot.isHittingCeiling() && mascot.getCurrentAction()\
+    \ == null"
+  actions:
+  - "Breed"
+- name: "BreedJump"
+  frequency: 2
+  conditions:
+  - "mascot.isGrounded() && !mascot.isHittingCeiling() && mascot.getCurrentAction()\
+    \ == null"
+  actions:
+  - "BreedJump"
+- name: "Dig"
+  frequency: 1
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "Dig"
+- name: "Gather"
+  frequency: 5
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "Gather"
+- name: "Stay"
+  frequency: 100
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "Stay"
+- name: "Grab"
+  frequency: 50
+  conditions:
+  - "mascot.isGrounded() && mascot.getFloorWindow() != null && !isOnEdge && mascot.getCurrentAction()\
+    \ == null"
+  actions:
+  - "Grab"
+- name: "Throw"
+  frequency: 2
+  conditions:
+  - "mascot.isGrounded() && mascot.getCurrentAction() == null"
+  actions:
+  - "Throw"
+- name: "GreetRight"
+  frequency: 5
+  conditions:
+  - "mascot.isGrounded() && !mascot.isHittingCeiling() && nearestMascot.distance <\
+    \ 150 && nearestMascot.x >= mascot.getX()"
+  actions:
+  - "GreetSequenceRight"
+- name: "GreetLeft"
+  frequency: 5
+  conditions:
+  - "mascot.isGrounded() && !mascot.isHittingCeiling() && nearestMascot.distance <\
+    \ 150 && nearestMascot.x < mascot.getX()"
+  actions:
+  - "GreetSequenceLeft"

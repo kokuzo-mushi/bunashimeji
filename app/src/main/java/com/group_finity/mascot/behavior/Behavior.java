@@ -46,6 +46,7 @@ public class Behavior implements Trigger {
 
     // GraalJS Support
     private Source scriptSource;
+    private String script; // XML Binding
 
     public Behavior() {
     }
@@ -113,13 +114,47 @@ public class Behavior implements Trigger {
         this.action = action;
     }
 
+    public String getScript() {
+        return script;
+    }
+
+    public void setScript(String script) {
+        this.script = script;
+        if (script != null && !script.isEmpty()) {
+            loadScript(script);
+        }
+    }
+
     // --- Scripting Support ---
 
     /**
      * JavaScriptファイルを読み込み、このビヘイビアに関連付けます。
+     * ファイルシステム、またはクラスパスリソースから探索します。
      */
-    public void loadScript(Path path) throws IOException {
-        this.scriptSource = ScriptEngineManager.INSTANCE.loadScript(path);
+    public void loadScript(String pathOrResource) {
+        try {
+            // 1. ファイルシステムから探す
+            Path path = Path.of(pathOrResource);
+            if (java.nio.file.Files.exists(path)) {
+                this.scriptSource = ScriptEngineManager.INSTANCE.loadScript(path);
+                log.info("Behavior '" + name + "': Loaded script from file: " + path.toAbsolutePath());
+                return;
+            }
+
+            // 2. クラスパスリソースから探す
+            var resourceUrl = getClass().getClassLoader().getResource(pathOrResource);
+            if (resourceUrl != null) {
+                try (var stream = resourceUrl.openStream()) {
+                    String content = new String(stream.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                    this.scriptSource = ScriptEngineManager.INSTANCE.loadScript(content, pathOrResource);
+                    log.info("Behavior '" + name + "': Loaded script from resource: " + pathOrResource);
+                    return;
+                }
+            }
+            log.warning("Behavior '" + name + "': Script NOT FOUND in filesystem or classpath: " + pathOrResource);
+        } catch (Exception e) {
+            log.warning("Behavior '" + name + "': Failed to load script: " + pathOrResource + " -> " + e.getMessage());
+        }
     }
 
     /**
@@ -130,23 +165,24 @@ public class Behavior implements Trigger {
         // 1. JSスクリプトがある場合 (Modern)
         if (scriptSource != null) {
             Context context = mascot.getJsContext();
-            if (context == null) {
-                log.warning("Mascot has no JS Context. Skipping script execution.");
-                return null;
-            }
+            if (context != null) {
+                try {
+                    // スクリプトを評価 (キャッシュされているので高速)
+                    Value exports = context.eval(scriptSource);
 
-            try {
-                // スクリプトを評価 (キャッシュされているので高速)
-                Value exports = context.eval(scriptSource);
-
-                // スクリプトが関数そのものを返している場合 ( module.exports = function*()... )
-                if (exports.canExecute()) {
-                    Value generator = exports.execute(mascot);
-                    return new JSGeneratorAction(generator);
+                    // スクリプトが関数そのものを返している場合 ( module.exports = function*()... )
+                    if (exports.canExecute()) {
+                        Value generator = exports.execute(mascot);
+                        return new JSGeneratorAction(generator);
+                    } else {
+                        log.warning("Behavior '" + name + "': Script evaluated but returned non-executable value: " + exports);
+                    }
+                } catch (Exception e) {
+                    log.severe("Failed to execute behavior script: " + name + " / " + e.getMessage());
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                log.severe("Failed to execute behavior script: " + name + " / " + e.getMessage());
-                e.printStackTrace();
+            } else {
+                log.warning("Mascot has no JS Context. Skipping script execution.");
             }
         }
 
@@ -155,7 +191,9 @@ public class Behavior implements Trigger {
             // TODO: Actionがステートフルの場合、ここで複製(clone)を返す必要がある
             return action;
         }
-        return null;
+        
+        // Fallback: Return a dummy action to prevent NullPointerException in EventDispatcher
+        return new com.group_finity.mascot.action.SequenceAction();
     }
 
     @Override

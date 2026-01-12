@@ -296,7 +296,7 @@ class ActionBuilder {
                 )
             }
         }
-        sequenceAction.sequence = sequence
+        sequenceAction.setSequence(sequence)
     }
 
     private fun resolveRandomChoiceAction(
@@ -315,7 +315,7 @@ class ActionBuilder {
                 )
             }
         }
-        randomAction.candidates = candidates
+        randomAction.setCandidates(candidates)
     }
 
     private fun resolveThrowAction(
@@ -353,7 +353,9 @@ class ActionBuilder {
             if (imageName.isNullOrEmpty()) {
                 imageName = "${actionName ?: ""}$index.png"
             }
-            poses.add(Pose(imageName, xmlPose.duration, xmlPose.imageAnchorPoint))
+            // XmlPoint -> java.awt.Point 変換
+            val anchor = xmlPose.imageAnchorPoint?.let { Point(it.x, it.y) }
+            poses.add(Pose(imageName, xmlPose.duration, anchor))
             index++
         }
         return Animation(poses)
@@ -384,6 +386,7 @@ class ActionBuilder {
         return Collections.unmodifiableMap(builtActions)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun createActionFromConfig(config: ActionConfig): Action? {
         val params = config.params
 
@@ -406,7 +409,7 @@ class ActionBuilder {
                     if (params.containsKey("Animation")) {
                         val a = createAnimationFromConfig(params, config.name)
                         if (a != null) {
-                            duration = a.poses.sumOf { it.duration }
+                            duration = a.totalDuration
                         }
                     }
                     MoveAction(point, duration)
@@ -651,6 +654,12 @@ class ActionBuilder {
                     PullUpAction(puAnim, puDuration)
                 }
             }
+            "Script" -> { // Added Script Action support logic implicitly or todo?
+                System.err.println(
+                        "Script action not fully supported in builder yet: " + config.name
+                ) // or similar
+                null
+            }
             else -> {
                 System.err.println("Unknown action type: " + config.type)
                 null
@@ -658,6 +667,7 @@ class ActionBuilder {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun createAnimationFromConfig(
             params: Map<String, Any>,
             actionName: String
@@ -689,6 +699,7 @@ class ActionBuilder {
         return Animation(poses)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun createDraggedActionFromConfig(
             params: Map<String, Any>,
             actionName: String
@@ -723,6 +734,7 @@ class ActionBuilder {
         return DraggedAction(poseAnims)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun resolveSequenceActionConfig(
             sequenceAction: SequenceAction,
             config: ActionConfig,
@@ -742,9 +754,10 @@ class ActionBuilder {
                 System.err.println("ActionReference not found: $name in Sequence ${config.name}")
             }
         }
-        sequenceAction.sequence = sequence
+        sequenceAction.setSequence(sequence)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun resolveRandomChoiceActionConfig(
             randomAction: RandomChoiceAction,
             config: ActionConfig,
@@ -766,9 +779,10 @@ class ActionBuilder {
                 )
             }
         }
-        randomAction.candidates = candidates
+        randomAction.setCandidates(candidates)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun resolveThrowActionConfig(
             throwAction: ThrowAction,
             config: ActionConfig,

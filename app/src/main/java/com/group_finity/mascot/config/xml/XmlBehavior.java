@@ -24,6 +24,9 @@ public class XmlBehavior {
     @XmlAttribute(name = "Hidden")
     private boolean hidden;
 
+    @XmlAttribute(name = "Script")
+    private String script;
+
     @XmlElement(name = "Condition")
     private String condition;
 
@@ -36,12 +39,14 @@ public class XmlBehavior {
     public String getName() { return name; }
     public Integer getFrequency() { return frequency; }
     public boolean isHidden() { return hidden; }
+    public String getScript() { return script; }
     public String getCondition() { return condition; }
     public List<XmlActionReference> getActionReferences() { return actionReferences; }
     public List<XmlNextBehavior> getNextBehaviors() { return nextBehaviors; }
 
     public void setFrequency(Integer frequency) { this.frequency = frequency; }
     public void setHidden(boolean hidden) { this.hidden = hidden; }
+    public void setScript(String script) { this.script = script; }
 
     /**
      * 次の振る舞いへの遷移定義を表す内部クラス。
