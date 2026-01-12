@@ -119,7 +119,7 @@ public class Behavior implements Trigger {
      * JavaScriptファイルを読み込み、このビヘイビアに関連付けます。
      */
     public void loadScript(Path path) throws IOException {
-        this.scriptSource = ScriptEngineManager.getInstance().loadScript(path);
+        this.scriptSource = ScriptEngineManager.INSTANCE.loadScript(path);
     }
 
     /**

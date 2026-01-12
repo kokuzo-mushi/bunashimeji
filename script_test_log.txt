@@ -1,0 +1,44 @@
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateComposeResClass UP-TO-DATE
+> Task :app:compileKotlin UP-TO-DATE
+> Task :app:compileJava UP-TO-DATE
+> Task :app:processResources UP-TO-DATE
+> Task :app:classes UP-TO-DATE
+> Task :app:compileTestKotlin UP-TO-DATE
+> Task :app:compileTestJava UP-TO-DATE
+> Task :app:processTestResources UP-TO-DATE
+> Task :app:testClasses UP-TO-DATE
+
+> Task :app:test
+
+ScriptEngineTest > testJavaClassAccess() PASSED
+
+ScriptEngineTest > testEvaluateString() PASSED
+
+ScriptEngineTest > testJavaObjectInterop() FAILED
+    org.opentest4j.AssertionFailedError: expected: <150> but was: <50>
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+        at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+        at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+        at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+        at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
+        at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
+        at app//com.group_finity.mascot.script.ScriptEngineTest.testJavaObjectInterop(ScriptEngineTest.kt:67)
+
+ScriptEngineTest > testEvaluateMath() PASSED
+
+4 tests completed, 1 failed
+
+> Task :app:test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:test'.
+> There were failing tests. See the report at: file:///C:/bunashimeji/bunashimeji/app/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 3s
+9 actionable tasks: 2 executed, 7 up-to-date

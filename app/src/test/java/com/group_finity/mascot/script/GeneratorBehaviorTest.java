@@ -4,6 +4,7 @@ import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.action.Action;
 import com.group_finity.mascot.behavior.Behavior;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GeneratorBehaviorTest {
 
     private Mascot mascot;
-    private ScriptEngineManager manager;
+    private ScriptEngine engine;
     private Context context;
 
     @BeforeEach
@@ -33,18 +34,18 @@ class GeneratorBehaviorTest {
         mascot.setLookRight(false); // 初期状態は左向き
 
         // 2. スクリプトエンジンの準備
-        manager = ScriptEngineManager.getInstance();
         Map<String, Object> globals = new HashMap<>();
         globals.put("mascot", mascot);
 
-        context = manager.createMascotContext(globals);
+        engine = ScriptEngineManager.INSTANCE.createMascotContext(globals);
+        context = engine.getContext();
         mascot.setJsContext(context);
     }
 
     @AfterEach
     void tearDown() {
-        if (context != null) {
-            context.close();
+        if (engine != null) {
+            engine.close();
         }
     }
 
@@ -52,7 +53,7 @@ class GeneratorBehaviorTest {
     void testGeneratorBehaviorExecution() throws Exception {
         // 1. ビヘイビアの作成とスクリプトのロード
         Behavior behavior = new Behavior("TestGen", 1, "true");
-        
+
         // リソースからスクリプトファイルのパスを取得
         URL res = getClass().getResource("/behavior/example_behavior.js");
         Path scriptPath;
@@ -98,8 +99,6 @@ class GeneratorBehaviorTest {
         assertFalse(mascot.isLookRight(), "Mascot should look left");
 
         // --- End of Generator ---
-        // ジェネレータ関数が終了すると、hasNext() は false になるはず
-        // (JSGeneratorActionの実装依存だが、done=trueでfinishedフラグが立つ)
         action.execute(mascot); // 最後の実行で done が検出される
         assertFalse(action.hasNext(), "Action should be finished");
     }

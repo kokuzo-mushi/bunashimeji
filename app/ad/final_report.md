@@ -10,7 +10,7 @@
 |---|---|---|
 | **Runtime** | **Java 21 (LTS)** | Project Panama, Virtual Threads, ZGC などの最新機能を利用するため。 |
 | **Native Interop** | **Project Panama (FFM API)** | JNAのオーバーヘッドを排除し、OSネイティブAPIを高速に呼び出すため。 |
-| **Rendering** | **Active Rendering** | OSの再描画イベントに依存せず、正確な60FPSループを制御するため。 |
+| **Rendering** | **Compose / State-Driven** | JetBrains Compose を使用し、宣言的UIとステート管理による効率的な描画を行うため。 |
 | **Scripting** | **GraalJS** | 高速なJavaScript実行と、Javaとのシームレスな連携のため。 |
 | **GC** | **Generational ZGC** | 大量のオブジェクト（マスコット）を扱いつつ、GC停止時間を1ms以下に抑えるため。 |
 
@@ -33,8 +33,8 @@ Windows 11 環境における高DPI対応と、ウィンドウ制御の基盤を
 ### Phase 3: Rendering & Performance
 多数のマスコットを表示してもパフォーマンスが低下しない、堅牢なレンダリングループを実装しました。
 
-- **Direct3D パイプライン**: JVMオプション `-Dsun.java2d.d3d=true` を有効化し、GPUアクセラレーションを活用。
-- **高精度 60FPS ループ**: `System.nanoTime()` を使用した可変スリープ方式のメインループを実装し、PCの性能に依存しない一定の動作速度を実現。
+- **Skia グラフィックスエンジン**: JetBrains Compose (Skia) によるGPUアクセラレーションを活用した描画。
+- **Coroutine Game Loop**: Kotlin Coroutines を使用した非同期かつ正確なメインループを実装し、ロジックと描画を分離。
 - **Generational ZGC**: `-XX:+UseZGC -XX:+ZGenerational` により、メモリ割り当ての激しい状況でもフレーム落ち（カクつき）を完全に排除。
 - **画像最適化**: 読み込み時に `BufferedImage.TYPE_INT_ARGB_PRE` (Pre-multiplied Alpha) に変換することで、GPUへの転送コストを最小化。
 

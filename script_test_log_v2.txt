@@ -1,0 +1,28 @@
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateComposeResClass UP-TO-DATE
+> Task :app:compileKotlin UP-TO-DATE
+> Task :app:compileJava UP-TO-DATE
+> Task :app:processResources UP-TO-DATE
+> Task :app:classes UP-TO-DATE
+> Task :app:compileTestKotlin UP-TO-DATE
+
+> Task :app:compileTestJava FAILED
+C:\bunashimeji\bunashimeji\app\src\test\java\com\group_finity\mascot\behavior\BehaviorTest.java:35: 繧ｨ繝ｩ繝ｼ: 繧ｷ繝ｳ繝懊Ν繧定ｦ九▽縺代ｉ繧後∪縺帙ｓ
+        jsContext = ScriptEngineManager.getInstance().createMascotContext(globals);
+                                       ^
+  繧ｷ繝ｳ繝懊Ν:   繝｡繧ｽ繝・ラ getInstance()
+  蝣ｴ謇: 繧ｯ繝ｩ繧ｹ ScriptEngineManager
+繧ｨ繝ｩ繝ｼ1蛟・
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileTestJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 1s
+7 actionable tasks: 2 executed, 5 up-to-date

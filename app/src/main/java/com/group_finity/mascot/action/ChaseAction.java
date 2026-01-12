@@ -4,9 +4,8 @@ import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
 import com.group_finity.mascot.type.NeoRect;
+import com.group_finity.mascot.type.NeoPoint;
 import java.lang.foreign.MemorySegment;
-import java.awt.MouseInfo;
-import java.awt.Point;
 
 /**
  * マウスカーソルを追いかけるアクション。
@@ -42,8 +41,10 @@ public class ChaseAction implements Action {
         animation.tick(FRAME_DURATION_MS);
 
         // マウス位置の取得
-        Point mousePos = MouseInfo.getPointerInfo().getLocation();
-        int distance = mousePos.x - mascot.getX();
+        NeoPoint mousePos = NativeWindowUtil.getCursorPos();
+        if (mousePos == null) return; // 取得失敗時は何もしない
+
+        int distance = mousePos.x() - mascot.getX();
 
         // 向きの更新と移動
         if (Math.abs(distance) >= targetDistance) {

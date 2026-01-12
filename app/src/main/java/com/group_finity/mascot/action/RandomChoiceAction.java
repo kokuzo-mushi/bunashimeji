@@ -17,6 +17,10 @@ public class RandomChoiceAction implements Action {
         this.candidates = candidates;
     }
 
+    public List<Action> getCandidates() {
+        return candidates;
+    }
+
     @Override
     public void execute(Mascot mascot) {
         // まだアクションが選ばれていない場合、候補からランダムに選択

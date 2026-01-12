@@ -8,16 +8,18 @@ import com.group_finity.mascot.image.ImageCache
 import com.group_finity.mascot.manager.MascotContext
 import com.group_finity.mascot.manager.MascotManager
 import com.group_finity.mascot.script.ScriptEngineManager
+import com.group_finity.mascot.config.XmlToYamlConverter
 import com.group_finity.mascot.trigger.EventDispatcher
 import com.group_finity.mascot.platform.Platform
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil
 import com.group_finity.mascot.type.NeoPoint
 import com.group_finity.mascot.type.NeoRect
 import com.group_finity.mascot.view.MascotView
-import java.awt.GraphicsEnvironment
 import java.awt.Point
 import java.awt.image.BufferedImage
 import java.nio.file.Path
+import java.nio.file.Files
 import java.util.HashMap
 import androidx.compose.ui.window.Tray
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -26,16 +28,41 @@ import java.io.File
 import javax.imageio.ImageIO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import androidx.compose.ui.window.Window
 
-fun main(args: Array<String>) = application {
+fun main() = application {
     // 1. Initialize Global Resources (Once)
-    val config = remember { Configuration(Path.of("conf/actions.xml"), Path.of("conf/behaviors.xml")) }
+    
+    // XML -> YAML 自動変換ロジック
+    // YAMLファイルが存在しない場合、XMLから生成する
+    val actionsXml = Path.of("conf/actions.xml")
+    val actionsYaml = Path.of("conf/actions.yaml")
+    if (Files.exists(actionsXml) && !Files.exists(actionsYaml)) {
+        try {
+            XmlToYamlConverter.convert(actionsXml, actionsYaml, "actions")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    val behaviorsXml = Path.of("conf/behaviors.xml")
+    val behaviorsYaml = Path.of("conf/behaviors.yaml")
+    if (Files.exists(behaviorsXml) && !Files.exists(behaviorsYaml)) {
+        try {
+            XmlToYamlConverter.convert(behaviorsXml, behaviorsYaml, "behaviors")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    // TODO: behavior.Configuration が YAML 対応したら、ここで .yaml パスを渡すように変更する
+    val config = remember { Configuration(actionsXml, behaviorsXml) }
+    
     // Separate ImageCache for each skin path
     val imageCaches = remember { mutableMapOf<Path, ImageCache>() }
     
     val workArea = remember {
-        val workAreaRect = GraphicsEnvironment.getLocalGraphicsEnvironment().maximumWindowBounds
-        NeoRect(workAreaRect.x, workAreaRect.y, workAreaRect.width, workAreaRect.height)
+        NativeWindowUtil.getPrimaryMonitorWorkArea() ?: NeoRect(0, 0, 1024, 768)
     }
     
     val mascotManager = remember { MascotManager() }
@@ -74,8 +101,8 @@ fun main(args: Array<String>) = application {
             contextVariables["nearestMascot"] = nearestMascotMap
 
             // Script Engine
-            val jsContext = ScriptEngineManager.getInstance().createMascotContext(contextVariables)
-            mascot.jsContext = jsContext
+            val jsContext = ScriptEngineManager.createMascotContext(contextVariables)
+            mascot.jsContext = jsContext.context
 
             // Dispatcher & Adapter
             val evalContext = EvaluationContext(contextVariables)
@@ -243,10 +270,12 @@ fun main(args: Array<String>) = application {
                     }
                 })
                 Item("あつまれ！", onClick = {
-                    val mousePos = java.awt.MouseInfo.getPointerInfo().location
-                    mascotList.forEach { ctx ->
-                        ctx.mascot.anchor = NeoPoint(mousePos.x, mousePos.y)
-                        ctx.mascot.isGrounded = false
+                    val mousePos = NativeWindowUtil.getCursorPos()
+                    if (mousePos != null) {
+                        mascotList.forEach { ctx ->
+                            ctx.mascot.anchor = mousePos
+                            ctx.mascot.isGrounded = false
+                        }
                     }
                 })
                 Item("一匹にする", onClick = {

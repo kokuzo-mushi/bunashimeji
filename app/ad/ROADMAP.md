@@ -12,8 +12,8 @@
 - **完了済みタスク**:
   - Phase 1〜4 の全工程（機能拡張、物理演算強化、インストーラ作成まで）
   - セキュリティガイドライン (`SECURITY_IMPLEMENTATION_GUIDE.md`) の策定
-  - **イベント駆動システムの刷新**: `EventDispatcher` のリファクタリング、テストの整備、デバッグログのクリーンアップ完了。
-- **次のステップ**: GUIフレームワークの刷新 (Compose)、ネイティブ連携の完全移行 (Panama)、残存アクションの実装
+  - **イベント駆動システムの刷新**: `EventDispatcher` のリファクタリングと安定化（メインブランチ統合済み）。
+- **次のステップ**: 設定ファイルのYAML化、スクリプト言語の導入
 
 ---
 
@@ -98,10 +98,10 @@
     - [x] Compose 導入の概念実証 (PoC) の実施 (描画, アニメーション, 透過ウィンドウ)。
     - [x] マスコットロジック (MascotManager) の分離と Compose への統合。
     - [x] 設定画面 (Settings UI) の Compose 移植と物理演算パラメータのリアルタイム反映。
-    - [ ] Swing/AWT から **JetBrains Compose Multiplatform** への完全移行。
+    - [x] Swing/AWT から **JetBrains Compose Multiplatform** への完全移行。
   - [ ] **ネイティブ連携の刷新**:
     - [x] コアウィンドウ操作 (`NativeWindowUtil`) の Project Panama (FFM API) 化。
-    - [ ] JNA 依存の完全排除。
+    - [x] **JNA 依存の完全排除**: `build.gradle.kts` から JNA ライブラリを削除し、すべて FFM API で実装する。
   - [ ] **拡張性の向上**:
     - 設定ファイルの YAML 化、およびスクリプト言語 (Lua/Kotlin) の導入。
   - [ ] **未実装アクションの追加**:

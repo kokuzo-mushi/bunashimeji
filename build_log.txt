@@ -1,0 +1,30 @@
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateComposeResClass UP-TO-DATE
+> Task :app:processResources UP-TO-DATE
+> Task :app:processTestResources UP-TO-DATE
+
+> Task :app:compileKotlin
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/behavior/ActionBuilder.kt:299:24 Cannot access 'sequence': it is private in 'SequenceAction'
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/behavior/ActionBuilder.kt:318:22 Cannot access 'candidates': it is private in 'RandomChoiceAction'
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/behavior/ActionBuilder.kt:409:42 Cannot access 'poses': it is private in 'Animation'
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/behavior/ActionBuilder.kt:412:32 Type mismatch: inferred type is Point but XmlPoint! was expected
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/behavior/ActionBuilder.kt:745:24 Cannot access 'sequence': it is private in 'SequenceAction'
+e: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/behavior/ActionBuilder.kt:769:22 Cannot access 'candidates': it is private in 'RandomChoiceAction'
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+> Task :app:compileKotlin FAILED
+Execution failed for task ':app:compileKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 3s
+5 actionable tasks: 2 executed, 3 up-to-date

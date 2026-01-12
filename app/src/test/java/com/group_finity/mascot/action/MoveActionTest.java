@@ -1,7 +1,7 @@
 package com.group_finity.mascot.action;
 
 import com.group_finity.mascot.Mascot;
-import com.group_finity.mascot.config.xml.XmlPoint;
+import java.awt.Point;
 import com.group_finity.mascot.type.NeoPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,10 +28,8 @@ class MoveActionTest {
     @Test
     void execute_shouldMoveToTargetImmediately_whenDurationIsZero() {
         // Arrange
-        XmlPoint mockTargetXml = mock(XmlPoint.class);
-        when(mockTargetXml.getX()).thenReturn(200);
-        when(mockTargetXml.getY()).thenReturn(200);
-        MoveAction moveAction = new MoveAction(mockTargetXml, 0);
+        Point target = new Point(200, 200);
+        MoveAction moveAction = new MoveAction(target, 0);
 
         // Act
         moveAction.execute(mockMascot);
@@ -47,10 +45,8 @@ class MoveActionTest {
     void execute_shouldMoveIncrementally_whenDurationIsPositive() {
         // Arrange
         // (100, 100) -> (200, 200)
-        XmlPoint mockTargetXml = mock(XmlPoint.class);
-        when(mockTargetXml.getX()).thenReturn(200);
-        when(mockTargetXml.getY()).thenReturn(200);
-        MoveAction moveAction = new MoveAction(mockTargetXml, 100); // duration 100ms
+        Point target = new Point(200, 200);
+        MoveAction moveAction = new MoveAction(target, 100); // duration 100ms
         ArgumentCaptor<NeoPoint> pointCaptor = ArgumentCaptor.forClass(NeoPoint.class);
 
         // Act (Frame 1: 40ms elapsed)
@@ -75,10 +71,8 @@ class MoveActionTest {
     @Test
     void hasNext_shouldReturnFalse_afterDuration() {
         // Arrange
-        XmlPoint mockTargetXml = mock(XmlPoint.class);
-        when(mockTargetXml.getX()).thenReturn(200);
-        when(mockTargetXml.getY()).thenReturn(200);
-        MoveAction moveAction = new MoveAction(mockTargetXml, 100); // duration 100ms
+        Point target = new Point(200, 200);
+        MoveAction moveAction = new MoveAction(target, 100); // duration 100ms
         ArgumentCaptor<NeoPoint> pointCaptor = ArgumentCaptor.forClass(NeoPoint.class);
 
         // Act

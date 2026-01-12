@@ -36,6 +36,10 @@ public class SequenceAction implements Action {
         this.currentIndex = 0; // リストが再設定されたらリセット
     }
 
+    public List<Action> getSequence() {
+        return sequence;
+    }
+
     public void setLoopCount(int loopCount) {
         this.loopCount = loopCount;
     }

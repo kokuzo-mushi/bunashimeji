@@ -16,16 +16,17 @@
 
 ## 1. Core Architecture
 -   **Goal:** Run 50+ desktop mascot instances at 60 FPS on Windows 11.
--   **Runtime:** Java 21 (LTS) with Preview Features enabled (`--enable-preview`).
+-   **Runtime:** Java 21 (LTS) & Kotlin 1.9.
 -   **Garbage Collection:** Generational ZGC (`-XX:+UseZGC -XX:+ZGenerational`) is mandatory for low latency.
 
 ## 2. "Iron Rules" of Tech Stack
 ### GUI & Rendering
--   **Windowing:** Use `java.awt.Window` directly.
-    -   ❌ DO NOT use `JWindow`, `JFrame`, or JetBrains Compose.
--   **Rendering Loop:** Use **Active Rendering** with `BufferStrategy` (2 buffers).
-    -   ❌ DO NOT use `paint/repaint`, `Thread.sleep`, or `javax.swing.Timer`.
-    -   ✅ Implement a precise `while` loop using `System.nanoTime()`.
+-   **Windowing:** Use **JetBrains Compose Multiplatform** for UI.
+    -   ✅ USE `androidx.compose.ui.window.Window` and `MascotWindow`.
+    -   ❌ DO NOT use `JFrame`, `JWindow`, or raw AWT `Window` for UI components.
+-   **Rendering Loop:** Use **State-Driven Rendering** via Compose.
+    -   ✅ Implement logic loop using Kotlin Coroutines (`LaunchedEffect`, `delay`, `withFrameNanos`).
+    -   ❌ DO NOT use `BufferStrategy` or manual `paint/repaint`.
 -   **Transparency:** Use Win32 `UpdateLayeredWindow` API via Project Panama.
     -   ❌ DO NOT use `AWTUtilities` or `setBackground(new Color(0,0,0,0))`.
 
@@ -42,35 +43,31 @@
     -   This allows writing asynchronous behavior (e.g., "Walk -> Wait -> Jump") in a synchronous style.
 
 ### Build & Distribution
--   **Tool:** Gradle with `org.beryx.runtime` (Badass Runtime Plugin).
+-   **Tool:** Gradle (Kotlin DSL).
 -   **Strategy:** Hybrid Runtime (Custom JRE + Classpath jars).
 -   **Installer:** Use WiX Toolset v3.11 (NOT v4/v5 due to compatibility).
 -   **Flags:** Always embed `--enable-preview` and `--enable-native-access=ALL-UNNAMED` in the launcher.
 
 ## 3. Implementation Reference (Golden Samples)
 
-### A. Active Rendering Loop Pattern
-```java
-// Logic: Ignore OS repaint events and control the frame rate manually.
-setIgnoreRepaint(true);
-createBufferStrategy(2);
-while (running) {
-    long now = System.nanoTime();
-    updateState(); // Physics & Logic
-    do {
-        do {
-            Graphics2D g = (Graphics2D) bs.getDrawGraphics();
-            g.setComposite(AlphaComposite.Clear); // Clear previous frame
-            g.fillRect(0,0,w,h);
-            g.setComposite(AlphaComposite.SrcOver);
-            drawMascot(g); // Draw current frame
-            g.dispose();
-        } while (bs.contentsRestored());
-        bs.show();
-    } while (bs.contentsLost());
-    // Sleep logic for 60FPS cap
+### A. Coroutine Logic Loop Pattern (Kotlin)
+```kotlin
+// Logic: Separate Physics/Logic tick from Rendering.
+// Rendering is handled automatically by Compose State changes.
+LaunchedEffect(Unit) {
+    while (isActive) {
+        val frameStart = System.nanoTime()
+        
+        mascot.tick() // Update Model (State)
+        
+        // Calculate wait time for ~60 FPS
+        val elapsed = System.nanoTime() - frameStart
+        val waitNanos = 16_666_666 - elapsed
+        if (waitNanos > 0) {
+            delay(waitNanos / 1_000_000)
+        }
+    }
 }
-
 ```
 
 ### B. Project Panama Boilerplate
@@ -99,21 +96,22 @@ try (Arena arena = Arena.ofConfined()) {
 
 ## 5. Project Structure Reference
 - Root Package: `com.group_finity.mascot`
-- Source Root: `src/main/java`
+- Source Roots: `src/main/java` & `src/main/kotlin`
 - Resource Root: `src/main/resources`
 - Structure:
-  - `com.group_finity.mascot.Main` (Launcher)
-  - `com.group_finity.mascot.trigger.*` (Logic: Event & Trigger System)
-  - `com.group_finity.mascot.action.*` (Logic: Actions like Walk, Fall)
-  - `com.group_finity.mascot.behavior.*` (Logic: Behavior Definitions)
-  - `com.group_finity.mascot.native_interface.*` (Panama: Native Interop)
-  - `com.group_finity.mascot.script.*` (Scripting: GraalJS Integration)
-  - `com.group_finity.mascot.image.*` (Assets: Image & Texture Management)
-  - `com.group_finity.mascot.config.*` (Configuration: XML/YAML Parsers)
+  - `src/main/kotlin/com/group_finity/mascot/`
+      - `ui/`: JetBrains Compose UI (`ShimejiApp.kt`, `MascotWindow.kt`)
+      - `config/`: Configuration Loading (`ConfigurationLoader.kt`, `MascotConfigSchema.kt`)
+  - `src/main/java/com/group_finity/mascot/`
+      - `nativeaccess/`: FFM API implementations (`NativeWindowUtil.java`)
+      - `action/`: Atomic actions (Walk, Fall, Thrown)
+      - `behavior/`: Complex behaviors and decision trees
+      - `script/`: GraalJS Integration
+      - `trigger/`: Event & Trigger System
   - Resources (`src/main/resources`):
     - `behavior/` (Behavior definitions: XML/JS)
-    - `config/` (App settings: `actions.xml`, `system.yaml`)
-    - `images/` (Sprite assets)
+    - `config/` (App settings: `actions.xml`, `behaviors.xml`)
+    - `img/` (Sprite assets)
     - `sounds/` (Audio files)
 
 ## 6. Verified Logic (DO NOT CHANGE)

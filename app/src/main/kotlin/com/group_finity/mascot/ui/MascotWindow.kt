@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isSecondaryPressed
 import androidx.compose.ui.input.pointer.pointerInput
@@ -22,10 +21,10 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.group_finity.mascot.manager.MascotContext
 import com.group_finity.mascot.manager.MascotManager
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil
 import com.group_finity.mascot.type.NeoRect
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import java.awt.Point
 
 @Composable
 fun MascotWindow(
@@ -63,8 +62,11 @@ fun MascotWindow(
             val startTime = System.nanoTime()
 
             // 1. Tick Logic
-            val mousePos = java.awt.MouseInfo.getPointerInfo().location
-            val mouseMap = mapOf("x" to mousePos.x, "y" to mousePos.y)
+            // AWT依存を排除し、Panama経由でマウス位置を取得
+            val mousePoint = NativeWindowUtil.getCursorPos()
+            // 取得失敗時は (0,0) 等でフォールバック、または前回の値を保持する設計が望ましいが、
+            // ここでは簡易的に 0 を使用 (nullチェックが必要)
+            val mouseMap = if (mousePoint != null) mapOf("x" to mousePoint.x(), "y" to mousePoint.y()) else mapOf("x" to 0, "y" to 0)
 
             mascotManager.tick(
                 mascotContext,
@@ -77,14 +79,15 @@ fun MascotWindow(
             )
 
             // 2. Update Image
-            val bufImg = adapter?.getCurrentImage()
-            if (bufImg != null) {
-                currentImage = bufImg.toComposeImageBitmap()
+            val img = adapter?.getCurrentImage()
+            if (img != null) {
+                currentImage = img
                 
                 // マスコットの座標に合わせてウィンドウ位置とサイズを更新
-                val anchor = adapter.getAnchor()
-                windowState.position = WindowPosition((mascot.x - anchor.x).dp, (mascot.y - anchor.y).dp)
-                windowState.size = DpSize(bufImg.width.dp, bufImg.height.dp)
+                val anchor = adapter.getNeoAnchor()
+                // NeoPoint は record なのでアクセサは x(), y()
+                windowState.position = WindowPosition((mascot.x - anchor.x()).dp, (mascot.y - anchor.y()).dp)
+                windowState.size = DpSize(img.width.dp, img.height.dp)
             }
 
             // 3. Wait for next frame (approx 60 FPS)
@@ -137,10 +140,12 @@ fun MascotWindow(
                                 onDragStart = { mascot.isBeingDragged = true },
                                 onDragEnd = { mascot.isBeingDragged = false },
                                 onDragCancel = { mascot.isBeingDragged = false }
-                            ) { change, dragAmount ->
+                            ) { change, _ -> // 未使用パラメータ dragAmount を _ に変更//
                                 change.consume()
-                                val awtPoint = java.awt.MouseInfo.getPointerInfo().location
-                                mascot.anchor = com.group_finity.mascot.type.NeoPoint(awtPoint.x, awtPoint.y)
+                                val nativePoint = NativeWindowUtil.getCursorPos()
+                                if (nativePoint != null) {
+                                    mascot.anchor = nativePoint
+                                }
                             }
                         }
                 )

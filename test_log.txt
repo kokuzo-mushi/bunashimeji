@@ -1,0 +1,28 @@
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateComposeResClass UP-TO-DATE
+> Task :app:compileKotlin UP-TO-DATE
+> Task :app:compileJava UP-TO-DATE
+> Task :app:processResources UP-TO-DATE
+> Task :app:classes UP-TO-DATE
+> Task :app:processTestResources UP-TO-DATE
+
+> Task :app:compileTestKotlin FAILED
+e: file:///C:/bunashimeji/bunashimeji/app/src/test/java/com/group_finity/mascot/config/ConfigurationTest.kt:33:28 Unresolved reference: Configuration
+e: file:///C:/bunashimeji/bunashimeji/app/src/test/java/com/group_finity/mascot/config/ConfigurationTest.kt:57:28 Unresolved reference: Configuration
+e: file:///C:/bunashimeji/bunashimeji/app/src/test/java/com/group_finity/mascot/config/ConfigurationTest.kt:81:28 Unresolved reference: Configuration
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileTestKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2s
+7 actionable tasks: 2 executed, 5 up-to-date

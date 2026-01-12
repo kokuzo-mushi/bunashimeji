@@ -1,15 +1,20 @@
-PS C:\bunashimeji\bunashimeji> ./gradlew run
+PS C:\bunashimeji\bunashimeji> ./gradlew test                                                                                 
 
-> Task :app:compileKotlin
-w: file:///C:/bunashimeji/bunashimeji/app/src/main/kotlin/com/group_finity/mascot/ui/ShimejiApp.kt:30:10 Parameter 'args' is never used
+> Task :app:compileTestKotlin FAILED
+e: file:///C:/bunashimeji/bunashimeji/app/src/test/kotlin/com/group_finity/mascot/script/ScriptEngineTest.kt:14:38 Unresolved reference: createEngine
 
-> Task :app:run
-[Debug] Transition: Prev=FallAction -> Next (Evaluating)
-[Debug] Transition: Prev=com.group_finity.mascot.action.SequenceAction@1ea774b0 -> Next (Evaluating)
-[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@1b6d243 -> Next (Evaluating)
-[Debug] Transition: Prev=com.group_finity.mascot.action.StayAction@3e1b0d1d -> Next (Evaluating)
-[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@1b6d243 -> Next (Evaluating)
+FAILURE: Build failed with an exception.
 
-BUILD SUCCESSFUL in 14s
-6 actionable tasks: 3 executed, 3 up-to-date
+* What went wrong:
+Execution failed for task ':app:compileTestKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
 
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1s
+7 actionable tasks: 2 executed, 5 up-to-date

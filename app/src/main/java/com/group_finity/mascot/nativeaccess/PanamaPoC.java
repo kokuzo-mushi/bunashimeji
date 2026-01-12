@@ -1,8 +1,5 @@
 package com.group_finity.mascot.nativeaccess;
 
-import com.sun.jna.platform.win32.User32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import static java.lang.foreign.ValueLayout.*;
@@ -22,7 +19,7 @@ public class PanamaPoC {
     private static final int LWA_ALPHA = 0x2;
 
     public static void main(String[] args) throws Throwable {
-        System.out.println("=== Project Panama PoC: Window Transparency & Benchmark ===");
+        System.out.println("=== Project Panama PoC: Window Transparency ===");
 
         // ---------------------------------------------------------
         // 1. Panamaのセットアップ (MethodHandleの取得)
@@ -64,19 +61,6 @@ public class PanamaPoC {
 
         // テスト対象のウィンドウハンドル (デスクトップ)
         MemorySegment hwndSegment = (MemorySegment) getDesktopWindow.invoke();
-        HWND hwndJna = User32.INSTANCE.GetDesktopWindow();
-
-        // JNA Warmup
-        for(int i=0; i<10000; i++) User32.INSTANCE.GetWindowLong(hwndJna, GWL_EXSTYLE);
-
-        // JNA Benchmark
-        long startJna = System.nanoTime();
-        for(int i=0; i<1_000_000; i++) {
-            User32.INSTANCE.GetWindowLong(hwndJna, GWL_EXSTYLE);
-        }
-        long endJna = System.nanoTime();
-        double jnaMs = (endJna - startJna) / 1_000_000.0;
-        System.out.printf("JNA    : %.2f ms%n", jnaMs);
 
         // Panama Warmup
         for(int i=0; i<10000; i++) getWindowLongPtr.invoke(hwndSegment, GWL_EXSTYLE);
@@ -89,8 +73,6 @@ public class PanamaPoC {
         long endPanama = System.nanoTime();
         double panamaMs = (endPanama - startPanama) / 1_000_000.0;
         System.out.printf("Panama : %.2f ms%n", panamaMs);
-
-        System.out.printf("Result : Panama is %.2fx faster than JNA%n", jnaMs / panamaMs);
 
         // ---------------------------------------------------------
         // 3. 透過処理の実装例 (シミュレーション)

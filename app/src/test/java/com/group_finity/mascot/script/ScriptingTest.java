@@ -24,11 +24,13 @@ public class ScriptingTest {
             System.out.println("Initial Mascot State: X=" + mascot.getX() + ", Y=" + mascot.getY());
 
             // 2. スクリプトエンジンの準備
-            ScriptEngineManager manager = ScriptEngineManager.getInstance();
+            // ScriptEngineManager manager = ScriptEngineManager.getInstance(); // JAVA
+            // (Deleted)
             Map<String, Object> globals = new HashMap<>();
             globals.put("mascot", mascot);
 
-            Context context = manager.createMascotContext(globals);
+            ScriptEngine engine = ScriptEngineManager.INSTANCE.createMascotContext(globals);
+            Context context = engine.getContext();
 
             // 3. テスト用スクリプトファイルの作成
             File scriptFile = new File("test_script.js");
@@ -42,12 +44,12 @@ public class ScriptingTest {
 
             // 4. スクリプトの実行
             System.out.println("Executing script...");
-            Source source = manager.loadScript(scriptFile.toPath());
+            Source source = ScriptEngineManager.INSTANCE.loadScript(scriptFile.toPath());
             context.eval(source);
 
             // 5. 結果の検証
             System.out.println("Final Mascot State: X=" + mascot.getX() + ", LookRight=" + mascot.isLookRight());
-            
+
             if (mascot.getX() == 150 && mascot.isLookRight()) {
                 System.out.println("SUCCESS: Script modified Java object correctly.");
             } else {
@@ -56,6 +58,7 @@ public class ScriptingTest {
 
             // クリーンアップ
             scriptFile.delete();
+            engine.close();
 
         } catch (Exception e) {
             e.printStackTrace();

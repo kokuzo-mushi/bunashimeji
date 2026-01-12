@@ -1,6 +1,6 @@
 # Shimeji Neo — Architecture Design Document
 
-**Status**: Draft / Active
+**Status**: Active / Phase 5 In-Progress
 **Last Updated**: 2026-01-10
 
 ## 1. Architectural Overview
@@ -34,7 +34,7 @@ Shimeji Neo (Bunashimeji) は、**イベント駆動型 (Event-Driven)** かつ 
 ### 2.3. Action & Physics Engine
 物理演算とアニメーションを統合したシステムです。
 
-*   **Active Rendering Loop**: `BufferStrategy` を用いた独自のレンダリングループで、OSの再描画イベントに依存せず60FPSを維持します。
+*   **Game Loop**: Kotlin Coroutines (`LaunchedEffect`) を用いたメインループで、物理演算とAIロジックを一定間隔で実行します。描画はComposeのステート更新により自動的に行われます。
 *   **Hybrid Physics**:
     *   **Dynamic Mode**: 重力、摩擦、壁判定を行う通常の物理演算。
     *   **Kinematic Mode**: 壁・天井の遷移時 (`CornerTurn`) など、物理演算を一時的に無効化し、幾何学的な軌道計算 (`CornerMath`) に従って移動するモード。
@@ -42,7 +42,7 @@ Shimeji Neo (Bunashimeji) は、**イベント駆動型 (Event-Driven)** かつ 
 ### 2.4. Native Interface (Project Panama)
 OSネイティブ機能へのアクセスは、JNAではなく **Foreign Function & Memory (FFM) API** を使用します。
 
-*   **Window Management**: `User32.dll` (Windows) などのAPIを直接呼び出し、ウィンドウ移動 (`SetWindowPos`) や透明化 (`UpdateLayeredWindow`) を高速に行います。
+*   **Window Management**: `User32.dll` (Windows) などのAPIを直接呼び出し、ウィンドウ移動 (`SetWindowPos`) や透明化 (`UpdateLayeredWindow`) を高速に行います。（JNAからの移行完了）
 *   **Environment Sensing**: マウスカーソル位置、アクティブウィンドウの矩形、タスクバーの位置などをリアルタイムに取得します。
 
 ---
@@ -62,5 +62,5 @@ graph TD
         Physics -->|Apply| MascotState[Mascot State]
     end
     
-    MascotState -->|Render| Window[AWT Window / Panama]
+    MascotState -->|Render| Window[JetBrains Compose Window]
 ```

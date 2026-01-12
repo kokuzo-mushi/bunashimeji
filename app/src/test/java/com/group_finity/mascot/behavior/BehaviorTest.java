@@ -2,6 +2,7 @@ package com.group_finity.mascot.behavior;
 
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.script.ScriptEngine;
 import com.group_finity.mascot.script.ScriptEngineManager;
 import com.group_finity.mascot.trigger.expr.eval.EvaluationContext;
 import org.graalvm.polyglot.Context;
@@ -22,24 +23,27 @@ class BehaviorTest {
     private Action mockAction;
 
     private Mascot mascot;
+    private ScriptEngine engine;
     private Context jsContext;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        
+
         // Mascot と GraalJS Context の初期化
         mascot = new Mascot();
         Map<String, Object> globals = new HashMap<>();
         globals.put("mascot", mascot);
-        jsContext = ScriptEngineManager.getInstance().createMascotContext(globals);
+
+        engine = ScriptEngineManager.INSTANCE.createMascotContext(globals);
+        jsContext = engine.getContext();
         mascot.setJsContext(jsContext);
     }
 
     @AfterEach
     void tearDown() {
-        if (jsContext != null) {
-            jsContext.close();
+        if (engine != null) {
+            engine.close();
         }
     }
 
@@ -49,7 +53,7 @@ class BehaviorTest {
         // JSコンテキストに変数を注入して条件をテスト
         jsContext.getBindings("js").putMember("testVar", "idle");
         String condition = "testVar == 'idle'";
-        
+
         // コンストラクタ引数を修正 (name, action, condition, hidden, frequency)
         Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
 
@@ -69,7 +73,7 @@ class BehaviorTest {
         // Arrange
         jsContext.getBindings("js").putMember("testVar", "running");
         String condition = "testVar == 'idle'";
-        
+
         Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
 
         Map<String, Object> vars = new HashMap<>();
@@ -95,7 +99,7 @@ class BehaviorTest {
         // Math.random() は 0.0 以上 1.0 未満の値を返すため、常に true となる条件
         String condition = "Math.random() < 2.0";
         Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
-        
+
         Map<String, Object> vars = new HashMap<>();
         vars.put("mascot", mascot);
         EvaluationContext context = new EvaluationContext(vars);
@@ -110,7 +114,7 @@ class BehaviorTest {
         // Math.max(10, 20) returns 20, so 20 > 15 is true
         String condition = "Math.max(10, 20) > 15";
         Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
-        
+
         Map<String, Object> vars = new HashMap<>();
         vars.put("mascot", mascot);
         EvaluationContext context = new EvaluationContext(vars);

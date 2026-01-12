@@ -22,6 +22,10 @@ public class Animation {
         this.time = 0;
     }
 
+    public List<Pose> getPoses() {
+        return poses;
+    }
+
     /**
      * アニメーションの総再生時間（ミリ秒）を返します。
      */
@@ -31,6 +35,7 @@ public class Animation {
 
     /**
      * アニメーションの時間を1フレーム分進めます。
+     * 
      * @param deltaMillis 前のフレームからの経過時間(ms)
      */
     public void tick(int deltaMillis) {
@@ -40,6 +45,7 @@ public class Animation {
     /**
      * 現在の経過時間に対応するポーズを返します。
      * アニメーションはループ再生されます。
+     * 
      * @return 現在表示すべきポーズ
      */
     public Pose getPose() {

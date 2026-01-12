@@ -1,8 +1,9 @@
 package com.group_finity.mascot;
 
-import com.group_finity.mascot.nativeaccess.Win32;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinDef.RECT;
+import com.group_finity.mascot.nativeaccess.NativeWindowUtil;
+import com.group_finity.mascot.type.NeoRect;
+
+import java.lang.foreign.MemorySegment;
 
 /**
  * ウィンドウ追従機能の検証用テストクラス。
@@ -19,23 +20,21 @@ public class WindowTrackingTest {
         Thread.sleep(3000);
 
         // ターゲットとなるウィンドウを探す
-        final HWND[] targetHwnd = {null};
+        final long[] targetHwndAddr = {0};
         final String[] targetTitle = {null};
 
-        Win32.INSTANCE.EnumWindows(new Win32.WNDENUMPROC() {
+        NativeWindowUtil.enumWindows(new NativeWindowUtil.EnumWindowsProc() {
             boolean found = false;
             @Override
-            public boolean callback(HWND hWnd, com.sun.jna.Pointer arg) {
+            public boolean callback(MemorySegment hWnd, long lParam) {
                 if (found) return false; // すでに見つかったら終了
                 
-                if (Win32.INSTANCE.IsWindowVisible(hWnd) && !Win32.INSTANCE.IsIconic(hWnd)) {
-                    byte[] buffer = new byte[1024];
-                    Win32.INSTANCE.GetWindowTextA(hWnd, buffer, buffer.length);
-                    String title = new String(buffer).trim();
+                if (NativeWindowUtil.isWindowVisible(hWnd) && !NativeWindowUtil.isIconic(hWnd)) {
+                    String title = NativeWindowUtil.getWindowText(hWnd).trim();
                     
                     // システム系のウィンドウを除外して、最初に見つかったウィンドウを採用
                     if (!title.isEmpty() && !title.equals("Default IME") && !title.equals("MSCTFIME UI")) {
-                        targetHwnd[0] = hWnd;
+                        targetHwndAddr[0] = hWnd.address();
                         targetTitle[0] = title;
                         found = true;
                         return false; // 列挙終了
@@ -43,9 +42,9 @@ public class WindowTrackingTest {
                 }
                 return true; // 続行
             }
-        }, null);
+        }, 0L);
 
-        if (targetHwnd[0] == null) {
+        if (targetHwndAddr[0] == 0) {
             System.err.println("エラー: 追跡可能なウィンドウが見つかりませんでした。");
             return;
         }
@@ -54,32 +53,34 @@ public class WindowTrackingTest {
         System.out.println("このウィンドウをマウスで動かしてください。座標の変化をログに出力します。");
         System.out.println("終了するには Ctrl+C を押してください。");
 
-        RECT lastRect = new RECT();
-        if (Win32.INSTANCE.GetWindowRect(targetHwnd[0], lastRect) == 0) {
+        // アドレスからMemorySegmentを再構築（スコープはGlobalとみなすか、呼び出し毎にラップする）
+        MemorySegment targetHwnd = MemorySegment.ofAddress(targetHwndAddr[0]);
+
+        NeoRect lastRect = NativeWindowUtil.getWindowRect(targetHwnd);
+        if (lastRect == null) {
             System.err.println("エラー: 初期座標の取得に失敗しました。");
             return;
         }
-        System.out.printf("初期位置: (%d, %d)%n", lastRect.left, lastRect.top);
+        System.out.printf("初期位置: (%d, %d)%n", lastRect.x(), lastRect.y());
 
         // 監視ループ
         while (true) {
-            RECT currentRect = new RECT();
-            if (Win32.INSTANCE.GetWindowRect(targetHwnd[0], currentRect) == 0) {
+            // NativeWindowUtilのメソッドはMemorySegmentを要求する
+            NeoRect currentRect = NativeWindowUtil.getWindowRect(targetHwnd);
+            
+            if (currentRect == null) {
                 System.out.println("ウィンドウが閉じられたか、取得に失敗しました。終了します。");
                 break;
             }
 
             // 位置が変わった場合のみログ出力
-            if (currentRect.left != lastRect.left || currentRect.top != lastRect.top) {
-                int dx = currentRect.left - lastRect.left;
-                int dy = currentRect.top - lastRect.top;
-                System.out.printf("移動検知! dx=%d, dy=%d | 新位置: (%d, %d)%n", dx, dy, currentRect.left, currentRect.top);
+            if (currentRect.x() != lastRect.x() || currentRect.y() != lastRect.y()) {
+                int dx = currentRect.x() - lastRect.x();
+                int dy = currentRect.y() - lastRect.y();
+                System.out.printf("移動検知! dx=%d, dy=%d | 新位置: (%d, %d)%n", dx, dy, currentRect.x(), currentRect.y());
                 
                 // 座標更新
-                lastRect.left = currentRect.left;
-                lastRect.top = currentRect.top;
-                lastRect.right = currentRect.right;
-                lastRect.bottom = currentRect.bottom;
+                lastRect = currentRect;
             }
 
             Thread.sleep(16); // 約60FPS

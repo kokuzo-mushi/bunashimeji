@@ -1,10 +1,11 @@
 package com.group_finity.mascot.ui
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.group_finity.mascot.Mascot
 import com.group_finity.mascot.image.ImageCache
+import com.group_finity.mascot.type.NeoPoint
 import com.group_finity.mascot.view.MascotView
 import java.awt.Point
-import java.awt.image.BufferedImage
 
 class MascotViewImpl(
     private val mascot: Mascot,
@@ -62,7 +63,40 @@ class MascotViewImpl(
         return Point(anchorX, anchorY)
     }
 
-    fun getCurrentImage(): BufferedImage? {
+    /**
+     * AWT依存を排除した新しいアンカー取得メソッド。
+     * Phase 5: GUIのCompose化に伴い、java.awt.Point ではなく NeoPoint を返す。
+     */
+    fun getNeoAnchor(): NeoPoint {
+        val image = getCurrentImage() ?: return NeoPoint(0, 0)
+        val animation = mascot.animation
+        val pose = animation?.pose ?: return NeoPoint(0, 0)
+
+        val width = image.width
+        val height = image.height
+
+        var anchorX: Int
+        var anchorY: Int
+
+        if (pose.imageAnchor != null) {
+            anchorX = pose.imageAnchor.x
+            anchorY = pose.imageAnchor.y
+        } else {
+            anchorX = width / 2
+            anchorY = height
+        }
+
+        if (mascot.isLookRight) {
+            anchorX = width - anchorX
+        }
+        if (anchorY == 0 && height > 0) {
+            anchorY = height
+        }
+
+        return NeoPoint(anchorX, anchorY)
+    }
+
+    fun getCurrentImage(): ImageBitmap? {
         val animation = mascot.animation
         val pose = animation?.pose ?: return null
         return if (mascot.isLookRight) {

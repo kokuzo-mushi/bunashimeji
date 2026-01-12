@@ -20,6 +20,7 @@ public class NativeWindowUtil {
     public static final long WS_EX_LAYERED = 0x80000L;
     public static final int LWA_ALPHA = 0x2;
     public static final int MONITOR_DEFAULTTONEAREST = 0x00000002;
+    public static final int MONITOR_DEFAULTTOPRIMARY = 0x00000001;
     public static final int SWP_NOZORDER = 0x0004;
     public static final int SWP_NOACTIVATE = 0x0010;
     public static final int ULW_ALPHA = 0x00000002;
@@ -75,6 +76,8 @@ public class NativeWindowUtil {
     private static final MethodHandle DeleteDC;
     private static final MethodHandle GetDC;
     private static final MethodHandle ReleaseDC;
+    private static final MethodHandle GetCursorPos;
+    private static final MethodHandle EnumDisplayMonitors;
 
     static {
         // 1. PhysicalToLogicalPointForPerMonitorDPI
@@ -494,6 +497,15 @@ public class NativeWindowUtil {
                     USER32.find("EnumWindows").orElseThrow(),
                     FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG));
 
+            // EnumDisplayMonitors: BOOL EnumDisplayMonitors(HDC hdc, LPCRECT lprcClip, MONITORENUMPROC lpfnEnum, LPARAM dwData)
+            EnumDisplayMonitors = LINKER.downcallHandle(
+                    USER32.find("EnumDisplayMonitors").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG));
+
+            // GetCursorPos: BOOL GetCursorPos(LPPOINT lpPoint)
+            GetCursorPos = LINKER.downcallHandle(
+                    USER32.find("GetCursorPos").orElseThrow(),
+                    FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
         } catch (Throwable t) {
             throw new ExceptionInInitializerError(t);
         }
@@ -554,8 +566,71 @@ public class NativeWindowUtil {
         }
     }
 
+    @FunctionalInterface
+    public interface MonitorEnumProc {
+        boolean callback(MemorySegment hMonitor, MemorySegment hdcMonitor, MemorySegment lprcMonitor, long dwData);
+    }
+
+    public static void enumDisplayMonitors(MonitorEnumProc proc, long dwData) {
+        try (Arena arena = Arena.ofConfined()) {
+            FunctionDescriptor callbackDesc = FunctionDescriptor.of(ValueLayout.JAVA_INT,
+                    ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG);
+
+            MethodHandle handle = MethodHandles.lookup().findVirtual(MonitorEnumProc.class, "callback",
+                    MethodType.methodType(boolean.class, MemorySegment.class, MemorySegment.class, MemorySegment.class, long.class));
+            handle = handle.bindTo(proc);
+
+            MethodHandle boolToInt = MethodHandles.lookup().findStatic(NativeWindowUtil.class, "booleanToInt",
+                    MethodType.methodType(int.class, boolean.class));
+            handle = MethodHandles.filterReturnValue(handle, boolToInt);
+
+            MemorySegment stub = LINKER.upcallStub(handle, callbackDesc, arena);
+            EnumDisplayMonitors.invoke(MemorySegment.NULL, MemorySegment.NULL, stub, dwData);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    public static com.group_finity.mascot.type.NeoRect getPrimaryMonitorWorkArea() {
+        try (Arena arena = Arena.ofConfined()) {
+            // MonitorFromWindow(NULL, MONITOR_DEFAULTTOPRIMARY) gets the primary monitor
+            MemorySegment hMonitor = (MemorySegment) MonitorFromWindow.invokeExact(MemorySegment.NULL, MONITOR_DEFAULTTOPRIMARY);
+
+            MemorySegment monitorInfo = arena.allocate(MONITORINFO_LAYOUT);
+            monitorInfo.set(ValueLayout.JAVA_INT, 0, (int) MONITORINFO_LAYOUT.byteSize());
+
+            int result = (int) GetMonitorInfoW.invokeExact(hMonitor, monitorInfo);
+            if (result == 0) return null;
+
+            long rcWorkOffset = 4 + 16; // cbSize(4) + rcMonitor(16)
+            int left = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset);
+            int top = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 4);
+            int right = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 8);
+            int bottom = monitorInfo.get(ValueLayout.JAVA_INT, rcWorkOffset + 12);
+
+            return new com.group_finity.mascot.type.NeoRect(left, top, right - left, bottom - top);
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to get primary monitor work area", t);
+        }
+    }
+
     private static int booleanToInt(boolean b) {
         return b ? 1 : 0;
+    }
+
+    public static com.group_finity.mascot.type.NeoPoint getCursorPos() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment point = arena.allocate(POINT_LAYOUT);
+            int result = (int) GetCursorPos.invokeExact(point);
+            if (result != 0) {
+                int x = point.get(ValueLayout.JAVA_INT, 0);
+                int y = point.get(ValueLayout.JAVA_INT, 4);
+                return new com.group_finity.mascot.type.NeoPoint(x, y);
+            }
+            return null;
+        } catch (Throwable t) {
+            throw new RuntimeException("Failed to GetCursorPos", t);
+        }
     }
 
     // --- Window Control ---

@@ -20,8 +20,8 @@ public class MoveAction implements Action {
     // アクションが完了したかどうかを示すフラグ
     private boolean isFinished;
 
-    public MoveAction(XmlPoint target, int duration) {
-        this.target = new com.group_finity.mascot.type.NeoPoint(target.getX(), target.getY());
+    public MoveAction(Point target, int duration) {
+        this.target = new com.group_finity.mascot.type.NeoPoint(target.x, target.y);
         this.duration = Math.max(0, duration); // 負のdurationを防ぐ
         this.timeElapsed = 0;
         this.isFinished = false;
