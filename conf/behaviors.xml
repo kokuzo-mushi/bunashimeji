@@ -1,5 +1,5 @@
 <Behaviors>
-    <Behavior Name="ScriptWalk" Frequency="10000" Condition="true" Script="behavior/walk.js" />
+    <Behavior Name="ScriptWalk" Frequency="10000" Condition="mascot.isGrounded()" Script="behavior/walk.js" />
     <Behavior Name="Dragged" Frequency="100">
         <Condition>mascot.isBeingDragged()</Condition>
         <ActionReference Name="Dragged" />

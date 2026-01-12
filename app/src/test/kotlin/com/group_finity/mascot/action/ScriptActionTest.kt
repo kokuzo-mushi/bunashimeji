@@ -19,9 +19,21 @@ class ScriptActionTest {
         @JvmField var x: Int = 0
         @JvmField var y: Int = 0
 
-        fun move(dx: Int, dy: Int) {
-            x += dx
-            y += dy
+        // JSから mascot.getX() で呼び出せるように public メソッドを追加
+        fun getX(): Int {
+            return x
+        }
+
+        fun setX(x: Int) {
+            this.x = x
+        }
+
+        fun getY(): Int {
+            return y
+        }
+
+        fun setY(y: Int) {
+            this.y = y
         }
     }
 
@@ -32,11 +44,11 @@ class ScriptActionTest {
         val scriptPath = tempDir.resolve("walk.js")
         Files.writeString(scriptPath, """
             function* walk() {
-                mascot.move(10, 0);
+                mascot.setX(mascot.getX() + 10);
                 yield 1;
-                mascot.move(10, 0);
+                mascot.setX(mascot.getX() + 10);
                 yield 1;
-                mascot.move(0, -5);
+                mascot.setY(mascot.getY() - 5);
             }
         """.trimIndent())
 

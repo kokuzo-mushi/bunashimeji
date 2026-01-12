@@ -34,8 +34,12 @@ public class EventSystemTest {
 
         // 条件に合致するように設定
         when(mockBehavior.evaluate(any(), any())).thenReturn(true);
-        when(mockBehavior.getAction()).thenReturn(mockAction);
+        // getAction()ではなく、instantiateAction()が呼ばれることを想定
+        when(mockBehavior.instantiateAction(mascot)).thenReturn(mockAction);
         when(mockBehavior.getName()).thenReturn("MockBehavior");
+
+        // 前提条件：現在アクションが実行中でないこと
+        when(mascot.getCurrentAction()).thenReturn(null);
 
         dispatcher.registerTrigger(mockBehavior);
 
@@ -75,7 +79,11 @@ public class EventSystemTest {
         });
         
         Action mockAction = mock(Action.class);
-        when(spyBehavior.getAction()).thenReturn(mockAction);
+        // getAction()ではなく、instantiateAction()が呼ばれることを想定
+        when(spyBehavior.instantiateAction(mascot)).thenReturn(mockAction);
+
+        // 前提条件：現在アクションが実行中でないこと
+        when(mascot.getCurrentAction()).thenReturn(null);
 
         dispatcher.registerTrigger(spyBehavior);
 

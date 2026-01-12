@@ -15,6 +15,7 @@ class ActionBuilder {
 
     // === XML Build Logic ===
     fun build(actionsPath: Path): Map<String, Action> {
+        println("[DEBUG] ActionBuilder: Loading XML from ${actionsPath.toAbsolutePath()}")
         return try {
             val context = JAXBContext.newInstance(XmlActions::class.java)
             val unmarshaller = context.createUnmarshaller()
@@ -47,9 +48,10 @@ class ActionBuilder {
                 }
             }
 
+            println("[DEBUG] ActionBuilder: Successfully loaded ${builtActions.size} actions.")
             Collections.unmodifiableMap(builtActions)
         } catch (e: Exception) {
-            System.err.println("Failed to parse actions.xml: $actionsPath")
+            System.err.println("[ERROR] ActionBuilder: Failed to parse actions.xml: ${actionsPath.toAbsolutePath()}")
             e.printStackTrace()
             emptyMap()
         }

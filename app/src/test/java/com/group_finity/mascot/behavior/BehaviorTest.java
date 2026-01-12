@@ -50,8 +50,6 @@ class BehaviorTest {
     @Test
     void evaluate_shouldReturnTrue_whenConditionIsMet() {
         // Arrange
-        // JSコンテキストに変数を注入して条件をテスト
-        jsContext.getBindings("js").putMember("testVar", "idle");
         String condition = "testVar == 'idle'";
 
         // コンストラクタ引数を修正 (name, action, condition, hidden, frequency)
@@ -59,6 +57,7 @@ class BehaviorTest {
 
         Map<String, Object> vars = new HashMap<>();
         vars.put("mascot", mascot);
+        vars.put("testVar", "idle");
         EvaluationContext context = new EvaluationContext(vars);
 
         // Act
@@ -71,13 +70,13 @@ class BehaviorTest {
     @Test
     void evaluate_shouldReturnFalse_whenConditionIsNotMet() {
         // Arrange
-        jsContext.getBindings("js").putMember("testVar", "running");
         String condition = "testVar == 'idle'";
 
         Behavior behavior = new Behavior("TestBehavior", mockAction, condition, false, 1);
 
         Map<String, Object> vars = new HashMap<>();
         vars.put("mascot", mascot);
+        vars.put("testVar", "running");
         EvaluationContext context = new EvaluationContext(vars);
 
         // Act

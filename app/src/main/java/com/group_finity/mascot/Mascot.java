@@ -5,6 +5,11 @@ import com.group_finity.mascot.animation.Animation;
 import com.group_finity.mascot.type.NeoPoint;
 import com.group_finity.mascot.type.NeoRect;
 import java.lang.foreign.MemorySegment;
+import java.util.Map;
+
+import com.group_finity.mascot.script.ScriptEngine;
+import com.group_finity.mascot.script.ScriptEngineManager;
+
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Context;
 
@@ -48,6 +53,32 @@ public class Mascot {
 
     // GraalJS Context (Per-instance isolation)
     private Context jsContext;
+
+     /**
+     * このマスコット専用のJavaScript実行エンジン。
+     */
+    private ScriptEngine scriptEngine;
+
+    /**
+     * コンストラクタ
+     */
+    public Mascot() {
+        // ... 既存の初期化処理 ...
+
+        // ▼▼▼ この初期化処理を追加 ▼▼▼
+        // JavaScriptコンテキストを初期化し、グローバル変数として 'mascot' 自身を登録する。
+        // これにより、スクリプトや条件式から 'mascot.isGrounded()' のようにアクセスできるようになる。
+        this.scriptEngine = ScriptEngineManager.INSTANCE.createMascotContext(Map.of("mascot", this));
+    }
+
+    /**
+     * このマスコットのJavaScript実行コンテキストを返す。
+     * Behaviorの条件式評価などで使用される。
+     * @return GraalJSのContextオブジェクト
+     */
+    public Context getJsContext() {
+        return (this.scriptEngine != null) ? this.scriptEngine.getContext() : null;
+    }
 
     /**
      * Checks if the mascot is currently on the ground (e.g. taskbar or window
@@ -352,10 +383,6 @@ public class Mascot {
                 currentAction = null;
             }
         }
-    }
-
-    public Context getJsContext() {
-        return jsContext;
     }
 
     public void setJsContext(Context jsContext) {

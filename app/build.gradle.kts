@@ -63,6 +63,11 @@ dependencies {
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.compilerArgs.add("--enable-preview")
+
+    // 【レポート戦略Aの適用】
+    // Javaコンパイル時にKotlinのコンパイル済みクラス(ScriptEngine等)が見えるようにする
+    // これにより、Java -> Kotlin の参照エラーを解決します
+    classpath += files(tasks.named("compileKotlin").get().outputs.files)
 }
 
 tasks.withType<JavaExec>().configureEach {

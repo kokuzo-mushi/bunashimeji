@@ -175,7 +175,8 @@ public class Behavior implements Trigger {
                         Value generator = exports.execute(mascot);
                         return new JSGeneratorAction(generator);
                     } else {
-                        log.warning("Behavior '" + name + "': Script evaluated but returned non-executable value: " + exports);
+                        log.warning("Behavior '" + name + "': Script evaluated but returned non-executable value: "
+                                + exports);
                     }
                 } catch (Exception e) {
                     log.severe("Failed to execute behavior script: " + name + " / " + e.getMessage());
@@ -191,8 +192,10 @@ public class Behavior implements Trigger {
             // TODO: Actionがステートフルの場合、ここで複製(clone)を返す必要がある
             return action;
         }
-        
-        // Fallback: Return a dummy action to prevent NullPointerException in EventDispatcher
+
+        // Fallback: Return a dummy action to prevent NullPointerException in
+        // EventDispatcher
+        log.warning("Behavior '" + name + "': Action is null. Returning dummy action.");
         return new com.group_finity.mascot.action.SequenceAction();
     }
 
@@ -206,7 +209,6 @@ public class Behavior implements Trigger {
         if (check(event, context)) {
             Mascot mascot = (Mascot) context.getVariables().get("mascot");
             if (mascot != null) {
-                execute(event, mascot);
                 return true;
             }
         }
@@ -251,17 +253,6 @@ public class Behavior implements Trigger {
             log.warning("Condition evaluation failed: " + condition + " -> " + e.getMessage());
             // e.printStackTrace(); // 必要に応じて有効化
             return false;
-        }
-    }
-
-    private void execute(EventEnvelope<?> event, Mascot mascot) {
-        Action action = instantiateAction(mascot);
-        if (action != null) {
-            mascot.setNextAction(action);
-            // デバッグログ: 挨拶イベントの発火を確認
-            if (name != null && name.startsWith("Greet")) {
-                System.out.println("[Behavior] Fired: " + name);
-            }
         }
     }
 

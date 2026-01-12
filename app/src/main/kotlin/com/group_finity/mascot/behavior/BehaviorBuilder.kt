@@ -14,6 +14,7 @@ class BehaviorBuilder(private val actions: Map<String, Action>) {
 
     // === XML Build Logic ===
     fun build(behaviorsPath: Path): List<Behavior> {
+        println("[DEBUG] BehaviorBuilder: Loading XML from ${behaviorsPath.toAbsolutePath()}")
         return try {
             val context = JAXBContext.newInstance(XmlBehaviors::class.java)
             val unmarshaller = context.createUnmarshaller()
@@ -47,9 +48,10 @@ class BehaviorBuilder(private val actions: Map<String, Action>) {
                     )
                 }
             }
+            println("[DEBUG] BehaviorBuilder: Successfully loaded ${builtBehaviors.size} behaviors.")
             Collections.unmodifiableList(builtBehaviors)
         } catch (e: Exception) {
-            System.err.println("Failed to parse behaviors.xml: $behaviorsPath")
+            System.err.println("[ERROR] BehaviorBuilder: Failed to parse behaviors.xml: ${behaviorsPath.toAbsolutePath()}")
             e.printStackTrace()
             emptyList()
         }

@@ -12,9 +12,11 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Dispatches events to triggers and fires the first one whose conditions are met.
+ * Dispatches events to triggers and fires the first one whose conditions are
+ * met.
  * This class is central to the event-driven architecture of Shimeji Neo.
- * It holds a list of registered triggers and evaluates them when an event occurs.
+ * It holds a list of registered triggers and evaluates them when an event
+ * occurs.
  */
 public class EventDispatcher {
 
@@ -34,17 +36,21 @@ public class EventDispatcher {
     /**
      * Evaluates registered triggers in response to an event.
      * <p>
-     * This method iterates through the list of triggers. For each trigger, it checks if its
+     * This method iterates through the list of triggers. For each trigger, it
+     * checks if its
      * conditions are met by calling {@link Trigger#evaluate(EvaluationContext)}.
      * <p>
      * The first trigger that evaluates to {@code true} is considered "fired".
      * If the fired trigger is a {@link Behavior}, its associated {@link Action} is
-     * retrieved and passed to the {@link Mascot} to be executed. The evaluation then stops.
+     * retrieved and passed to the {@link Mascot} to be executed. The evaluation
+     * then stops.
      * <p>
-     * Currently, this method evaluates all triggers for any event. Future optimizations
+     * Currently, this method evaluates all triggers for any event. Future
+     * optimizations
      * could filter triggers based on the event type to improve performance.
      *
-     * @param event The event that triggered the evaluation (currently unused, for future filtering).
+     * @param event The event that triggered the evaluation (currently unused, for
+     *              future filtering).
      */
     public void evaluateTriggers(EventEnvelope<?> event) {
         if (mascot == null) {
@@ -77,9 +83,9 @@ public class EventDispatcher {
 
         // 候補の中からFrequencyに基づいて抽選を行う
         Behavior selectedBehavior = selectBehavior(candidates);
-        
+
         if (selectedBehavior != null) {
-            Action action = selectedBehavior.getAction();
+            Action action = selectedBehavior.instantiateAction(this.mascot);
 
             // 現在実行中のアクションと同じインスタンスであれば、リセット・再設定を行わない
             // これにより、毎フレーム条件を満たすアクション（Fallなど）がリセットされずに継続実行され、加速などが有効になる
@@ -87,20 +93,24 @@ public class EventDispatcher {
                 return;
             }
 
-            action.reset(); // アクションを再利用する前に必ず初期化する
-            this.mascot.setNextAction(action);
+            if (action != null) {
+                action.reset(); // アクションを再利用する前に必ず初期化する
+                this.mascot.setNextAction(action);
+            }
         }
     }
 
     private Behavior selectBehavior(List<Behavior> candidates) {
         int totalFrequency = candidates.stream().mapToInt(Behavior::getFrequency).sum();
-        if (totalFrequency == 0) return candidates.get(0);
+        if (totalFrequency == 0)
+            return candidates.get(0);
 
         int random = new Random().nextInt(totalFrequency);
         int current = 0;
         for (Behavior behavior : candidates) {
             current += behavior.getFrequency();
-            if (random < current) return behavior;
+            if (random < current)
+                return behavior;
         }
         return candidates.get(candidates.size() - 1);
     }

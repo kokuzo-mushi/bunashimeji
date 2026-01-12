@@ -1,7 +1,7 @@
 function* walk() {
-    mascot.move(10, 0);
+    mascot.setX(mascot.getX() + 10);
     yield 1; // 1フレーム待機
-    mascot.move(10, 0);
+    mascot.setX(mascot.getX() + 10);
     yield 1;
-    mascot.move(0, -5);
+    mascot.setY(mascot.getY() - 5);
 }

@@ -4,5 +4,5 @@
       Script: 実行するJSファイルのパス (実行ディレクトリからの相対パス)
       Frequency: 実行頻度 (高いほど選ばれやすい)
     -->
-    <Behavior Name="ScriptWalk" Frequency="100" Condition="true" Script="behavior/walk.js" />
+    <Behavior Name="ScriptWalk" Frequency="10000" Condition="mascot.isGrounded()" Script="behavior/walk.js" />
 </Behaviors>

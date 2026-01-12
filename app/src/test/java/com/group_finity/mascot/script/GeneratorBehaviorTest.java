@@ -66,7 +66,7 @@ class GeneratorBehaviorTest {
 
         assertTrue(scriptPath.toFile().exists(), "Test script file not found: " + scriptPath.toAbsolutePath());
 
-        behavior.loadScript(scriptPath);
+        behavior.loadScript(scriptPath.toString());
 
         // 2. アクションのインスタンス化
         Action action = behavior.instantiateAction(mascot);
