@@ -63,11 +63,23 @@ public class EventDispatcher {
         // イベント変数をコンテキストに注入して、条件式から参照できるようにする
         this.context.setValue("event", event);
 
+        // ✅ 【修正】マスコット自身もコンテキストに注入しないと、条件式(mascot.y < floor等)が評価できない
+        this.context.setValue("mascot", this.mascot);
+
+        // Debug: マスコットの物理状態を確認
+        // これにより、isGrounded() が true なのか false なのかをログで確定させる
+        if (this.mascot != null) {
+            // System.out.println("[EventDispatcher] Mascot State: isGrounded=" + this.mascot.isGrounded() + ", y=" + this.mascot.getAnchor().y);
+        }
+
         try {
             for (final Trigger trigger : triggers) {
                 if (trigger.evaluate(event, this.context)) {
                     if (trigger instanceof Behavior) {
                         Behavior b = (Behavior) trigger;
+                        // Debug Log
+                        // System.out.println("[EventDispatcher] Condition Matched: " + b.getName() + " (Event: "
+                        //        + event.getType() + ")");
                         candidates.add(b);
                     }
                 }
@@ -75,6 +87,8 @@ public class EventDispatcher {
         } finally {
             // 評価終了後にイベント変数を削除
             this.context.removeVariable("event");
+            // mascotは常駐させても良いが、念のためクリーンアップする場合
+            this.context.removeVariable("mascot");
         }
 
         if (candidates.isEmpty()) {

@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id ("java")
@@ -14,10 +15,9 @@ application {
     applicationName = "ShimejiNeo"
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+// ✅ 【修正】Java ToolchainによるJDKバージョンの統一 (Java 21)
+kotlin {
+    jvmToolchain(21)
 }
 
 repositories {
@@ -63,11 +63,6 @@ dependencies {
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.compilerArgs.add("--enable-preview")
-
-    // 【レポート戦略Aの適用】
-    // Javaコンパイル時にKotlinのコンパイル済みクラス(ScriptEngine等)が見えるようにする
-    // これにより、Java -> Kotlin の参照エラーを解決します
-    classpath += files(tasks.named("compileKotlin").get().outputs.files)
 }
 
 tasks.withType<JavaExec>().configureEach {
@@ -114,6 +109,17 @@ tasks.test {
 tasks.named<Jar>("jar") {
     manifest {
         attributes["Main-Class"] = "com.group_finity.mascot.ui.ShimejiAppKt"
+    }
+}
+
+// ✅ 【修正】Kotlinコンパイルオプションの調整
+// Javaからの呼び出しにおいて、パラメータ名などのメタデータを保持するように設定
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions {
+        // JSR-305アノテーション（Null安全性など）の厳密なチェックを有効化
+        freeCompilerArgs.add("-Xjsr305=strict")
+        // Javaパラメータ名をクラスファイルに残す（リフレクションやライブラリでの利用に有用）
+        javaParameters.set(true)
     }
 }
 

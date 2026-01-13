@@ -54,7 +54,7 @@ public class Mascot {
     // GraalJS Context (Per-instance isolation)
     private Context jsContext;
 
-     /**
+    /**
      * このマスコット専用のJavaScript実行エンジン。
      */
     private ScriptEngine scriptEngine;
@@ -74,6 +74,7 @@ public class Mascot {
     /**
      * このマスコットのJavaScript実行コンテキストを返す。
      * Behaviorの条件式評価などで使用される。
+     * 
      * @return GraalJSのContextオブジェクト
      */
     public Context getJsContext() {
@@ -335,6 +336,11 @@ public class Mascot {
 
     @HostAccess.Export
     public void setNextAction(Action action) {
+        if (this.nextAction != action) {
+            String prevName = (currentAction != null) ? currentAction.toString() : "null";
+            String nextName = (action != null) ? action.toString() : "null";
+            System.out.println("[Mascot] Transition: " + prevName + " -> " + nextName + " at (" + x + "," + y + ")");
+        }
         this.nextAction = action;
     }
 
