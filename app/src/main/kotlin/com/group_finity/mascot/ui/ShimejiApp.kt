@@ -51,8 +51,11 @@ fun main() = application {
         }
     }
 
-    // TODO: behavior.Configuration が YAML 対応したら、ここで .yaml パスを渡すように変更する
-    val config = remember { Configuration(actionsXml, behaviorsXml) }
+    // behavior.Configuration で読み込むファイルを決定 (YAML優先)
+    val finalActionsPath = if (Files.exists(actionsYaml)) actionsYaml else actionsXml
+    val finalBehaviorsPath = if (Files.exists(behaviorsYaml)) behaviorsYaml else behaviorsXml
+
+    val config = remember { Configuration(finalActionsPath, finalBehaviorsPath) }
 
     // Separate ImageCache for each skin path
     val imageCaches = remember { mutableMapOf<Path, ImageCache>() }
@@ -62,6 +65,9 @@ fun main() = application {
     }
 
     val mascotManager = remember { MascotManager() }
+
+    // 3. State: List of Mascots (Moved up for forward reference in createMascot)
+    val mascotList = remember { mutableStateListOf<MascotContext>() }
 
     // Factory Function
     fun createMascot(skinPath: Path): MascotContext? {
@@ -105,6 +111,9 @@ fun main() = application {
             // Dispatcher & Adapter
             val evalContext = EvaluationContext(contextVariables)
             val dispatcher = EventDispatcher(evalContext, mascot)
+            
+            // 環境認識: 他のマスコットの位置を知るためのプロバイダを設定
+            dispatcher.setMascotListProvider { mascotList.map { it.mascot } }
 
             // Get or create ImageCache for this skin
             val cache = imageCaches.getOrPut(skinPath) { ImageCache(skinPath) }
@@ -126,9 +135,6 @@ fun main() = application {
     val timeScale = remember { mutableStateOf(1.0f) }
     var showSettings by remember { mutableStateOf(false) }
     var showSkinSelector by remember { mutableStateOf(true) } // SHow selector at start
-
-    // 3. State: List of Mascots
-    val mascotList = remember { mutableStateListOf<MascotContext>() }
 
     // Initialize Platform for Actions (Breed, Dig, Gather)
     DisposableEffect(Unit) {

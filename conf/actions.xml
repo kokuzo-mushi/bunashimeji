@@ -170,10 +170,10 @@
     </Action>
     <Action Name="Teeter" Type="Teeter" Duration="2000" FallProbability="0.2">
         <Animation>
-            <Pose ImageAnchor="64,128" Duration="150" />
-            <Pose ImageAnchor="64,128" Duration="150" />
-            <Pose ImageAnchor="64,128" Duration="150" />
-            <Pose ImageAnchor="64,128" Duration="150" />
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="150" />
+            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="150" />
+            <Pose Image="shime1.png" ImageAnchor="64,128" Duration="150" />
+            <Pose Image="shime2.png" ImageAnchor="64,128" Duration="150" />
         </Animation>
     </Action>
     <Action Name="PullUp" Type="PullUp" Duration="2000">

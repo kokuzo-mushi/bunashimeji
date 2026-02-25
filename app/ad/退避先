@@ -1,17 +1,17 @@
 package com.group_finity.mascot;
 
+import com.group_finity.mascot.action.Action;
+import com.group_finity.mascot.animation.Animation;
+import com.group_finity.mascot.type.NeoPoint;
+import com.group_finity.mascot.type.NeoRect;
 import java.lang.foreign.MemorySegment;
 import java.util.Map;
 
 import com.group_finity.mascot.script.ScriptEngine;
 import com.group_finity.mascot.script.ScriptEngineManager;
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.HostAccess;
 
-import com.group_finity.mascot.action.Action;
-import com.group_finity.mascot.animation.Animation;
-import com.group_finity.mascot.type.NeoPoint;
-import com.group_finity.mascot.type.NeoRect;
+import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.Context;
 
 /**
  * Represents the mascot character.
@@ -54,7 +54,7 @@ public class Mascot {
     // GraalJS Context (Per-instance isolation)
     private Context jsContext;
 
-     /**
+    /**
      * このマスコット専用のJavaScript実行エンジン。
      */
     private ScriptEngine scriptEngine;
@@ -74,6 +74,7 @@ public class Mascot {
     /**
      * このマスコットのJavaScript実行コンテキストを返す。
      * Behaviorの条件式評価などで使用される。
+     * 
      * @return GraalJSのContextオブジェクト
      */
     public Context getJsContext() {
@@ -335,6 +336,11 @@ public class Mascot {
 
     @HostAccess.Export
     public void setNextAction(Action action) {
+        if (this.nextAction != action) {
+            String prevName = (currentAction != null) ? currentAction.toString() : "null";
+            String nextName = (action != null) ? action.toString() : "null";
+            System.out.println("[Mascot] Transition: " + prevName + " -> " + nextName + " at (" + x + "," + y + ")");
+        }
         this.nextAction = action;
     }
 

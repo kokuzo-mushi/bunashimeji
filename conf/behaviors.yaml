@@ -1,5 +1,11 @@
 actions: []
 behaviors:
+- name: "ScriptWalk"
+  frequency: 100
+  conditions:
+  - "mascot.isGrounded() && !mascot.isBeingDragged() && mascot.getCurrentAction() == null"
+  actions:
+  - "Walk"
 - name: "Dragged"
   frequency: 100
   conditions:

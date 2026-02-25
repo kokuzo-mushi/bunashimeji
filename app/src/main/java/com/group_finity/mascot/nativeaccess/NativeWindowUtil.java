@@ -225,28 +225,19 @@ public class NativeWindowUtil {
      * @return 論理座標 (Point)。変換に失敗した場合は入力座標をそのまま返します。
      */
     public static Point convertPhysicalToLogical(MemorySegment hwndSegment, int x, int y) {
-        try (Arena arena = Arena.ofConfined()) {
-            // POINT 構造体の割り当て
-            MemorySegment point = arena.allocate(POINT_LAYOUT);
-            point.set(ValueLayout.JAVA_INT, 0, x);
-            point.set(ValueLayout.JAVA_INT, 4, y); // offset 4 bytes for y
+        // API (PhysicalToLogicalPointForPerMonitorDPI) が期待通りに変換しないため、
+        // DPIを取得して手動でスケーリング計算を行う
+        int dpi = getDpiForWindow(hwndSegment);
+        if (dpi == 0) dpi = 96; // 取得失敗時は標準DPIとみなす
 
-            // API 呼び出し
-            int result = (int) PhysicalToLogicalPointForPerMonitorDPI.invokeExact(hwndSegment, point);
-
-            if (result != 0) {
-                // 成功: 構造体から変換後の値を取得
-                int logicalX = point.get(ValueLayout.JAVA_INT, 0);
-                int logicalY = point.get(ValueLayout.JAVA_INT, 4);
-                return new Point(logicalX, logicalY);
-            } else {
-                // 失敗: 元の値を返す (ログ出力などを検討しても良い)
-                return new Point(x, y);
-            }
-        } catch (Throwable t) {
-            t.printStackTrace();
-            return new Point(x, y);
-        }
+        // Javaの論理座標系は 96 DPI ベース
+        // DPI 120 (125%) の場合、物理座標は 1.25倍 なので、 96/120 = 0.8倍 して論理座標に戻す
+        double scale = 96.0 / dpi;
+        
+        int logicalX = (int) Math.round(x * scale);
+        int logicalY = (int) Math.round(y * scale);
+        
+        return new Point(logicalX, logicalY);
     }
 
     /**
@@ -549,9 +540,89 @@ public class NativeWindowUtil {
             FunctionDescriptor callbackDesc = FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS,
                     ValueLayout.JAVA_LONG);
 
+            // コールバック内で例外が発生するとネイティブ側でクラッシュする恐れがあるため、
+            // ここでラップして例外を握りつぶし、常に続行(true/1)するようにする等の対策が必要だが、
+            // まずは呼び出し元(proc)が例外を出さないことを前提としつつ、デバッグログを入れる。
+            
+            // デバッグ用カウンタ
+            int[] count = {0};
+            int[] visibleCount = {0};
+            long myPid = ProcessHandle.current().pid(); // 自分のプロセスID
+
+            EnumWindowsProc safeProc = (hwnd, lp) -> {
+                // 1. 自分自身のプロセス(Shimeji)のウィンドウは絶対に無視する
+                // これを行わないと、自分自身を足場にしてしまったり、描画中の不安定なウィンドウ(height=0)を拾ってクラッシュする
+                try {
+                    int pid = getWindowThreadProcessId(hwnd);
+                    if (pid == myPid) {
+                        return true; // Continue
+                    }
+
+                    // 2. サイズが0以下のウィンドウは無視する
+                    com.group_finity.mascot.type.NeoRect r = getWindowRect(hwnd);
+                    if (r == null || r.width() <= 0 || r.height() <= 0) {
+                        return true; // Continue
+                    }
+                } catch (Exception e) {
+                    return true; // エラーが起きるようなウィンドウは触らない
+                }
+
+                count[0]++;
+                // デバッグ: 可視かつタイトルがあるウィンドウが見つかったらログに出す (最大10件)
+                try {
+                    boolean visible = isWindowVisible(hwnd);
+                    if (visible) {
+                        String title = getWindowText(hwnd);
+                        if (!title.isEmpty() && visibleCount[0] < 10) {
+                            visibleCount[0]++;
+                            com.group_finity.mascot.type.NeoRect r = getWindowRect(hwnd);
+                            boolean iconic = isIconic(hwnd);
+                            boolean zoomed = isZoomed(hwnd);
+                            long style = getWindowLongPtr(hwnd, -16); // GWL_STYLE
+                            long exStyle = getWindowLongPtr(hwnd, -20); // GWL_EXSTYLE
+                            
+                            // タイトルの先頭数文字をHexダンプして、文字化けがデータ破損か表示の問題かを確認
+                            StringBuilder hexTitle = new StringBuilder();
+                            for (int i = 0; i < Math.min(title.length(), 5); i++) {
+                                hexTitle.append(String.format("\\u%04X", (int)title.charAt(i)));
+                            }
+
+                            // 座標変換のデバッグログ
+                            // getWindowRect内部ですでに変換されているが、ここでは変換前後の値を明示的に比較する
+                            try (Arena debugArena = Arena.ofConfined()) {
+                                MemorySegment rawRect = debugArena.allocate(RECT_LAYOUT);
+                                if ((int) GetWindowRect.invokeExact(hwnd, rawRect) != 0) {
+                                    int rawLeft = rawRect.get(ValueLayout.JAVA_INT, 0);
+                                    int rawTop = rawRect.get(ValueLayout.JAVA_INT, 4);
+                                    Point logPos = convertPhysicalToLogical(hwnd, rawLeft, rawTop);
+                                    System.out.println("[NativeWindowUtil] Coord Check: Physical(" + rawLeft + "," + rawTop + ") -> Logical(" + logPos.x + "," + logPos.y + ")");
+                                }
+                            }
+
+                            System.out.println("[NativeWindowUtil] Window Found: HWND=" + hwnd 
+                                + " Rect=" + r 
+                                + " Iconic=" + iconic 
+                                + " Zoomed=" + zoomed
+                                + " Style=" + Long.toHexString(style)
+                                + " ExStyle=" + Long.toHexString(exStyle)
+                                + " Title='" + title + "' (Hex: " + hexTitle + "...)");
+                        }
+                    }
+                } catch (Throwable e) {
+                    // ignore probing errors
+                }
+                try {
+                    return proc.callback(hwnd, lp);
+                } catch (Throwable t) {
+                    // 列挙中の例外はログに出して無視し、列挙を継続させる
+                    System.err.println("[NativeWindowUtil] Error in EnumWindows callback: " + t.getMessage());
+                    return true; 
+                }
+            };
+
             MethodHandle handle = MethodHandles.lookup().findVirtual(EnumWindowsProc.class, "callback",
                     MethodType.methodType(boolean.class, MemorySegment.class, long.class));
-            handle = handle.bindTo(proc);
+            handle = handle.bindTo(safeProc);
             
             // Fix: Adapt boolean return to int for the native upcall (BOOL is int)
             // upcallStub requires exact type match between Java handle and FunctionDescriptor
@@ -560,7 +631,12 @@ public class NativeWindowUtil {
             handle = MethodHandles.filterReturnValue(handle, boolToInt);
 
             MemorySegment stub = LINKER.upcallStub(handle, callbackDesc, arena);
+            System.out.println("[NativeWindowUtil] Starting EnumWindows...");
             int result = (int) EnumWindows.invokeExact(stub, lParam);
+            
+            // Debug: 列挙が完了したか確認
+            System.out.println("[NativeWindowUtil] EnumWindows finished. Result: " + result + ", Total callbacks: " + count[0] + ", Visible found: " + visibleCount[0]);
+
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -614,7 +690,7 @@ public class NativeWindowUtil {
         }
     }
 
-    private static int booleanToInt(boolean b) {
+    public static int booleanToInt(boolean b) {
         return b ? 1 : 0;
     }
 
@@ -682,7 +758,11 @@ public class NativeWindowUtil {
             int right = rect.get(ValueLayout.JAVA_INT, 8);
             int bottom = rect.get(ValueLayout.JAVA_INT, 12);
 
-            return new com.group_finity.mascot.type.NeoRect(left, top, right - left, bottom - top);
+            // 物理座標 -> 論理座標へ変換 (DPIスケーリング対応)
+            Point topLeft = convertPhysicalToLogical(hwnd, left, top);
+            Point bottomRight = convertPhysicalToLogical(hwnd, right, bottom);
+
+            return new com.group_finity.mascot.type.NeoRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
         } catch (Throwable t) {
             throw new RuntimeException("Failed to GetWindowRect", t);
         }
@@ -691,15 +771,15 @@ public class NativeWindowUtil {
     public static String getWindowText(MemorySegment hwnd) {
         try (Arena arena = Arena.ofConfined()) {
             // Allocate for 512 wide characters (LPWSTR)
-            MemorySegment buffer = arena.allocateArray(ValueLayout.JAVA_CHAR, 512);
+            MemorySegment buffer = arena.allocateArray(ValueLayout.JAVA_BYTE, 1024);
             int length = (int) GetWindowTextW.invokeExact(hwnd, buffer, 512);
             if (length == 0)
                 return "";
 
-            // Read into char array
-            char[] chars = new char[length];
-            MemorySegment.copy(buffer, ValueLayout.JAVA_CHAR, 0, chars, 0, length);
-            return new String(chars);
+            // Read into byte array and parse as UTF-16LE
+            byte[] bytes = new byte[length * 2];
+            MemorySegment.copy(buffer, ValueLayout.JAVA_BYTE, 0, bytes, 0, length * 2);
+            return new String(bytes, java.nio.charset.StandardCharsets.UTF_16LE);
         } catch (Throwable t) {
             throw new RuntimeException("Failed to GetWindowText", t);
         }

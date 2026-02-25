@@ -19,6 +19,7 @@ class Configuration(actionsPath: Path, behaviorsPath: Path) {
         // 1. アクション定義の読み込み
         actions =
                 if (configLoader.isYaml(actionsPath)) {
+                    println("[INFO] Configuration: Loading Actions from YAML: $actionsPath")
                     val config = configLoader.loadMascotConfig(actionsPath)
                     val actionBuilder = ActionBuilder()
                     actionBuilder.build(config.actions)
@@ -30,6 +31,7 @@ class Configuration(actionsPath: Path, behaviorsPath: Path) {
         // 2. ビヘイビア定義の読み込み
         behaviors =
                 if (configLoader.isYaml(behaviorsPath)) {
+                    println("[INFO] Configuration: Loading Behaviors from YAML: $behaviorsPath")
                     val config = configLoader.loadMascotConfig(behaviorsPath)
                     val behaviorBuilder = BehaviorBuilder(actions)
                     behaviorBuilder.build(config.behaviors)

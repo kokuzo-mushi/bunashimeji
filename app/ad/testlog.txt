@@ -1,36 +1,555 @@
-PS C:\bunashimeji\bunashimeji> ./gradlew run
+ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@98c03d7 -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[EventDispatcher] Condition Matched: ScriptWalk (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: TurnRandomly (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: ChaseMouse (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Walk (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Trip (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: RandomJump (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Sit (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Breed (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: BreedJump (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Dig (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Gather (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Stay (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Throw (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: ScriptWalk
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@98c03d7 -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[EventDispatcher] Condition Matched: ScriptWalk (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: TurnRandomly (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: ChaseMouse (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Walk (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Trip (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: RandomJump (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Sit (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Breed (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: BreedJump (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Dig (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Gather (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Stay (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Throw (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Sit
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
+[NativeWindowUtil] Starting EnumWindows...
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
+[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
+[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
+[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
+[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
+[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
+[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
+[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 
-> Task :app:run
-WARNING: "public static final void com.group_finity.mascot.ui.ShimejiAppKt.main()" chosen over "public static void com.group_finity.mascot.ui.ShimejiAppKt.main(java.lang.String[])"
-[DEBUG] ActionBuilder: Loading XML from C:\bunashimeji\bunashimeji\conf\actions.xml
-[DEBUG] ActionBuilder: Successfully loaded 57 actions.
-[DEBUG] BehaviorBuilder: Loading XML from C:\bunashimeji\bunashimeji\conf\behaviors.xml
-1・ｽ・ｽ 13, 2026 9:47:31 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior loadScript
-・ｽ・ｽ・ｽ: Behavior 'ScriptWalk': Loaded script from resource: behavior/walk.js
-[DEBUG] BehaviorBuilder: Successfully loaded 28 behaviors.
-[Mascot] Transition: null -> FallAction at (960,200)
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-[Mascot] Transition: FallAction -> com.group_finity.mascot.action.WalkAction@407e3be1 at (965,1032)
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-1・ｽ・ｽ 13, 2026 9:47:36 ・ｽﾟ鯉ｿｽ com.group_finity.mascot.behavior.Behavior instantiateAction
-・ｽx・ｽ・ｽ: Behavior 'ScriptWalk': Script evaluated but returned non-executable value: null
-[Mascot] Transition: com.group_finity.mascot.action.WalkAction@407e3be1 -> com.group_finity.mascot.action.DraggedAction@2cc9e704 at (961,992)
-[Debug] Transition: Prev=com.group_finity.mascot.action.DraggedAction@2cc9e704 -> Next (Evaluating)
-[Mascot] Transition: null -> FallAction at (940,719)
-[Debug] Transition: Prev=FallAction -> Next (Evaluating)
-[Mascot] Transition: null -> com.group_finity.mascot.action.RandomChoiceAction@5dbecb20 at (940,924)
-
-BUILD SUCCESSFUL in 13s
-6 actionable tasks: 2 executed, 4 up-to-date
+BUILD SUCCESSFUL in 19s
+6 actionable tasks: 4 executed, 2 up-to-date

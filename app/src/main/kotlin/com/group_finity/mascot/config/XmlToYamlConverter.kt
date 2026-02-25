@@ -6,52 +6,53 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import org.w3c.dom.Element
 import java.nio.file.Path
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.io.path.outputStream
+import org.w3c.dom.Element
 
-/**
- * 既存のXML設定ファイルをYAML形式に変換するユーティリティ。
- */
+/** 既存のXML設定ファイルをYAML形式に変換するユーティリティ。 */
 object XmlToYamlConverter {
-    private val yamlMapper = ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
-        .registerKotlinModule()
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        .enable(SerializationFeature.INDENT_OUTPUT)
+    private val yamlMapper =
+            ObjectMapper(YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
+                    .registerKotlinModule()
+                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .enable(SerializationFeature.INDENT_OUTPUT)
 
     fun convert(xmlPath: Path, yamlPath: Path, type: String) {
         val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlPath.toFile())
         doc.documentElement.normalize()
 
-        val config = when (type.lowercase()) {
-            "actions" -> {
-                val actionNodes = doc.getElementsByTagName("Action")
-                val actions = (0 until actionNodes.length).map { i ->
-                    parseAction(actionNodes.item(i) as Element)
+        val config =
+                when (type.lowercase()) {
+                    "actions" -> {
+                        val actionNodes = doc.getElementsByTagName("Action")
+                        val actions =
+                                (0 until actionNodes.length).map { i ->
+                                    parseAction(actionNodes.item(i) as Element)
+                                }
+                        MascotConfig(actions = actions)
+                    }
+                    "behaviors" -> {
+                        val behaviorNodes = doc.getElementsByTagName("Behavior")
+                        val behaviors =
+                                (0 until behaviorNodes.length).map { i ->
+                                    parseBehavior(behaviorNodes.item(i) as Element)
+                                }
+                        MascotConfig(behaviors = behaviors)
+                    }
+                    else -> throw IllegalArgumentException("Unknown type: $type")
                 }
-                MascotConfig(actions = actions)
-            }
-            "behaviors" -> {
-                val behaviorNodes = doc.getElementsByTagName("Behavior")
-                val behaviors = (0 until behaviorNodes.length).map { i ->
-                    parseBehavior(behaviorNodes.item(i) as Element)
-                }
-                MascotConfig(behaviors = behaviors)
-            }
-            else -> throw IllegalArgumentException("Unknown type: $type")
-        }
 
-        yamlPath.outputStream().use { out ->
-            yamlMapper.writeValue(out, config)
-        }
+        yamlPath.outputStream().use { out -> yamlMapper.writeValue(out, config) }
     }
 
     private fun parseAction(element: Element): ActionConfig {
         val name = element.getAttribute("Name")
         val type = element.getAttribute("Type")
-        val classPattern = if (element.hasAttribute("Class")) element.getAttribute("Class") else null
-        
+        val classPattern =
+                if (element.hasAttribute("Class")) element.getAttribute("Class") else null
+
         val params = mutableMapOf<String, Any>()
 
         // Attributes
@@ -79,7 +80,16 @@ object XmlToYamlConverter {
                             val poseAttrs = pose.attributes
                             for (k in 0 until poseAttrs.length) {
                                 val attr = poseAttrs.item(k)
-                                poseMap[attr.nodeName] = parseValue(attr.nodeValue)
+                                if (attr.nodeName == "ImageAnchor") {
+                                    val parts = attr.nodeValue.split(",")
+                                    if (parts.size >= 2) {
+                                        val x = parts[0].trim().toIntOrNull() ?: 0
+                                        val y = parts[1].trim().toIntOrNull() ?: 0
+                                        poseMap["ImageAnchor"] = mapOf("x" to x, "y" to y)
+                                    }
+                                } else {
+                                    poseMap[attr.nodeName] = parseValue(attr.nodeValue)
+                                }
                             }
                             poses.add(poseMap)
                         }
@@ -87,15 +97,22 @@ object XmlToYamlConverter {
                     }
                     "ActionReference" -> {
                         @Suppress("UNCHECKED_CAST")
-                        val refs = params.getOrPut("ActionReferences") { mutableListOf<String>() } as MutableList<String>
-                        refs.add(node.getAttribute("Name"))
+                        val refs =
+                                params.getOrPut("ActionReferences") {
+                                    mutableListOf<Map<String, String>>()
+                                } as
+                                        MutableList<Map<String, String>>
+                        // ActionBuilder expects List<Map<String, String>> with "Name" key for
+                        // references
+                        refs.add(mapOf("Name" to node.getAttribute("Name")))
                     }
                     "Point" -> {
                         val pointMap = mutableMapOf<String, Any>()
                         val pointAttrs = node.attributes
                         for (k in 0 until pointAttrs.length) {
                             val attr = pointAttrs.item(k)
-                            pointMap[attr.nodeName] = parseValue(attr.nodeValue)
+                            // Lowercase X/Y for ActionBuilder compatibility
+                            pointMap[attr.nodeName.lowercase()] = parseValue(attr.nodeValue)
                         }
                         params["Point"] = pointMap
                     }
