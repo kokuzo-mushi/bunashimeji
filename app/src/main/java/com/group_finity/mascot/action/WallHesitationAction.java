@@ -16,12 +16,13 @@ public class WallHesitationAction implements Action {
 
     public WallHesitationAction(Animation animation, int duration) {
         this.animation = animation;
-        this.duration = duration;
+        // durationが未設定(0)の場合、アニメーションの長さを採用する安全装置
+        this.duration = duration > 0 ? duration : (animation != null ? animation.getTotalDuration() : 2000);
     }
 
     @Override
     public void execute(Mascot mascot) {
-        final int FRAME_DURATION_MS = 40;
+        final int FRAME_DURATION_MS = 16;
 
         if (time == 0) {
             mascot.setAnimation(animation);
@@ -38,15 +39,16 @@ public class WallHesitationAction implements Action {
             Random random = new Random();
             
             if (random.nextBoolean()) {
-                // 登る: 少し上に移動させて、次のフレームで ClimbAction の条件にヒットさせる
-                mascot.setY(mascot.getY() - 4);
+                // 登る: 下端の安全装置を確実に抜け、登り直せる位置まで一気に上へ移動
+                mascot.setY(mascot.getY() - 50);
             } else {
-                // 落ちる: 壁判定を解除し、少し壁から離して FallAction の条件にヒットさせる
+                // 落ちる: ウィンドウ壁の強力な吸着判定を完全に抜け、空中に放り出すため大きく横へ移動
                 if (mascot.isHittingLeftWall()) {
-                    mascot.setX(mascot.getX() + 4);
+                    mascot.setX(mascot.getX() + 150);
                     mascot.setHittingLeftWall(false);
-                } else if (mascot.isHittingRightWall()) {
-                    mascot.setX(mascot.getX() - 4);
+                } else {
+                    // 右壁または壁不明の場合（安全のため左方向へ移動）
+                    mascot.setX(mascot.getX() - 150);
                     mascot.setHittingRightWall(false);
                 }
             }

@@ -30,24 +30,32 @@ fun main() = application {
     // 1. Initialize Global Resources (Once)
 
     // XML -> YAML 自動変換ロジック
-    // YAMLファイルが存在しない場合、XMLから生成する
+    // YAMLが存在しない、またはXMLの方が新しく更新されている場合に変換を実行する
     val actionsXml = Path.of("conf/actions.xml")
     val actionsYaml = Path.of("conf/actions.yaml")
-    if (Files.exists(actionsXml) && !Files.exists(actionsYaml)) {
-        try {
-            XmlToYamlConverter.convert(actionsXml, actionsYaml, "actions")
-        } catch (e: Exception) {
-            e.printStackTrace()
+    if (Files.exists(actionsXml)) {
+        val needsUpdate = !Files.exists(actionsYaml) || Files.getLastModifiedTime(actionsXml) > Files.getLastModifiedTime(actionsYaml)
+        if (needsUpdate) {
+            try {
+                println("Updating actions.yaml from actions.xml...")
+                XmlToYamlConverter.convert(actionsXml, actionsYaml, "actions")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
     val behaviorsXml = Path.of("conf/behaviors.xml")
     val behaviorsYaml = Path.of("conf/behaviors.yaml")
-    if (Files.exists(behaviorsXml) && !Files.exists(behaviorsYaml)) {
-        try {
-            XmlToYamlConverter.convert(behaviorsXml, behaviorsYaml, "behaviors")
-        } catch (e: Exception) {
-            e.printStackTrace()
+    if (Files.exists(behaviorsXml)) {
+        val needsUpdate = !Files.exists(behaviorsYaml) || Files.getLastModifiedTime(behaviorsXml) > Files.getLastModifiedTime(behaviorsYaml)
+        if (needsUpdate) {
+            try {
+                println("Updating behaviors.yaml from behaviors.xml...")
+                XmlToYamlConverter.convert(behaviorsXml, behaviorsYaml, "behaviors")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

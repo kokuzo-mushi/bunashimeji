@@ -320,6 +320,12 @@ actions:
       ImageAnchor:
         x: 128
         "y": 128
+- name: "WindowClimbDownSequence"
+  type: "Sequence"
+  params:
+    ActionReferences:
+    - Name: "WindowClimbDown"
+    - Name: "WallHesitation"
 - name: "ClimbUpForCeiling"
   type: "ClimbCeiling"
   params:
@@ -487,7 +493,7 @@ actions:
   type: "RandomChoice"
   params:
     ActionReferences:
-    - Name: "WindowClimbDown"
+    - Name: "WindowClimbDownSequence"
 - name: "WallComplexSequence"
   type: "Sequence"
   params:
