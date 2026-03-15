@@ -131,6 +131,14 @@
             <Pose Image="WallCling1.png" ImageAnchor="128,128" Duration="2000" />
         </Animation>
     </Action>
+    <Action Name="WallHesitation" Type="WallHesitation" Duration="2000">
+        <Animation>
+            <Pose Image="WallCling1.png" ImageAnchor="64,128" Duration="500" />
+            <Pose Image="WallCling1.png" ImageAnchor="64,128" Duration="500" />
+            <Pose Image="WallCling1.png" ImageAnchor="64,128" Duration="500" />
+            <Pose Image="WallCling1.png" ImageAnchor="64,128" Duration="500" />
+        </Animation>
+    </Action>
     <Action Name="Climb" Type="Climb" Speed="1">
         <Animation>
             <Pose ImageAnchor="64,128" Duration="200" />
@@ -138,6 +146,13 @@
         </Animation>
     </Action>
     <Action Name="WindowClimb" Type="Climb" Speed="1">
+        <Animation>
+            <Pose Image="Climb1.png" ImageAnchor="128,128" Duration="200" />
+            <Pose Image="Climb2.png" ImageAnchor="128,128" Duration="200" />
+        </Animation>
+    </Action>
+    <!-- Debug: 強制的に下方向へ降りるアクション -->
+    <Action Name="WindowClimbDown" Type="Climb" Speed="-2" Duration="3000">
         <Animation>
             <Pose Image="Climb1.png" ImageAnchor="128,128" Duration="200" />
             <Pose Image="Climb2.png" ImageAnchor="128,128" Duration="200" />
@@ -222,7 +237,8 @@
         <ActionReference Name="Climb" />
     </Action>
     <Action Name="WindowWallRandomMove" Type="RandomChoice">
-        <ActionReference Name="WindowClimb" />
+        <!-- Debug: 強制的に下へ降りさせる -->
+        <ActionReference Name="WindowClimbDown" />
     </Action>
     <Action Name="WallComplexSequence" Type="Sequence">
         <ActionReference Name="WallCling" />

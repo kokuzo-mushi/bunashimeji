@@ -31,6 +31,12 @@ behaviors:
     \ && !mascot.isHittingCeiling() && mascot.getCurrentAction() == null"
   actions:
   - "Fall"
+- name: "ForcedFall"
+  frequency: 500
+  conditions:
+  - "isAtWindowBottom"
+  actions:
+  - "Fall"
 - name: "Land"
   frequency: 2000
   conditions:
@@ -88,6 +94,13 @@ behaviors:
     \ && mascot.getRightWallWindow() != null)) && mascot.getCurrentAction() == null"
   actions:
   - "WindowWallComplexSequence"
+- name: "WallHesitation"
+  frequency: 100
+  conditions:
+  - "(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) && signedDistToWallBottom\
+    \ < 50"
+  actions:
+  - "WallHesitation"
 - name: "TurnRandomly"
   frequency: 10
   conditions:

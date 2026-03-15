@@ -149,3 +149,19 @@ object XmlToYamlConverter {
         return value.toIntOrNull() ?: value.toDoubleOrNull() ?: value
     }
 }
+
+/**
+ * スタンドアロンで変換ツールを実行するためのメイン関数。
+ * IDEのガターアイコン（緑の再生マーク）から実行できます。
+ */
+fun main() {
+    val confDir = java.nio.file.Path.of("conf")
+    
+    println("Converting actions.xml to actions.yaml...")
+    XmlToYamlConverter.convert(confDir.resolve("actions.xml"), confDir.resolve("actions.yaml"), "actions")
+    
+    println("Converting behaviors.xml to behaviors.yaml...")
+    XmlToYamlConverter.convert(confDir.resolve("behaviors.xml"), confDir.resolve("behaviors.yaml"), "behaviors")
+    
+    println("Conversion complete!")
+}

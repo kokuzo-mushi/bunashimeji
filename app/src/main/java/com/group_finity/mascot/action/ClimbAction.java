@@ -14,6 +14,7 @@ public class ClimbAction implements Action {
 
     private final Animation animation;
     private final int speed;
+    private final int initialDuration; // コンストラクタで決めた初期時間を保存
     private int timeRemaining;
 
     public ClimbAction(Animation animation, int speed) {
@@ -23,7 +24,8 @@ public class ClimbAction implements Action {
     public ClimbAction(Animation animation, int speed, int duration) {
         this.animation = animation;
         this.speed = speed;
-        this.timeRemaining = duration > 0 ? duration : this.animation.getTotalDuration();
+        this.initialDuration = duration > 0 ? duration : this.animation.getTotalDuration();
+        this.timeRemaining = this.initialDuration;
     }
 
     @Override
@@ -56,14 +58,23 @@ public class ClimbAction implements Action {
         if (wallWindow != null && NativeWindowUtil.isWindow(wallWindow)) {
             NeoRect rect = NativeWindowUtil.getWindowRect(wallWindow);
 
-            // マスコットの頭上（Y - 128）と壁の上端（rect.top）の距離をチェック
-            // Main.javaのPullUp発動条件 (distToWallTop < 64) に合わせて終了させる
-            int mascotHeadY = mascot.getY() - 128;
-            int distToTop = mascotHeadY - rect.top();
+            if (speed > 0) {
+                // 上へ登る場合：マスコットの頭上（Y - 128）と壁の上端（rect.top）の距離をチェック
+                // Main.javaのPullUp発動条件 (distToWallTop < 64) に合わせて終了させる
+                int mascotHeadY = mascot.getY() - 128;
+                int distToTop = mascotHeadY - rect.top();
 
-            if (distToTop < -32) { // 頭が半分くらい出るまで登る
-                timeRemaining = 0;
-                return;
+                if (distToTop < -32) { // 頭が半分くらい出るまで登る
+                    timeRemaining = 0;
+                    return;
+                }
+            } else if (speed < 0) {
+                // 下へ降りる場合：足元（Y）と壁の下端（rect.bottom）の距離をチェック
+                int distToBottom = rect.bottom() - mascot.getY();
+                if (distToBottom < 10) { // 足元が下端付近に到達したら終了
+                    timeRemaining = 0;
+                    return;
+                }
             }
         }
 
@@ -81,7 +92,7 @@ public class ClimbAction implements Action {
 
     @Override
     public void reset() {
-        this.timeRemaining = this.animation.getTotalDuration();
+        this.timeRemaining = this.initialDuration; // 保存しておいた初期時間でリセット
         this.animation.reset();
     }
 }

@@ -215,6 +215,37 @@ public class EventDispatcher {
             }
         }
         this.context.setValue("signedDistToWallTop", signedDistToWallTop);
+
+        // 3. signedDistToWallBottom (壁の下端までの距離)
+        // 壁登り中に下端に到達したかの判定に使用
+        int signedDistToWallBottom = Integer.MAX_VALUE;
+        if (wall != null && NativeWindowUtil.isWindow(wall)) {
+            NeoRect rect = NativeWindowUtil.getWindowRect(wall);
+            if (rect != null) {
+                // 壁の下端 (rect.bottom) とマスコットの位置関係
+                // 壁登り中は Y が足の位置に近いので、bottom - Y が残り距離となる
+                signedDistToWallBottom = rect.bottom() - mascot.getY();
+            }
+        }
+        this.context.setValue("signedDistToWallBottom", signedDistToWallBottom);
+
+        // 4. isAtWindowBottom (ウィンドウの下端に乗っているか)
+        // 投げた後にウィンドウの下辺に着地してしまうのを防ぐために使用
+        boolean isAtWindowBottom = false;
+        if (mascot.isGrounded()) {
+            MemorySegment floor = mascot.getFloorWindow();
+            if (floor != null && NativeWindowUtil.isWindow(floor)) {
+                NeoRect rect = NativeWindowUtil.getWindowRect(floor);
+                if (rect != null) {
+                    // 足元 (Y) が ウィンドウ下端 (rect.bottom) に近い場合 (誤差10px以内)
+                    // 通常、床は rect.top なので、bottom に近いということは下辺に乗っている
+                    if (Math.abs(mascot.getY() - rect.bottom()) < 10) {
+                        isAtWindowBottom = true;
+                    }
+                }
+            }
+        }
+        this.context.setValue("isAtWindowBottom", isAtWindowBottom);
     }
 
     private Behavior selectBehavior(List<Behavior> candidates) {

@@ -544,9 +544,6 @@ public class NativeWindowUtil {
             // ここでラップして例外を握りつぶし、常に続行(true/1)するようにする等の対策が必要だが、
             // まずは呼び出し元(proc)が例外を出さないことを前提としつつ、デバッグログを入れる。
             
-            // デバッグ用カウンタ
-            int[] count = {0};
-            int[] visibleCount = {0};
             long myPid = ProcessHandle.current().pid(); // 自分のプロセスID
 
             EnumWindowsProc safeProc = (hwnd, lp) -> {
@@ -567,50 +564,6 @@ public class NativeWindowUtil {
                     return true; // エラーが起きるようなウィンドウは触らない
                 }
 
-                count[0]++;
-                // デバッグ: 可視かつタイトルがあるウィンドウが見つかったらログに出す (最大10件)
-                try {
-                    boolean visible = isWindowVisible(hwnd);
-                    if (visible) {
-                        String title = getWindowText(hwnd);
-                        if (!title.isEmpty() && visibleCount[0] < 10) {
-                            visibleCount[0]++;
-                            com.group_finity.mascot.type.NeoRect r = getWindowRect(hwnd);
-                            boolean iconic = isIconic(hwnd);
-                            boolean zoomed = isZoomed(hwnd);
-                            long style = getWindowLongPtr(hwnd, -16); // GWL_STYLE
-                            long exStyle = getWindowLongPtr(hwnd, -20); // GWL_EXSTYLE
-                            
-                            // タイトルの先頭数文字をHexダンプして、文字化けがデータ破損か表示の問題かを確認
-                            StringBuilder hexTitle = new StringBuilder();
-                            for (int i = 0; i < Math.min(title.length(), 5); i++) {
-                                hexTitle.append(String.format("\\u%04X", (int)title.charAt(i)));
-                            }
-
-                            // 座標変換のデバッグログ
-                            // getWindowRect内部ですでに変換されているが、ここでは変換前後の値を明示的に比較する
-                            try (Arena debugArena = Arena.ofConfined()) {
-                                MemorySegment rawRect = debugArena.allocate(RECT_LAYOUT);
-                                if ((int) GetWindowRect.invokeExact(hwnd, rawRect) != 0) {
-                                    int rawLeft = rawRect.get(ValueLayout.JAVA_INT, 0);
-                                    int rawTop = rawRect.get(ValueLayout.JAVA_INT, 4);
-                                    Point logPos = convertPhysicalToLogical(hwnd, rawLeft, rawTop);
-                                    System.out.println("[NativeWindowUtil] Coord Check: Physical(" + rawLeft + "," + rawTop + ") -> Logical(" + logPos.x + "," + logPos.y + ")");
-                                }
-                            }
-
-                            System.out.println("[NativeWindowUtil] Window Found: HWND=" + hwnd 
-                                + " Rect=" + r 
-                                + " Iconic=" + iconic 
-                                + " Zoomed=" + zoomed
-                                + " Style=" + Long.toHexString(style)
-                                + " ExStyle=" + Long.toHexString(exStyle)
-                                + " Title='" + title + "' (Hex: " + hexTitle + "...)");
-                        }
-                    }
-                } catch (Throwable e) {
-                    // ignore probing errors
-                }
                 try {
                     return proc.callback(hwnd, lp);
                 } catch (Throwable t) {
@@ -631,11 +584,7 @@ public class NativeWindowUtil {
             handle = MethodHandles.filterReturnValue(handle, boolToInt);
 
             MemorySegment stub = LINKER.upcallStub(handle, callbackDesc, arena);
-            System.out.println("[NativeWindowUtil] Starting EnumWindows...");
             int result = (int) EnumWindows.invokeExact(stub, lParam);
-            
-            // Debug: 列挙が完了したか確認
-            System.out.println("[NativeWindowUtil] EnumWindows finished. Result: " + result + ", Total callbacks: " + count[0] + ", Visible found: " + visibleCount[0]);
 
         } catch (Throwable t) {
             throw new RuntimeException(t);

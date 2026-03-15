@@ -19,6 +19,10 @@
         <Condition>!mascot.isGrounded() &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall() &amp;&amp; !mascot.isHittingCeiling() &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="Fall" />
     </Behavior>
+    <Behavior Name="ForcedFall" Frequency="500">
+        <Condition>isAtWindowBottom</Condition>
+        <ActionReference Name="Fall" />
+    </Behavior>
     <Behavior Name="Land" Frequency="2000">
         <Condition>mascot.isGrounded() &amp;&amp; mascot.isPreviousAction('FallAction') &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="LandSequence" />
@@ -50,6 +54,10 @@
     <Behavior Name="WindowWallAction" Frequency="1">
         <Condition>((mascot.isHittingLeftWall() &amp;&amp; mascot.getLeftWallWindow() != null) || (mascot.isHittingRightWall() &amp;&amp; mascot.getRightWallWindow() != null)) &amp;&amp; mascot.getCurrentAction() == null</Condition>
         <ActionReference Name="WindowWallComplexSequence" />
+    </Behavior>
+    <Behavior Name="WallHesitation" Frequency="100">
+        <Condition>(mascot.isHittingLeftWall() || mascot.isHittingRightWall()) &amp;&amp; signedDistToWallBottom &lt; 50</Condition>
+        <ActionReference Name="WallHesitation" />
     </Behavior>
     <Behavior Name="TurnRandomly" Frequency="10">
         <Condition>mascot.isGrounded() &amp;&amp; mascot.getCurrentAction() == null &amp;&amp; !mascot.isHittingLeftWall() &amp;&amp; !mascot.isHittingRightWall()</Condition>

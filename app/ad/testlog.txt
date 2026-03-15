@@ -1,138 +1,70 @@
-ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+> Task :app:run
+WARNING: "public static final void com.group_finity.mascot.ui.ShimejiAppKt.main()" chosen over "public static void com.group_finity.mascot.ui.ShimejiAppKt.main(java.lang.String[])"
+[INFO] Configuration: Loading Actions from YAML: conf\actions.yaml
+[INFO] Configuration: Loading Behaviors from YAML: conf\behaviors.yaml
+[EventDispatcher] Mascot State: isGrounded=false, y=200, Floor=None
+[EventDispatcher] Condition Matched: Fall (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Fall
+[EventDispatcher] Mascot State: isGrounded=false, y=203, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=208, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=215, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=224, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=235, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=248, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=263, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=280, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=299, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=320, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=341, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=362, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=383, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=404, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=425, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=446, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=467, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=488, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=509, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=530, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=551, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=572, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=593, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=614, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=635, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=656, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=677, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=698, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=719, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=740, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=761, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=782, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=803, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=824, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=845, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=866, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=887, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=908, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=929, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=950, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=971, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=992, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1013, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1033, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1024, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1017, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1012, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1009, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1008, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1009, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1012, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1017, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=1024, Floor=None
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
-[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
-[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
-[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
-[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@98c03d7 -> Next (Evaluating)
+[Debug] Transition: Prev=FallAction -> Next (Evaluating)
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
 [EventDispatcher] Condition Matched: ScriptWalk (Event: SYSTEM_TICK)
+[EventDispatcher] Condition Matched: Land (Event: SYSTEM_TICK)
 [EventDispatcher] Condition Matched: TurnRandomly (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: ChaseMouse (Event: SYSTEM_TICK)
 [EventDispatcher] Condition Matched: Walk (Event: SYSTEM_TICK)
 [EventDispatcher] Condition Matched: Trip (Event: SYSTEM_TICK)
 [EventDispatcher] Condition Matched: RandomJump (Event: SYSTEM_TICK)
@@ -143,413 +75,555 @@
 [EventDispatcher] Condition Matched: Gather (Event: SYSTEM_TICK)
 [EventDispatcher] Condition Matched: Stay (Event: SYSTEM_TICK)
 [EventDispatcher] Condition Matched: Throw (Event: SYSTEM_TICK)
-[EventDispatcher] Selected Behavior: ScriptWalk
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
+[EventDispatcher] Selected Behavior: Land
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[Debug] Transition: Prev=com.group_finity.mascot.action.WalkAction@98c03d7 -> Next (Evaluating)
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[EventDispatcher] Condition Matched: ScriptWalk (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: TurnRandomly (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: ChaseMouse (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Walk (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Trip (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: RandomJump (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Sit (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Breed (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: BreedJump (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Dig (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Gather (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Stay (Event: SYSTEM_TICK)
-[EventDispatcher] Condition Matched: Throw (Event: SYSTEM_TICK)
-[EventDispatcher] Selected Behavior: Sit
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
 [EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
-[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
-[EventDispatcher] Mascot State: isGrounded=true, y=1032, Floor=WorkArea
-[NativeWindowUtil] Starting EnumWindows...
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:66300 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=a0800a8 Title='Shell Handwriting Canvas' (Hex: \u0053\u0068\u0065\u006C\u006C...)
-[NativeWindowUtil] Coord Check: Physical(1578,918) -> Logical(1578,918) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:985792 limit: 0 } Rect=NeoRect[x=1578, y=918, width=234, height=114] Iconic=false Zoomed=false Style=94000000 ExStyle=200088 Title='・ｽV・ｽX・ｽe・ｽ・ｽ ・ｽg・ｽ・ｽ・ｽC ・ｽI・ｽ[・ｽo・ｽ[・ｽt・ｽ・ｽ・ｽ[ ・ｽE・ｽB・ｽ・ｽ・ｽh・ｽE・ｽB' (Hex: \u30B7\u30B9\u30C6\u30E0\u0020...)
-[NativeWindowUtil] Coord Check: Physical(749,443) -> Logical(749,443) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:15796916 limit: 0 } Rect=NeoRect[x=749, y=443, width=837, height=671] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='・ｽz・ｽ[・ｽ・ｽ - ・ｽG・ｽN・ｽX・ｽv・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ[' (Hex: \u30DB\u30FC\u30E0\u0020\u002D...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:133280 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15c70000 ExStyle=200100 Title='NativeWindowUtil.java - ・ｽ・ｽ・ｽﾝ抵ｿｽ (・ｽ・ｽ・ｽ[・ｽN・ｽX・ｽy・ｽ[・ｽX) - Visual Studio Code' (Hex: \u004E\u0061\u0074\u0069\u0076...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:394874 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=17cf0000 ExStyle=100 Title='・ｽE・ｽ}・ｽ・ｽ・ｽE・ｽ・ｽ・ｽn・ｽb・ｽ・ｽ ・ｽﾉまゑｿｽf・ｽ・ｽ・ｽ・ｽ ? Mozilla Firefox' (Hex: \u30A6\u30DE\u5A18\u30FB\u7AF6...)
-[NativeWindowUtil] Coord Check: Physical(714,166) -> Logical(714,166) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:524488 limit: 0 } Rect=NeoRect[x=714, y=166, width=1018, height=768] Iconic=false Zoomed=false Style=14cf0000 ExStyle=100 Title='CLIP STUDIO' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-8,-8) -> Logical(-8,-8) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:1310846 limit: 0 } Rect=NeoRect[x=-8, y=-8, width=1936, height=1048] Iconic=false Zoomed=true Style=15cf0000 ExStyle=100 Title='CLIP STUDIO PAINT' (Hex: \u0043\u004C\u0049\u0050\u0020...)
-[NativeWindowUtil] Coord Check: Physical(-2000,-2000) -> Logical(-2000,-2000) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65766 limit: 0 } Rect=NeoRect[x=-2000, y=-2000, width=324, height=605] Iconic=false Zoomed=false Style=14000000 ExStyle=0 Title='Amazon Assistant' (Hex: \u0041\u006D\u0061\u007A\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:197714 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=94000000 ExStyle=200000 Title='Windows ・ｽ・ｽ・ｽﾍエ・ｽN・ｽX・ｽy・ｽ・ｽ・ｽG・ｽ・ｽ・ｽX' (Hex: \u0057\u0069\u006E\u0064\u006F...)
-[NativeWindowUtil] Coord Check: Physical(0,0) -> Logical(0,0) DPI=96
-[NativeWindowUtil] Window Found: HWND=MemorySegment{ heapBase: Optional.empty address:65900 limit: 0 } Rect=NeoRect[x=0, y=0, width=1920, height=1080] Iconic=false Zoomed=false Style=96000000 ExStyle=200080 Title='Program Manager' (Hex: \u0050\u0072\u006F\u0067\u0072...)
-[NativeWindowUtil] EnumWindows finished. Result: 1, Total callbacks: 157, Visible found: 10
-
-BUILD SUCCESSFUL in 19s
-6 actionable tasks: 4 executed, 2 up-to-date
+[EventDispatcher] Mascot State: isGrounded=true, y=974, Floor=WorkArea
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=974, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: MASCOT_STATE_CHANGED)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=963, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=937, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=902, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=879, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=856, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=838, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=817, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=803, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=789, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=788, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=788, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=788, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=786, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=780, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=760, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=742, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=735, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=732, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=730, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=726, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=722, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=719, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=713, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=708, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=694, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=671, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=626, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=602, Floor=None
+[EventDispatcher] Condition Matched: Dragged (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: Dragged
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[Debug] Transition: Prev=com.group_finity.mascot.action.DraggedAction@434a2faa -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Condition Matched: WindowWallAction (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: WindowWallAction
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=586, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=585, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=584, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=583, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=582, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=581, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=580, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=579, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=578, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=577, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=576, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=575, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=574, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=573, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=572, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=571, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=570, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=569, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=568, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=567, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=566, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=565, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=564, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=563, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=562, Floor=None
+[Debug] Transition: Prev=com.group_finity.mascot.action.SequenceAction@42e44a44 -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Condition Matched: WindowWallAction (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: WindowWallAction
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=561, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=560, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=559, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=558, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=557, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=556, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=555, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=554, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=553, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=552, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=551, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=550, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=549, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=548, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=547, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=546, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=545, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=544, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=543, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=542, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=541, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=540, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=539, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=538, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=537, Floor=None
+[Debug] Transition: Prev=com.group_finity.mascot.action.SequenceAction@42e44a44 -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Condition Matched: WindowWallAction (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: WindowWallAction
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=536, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=535, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=534, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=533, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=532, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=531, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=530, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=529, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=528, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=527, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=526, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=525, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=524, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=523, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=522, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=521, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=520, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=519, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=518, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=517, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=516, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=515, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=514, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=513, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=512, Floor=None
+[Debug] Transition: Prev=com.group_finity.mascot.action.SequenceAction@42e44a44 -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Condition Matched: WindowWallAction (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: WindowWallAction
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=511, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=510, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=509, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=508, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=507, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=506, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=505, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=504, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=503, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=502, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=501, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=500, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=499, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=498, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=497, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=496, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=495, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=494, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=493, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=492, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=491, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=490, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=489, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=488, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=487, Floor=None
+[Debug] Transition: Prev=com.group_finity.mascot.action.SequenceAction@42e44a44 -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Condition Matched: WindowWallAction (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: WindowWallAction
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=486, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=485, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=484, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=483, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=482, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=481, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=480, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=479, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=478, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=477, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=476, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=475, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=474, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=473, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=472, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=471, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=470, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=469, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=468, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=467, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=466, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=465, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=464, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=463, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=462, Floor=None
+[Debug] Transition: Prev=com.group_finity.mascot.action.SequenceAction@42e44a44 -> Next (Evaluating)
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Condition Matched: WindowWallAction (Event: SYSTEM_TICK)
+[EventDispatcher] Selected Behavior: WindowWallAction
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=461, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=460, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=459, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=458, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=457, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=456, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=455, Floor=None
+[EventDispatcher] Mascot State: isGrounded=false, y=454, Floor=None

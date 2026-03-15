@@ -251,6 +251,31 @@ actions:
       ImageAnchor:
         x: 128
         "y": 128
+- name: "WallHesitation"
+  type: "WallHesitation"
+  params:
+    Duration: 2000
+    Animation:
+    - Duration: 500
+      Image: "WallCling1.png"
+      ImageAnchor:
+        x: 64
+        "y": 128
+    - Duration: 500
+      Image: "WallCling1.png"
+      ImageAnchor:
+        x: 64
+        "y": 128
+    - Duration: 500
+      Image: "WallCling1.png"
+      ImageAnchor:
+        x: 64
+        "y": 128
+    - Duration: 500
+      Image: "WallCling1.png"
+      ImageAnchor:
+        x: 64
+        "y": 128
 - name: "Climb"
   type: "Climb"
   params:
@@ -268,6 +293,22 @@ actions:
   type: "Climb"
   params:
     Speed: 1
+    Animation:
+    - Duration: 200
+      Image: "Climb1.png"
+      ImageAnchor:
+        x: 128
+        "y": 128
+    - Duration: 200
+      Image: "Climb2.png"
+      ImageAnchor:
+        x: 128
+        "y": 128
+- name: "WindowClimbDown"
+  type: "Climb"
+  params:
+    Speed: -2
+    Duration: 3000
     Animation:
     - Duration: 200
       Image: "Climb1.png"
@@ -446,7 +487,7 @@ actions:
   type: "RandomChoice"
   params:
     ActionReferences:
-    - Name: "WindowClimb"
+    - Name: "WindowClimbDown"
 - name: "WallComplexSequence"
   type: "Sequence"
   params:
